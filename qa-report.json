@@ -1,0 +1,18 @@
+{
+  "phase": "P5-QA",
+  "checkedFiles": 261,
+  "filesWithBracketTokens": 261,
+  "totalTokenOccurrences": 5930,
+  "unmatchedPreserved": 3981,
+  "resolutionRatePct": "32.9",
+  "bubblesProseFalsePositive": 0,
+  "designRulesVerified": {
+    "onlyBlocksTxtTokens": true,
+    "bubblesUntouched": true,
+    "noDataIdRuntime": true,
+    "liveRenderOnly": true,
+    "unmatchedPreserved": true
+  },
+  "manifestVersionPinned": true,
+  "storageLRURecommended": true
+}
