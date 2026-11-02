@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     // Find arcade.makecode.com tab with renderer content script
     chrome.tabs.query({ url: '*://arcade.makecode.com/*' }, (tabs) => {
       if (!tabs || !tabs.length) { sendResponse({ svg: null, err: 'no arcade tab' }); return; }
-      chrome.tabs.sendMessage(tabs[0].id, req, (res) => {
+      chrome.tabs.sendMessage(tabs[0].id, req, { allFrames: true }, (res) => {
         if (chrome.runtime.lastError) {
           sendResponse({ svg: null, err: chrome.runtime.lastError.message || 'renderer unreachable' });
         } else {
