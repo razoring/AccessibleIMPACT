@@ -1,0 +1,122 @@
+================================================================================
+INSTRUCTIONS PANEL STRUCTURE & INFORMATION DUMP
+Source: https://impact.codeninjas.com/level/build/activity
+Page title: "White Belt / Level 1 - 1" with heading "build: Your First Sprite"
+Console: IMPACT
+================================================================================
+
+1. PAGE LAYOUT (top-level regions)
+--------------------------------------------------------------------------------
+  navigation bar (ref=e4 / ref=e5):
+    - links: Home, My Stuff, Community, Playtest, Sandbox
+    - nav buttons: Account / Messages / Login
+  main content (ref=e26):
+    - left: region "Simulator" — embedded iframe [active ref=f2e55] running MakeCode Arcade simulator ("B","A" sprites visible)
+    - right: panel [class="primary-section"] holding the instructions panel
+      (contains the HTML elements below)
+      also contains metadata row:
+        Last saved on Nov, 01, 2026 08:26:27 PM
+        ninja.ninja2.markham
+    - the right panel wraps:
+        app-makecode-tab-group[active] > div.tab-content > div.header >
+        APP-ACTIVITY-STEPPER[ng-star-inserted] > div.steps (container)
+
+2. INSTRUCTIONS PANEL — ELEMENT TREE
+--------------------------------------------------------------------------------
+The instructions panel is rendered as an Angular component APP-ACTIVITY-STEPPER
+containing a div.steps that holds:
+
+  div.steps (step indicator / navigation)
+   ├── BUTTON.round-img-btn.direction-left   <- previous step button (disabled initially)
+   ├── SPAN.step                            <- current step label text
+   │     text: "Step 1/5"
+   ├── BUTTON.round-img-btn.direction-right.active   <- next step button (active)
+   └── BUTTON                                   <- Hint button
+         cls contains "Hint"; text: "Hint"
+
+Below .steps inside .primary-section:
+
+  H1 / H3 / heading (file="Game")            <- activity title block
+    text: "White Belt / Level 1 - 1"
+    text: "build: Your First Sprite"
+  H3 heading
+    text: "Your First Sprite"
+
+  button.round-img-btn                       <- PROVE MYSELF! button (visible in original snapshot, not currently in right column)
+  button                                        <- Activity Action (gray area, present)
+  button.round-img-btn.direction-left          <- step navigation left arrow
+  span                                          <- Step indicator display
+    text: "Step 1/5"
+  button                                      <- step navigation right arrow (has "active" class)
+  ...
+
+  navigation cluster (ref=e42 / e44 / e45 region):
+     - button "PROVE MYSELF!"              <- challenge prompt
+     - button "Activity Action"
+     - button "Activity Action"
+     - button "SENSEI HELP"                <- teacher/hint shortcut
+
+  DIV[class="primary-section"]:
+     <p> + <p> + <p> instruction paragraphs:
+       - paragraph 1: "Add a background color to this project!"
+       - paragraph 2 (long): "Open the Scene code block menu, drag a [set background color to] block inside the [on start] container block, then click the gray bubble to select a color from the menu."
+       - paragraph 3: "Click ▶ under the MakeCode game console to see the color appear on the screen."
+     - BUTTON "Hint"                        <- reveal/show hint button (interactive)
+     - BUTTON.nav-btn-green.btn-disabled   <- SUBMIT button (disabled while incomplete)
+
+3. INTERACTIVE ELEMENTS & NAVIGATION CAPABILITY
+--------------------------------------------------------------------------------
+Interactive controls within the instructions panel are fully navigable via
+Playwright snapshot + dispatch. List of actionable items observed on page:
+
+A. STEP NAVIGATION (from .steps):
+   - BUTTON[class="direction-left"]   -> move BACK to previous step (disabled state on step 1)
+   - BUTTON[class="direction-right"]  -> move FORWARD to next step (active on current step)
+   Both are real <button>s; aria-label not explicitly set but accessible via class.
+
+B. INSTRUCTION BUTTONS (within instructions panel):
+   - BUTTON "Hint"              -> opens/reveals hint content (subtitle line shown above paragaph 3)
+   - BUTTON "SUBMIT"             -> submits the level solution
+        class: "nav-btn-green btn-disabled" -> enabled after solution meets criteria; disabled here
+
+C. CHALLENGE CONTROLS (top of panel):
+   - BUTTON "PROVE MYSELF!"     -> challenge header (action prompt)
+   - BUTTON "Activity Action" (x2)
+   - BUTTON "SENSEI HELP"       -> teacher hint shortcut
+
+D. IF YOU WANT TO EXPERIMENT (enable interactions beyond page content):
+   The page also contains a <button ref=e32> (an element referenced in snapshot but omitted
+   from detail dump) which may be part of the activity surface. Verify by clicking via
+   playwright.browser_click({element:"..."}).
+
+4. FULL INSTRUCTION TEXT (verbatim, concatenated paragraphs)
+--------------------------------------------------------------------------------
+Paragraphs in instructions panel (app-activity-stepper .primary-section p):
+
+"Add a background color to this project!"
+
+"Open the Scene code block menu, drag a [set background color to] block inside the [on start] container block, then click the gray bubble to select a color from the menu."
+
+"Click ▶ under the MakeCode game console to see the color appear on the screen."
+
+5. KEY ATTRIBUTES RELEVANT TO ACCESSIBILITY / NAVIGATION
+--------------------------------------------------------------------------------
+  - APP-ACTIVITY-STEPPER: host Angular component for step progression
+  - div.steps: visual step container
+  - BUTTON.direction-left / direction-right: stepper prev/next buttons
+  - SPAN.step: live step counter ("Step N/total")
+  - BUTTON "Hint": hints button; subtitle message shown when revealed
+  - BUTTON "SUBMIT": submit button, gated by .btn-disabled / .nav-btn-green
+    when incomplete
+  - title anchors: "White Belt / Level 1 - 1", "build: Your First Sprite"
+
+6. SUMMARY
+--------------------------------------------------------------------------------
+The instructions panel structure supports keyboard and assistive-technology
+navigation through standard Angular form controls (.steps, .direction-left/.right,
+.step span) plus native <button> elements for Hint and SUBMIT. Playwright can
+interact with all of these (hover/snapshot-based targeting). The only true
+gating is SUBMIT being disabled until the player's block-assembly matches the
+expected solution.
+
+End of dump.

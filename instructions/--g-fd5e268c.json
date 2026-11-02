@@ -1,0 +1,666 @@
+{
+    "id": "8b9beb09-507a-4359-bc0c-8027737eece2",
+    "type": "level",
+    "createdDate": "2026-08-10T21:30:21.894Z",
+    "createdBy": "bill.marsland@codeninjas.com",
+    "lastModifiedDate": "2026-08-10T21:30:21.894Z",
+    "lastModifiedBy": "bill.marsland@codeninjas.com",
+    "attributes": {
+        "tags": [
+            "CREATE"
+        ],
+        "title": "Level 2",
+        "sequence": 2,
+        "activity": {
+            "id": "1be7c542-b814-422c-8cfa-eb24a17c56dc",
+            "type": "activity",
+            "sequence": 2,
+            "group": {
+                "id": "fd5e268c-44a1-4140-8f9c-703ab1954930",
+                "type": "solve",
+                "name": null,
+                "sequence": 7,
+                "subgroups": [
+                    {
+                        "id": "7fc381f5-58c0-4f3a-80ba-0d2edb34b133",
+                        "type": "subgroup",
+                        "sequence": 1,
+                        "name": "solve 1",
+                        "steps": [
+                            {
+                                "id": "8646dba4-75db-4718-858d-eb891c21aa80",
+                                "hints": "<p><span style=\"background-color: transparent; color: rgb(255, 255, 255);\">❓ Did you select the correct </span><strong style=\"background-color: transparent; color: rgb(255, 255, 255);\">sprite </strong><span style=\"background-color: transparent; color: rgb(255, 255, 255);\">names in the </span><strong style=\"background-color: rgb(74, 134, 232); color: rgb(255, 255, 255);\">[set sprite position to]</strong><span style=\"background-color: transparent; color: rgb(255, 255, 255);\"> blocks?</span></p>",
+                                "senseiHelp": "<p><strong>Ask the ninja:</strong>&nbsp;</p><p>❓ Which sprite names should be selected in each <strong>[set sprite position to]</strong> block?</p><p><br></p><p><strong>Solution:&nbsp;</strong></p><p>MySprite should be changed to bat in the first <strong>[set sprite position to]</strong> block, and strawberry in the second <strong>[set sprite position to]</strong> block.</p><p><img src=\"https://assets.codeninjas.com/clm/assets/images/woqq0ivj.f1z.png\"></p>",
+                                "instructions": "<p>When the project runs, nothing shows up on screen!</p><p><br></p><p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">Change </span><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\"><em>only</em></strong><span style=\"background-color: transparent; color: rgb(0, 0, 0);\"> the code needed to fix the </span><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\">bug</strong><span style=\"background-color: transparent; color: rgb(0, 0, 0);\"> so that the bat and the strawberry appear on screen in different positions.</span></p>",
+                                "text": null,
+                                "type": null,
+                                "image": null,
+                                "videoUrl": null,
+                                "mediaType": null,
+                                "questions": null,
+                                "badges": null,
+                                "reflectionQuestions": null
+                            }
+                        ],
+                        "title": "Debugging Sequence #2",
+                        "project": {
+                            "editor": {
+                                "filters": [
+                                    {
+                                        "name": "sprites",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "controller",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "game",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "music",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "scene",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "info",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "loops",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "logic",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "variables",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "Math",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "animation",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "images",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "functions",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "arrays",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "text",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "console",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "light",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "encoders",
+                                        "active": false,
+                                        "blocks": []
+                                    }
+                                ],
+                                "searchBar": true
+                            },
+                            "source": {
+                                "text": {
+                                    "main.ts": "let mySprite: Sprite = null\ngame.splash(\"Looking for Fruit!\")\nscene.setBackgroundColor(8)\nlet bat = sprites.create(img`\n    . . f f f . . . . . . . . f f f \n    . f f c c . . . . . . f c b b c \n    f f c c . . . . . . f c b b c . \n    f c f c . . . . . . f b c c c . \n    f f f c c . c c . f c b b c c . \n    f f c 3 c c 3 c c f b c b b c . \n    f f b 3 b c 3 b c f b c c b c . \n    . c b b b b b b c b b c c c . . \n    . c 1 b b b 1 b b c c c c . . . \n    c b b b b b b b b b c c . . . . \n    c b c b b b c b b b b f . . . . \n    f b 1 f f f 1 b b b b f c . . . \n    f b b b b b b b b b b f c c . . \n    . f b b b b b b b b c f . . . . \n    . . f b b b b b b c f . . . . . \n    . . . f f f f f f f . . . . . . \n    `, SpriteKind.Player)\nmySprite.setPosition(88, 61)\nlet strawberry = sprites.create(img`\n    . . . . . . . 6 . . . . . . . . \n    . . . . . . 8 6 6 . . . 6 8 . . \n    . . . e e e 8 8 6 6 . 6 7 8 . . \n    . . e 2 2 2 2 e 8 6 6 7 6 . . . \n    . e 2 2 4 4 2 7 7 7 7 7 8 6 . . \n    . e 2 4 4 2 6 7 7 7 6 7 6 8 8 . \n    e 2 4 5 2 2 6 7 7 6 2 7 7 6 . . \n    e 2 4 4 2 2 6 7 6 2 2 6 7 7 6 . \n    e 2 4 2 2 2 6 6 2 2 2 e 7 7 6 . \n    e 2 4 2 2 4 2 2 2 4 2 2 e 7 6 . \n    e 2 4 2 2 2 2 2 2 2 2 2 e c 6 . \n    e 2 2 2 2 2 2 2 4 e 2 e e c . . \n    e e 2 e 2 2 4 2 2 e e e c . . . \n    e e e e 2 e 2 2 e e e c . . . . \n    e e e 2 e e c e c c c . . . . . \n    . c c c c c c c . . . . . . . . \n    `, SpriteKind.Player)\nmySprite.setPosition(66, 60)\ngame.setDialogFrame(img`\n    .....cccccccccccccc.....\n    ...cbd111111111111dbc...\n    ..cd1111111111111111dc..\n    .cd111111111111111111dc.\n    .b11111111111111111111b.\n    cd11111111111111111111dc\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    cd11111111111111111111dc\n    .b11111111111111111111b.\n    .cd111111111111111111dc.\n    ..cd1111111111111111dc..\n    ..b11d111111111111dbc...\n    .b11bcccccccccccccc.....\n    ccccc...................\n    `)\ngame.showLongText(\"I love eating fruit!\", DialogLayout.Top)\n",
+                                    "pxt.json": "{\n    \"name\": \"Untitled\",\n    \"description\": \"\",\n    \"dependencies\": {\n        \"device\": \"*\"\n    },\n    \"files\": [\n        \"main.blocks\",\n        \"main.ts\",\n        \"README.md\",\n        \"assets.json\"\n    ],\n    \"preferredEditor\": \"blocksprj\",\n    \"languageRestriction\": \"blocks-only\"\n}\n",
+                                    "readmE.md": null,
+                                    "assets.json": "",
+                                    "main.blocks": "<xml xmlns=\"https://developers.google.com/blockly/xml\"><variables><variable type=\"KIND_SpriteKind\" id=\"r-M(37_bj41mU1T/Qob$\">Player</variable><variable type=\"KIND_SpriteKind\" id=\".C=iN2,-N:Vv71XxM$Gx\">Projectile</variable><variable type=\"KIND_SpriteKind\" id=\"g).W`?C,`s=!79/*oxb0\">Food</variable><variable type=\"KIND_SpriteKind\" id=\"|6ciYTJdihfQca}#NG5T\">Enemy</variable><variable id=\"1+DybcrgpZs;R?3+B|x-\">bat</variable><variable id=\"1~Y4M?,b5{|6mOk~V)4I\">strawberry</variable><variable id=\"rm3zHv,Gy0OG/%eIEhY3\">mySprite</variable></variables><block type=\"pxt-on-start\" x=\"0\" y=\"0\"><statement name=\"HANDLER\"><block type=\"gameSplash\"><mutation xmlns=\"http://www.w3.org/1999/xhtml\" _expanded=\"0\" _input_init=\"true\"></mutation><value name=\"title\"><shadow type=\"text\"><field name=\"TEXT\">Looking for Fruit!</field></shadow></value><next><block type=\"gamesetbackgroundcolor\"><value name=\"color\"><shadow type=\"colorindexpicker\"><field name=\"index\">8</field></shadow></value><next><block type=\"variables_set\"><field name=\"VAR\" id=\"1+DybcrgpZs;R?3+B|x-\">bat</field><value name=\"VALUE\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow><block type=\"spritescreate\"><value name=\"img\"><shadow type=\"screen_image_picker\"><field name=\"img\">img`\n. . f f f . . . . . . . . f f f \n. f f c c . . . . . . f c b b c \nf f c c . . . . . . f c b b c . \nf c f c . . . . . . f b c c c . \nf f f c c . c c . f c b b c c . \nf f c 3 c c 3 c c f b c b b c . \nf f b 3 b c 3 b c f b c c b c . \n. c b b b b b b c b b c c c . . \n. c 1 b b b 1 b b c c c c . . . \nc b b b b b b b b b c c . . . . \nc b c b b b c b b b b f . . . . \nf b 1 f f f 1 b b b b f c . . . \nf b b b b b b b b b b f c c . . \n. f b b b b b b b b c f . . . . \n. . f b b b b b b c f . . . . . \n. . . f f f f f f f . . . . . . \n`</field><data>{\"commentRefs\":[],\"fieldData\":{\"img\":\"FdlXCms;pOLc1B6j!g79\"}}</data></shadow></value><value name=\"kind\"><shadow type=\"spritekind\"><field name=\"MEMBER\">Player</field></shadow></value></block></value><next><block type=\"spritesetpos\"><value name=\"sprite\"><block type=\"variables_get\"><field name=\"VAR\" id=\"rm3zHv,Gy0OG/%eIEhY3\">mySprite</field></block></value><value name=\"x\"><shadow type=\"positionPicker\"><field name=\"index\">88</field></shadow></value><value name=\"y\"><shadow type=\"positionPicker\"><field name=\"index\">61</field></shadow></value><next><block type=\"variables_set\"><field name=\"VAR\" id=\"1~Y4M?,b5{|6mOk~V)4I\">strawberry</field><value name=\"VALUE\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow><block type=\"spritescreate\"><value name=\"img\"><shadow type=\"screen_image_picker\"><field name=\"img\">img`\n. . . . . . . 6 . . . . . . . . \n. . . . . . 8 6 6 . . . 6 8 . . \n. . . e e e 8 8 6 6 . 6 7 8 . . \n. . e 2 2 2 2 e 8 6 6 7 6 . . . \n. e 2 2 4 4 2 7 7 7 7 7 8 6 . . \n. e 2 4 4 2 6 7 7 7 6 7 6 8 8 . \ne 2 4 5 2 2 6 7 7 6 2 7 7 6 . . \ne 2 4 4 2 2 6 7 6 2 2 6 7 7 6 . \ne 2 4 2 2 2 6 6 2 2 2 e 7 7 6 . \ne 2 4 2 2 4 2 2 2 4 2 2 e 7 6 . \ne 2 4 2 2 2 2 2 2 2 2 2 e c 6 . \ne 2 2 2 2 2 2 2 4 e 2 e e c . . \ne e 2 e 2 2 4 2 2 e e e c . . . \ne e e e 2 e 2 2 e e e c . . . . \ne e e 2 e e c e c c c . . . . . \n. c c c c c c c . . . . . . . . \n`</field><data>{\"commentRefs\":[],\"fieldData\":{\"img\":\"]rp`Xh#=s1au@d4xFL}]\"}}</data></shadow></value><value name=\"kind\"><shadow type=\"spritekind\"><field name=\"MEMBER\">Player</field></shadow></value></block></value><next><block type=\"spritesetpos\"><value name=\"sprite\"><block type=\"variables_get\"><field name=\"VAR\" id=\"rm3zHv,Gy0OG/%eIEhY3\">mySprite</field></block></value><value name=\"x\"><shadow type=\"positionPicker\"><field name=\"index\">66</field></shadow></value><value name=\"y\"><shadow type=\"positionPicker\"><field name=\"index\">60</field></shadow></value><next><block type=\"game_dialog_set_frame\"><value name=\"frame\"><shadow type=\"dialog_image_picker\"><field name=\"img\">img`\n.....cccccccccccccc.....\n...cbd111111111111dbc...\n..cd1111111111111111dc..\n.cd111111111111111111dc.\n.b11111111111111111111b.\ncd11111111111111111111dc\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\ncd11111111111111111111dc\n.b11111111111111111111b.\n.cd111111111111111111dc.\n..cd1111111111111111dc..\n..b11d111111111111dbc...\n.b11bcccccccccccccc.....\nccccc...................\n`</field><data>{\"commentRefs\":[],\"fieldData\":{\"img\":\"dgbyxuAb4T{||A8tZ*kv\"}}</data></shadow></value><next><block type=\"game_show_long_text\"><field name=\"layout\">DialogLayout.Top</field><value name=\"str\"><shadow type=\"text\"><field name=\"TEXT\">I love eating fruit!</field></shadow></value></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></statement></block></xml>",
+                                    ".simstate.json": "{\"S/#run\":\"Bg==\",\"S/#scope\":\"VW50aXRsZWQ=\"}",
+                                    "images.g.jres": "",
+                                    "images.g.ts": "",
+                                    "tilemap.g.ts": "",
+                                    "tilemap.g.jres": "",
+                                    "_palettes.json": ""
+                                },
+                                "header": {
+                                    "id": "fb0312c8-60b6-4059-83d2-0a1571568d5b",
+                                    "meta": {},
+                                    "name": "Untitled",
+                                    "path": "Untitled",
+                                    "pubId": "",
+                                    "editor": "blocksprj",
+                                    "saveId": null,
+                                    "target": "arcade",
+                                    "recentUse": 1687559617,
+                                    "pubCurrent": false,
+                                    "cloudCurrent": false,
+                                    "githubCurrent": false,
+                                    "targetVersion": "4.0.12",
+                                    "modificationTime": 1687559617,
+                                    "cloudUserId": null
+                                }
+                            },
+                            "languageRestrictions": "blocks-only",
+                            "noProjectRunErrors": false,
+                            "projectHasBeenRun": false
+                        },
+                        "peerReview": false,
+                        "mediaFileId": "https://assets.codeninjas.com/clm/assets/images/2lyrxset.10u.gif",
+                        "introduction": "<p><span style=\"background-color: transparent; color: rgb(255, 255, 255);\">Oh no - there are </span><strong style=\"background-color: transparent; color: rgb(255, 255, 255);\">bugs</strong><span style=\"background-color: transparent; color: rgb(255, 255, 255);\">, or problems, in our code! Find and fix the problems by&nbsp; </span><strong style=\"background-color: transparent; color: rgb(255, 255, 255);\">debugging</strong><span style=\"background-color: transparent; color: rgb(255, 255, 255);\"> the code in each section!</span></p><p><br></p><p><span style=\"background-color: transparent; color: rgb(255, 255, 255);\">Help the bat find a yummy strawberry to eat!</span></p>",
+                        "lowThreshold": 0,
+                        "hasLowThreshold": false,
+                        "numberOfReviews": 0,
+                        "validationItems": [
+                            {
+                                "text": "mySprite changed in setPosition blocks",
+                                "type": "contains",
+                                "points": 1,
+                                "failureText": "Check the sprite names in the red bubbles.",
+                                "requirements": [
+                                    {
+                                        "file": "main.ts",
+                                        "parameters": [],
+                                        "functionName": "bat.setPosition",
+                                        "match": null,
+                                        "instanceCount": 1,
+                                        "effect": null,
+                                        "eventType": null,
+                                        "music": null,
+                                        "timing": null
+                                    },
+                                    {
+                                        "file": "main.ts",
+                                        "parameters": [],
+                                        "functionName": "strawberry.setPosition",
+                                        "match": null,
+                                        "instanceCount": 1,
+                                        "effect": null,
+                                        "eventType": null,
+                                        "music": null,
+                                        "timing": null
+                                    }
+                                ],
+                                "mustCompleteAll": true
+                            }
+                        ],
+                        "passingThreshold": 1,
+                        "hasPassingThreshold": true,
+                        "codingStep": {
+                            "hints": null,
+                            "project": null,
+                            "senseiHelp": null,
+                            "validationItems": null
+                        },
+                        "senseiStep": null,
+                        "planningStep": null,
+                        "ninjaRequirements": null,
+                        "status": false
+                    },
+                    {
+                        "id": "9f963261-6aeb-4fd2-9ded-6c17eca45f0f",
+                        "type": "subgroup",
+                        "sequence": 2,
+                        "name": "solve 2",
+                        "steps": [
+                            {
+                                "id": "e234afad-deac-4630-8892-932d716e63cb",
+                                "hints": "<p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">❓&nbsp; Did you</span><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\"><em> </em></strong><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">select a new position for your dialog text box?</span></p>",
+                                "senseiHelp": "<p><strong>Ask the ninja:</strong>&nbsp;</p><p>❓Did you try setting the <strong>[show long text] </strong>block to different positions?</p><p><br></p><p><strong>Solution:&nbsp;</strong></p><p>Change the location of the dialog boxes so they do not block the bat. </p><p><img src=\"https://assets.codeninjas.com/clm/assets/images/13ckounx.azy.png\"></p>",
+                                "instructions": "<p>When the project runs,&nbsp;you can’t see the bat because of the dialog boxes!</p><p><br></p><p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">Change </span><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\"><em>only</em></strong><span style=\"background-color: transparent; color: rgb(0, 0, 0);\"> the code needed to fix the </span><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\">bug</strong><span style=\"background-color: transparent; color: rgb(0, 0, 0);\"> so that the dialog boxes are not blocking the bat.</span></p>",
+                                "text": null,
+                                "type": null,
+                                "image": null,
+                                "videoUrl": null,
+                                "mediaType": null,
+                                "questions": null,
+                                "badges": null,
+                                "reflectionQuestions": null
+                            }
+                        ],
+                        "title": "Debugging Sequence #2",
+                        "project": {
+                            "editor": {
+                                "filters": [
+                                    {
+                                        "name": "sprites",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "controller",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "game",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "music",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "scene",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "info",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "loops",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "logic",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "variables",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "Math",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "animation",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "images",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "functions",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "arrays",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "text",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "console",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "light",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "encoders",
+                                        "active": false,
+                                        "blocks": []
+                                    }
+                                ],
+                                "searchBar": true
+                            },
+                            "source": {
+                                "text": {
+                                    "main.ts": "game.splash(\"Looking for Fruit!\")\nscene.setBackgroundColor(8)\nlet bat = sprites.create(img`\n    . . f f f . . . . . . . . f f f \n    . f f c c . . . . . . f c b b c \n    f f c c . . . . . . f c b b c . \n    f c f c . . . . . . f b c c c . \n    f f f c c . c c . f c b b c c . \n    f f c 3 c c 3 c c f b c b b c . \n    f f b 3 b c 3 b c f b c c b c . \n    . c b b b b b b c b b c c c . . \n    . c 1 b b b 1 b b c c c c . . . \n    c b b b b b b b b b c c . . . . \n    c b c b b b c b b b b f . . . . \n    f b 1 f f f 1 b b b b f c . . . \n    f b b b b b b b b b b f c c . . \n    . f b b b b b b b b c f . . . . \n    . . f b b b b b b c f . . . . . \n    . . . f f f f f f f . . . . . . \n    `, SpriteKind.Player)\nbat.setPosition(77, 82)\ngame.setDialogFrame(img`\n    .....cccccccccccccc.....\n    ...cbd111111111111dbc...\n    ..cd1111111111111111dc..\n    .cd111111111111111111dc.\n    .b11111111111111111111b.\n    cd11111111111111111111dc\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    cd11111111111111111111dc\n    .b11111111111111111111b.\n    .cd111111111111111111dc.\n    ..cd1111111111111111dc..\n    ..b11d111111111111dbc...\n    .b11bcccccccccccccc.....\n    ccccc...................\n    `)\ngame.showLongText(\"I love eating fruit!\", DialogLayout.Top)\nbat.setPosition(120, 59)\ngame.showLongText(\"Is there fruit here?\", DialogLayout.Right)\nbat.setPosition(32, 60)\ngame.showLongText(\"or is there fruit here?\", DialogLayout.Left)\nbat.setPosition(88, 61)\n",
+                                    "pxt.json": "{\n    \"name\": \"Untitled\",\n    \"description\": \"\",\n    \"dependencies\": {\n        \"device\": \"*\"\n    },\n    \"files\": [\n        \"main.blocks\",\n        \"main.ts\",\n        \"README.md\",\n        \"assets.json\"\n    ],\n    \"preferredEditor\": \"blocksprj\",\n    \"languageRestriction\": \"blocks-only\"\n}\n",
+                                    "readmE.md": null,
+                                    "assets.json": "",
+                                    "main.blocks": "<xml xmlns=\"https://developers.google.com/blockly/xml\"><variables><variable type=\"KIND_SpriteKind\" id=\"3X^#s53!y%HEZyPV:;t;\">Player</variable><variable type=\"KIND_SpriteKind\" id=\"02)A?QGVt)EV.AqpZ[qo\">Projectile</variable><variable type=\"KIND_SpriteKind\" id=\"Eq`%cG#!ASDr3a(6`/JS\">Food</variable><variable type=\"KIND_SpriteKind\" id=\"$zfuOU+S]Xw+:%5WHNyR\">Enemy</variable><variable id=\"5cDjp[W%UREr|*#0Xdd.\">bat</variable><variable id=\"zGjQ({lDu)EzW:0?+p%r\">strawberry</variable></variables><block type=\"pxt-on-start\" x=\"0\" y=\"0\"><statement name=\"HANDLER\"><block type=\"gameSplash\"><mutation xmlns=\"http://www.w3.org/1999/xhtml\" _expanded=\"0\" _input_init=\"true\"></mutation><value name=\"title\"><shadow type=\"text\"><field name=\"TEXT\">Looking for Fruit!</field></shadow></value><next><block type=\"gamesetbackgroundcolor\"><value name=\"color\"><shadow type=\"colorindexpicker\"><field name=\"index\">8</field></shadow></value><next><block type=\"variables_set\"><field name=\"VAR\" id=\"5cDjp[W%UREr|*#0Xdd.\">bat</field><value name=\"VALUE\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow><block type=\"spritescreate\"><value name=\"img\"><shadow type=\"screen_image_picker\"><field name=\"img\">img`\n. . f f f . . . . . . . . f f f \n. f f c c . . . . . . f c b b c \nf f c c . . . . . . f c b b c . \nf c f c . . . . . . f b c c c . \nf f f c c . c c . f c b b c c . \nf f c 3 c c 3 c c f b c b b c . \nf f b 3 b c 3 b c f b c c b c . \n. c b b b b b b c b b c c c . . \n. c 1 b b b 1 b b c c c c . . . \nc b b b b b b b b b c c . . . . \nc b c b b b c b b b b f . . . . \nf b 1 f f f 1 b b b b f c . . . \nf b b b b b b b b b b f c c . . \n. f b b b b b b b b c f . . . . \n. . f b b b b b b c f . . . . . \n. . . f f f f f f f . . . . . . \n`</field><data>{\"commentRefs\":[],\"fieldData\":{\"img\":\"AHJLW52_(Yh=#Cq?1iuc\"}}</data></shadow></value><value name=\"kind\"><shadow type=\"spritekind\"><field name=\"MEMBER\">Player</field></shadow></value></block></value><next><block type=\"spritesetpos\"><value name=\"sprite\"><block type=\"variables_get\"><field name=\"VAR\" id=\"5cDjp[W%UREr|*#0Xdd.\">bat</field></block></value><value name=\"x\"><shadow type=\"positionPicker\"><field name=\"index\">77</field></shadow></value><value name=\"y\"><shadow type=\"positionPicker\"><field name=\"index\">82</field></shadow></value><next><block type=\"game_dialog_set_frame\"><value name=\"frame\"><shadow type=\"dialog_image_picker\"><field name=\"img\">img`\n.....cccccccccccccc.....\n...cbd111111111111dbc...\n..cd1111111111111111dc..\n.cd111111111111111111dc.\n.b11111111111111111111b.\ncd11111111111111111111dc\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\ncd11111111111111111111dc\n.b11111111111111111111b.\n.cd111111111111111111dc.\n..cd1111111111111111dc..\n..b11d111111111111dbc...\n.b11bcccccccccccccc.....\nccccc...................\n`</field><data>{\"commentRefs\":[],\"fieldData\":{\"img\":\"gm)@[VGP|_sJzDylSQyh\"}}</data></shadow></value><next><block type=\"game_show_long_text\"><field name=\"layout\">DialogLayout.Top</field><value name=\"str\"><shadow type=\"text\"><field name=\"TEXT\">I love eating fruit!</field></shadow></value><next><block type=\"spritesetpos\"><value name=\"sprite\"><block type=\"variables_get\"><field name=\"VAR\" id=\"5cDjp[W%UREr|*#0Xdd.\">bat</field></block></value><value name=\"x\"><shadow type=\"positionPicker\"><field name=\"index\">120</field></shadow></value><value name=\"y\"><shadow type=\"positionPicker\"><field name=\"index\">59</field></shadow></value><next><block type=\"game_show_long_text\"><field name=\"layout\">DialogLayout.Right</field><value name=\"str\"><shadow type=\"text\"><field name=\"TEXT\">Is there fruit here?</field></shadow></value><next><block type=\"spritesetpos\"><value name=\"sprite\"><block type=\"variables_get\"><field name=\"VAR\" id=\"5cDjp[W%UREr|*#0Xdd.\">bat</field></block></value><value name=\"x\"><shadow type=\"positionPicker\"><field name=\"index\">32</field></shadow></value><value name=\"y\"><shadow type=\"positionPicker\"><field name=\"index\">60</field></shadow></value><next><block type=\"game_show_long_text\"><field name=\"layout\">DialogLayout.Left</field><value name=\"str\"><shadow type=\"text\"><field name=\"TEXT\">or is there fruit here?</field></shadow></value><next><block type=\"spritesetpos\"><value name=\"sprite\"><block type=\"variables_get\"><field name=\"VAR\" id=\"5cDjp[W%UREr|*#0Xdd.\">bat</field></block></value><value name=\"x\"><shadow type=\"positionPicker\"><field name=\"index\">88</field></shadow></value><value name=\"y\"><shadow type=\"positionPicker\"><field name=\"index\">61</field></shadow></value></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></statement></block></xml>",
+                                    ".simstate.json": "{\"S/#run\":\"BQ==\",\"S/#scope\":\"VW50aXRsZWQ=\"}",
+                                    "images.g.jres": "",
+                                    "images.g.ts": "",
+                                    "tilemap.g.ts": "",
+                                    "tilemap.g.jres": "",
+                                    "_palettes.json": ""
+                                },
+                                "header": {
+                                    "id": "f9a7805c-4cd6-4ee6-9655-fbe3a821a657",
+                                    "meta": {},
+                                    "name": "Untitled",
+                                    "path": "Untitled",
+                                    "pubId": "",
+                                    "editor": "blocksprj",
+                                    "saveId": null,
+                                    "target": "arcade",
+                                    "recentUse": 1687559629,
+                                    "pubCurrent": false,
+                                    "cloudCurrent": false,
+                                    "githubCurrent": false,
+                                    "targetVersion": "4.0.12",
+                                    "modificationTime": 1687559629,
+                                    "cloudUserId": null
+                                }
+                            },
+                            "languageRestrictions": "blocks-only",
+                            "noProjectRunErrors": false,
+                            "projectHasBeenRun": false
+                        },
+                        "peerReview": false,
+                        "mediaFileId": "",
+                        "introduction": "<p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">Oh no - there are </span><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\">bugs</strong><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">, or problems, in our code! Find and fix the problems by&nbsp; </span><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\">debugging</strong><span style=\"background-color: transparent; color: rgb(0, 0, 0);\"> the code in each section!</span></p><p><br></p><p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">Help the bat find a yummy strawberry to eat!</span></p>",
+                        "lowThreshold": 0,
+                        "hasLowThreshold": false,
+                        "numberOfReviews": 0,
+                        "validationItems": [
+                            {
+                                "text": "Anything has changed",
+                                "type": "anything-has-changed",
+                                "points": 1,
+                                "failureText": "Try changing the position of the [show long text] boxes so the sprite is not blocked. ",
+                                "requirements": [
+                                    {
+                                        "file": "main.ts",
+                                        "parameters": null,
+                                        "functionName": null,
+                                        "match": null,
+                                        "instanceCount": 1,
+                                        "effect": null,
+                                        "eventType": null,
+                                        "music": null,
+                                        "timing": null
+                                    }
+                                ],
+                                "mustCompleteAll": false
+                            }
+                        ],
+                        "passingThreshold": 1,
+                        "hasPassingThreshold": true,
+                        "codingStep": {
+                            "hints": null,
+                            "project": null,
+                            "senseiHelp": null,
+                            "validationItems": null
+                        },
+                        "senseiStep": null,
+                        "planningStep": null,
+                        "ninjaRequirements": null,
+                        "status": false
+                    },
+                    {
+                        "id": "e146fd53-9a09-41a3-bca9-b2fbe745da4c",
+                        "type": "subgroup",
+                        "sequence": 3,
+                        "name": "solve 3",
+                        "steps": [
+                            {
+                                "id": "8b3f4f82-e28b-4ac8-a86f-b75f185eb923",
+                                "hints": "<p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">❓ Did you change the order of the code blocks so that the strawberry sprite does not appear until the end?</span></p>",
+                                "senseiHelp": "<p><strong>Ask the ninja:</strong>&nbsp;</p><p>❓What blocks need to be moved so that the strawberry sprite does not appear until the very end?</p><p><br></p><p><strong>Solution:&nbsp;</strong></p><p>The strawberry sprite’s <strong>[set sprite to] </strong>and<strong> [set sprite position to]</strong> blocks need to be moved to the end of the project, before the final <strong>[show long text],</strong> <strong>[start screen effect], </strong>and <strong>[play sound]</strong> blocks.</p><p>﻿<img src=\"https://assets.codeninjas.com/clm/assets/images/s4roczxb.kbk.png\"></p>",
+                                "instructions": "<p>When the project runs, the strawberry sprite appears at the beginning of the project. That doesn’t make sense if the bat is searching for fruit!</p><p><br></p><p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">Change </span><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\"><em>only</em></strong><span style=\"background-color: transparent; color: rgb(0, 0, 0);\"> the code needed to fix the </span><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\">bug</strong><span style=\"background-color: transparent; color: rgb(0, 0, 0);\"> so that the strawberry sprite does not appear until after the bat has found it!</span></p>",
+                                "text": null,
+                                "type": null,
+                                "image": null,
+                                "videoUrl": null,
+                                "mediaType": null,
+                                "questions": null,
+                                "badges": null,
+                                "reflectionQuestions": null
+                            }
+                        ],
+                        "title": "Debugging Sequence #2",
+                        "project": {
+                            "editor": {
+                                "filters": [
+                                    {
+                                        "name": "sprites",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "controller",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "game",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "music",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "scene",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "info",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "loops",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "logic",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "variables",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "Math",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "animation",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "images",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "functions",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "arrays",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "text",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "console",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "light",
+                                        "active": false,
+                                        "blocks": []
+                                    },
+                                    {
+                                        "name": "encoders",
+                                        "active": false,
+                                        "blocks": []
+                                    }
+                                ],
+                                "searchBar": true
+                            },
+                            "source": {
+                                "text": {
+                                    "main.ts": "game.splash(\"Looking for Fruit!\")\nscene.setBackgroundColor(8)\nlet bat = sprites.create(img`\n    . . f f f . . . . . . . . f f f \n    . f f c c . . . . . . f c b b c \n    f f c c . . . . . . f c b b c . \n    f c f c . . . . . . f b c c c . \n    f f f c c . c c . f c b b c c . \n    f f c 3 c c 3 c c f b c b b c . \n    f f b 3 b c 3 b c f b c c b c . \n    . c b b b b b b c b b c c c . . \n    . c 1 b b b 1 b b c c c c . . . \n    c b b b b b b b b b c c . . . . \n    c b c b b b c b b b b f . . . . \n    f b 1 f f f 1 b b b b f c . . . \n    f b b b b b b b b b b f c c . . \n    . f b b b b b b b b c f . . . . \n    . . f b b b b b b c f . . . . . \n    . . . f f f f f f f . . . . . . \n    `, SpriteKind.Player)\nbat.setPosition(77, 82)\nlet strawberry = sprites.create(img`\n    . . . . . . . 6 . . . . . . . . \n    . . . . . . 8 6 6 . . . 6 8 . . \n    . . . e e e 8 8 6 6 . 6 7 8 . . \n    . . e 2 2 2 2 e 8 6 6 7 6 . . . \n    . e 2 2 4 4 2 7 7 7 7 7 8 6 . . \n    . e 2 4 4 2 6 7 7 7 6 7 6 8 8 . \n    e 2 4 5 2 2 6 7 7 6 2 7 7 6 . . \n    e 2 4 4 2 2 6 7 6 2 2 6 7 7 6 . \n    e 2 4 2 2 2 6 6 2 2 2 e 7 7 6 . \n    e 2 4 2 2 4 2 2 2 4 2 2 e 7 6 . \n    e 2 4 2 2 2 2 2 2 2 2 2 e c 6 . \n    e 2 2 2 2 2 2 2 4 e 2 e e c . . \n    e e 2 e 2 2 4 2 2 e e e c . . . \n    e e e e 2 e 2 2 e e e c . . . . \n    e e e 2 e e c e c c c . . . . . \n    . c c c c c c c . . . . . . . . \n    `, SpriteKind.Player)\nstrawberry.setPosition(66, 60)\ngame.setDialogFrame(img`\n    .....cccccccccccccc.....\n    ...cbd111111111111dbc...\n    ..cd1111111111111111dc..\n    .cd111111111111111111dc.\n    .b11111111111111111111b.\n    cd11111111111111111111dc\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    cd11111111111111111111dc\n    .b11111111111111111111b.\n    .cd111111111111111111dc.\n    ..cd1111111111111111dc..\n    ..b11d111111111111dbc...\n    .b11bcccccccccccccc.....\n    ccccc...................\n    `)\ngame.showLongText(\"I love eating fruit!\", DialogLayout.Top)\nbat.setPosition(120, 59)\ngame.showLongText(\"Is there fruit here?\", DialogLayout.Left)\nbat.setPosition(32, 60)\ngame.showLongText(\"or is there fruit here?\", DialogLayout.Right)\nbat.setPosition(88, 61)\ngame.showLongText(\"Found it! I love strawberries!\", DialogLayout.Bottom)\neffects.hearts.startScreenEffect()\nmusic.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)\n",
+                                    "pxt.json": "{\n    \"name\": \"Untitled\",\n    \"description\": \"\",\n    \"dependencies\": {\n        \"device\": \"*\"\n    },\n    \"files\": [\n        \"main.blocks\",\n        \"main.ts\",\n        \"README.md\",\n        \"assets.json\"\n    ],\n    \"preferredEditor\": \"blocksprj\",\n    \"languageRestriction\": \"blocks-only\"\n}\n",
+                                    "readmE.md": null,
+                                    "assets.json": "",
+                                    "main.blocks": "<xml xmlns=\"https://developers.google.com/blockly/xml\"><variables><variable type=\"KIND_SpriteKind\" id=\"6|FrY,SCjQN:zy:E0~~w\">Player</variable><variable type=\"KIND_SpriteKind\" id=\"wt9b]!Id5?Yo)Ny0)aXP\">Projectile</variable><variable type=\"KIND_SpriteKind\" id=\"I7R^vZ[2l~DHvfDA!d:^\">Food</variable><variable type=\"KIND_SpriteKind\" id=\"u=~YekW0hEMOD~;~u@Yd\">Enemy</variable><variable id=\"i{!vk25^Wm|}(KAWDwhK\">bat</variable><variable id=\"IP@f#s[hd1@_[(mX8i#z\">strawberry</variable></variables><block type=\"pxt-on-start\" x=\"0\" y=\"0\"><statement name=\"HANDLER\"><block type=\"gameSplash\"><mutation xmlns=\"http://www.w3.org/1999/xhtml\" _expanded=\"0\" _input_init=\"true\"></mutation><value name=\"title\"><shadow type=\"text\"><field name=\"TEXT\">Looking for Fruit!</field></shadow></value><next><block type=\"gamesetbackgroundcolor\"><value name=\"color\"><shadow type=\"colorindexpicker\"><field name=\"index\">8</field></shadow></value><next><block type=\"variables_set\"><field name=\"VAR\" id=\"i{!vk25^Wm|}(KAWDwhK\">bat</field><value name=\"VALUE\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow><block type=\"spritescreate\"><value name=\"img\"><shadow type=\"screen_image_picker\"><field name=\"img\">img`\n. . f f f . . . . . . . . f f f \n. f f c c . . . . . . f c b b c \nf f c c . . . . . . f c b b c . \nf c f c . . . . . . f b c c c . \nf f f c c . c c . f c b b c c . \nf f c 3 c c 3 c c f b c b b c . \nf f b 3 b c 3 b c f b c c b c . \n. c b b b b b b c b b c c c . . \n. c 1 b b b 1 b b c c c c . . . \nc b b b b b b b b b c c . . . . \nc b c b b b c b b b b f . . . . \nf b 1 f f f 1 b b b b f c . . . \nf b b b b b b b b b b f c c . . \n. f b b b b b b b b c f . . . . \n. . f b b b b b b c f . . . . . \n. . . f f f f f f f . . . . . . \n`</field><data>{\"commentRefs\":[],\"fieldData\":{\"img\":\"4i1Jw/#51g[~.`:@OTDO\"}}</data></shadow></value><value name=\"kind\"><shadow type=\"spritekind\"><field name=\"MEMBER\">Player</field></shadow></value></block></value><next><block type=\"spritesetpos\"><value name=\"sprite\"><block type=\"variables_get\"><field name=\"VAR\" id=\"i{!vk25^Wm|}(KAWDwhK\">bat</field></block></value><value name=\"x\"><shadow type=\"positionPicker\"><field name=\"index\">77</field></shadow></value><value name=\"y\"><shadow type=\"positionPicker\"><field name=\"index\">82</field></shadow></value><next><block type=\"variables_set\"><field name=\"VAR\" id=\"IP@f#s[hd1@_[(mX8i#z\">strawberry</field><value name=\"VALUE\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow><block type=\"spritescreate\"><value name=\"img\"><shadow type=\"screen_image_picker\"><field name=\"img\">img`\n. . . . . . . 6 . . . . . . . . \n. . . . . . 8 6 6 . . . 6 8 . . \n. . . e e e 8 8 6 6 . 6 7 8 . . \n. . e 2 2 2 2 e 8 6 6 7 6 . . . \n. e 2 2 4 4 2 7 7 7 7 7 8 6 . . \n. e 2 4 4 2 6 7 7 7 6 7 6 8 8 . \ne 2 4 5 2 2 6 7 7 6 2 7 7 6 . . \ne 2 4 4 2 2 6 7 6 2 2 6 7 7 6 . \ne 2 4 2 2 2 6 6 2 2 2 e 7 7 6 . \ne 2 4 2 2 4 2 2 2 4 2 2 e 7 6 . \ne 2 4 2 2 2 2 2 2 2 2 2 e c 6 . \ne 2 2 2 2 2 2 2 4 e 2 e e c . . \ne e 2 e 2 2 4 2 2 e e e c . . . \ne e e e 2 e 2 2 e e e c . . . . \ne e e 2 e e c e c c c . . . . . \n. c c c c c c c . . . . . . . . \n`</field><data>{\"commentRefs\":[],\"fieldData\":{\"img\":\"2gJCuGmz]X?qlh}oA?SF\"}}</data></shadow></value><value name=\"kind\"><shadow type=\"spritekind\"><field name=\"MEMBER\">Player</field></shadow></value></block></value><next><block type=\"spritesetpos\"><value name=\"sprite\"><block type=\"variables_get\"><field name=\"VAR\" id=\"IP@f#s[hd1@_[(mX8i#z\">strawberry</field></block></value><value name=\"x\"><shadow type=\"positionPicker\"><field name=\"index\">66</field></shadow></value><value name=\"y\"><shadow type=\"positionPicker\"><field name=\"index\">60</field></shadow></value><next><block type=\"game_dialog_set_frame\"><value name=\"frame\"><shadow type=\"dialog_image_picker\"><field name=\"img\">img`\n.....cccccccccccccc.....\n...cbd111111111111dbc...\n..cd1111111111111111dc..\n.cd111111111111111111dc.\n.b11111111111111111111b.\ncd11111111111111111111dc\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\nc1111111111111111111111c\ncd11111111111111111111dc\n.b11111111111111111111b.\n.cd111111111111111111dc.\n..cd1111111111111111dc..\n..b11d111111111111dbc...\n.b11bcccccccccccccc.....\nccccc...................\n`</field><data>{\"commentRefs\":[],\"fieldData\":{\"img\":\"i2S7g*`*;h+7yQq[.OfE\"}}</data></shadow></value><next><block type=\"game_show_long_text\"><field name=\"layout\">DialogLayout.Top</field><value name=\"str\"><shadow type=\"text\"><field name=\"TEXT\">I love eating fruit!</field></shadow></value><next><block type=\"spritesetpos\"><value name=\"sprite\"><block type=\"variables_get\"><field name=\"VAR\" id=\"i{!vk25^Wm|}(KAWDwhK\">bat</field></block></value><value name=\"x\"><shadow type=\"positionPicker\"><field name=\"index\">120</field></shadow></value><value name=\"y\"><shadow type=\"positionPicker\"><field name=\"index\">59</field></shadow></value><next><block type=\"game_show_long_text\"><field name=\"layout\">DialogLayout.Left</field><value name=\"str\"><shadow type=\"text\"><field name=\"TEXT\">Is there fruit here?</field></shadow></value><next><block type=\"spritesetpos\"><value name=\"sprite\"><block type=\"variables_get\"><field name=\"VAR\" id=\"i{!vk25^Wm|}(KAWDwhK\">bat</field></block></value><value name=\"x\"><shadow type=\"positionPicker\"><field name=\"index\">32</field></shadow></value><value name=\"y\"><shadow type=\"positionPicker\"><field name=\"index\">60</field></shadow></value><next><block type=\"game_show_long_text\"><field name=\"layout\">DialogLayout.Right</field><value name=\"str\"><shadow type=\"text\"><field name=\"TEXT\">or is there fruit here?</field></shadow></value><next><block type=\"spritesetpos\"><value name=\"sprite\"><block type=\"variables_get\"><field name=\"VAR\" id=\"i{!vk25^Wm|}(KAWDwhK\">bat</field></block></value><value name=\"x\"><shadow type=\"positionPicker\"><field name=\"index\">88</field></shadow></value><value name=\"y\"><shadow type=\"positionPicker\"><field name=\"index\">61</field></shadow></value><next><block type=\"game_show_long_text\"><field name=\"layout\">DialogLayout.Bottom</field><value name=\"str\"><shadow type=\"text\"><field name=\"TEXT\">Found it! I love strawberries!</field></shadow></value><next><block type=\"particlesStartScreenAnimation\"><mutation xmlns=\"http://www.w3.org/1999/xhtml\" _expanded=\"0\" _input_init=\"true\"></mutation><field name=\"effect\">effects.hearts</field><next><block type=\"music_playable_play\"><field name=\"playbackMode\">music.PlaybackMode.UntilDone</field><value name=\"toPlay\"><shadow type=\"music_melody_playable\"><field name=\"melody\">music.baDing</field></shadow></value></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></statement></block></xml>",
+                                    ".simstate.json": "{\"S/#run\":\"BA==\",\"S/#scope\":\"VW50aXRsZWQ=\"}",
+                                    "images.g.jres": "",
+                                    "images.g.ts": "",
+                                    "tilemap.g.ts": "",
+                                    "tilemap.g.jres": "",
+                                    "_palettes.json": ""
+                                },
+                                "header": {
+                                    "id": "a28f7c02-085a-42ed-8c9d-fa911617bca1",
+                                    "meta": {},
+                                    "name": "Untitled",
+                                    "path": "Untitled",
+                                    "pubId": "",
+                                    "editor": "blocksprj",
+                                    "saveId": null,
+                                    "target": "arcade",
+                                    "recentUse": 1687559639,
+                                    "pubCurrent": false,
+                                    "cloudCurrent": false,
+                                    "githubCurrent": false,
+                                    "targetVersion": "4.0.12",
+                                    "modificationTime": 1687559639,
+                                    "cloudUserId": null
+                                }
+                            },
+                            "languageRestrictions": "blocks-only",
+                            "noProjectRunErrors": false,
+                            "projectHasBeenRun": false
+                        },
+                        "peerReview": false,
+                        "mediaFileId": "",
+                        "introduction": "<p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">Oh no - there are </span><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\">bugs</strong><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">, or problems, in our code! Find and fix the problems by&nbsp; </span><strong style=\"background-color: transparent; color: rgb(0, 0, 0);\">debugging</strong><span style=\"background-color: transparent; color: rgb(0, 0, 0);\"> the code in each section!</span></p><p><br></p><p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">Help the bat find a yummy strawberry to eat!</span></p>",
+                        "lowThreshold": 0,
+                        "hasLowThreshold": false,
+                        "numberOfReviews": 0,
+                        "validationItems": [
+                            {
+                                "text": "Updated sequence of strawberry code",
+                                "type": "perfect-match",
+                                "points": 1,
+                                "failureText": "Check the order of your code blocks.",
+                                "requirements": [
+                                    {
+                                        "file": "main.ts",
+                                        "parameters": null,
+                                        "functionName": null,
+                                        "match": "game.splash(\"Looking for Fruit!\")\nscene.setBackgroundColor(8)\nlet bat = sprites.create(img`\n    . . f f f . . . . . . . . f f f \n    . f f c c . . . . . . f c b b c \n    f f c c . . . . . . f c b b c . \n    f c f c . . . . . . f b c c c . \n    f f f c c . c c . f c b b c c . \n    f f c 3 c c 3 c c f b c b b c . \n    f f b 3 b c 3 b c f b c c b c . \n    . c b b b b b b c b b c c c . . \n    . c 1 b b b 1 b b c c c c . . . \n    c b b b b b b b b b c c . . . . \n    c b c b b b c b b b b f . . . . \n    f b 1 f f f 1 b b b b f c . . . \n    f b b b b b b b b b b f c c . . \n    . f b b b b b b b b c f . . . . \n    . . f b b b b b b c f . . . . . \n    . . . f f f f f f f . . . . . . \n    `, SpriteKind.Player)\nbat.setPosition(77, 82)\ngame.setDialogFrame(img`\n    .....cccccccccccccc.....\n    ...cbd111111111111dbc...\n    ..cd1111111111111111dc..\n    .cd111111111111111111dc.\n    .b11111111111111111111b.\n    cd11111111111111111111dc\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    c1111111111111111111111c\n    cd11111111111111111111dc\n    .b11111111111111111111b.\n    .cd111111111111111111dc.\n    ..cd1111111111111111dc..\n    ..b11d111111111111dbc...\n    .b11bcccccccccccccc.....\n    ccccc...................\n    `)\ngame.showLongText(\"I love eating fruit!\", DialogLayout.Top)\nbat.setPosition(120, 59)\ngame.showLongText(\"Is there fruit here?\", DialogLayout.Left)\nbat.setPosition(32, 60)\ngame.showLongText(\"or is there fruit here?\", DialogLayout.Right)\nbat.setPosition(88, 61)\nlet strawberry = sprites.create(img`\n    . . . . . . . 6 . . . . . . . . \n    . . . . . . 8 6 6 . . . 6 8 . . \n    . . . e e e 8 8 6 6 . 6 7 8 . . \n    . . e 2 2 2 2 e 8 6 6 7 6 . . . \n    . e 2 2 4 4 2 7 7 7 7 7 8 6 . . \n    . e 2 4 4 2 6 7 7 7 6 7 6 8 8 . \n    e 2 4 5 2 2 6 7 7 6 2 7 7 6 . . \n    e 2 4 4 2 2 6 7 6 2 2 6 7 7 6 . \n    e 2 4 2 2 2 6 6 2 2 2 e 7 7 6 . \n    e 2 4 2 2 4 2 2 2 4 2 2 e 7 6 . \n    e 2 4 2 2 2 2 2 2 2 2 2 e c 6 . \n    e 2 2 2 2 2 2 2 4 e 2 e e c . . \n    e e 2 e 2 2 4 2 2 e e e c . . . \n    e e e e 2 e 2 2 e e e c . . . . \n    e e e 2 e e c e c c c . . . . . \n    . c c c c c c c . . . . . . . . \n    `, SpriteKind.Player)\nstrawberry.setPosition(66, 60)\ngame.showLongText(\"Found it! I love strawberries!\", DialogLayout.Bottom)\neffects.hearts.startScreenEffect()\nmusic.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)",
+                                        "instanceCount": 1,
+                                        "effect": null,
+                                        "eventType": null,
+                                        "music": null,
+                                        "timing": null
+                                    }
+                                ],
+                                "mustCompleteAll": false
+                            }
+                        ],
+                        "passingThreshold": 1,
+                        "hasPassingThreshold": true,
+                        "codingStep": {
+                            "hints": null,
+                            "project": null,
+                            "senseiHelp": null,
+                            "validationItems": null
+                        },
+                        "senseiStep": null,
+                        "planningStep": null,
+                        "ninjaRequirements": null,
+                        "status": false
+                    }
+                ],
+                "status": false
+            },
+            "status": false
+        },
+        "description": "<p><strong style=\"background-color: transparent; color: rgb(255, 255, 255);\">You’ve reached Level 2 of White Belt! </strong><span style=\"background-color: transparent; color: rgb(255, 255, 255);\">In this level, you’ll learn about using </span><strong style=\"background-color: transparent; color: rgb(255, 255, 255);\">sequence</strong><span style=\"background-color: transparent; color: rgb(255, 255, 255);\">, which is the specific order of steps in code, to make your projects run correctly! Here are the achievements you’ll unlock in Level 2:</span></p>",
+        "mustCompletePrevious": true,
+        "badges": [
+            {
+                "url": "https://assets.codeninjas.com/clm/assets/icons/WB_Level%202.png",
+                "title": "Step by Step",
+                "description": "<p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">Use sequence to control the order in which things happen in a project.</span></p>"
+            },
+            {
+                "url": "https://assets.codeninjas.com/clm/assets/icons/WB_2%20-%20Whats%20in%20a%20Name.png",
+                "title": "What’s in a Name?",
+                "description": "<p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">Change the name of a sprite variable.</span></p>"
+            },
+            {
+                "url": "https://assets.codeninjas.com/clm/assets/icons/WB_2%20-%20Story%20Teller.png",
+                "title": "Storyteller",
+                "description": "<p><span style=\"background-color: transparent; color: rgb(0, 0, 0);\">Add a dialog box and set its position on screen.</span></p>"
+            },
+            {
+                "url": "https://assets.codeninjas.com/clm/assets/icons/WB_2%20-%20That%20Belongs%20in%20a%20Museum.png",
+                "title": "That Belongs in a Museum!",
+                "description": "<p>Add a frame to a dialog box.</p>"
+            },
+            {
+                "url": "https://assets.codeninjas.com/clm/assets/icons/WB_2%20-%20Colorful%20Language.png",
+                "title": "Colorful Language",
+                "description": "<p>Change the dialog box font color.</p>"
+            }
+        ],
+        "activeGroupId": "fd5e268c-44a1-4140-8f9c-703ab1954930",
+        "activeSubGroupId": "7fc381f5-58c0-4f3a-80ba-0d2edb34b133",
+        "activeActivityId": "1be7c542-b814-422c-8cfa-eb24a17c56dc",
+        "status": false,
+        "courseName": "White Belt"
+    },
+    "relationShips": {
+        "data": {
+            "programId": "1b04b70e-39e3-4a19-968c-3e7cccc0dd47",
+            "courseId": "f7fc4496-351a-446e-be4d-81593c7afe0f"
+        }
+    }
+}

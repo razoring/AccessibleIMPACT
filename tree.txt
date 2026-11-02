@@ -1,0 +1,280 @@
+├── Sprites
+│   ├── Create
+│   │   ├── variables_set (data-id: "^T#Yqdb4A2rOBD3d9t7h")
+│   │   └── spritescreatenoset (data-id: "74:J`rN6(FKBL{U^{7FE")
+│   ├── Physics
+│   │   ├── spritesetvel (data-id: "kT$mD6m?0[Vt9dDxtC0O")
+│   │   ├── spritesetpos (data-id: ".#g8.,x,3==:hj|+6!et")
+│   │   ├── Sprite_blockCombine_set (data-id: "Ubu#%jt-(9Z7B%/:vbhl")
+│   │   ├── Sprite_blockCombine_change (data-id: "F-Dr)Brq[o~K(q]2h$69")
+│   │   ├── Sprite_blockCombine_get (data-id: "o5.vIs@3vZ9;RrN,j5{j")
+│   │   ├── spriteFollowOtherSprite (data-id: "(XoB5U~J;XD!KryeaY%$")
+│   │   └── spriteUnfollow (data-id: "`48EUAcnQ!cLV;8nf,sO")
+│   ├── Effects
+│   │   ├── startEffectOnSprite (data-id: "!W;ueq+{$Lk__X8J4HB7")
+│   │   ├── particlesclearparticles (data-id: "W6bPAT/PS`f1*c|d,6WV")
+│   │   ├── spritedestroy2 (data-id: "(U,DpveC8@%`mdxGmpU%")
+│   │   ├── sprites_destroy_all_sprites_of_kind (data-id: "0[3zmV?4kOGJXS`w2SdB")
+│   │   ├── spritesaytext (data-id: "YJu93w+w{N=@8!f8bF0l")
+│   │   ├── spritesetsetstayinscreen (data-id: "}MwT.A5qde47v+?euUfz")
+│   │   ├── spritesetsetbounceonwall (data-id: "de9Z-HVJE|Y]qlf1y4K!")
+│   │   └── spritesetsetflag (data-id: "RYR`#MIil5UxM7w3D*2f")
+│   ├── Projectiles
+│   │   ├── variables_set (data-id: "[uTFP#*F*QxK`L*2*mWg")
+│   │   └── variables_set (data-id: "n,h6/@WW6}6U:/-(^/=:")
+│   ├── Overlaps
+│   │   ├── spritesoverlap (data-id: "BPU[C@oRA7N$B40;hWg/")
+│   │   ├── spriteoverlapswith (data-id: "q8I6I3YVfW/8z9;N#]MJ")
+│   │   ├── spritesetkind (data-id: "7LY2DXFwoGx8O%lL5q;u")
+│   │   └── spritegetkind (data-id: "7DDa/r/vh$yT6T43Nd(.")
+│   ├── Lifecycle
+│   │   ├── spritesoncreated (data-id: "x%z}.n4Vk8XCiJj,F3b(")
+│   │   ├── spritesondestroyed (data-id: "q%F6KrLnyRMvqvzVGhS#")
+│   │   ├── allOfKind (data-id: "?dHnKt}fOef~a[qVBWa3")
+│   │   └── spritekind (data-id: "G2w`loFx[|obHor}`3ke")
+│   ├── Image
+│   │   ├── spriteimage (data-id: "To9)`5ksQ(oFg1}2cq5M")
+│   │   └── spritesetimage (data-id: "7RbE_$NY!#@kg$xUiB9V")
+│   └── Scale
+│       ├── sprite_change_scale (data-id: "`5-cu]#*8c_j!QM#=ze.")
+│       └── sprite_set_scale (data-id: "^y{mg1}$*h|[}PV`=C(P")
+├── Controller
+│   ├── Single Player
+│   │   ├── game_control_sprite (data-id: "~{$(z.v`~J!K.fCD4*f{")
+│   │   ├── keyonevent (data-id: "pF{1fR1tUr3SOyL_=x,)")
+│   │   ├── keyispressed (data-id: "oQ,4|}C@IqJMGt2zFfIC")
+│   │   ├── keydx (data-id: "PDmo8?]/~G/={,4]{o.}")
+│   │   └── keydy (data-id: "iz^=::~0IzqnP^YK?Sei")
+│   └── Multiplayer
+│       ├── ctrlgame_control_sprite (data-id: "Mr=3Qha}]V!ErivqSww=")
+│       ├── ctrlonevent (data-id: "_^Fq?#+PwkH$NRO-I)w!")
+│       ├── ctrlonbuttonevent (data-id: "%.B45-R.{bD;f|hDyzK0")
+│       ├── ctrlispressed (data-id: "/JhMG%I#eq}6k~?g/Aj3")
+│       ├── ctrldx (data-id: ")34X{;8*`ns1g(w(5_rt")
+│       └── ctrldy (data-id: "Z},OoC:PxXX!DTw{~btv")
+├── Game
+│   ├── Gameplay
+│   │   ├── gameupdate (data-id: "s1BJc1EZ8KDK@Bce$hUf")
+│   │   ├── gameinterval (data-id: "l2nf75e1/@hWw1=ouUn}")
+│   │   ├── arcade_game_runtime (data-id: "OC7u9y`(hwVC{KHO@%4@")
+│   │   └── arcade_game_reset (data-id: "G-ff(gNKG}EjU2T$3_`n")
+│   ├── Game Over
+│   │   ├── gameOver2 (data-id: "GsMDi|3uL(hcRgtDIM6.")
+│   │   ├── game_setgameovereffect (data-id: "(yg^(e=dbxg.lRZvFUKZ")
+│   │   ├── game_setgameoverplayable (data-id: "*VR*rwFV.s@!GRCF9Uc6")
+│   │   ├── game_setgameovermessage (data-id: "(L*P)$2wKKFvKy|]JJ7n")
+│   │   └── game_setgameoverscoringtype (data-id: "=a1QsY?R=hoOv{j,)e3h")
+│   ├── Prompt
+│   │   ├── gameSplash (data-id: "wsQF5O.-~8GbLxW@7!sx")
+│   │   ├── gameask (data-id: "@[uCIG_1;wmfy@6Hz*%@")
+│   │   ├── gameaskfornumber (data-id: "Wz=wP[GeWZtD+g?Vt6HB")
+│   │   └── gameaskforstring (data-id: "^GE}9X4-}I:nOH8|d_qS")
+│   └── Dialogs
+│       ├── game_dialog_set_text_color (data-id: "1lAY7]!7yxePLH@x2V!=")
+│       ├── game_dialog_set_cursor (data-id: "^61Q^]V2@;wZ]SDar|]d")
+│       ├── game_dialog_set_frame (data-id: "ml6{I1i@qZG9H*wVgNB|")
+│       └── game_show_long_text (data-id: "tyh+FPnL5bp^`p}xhqgW")
+├── Music
+│   ├── Songs
+│   │   ├── music_playable_play (data-id: "bQZ1a#$agMIDrfQ#mDhs")
+│   │   └── music_playable_play (data-id: "x.3tXUE@#1!oSxfU.*r7")
+│   ├── Sounds
+│   │   ├── music_playable_play (data-id: "6zq,7KyCkS$@W9,Js}A`")
+│   │   ├── music_stop_all_sounds (data-id: ",x}}V:qMTsG-wiCw@KZm")
+│   │   ├── music_playable_play (data-id: "+Dmk`!YtIC.DExuk[Y4.")
+│   │   └── soundExpression_generateSimilarSound (data-id: "O~1fPF?8E{]6Lu.;g,QB")
+│   ├── Tone
+│   │   ├── music_ring (data-id: "5(u+k1qsXK+?B4O3OS~G")
+│   │   ├── music_rest (data-id: "[uwBv!Hw|kC{viYg%ydl")
+│   │   ├── music_playable_play (data-id: "7np)`sb)*~jagq97T`:N")
+│   │   └── device_note (data-id: "OsJGBqFmfmg?L-Oq*hQ=")
+│   ├── Volume
+│   │   └── synth_set_volume (data-id: "XShgH`|$6c7jo`$OE4fA")
+│   └── Tempo
+│       ├── device_change_tempo (data-id: "R+e4o9eX3t4hs]rv=jvx")
+│       ├── device_set_tempo (data-id: "j(g$_%a|v]AA?{_lNE,=")
+│       ├── device_tempo (data-id: "*@zaVBI;_y^}QEptqLPU")
+│       └── device_beat (data-id: "v=Wx=yQ^a8eFhLA46N=%")
+├── Scene
+│   ├── Screen
+│   │   ├── scenescreenwidth (data-id: "F]jOu!}H)mM;`p$xnUXv")
+│   │   ├── scenescreenheight (data-id: "uNVb_b.Rm`v8Q{cfsTex")
+│   │   ├── gamesetbackgroundcolor (data-id: "VW]2xXWZ^z_vB0=5WIJA")
+│   │   ├── gamesetbackgroundimage (data-id: "9W04w@J5;Ezc(X%%!LK2")
+│   │   ├── gamebackgroundimage (data-id: "Kn(Q:cr1*m.B/wX_k%jw")
+│   │   └── gamebackgroundcolor (data-id: "#YTKM(!t{KGg_(.{sQ-K")
+│   ├── Camera
+│   │   ├── camerafollow (data-id: "kK+!,E.qI/[hegdr*~dN")
+│   │   ├── camerashake (data-id: "t)wUkMtno?{dXME|!(O`")
+│   │   ├── camerapos (data-id: "]t],_qMht-GZqhv*D%AL")
+│   │   └── cameraproperty (data-id: "Qz!37MHOC1)9f*4kD}S*")
+│   ├── Effects
+│   │   ├── particlesStartScreenAnimation (data-id: "C0o.v*9H|M0bdmw{+1Vw")
+│   │   └── particlesEndScreenAnimation (data-id: "Vo`[3I$0C`d1;ejMC3{%")
+│   ├── Tilemaps
+│   │   ├── set_current_tilemap (data-id: "IK)#-?m.yq9l4mx]CSln")
+│   │   ├── tiles_tilemap_editor (data-id: "i,}cbQ[.UQ5+c7N19`k?")
+│   │   ├── spriteshittile (data-id: "-*G)}A*`C*qS!n_d^Q@0")
+│   │   └── spriteshitwall (data-id: "vz?#neQ`c%g*]N!Otw6V")
+│   ├── Tilemap Operations
+│   │   ├── mapplaceontile (data-id: "LSLWMSbBP/=KP}5L9`rA")
+│   │   ├── mapplaceonrandomtile (data-id: "5FB@g+Qo2efAA|vZTh13")
+│   │   ├── mapsettileat (data-id: "cqWywC|3]0z+_@@11P$L")
+│   │   └── mapsetwallat (data-id: "A^9K=!o2.h#C,_{]8@C)")
+│   └── Locations
+│       ├── mapgettile (data-id: "F.WTWc+N-aWw@08W5!wA")
+│       ├── tiles_location_of_sprite (data-id: "AT-Vo;PMWxMS8W-p`qy=")
+│       ├── tiles.Location_blockCombine_get (data-id: "!qF}!}.UbiUPvMUT[RVl")
+│       ├── maplocationistile (data-id: "NtH=Rbkr7RN!sf#M}oiw")
+│       ├── tiles_tile_at_location_is_wall (data-id: "q^Q1Ju46f0-vXNQdXx-b")
+│       ├── spritetileat (data-id: "*-_C4T{]ScSh-_ckgS_:")
+│       ├── spritehasobstacle (data-id: "%Jv[:WDUCcc^}PX;%bOl")
+│       ├── mapgettilestype (data-id: "@-wM.d=#[9CxiCN#(NU#")
+│       ├── tiles_location_get_neighboring_location (data-id: "n-pRD`%2@Zn=-9q@5xMf")
+│       ├── tiles_image_at_location (data-id: "65aw.u8AP49,LmYXWEKV")
+│       └── tileset_tile_picker (data-id: "Lk9fEkRd)I5B)+]NIJ-=")
+├── Info
+│   ├── Score
+│   │   ├── hudScore (data-id: "spR3!{A3LHGkKA=yhgSS")
+│   │   ├── highScore (data-id: "]**Yr27HOY4:Z[V[|UK3")
+│   │   ├── hudsetScore (data-id: "z;UxC_W_eGJ=K@({4Wdk")
+│   │   ├── hudChangeScoreBy (data-id: "sI._;oDfE#4l:Q~*[0a|")
+│   │   └── gameonscore (data-id: "c{W+VY4Bsd;vnR[Zw*FN")
+│   ├── Life
+│   │   ├── hudLife (data-id: "u}|tgDxUj~C.PtA)fhT9")
+│   │   ├── hudSetLife (data-id: ",2z^}za:{`D$+7W}D5~A")
+│   │   ├── hudChangeLifeBy (data-id: "Nx#in;+tfBe/HI58naWb")
+│   │   └── gamelifeevent (data-id: "n||n8:;+O{dVMVXEu:Z3")
+│   ├── Countdown
+│   │   ├── gamegetcountdown (data-id: "irAH1q`~Ew=[/$MN5lh3")
+│   │   ├── gamecountdown (data-id: "S;|8-}.NT{fpg8CW9Z;|")
+│   │   ├── gamechangecountdown (data-id: "3H~UnlCJpoNPX+GG6cw1")
+│   │   ├── gamestopcountdown (data-id: "VH%X.icdBLAQFI.*.|rx")
+│   │   └── gamecountdownevent (data-id: "2%Swk@iWds=~2Un7fk/o")
+│   └── Multiplayer
+│       ├── playerinfoonscore (data-id: "yQ]FC),rMHW#cIwfm*Zs")
+│       ├── playerinfoonlifezero (data-id: "L?9@n~Nay7$qL=]Dda5_")
+│       ├── pihaslife (data-id: "Klv5zM1pjDE-:rDq]XVs")
+│       ├── pichangelife (data-id: "JT;),v}b{WIJps@HT$NK")
+│       ├── pisetlife (data-id: "atHgenZ4EvmN`1r6g.qJ")
+│       ├── info_PlayerInfo_life (data-id: "La39qxx3|8uquBoX6b*}")
+│       ├── pichangescore (data-id: "Y?gA9`[n(yCT1U68V`e@")
+│       ├── pisetscore (data-id: "F`.IJjJQ[^ZwNrXJw.Y,")
+│       └── piscore (data-id: "bF.ZDV4}pUphi.7eMBn=")
+├── Loops
+│   ├── forever (data-id: "r(?a%~,83[FV$v{Ddx4T")
+│   ├── device_pause (data-id: "Uzn?4%E.x(~j!BTgn-a^")
+│   ├── controls_repeat_ext (data-id: "F`H6MWpHdY0;H|o,V2x:")
+│   ├── device_while (data-id: "eow1nBGz~)4={iYh967?")
+│   ├── pxt_controls_for (data-id: "bqM;F4a=1AZ!{_!$XcU^")
+│   ├── pxt_controls_for_of (data-id: "S9#]yc?_9d3d]`;?AyX!")
+│   ├── break_keyword (data-id: "t}P=3.9I3AYUa;U5Bi[l")
+│   ├── continue_keyword (data-id: "T#p]?vYf6vh|(1F;`]my")
+│   ├── pxt-on-start (data-id: "ANdC-N~cg{Rg)Nz6B9P/")
+│   └── pxt_pause_until (data-id: "7U,gxz=Az)ZQi@6K4Xhi")
+├── Logic
+│   ├── Conditionals
+│   │   ├── controls_if (data-id: ";4iK`Xk3=8|J96OAwr8V")
+│   │   └── controls_if (data-id: "VYx|7{buWyz(Yp{-5`Hs")
+│   ├── Comparison
+│   │   ├── logic_compare (data-id: "LqVk3T~O)ks/@Tdeg.R`")
+│   │   ├── logic_compare (data-id: "!OrDNz[KFBd32s66u+7T")
+│   │   └── logic_compare (data-id: "zXdmj`ef_#G%D=Y_6+v2")
+│   └── Boolean
+│       ├── logic_operation (data-id: "A9A7a8eE86m-8]B8tqz%")
+│       ├── logic_operation (data-id: "5B6oG5|`]sgSIB=8#dC.")
+│       ├── logic_negate (data-id: "8,*;[C{oS@MaeaFrb?Jk")
+│       ├── logic_boolean (data-id: ",{oN|bcu{uq_L2Q6QM#h")
+│       └── logic_boolean (data-id: "nuX}!AP}2*je}};|YDFf")
+├── Variables  [no blocks (only "Make a Variable..." button)]
+├── Math
+│   ├── math_arithmetic (data-id: "S:h#g4(P!I@AL)]qNDr(")
+│   ├── math_arithmetic (data-id: ":yeFY%|1OMubrd`b?QS5")
+│   ├── math_arithmetic (data-id: "3^=3YZ=|T2Lm=Y}6$~W,")
+│   ├── math_arithmetic (data-id: "*_8lQI$(PJ?]/DXmm!ne")
+│   ├── math_number (data-id: "mi;g]xiPce^3{$[O0]}R")
+│   ├── math_modulo (data-id: "j[%Qd|6E9Bv^11Eohy0U")
+│   ├── math_op2 (data-id: "VsjG{CBY!Egs_N1cn,1B")
+│   ├── math_op2 (data-id: "HaY2Rek{1F2QjDN:T;`3")
+│   ├── math_op3 (data-id: "cEpo!F1Tfikt*$fJ/icz")
+│   ├── math_js_op (data-id: "y`m]6#@=Tl7,|b~]b@A)")
+│   ├── math_js_round (data-id: "1C,w*pmKW3GB;c+4g7;)")
+│   ├── device_random (data-id: "d,9Lha$:krz+J,9;][4h")
+│   ├── math_constrain_value (data-id: "rxF}PC!0I`6JQ,N/U1nk")
+│   ├── math_map (data-id: "7p6K_lIvawJEQsJPC?!G")
+│   ├── percentchance (data-id: "mw|z:TWg4fMaZ2gGx!`l")
+│   └── Math__constant (data-id: "a?({qt[SNn^/HT!~7e3V")
+├── Animation
+│   ├── run_image_animation (data-id: "tV@Kv/WAMCqL45C9[`i)")
+│   ├── run_movement_animation (data-id: "$xYBV$Q,.Wu.1^f{rnV^")
+│   ├── stop_animations (data-id: "#@U]t$]}lPOhZM--TM1]")
+│   └── animation_editor (data-id: "_@#7=|^GtxqS?hj-8s4n")
+├── Advanced  [collapsible section]
+│   ├── Images
+│   │   ├── Create
+│   │   │   ├── screen_image_picker (data-id: "IOv/]n,f1!M_]M9PDs$y")
+│   │   │   ├── image_create (data-id: "^s4$fhPG{owAw!0Z(n!p")
+│   │   │   ├── Image_clone (data-id: "Qdt]!-J?10-wTJJPJe%!")
+│   │   │   ├── imagescreen (data-id: "+1oi5423xenNKUIU~*n[")
+│   │   │   └── image_get_dimension (data-id: "8.|H%rj}VB!3w}vbhR5=")
+│   │   ├── Drawing
+│   │   │   ├── Image_fill (data-id: "-CVgqc]G:DXV13oFje(m")
+│   │   │   ├── Image_getPixel (data-id: "J}m`VA,OSW^Zr/E|h{9C")
+│   │   │   ├── Image_setPixel (data-id: "]tJ~e/xu;eBveO=h98o_")
+│   │   │   ├── Image_drawRect (data-id: "n*lA4;am/.z%;@CGk@:H")
+│   │   │   ├── Image_drawLine (data-id: "t{Nhtcx-3bV0)ITaSpxu")
+│   │   │   ├── Image_fillRect (data-id: "O!fyKc5Rqh.Ex{Ouc)nD")
+│   │   │   └── image_draw_transparent_image (data-id: "d(gT:,p=j)N6A/oN;`;X")
+│   │   ├── Transformations
+│   │   │   ├── Image_replace (data-id: "nohDn9(2.5vCJ$W-y|tz")
+│   │   │   ├── Image_flipY (data-id: "N,Ws6TQ{jJNt.FqL-;P,")
+│   │   │   └── Image_flipX (data-id: "[3f)EE0AENHHLj;l!Bg7")
+│   │   └── Compare
+│   │       └── Image_equals (data-id: "Qx~FR2)_oVrrO+.sv9|d")
+│   ├── Functions
+│   │   ├── function_return (data-id: "oR~a{TuBA;-2O@lYHxA[")
+│   │   └── Your Functions
+│   │       └── function_call (data-id: "qlEgmCv^sMn,7O$[8N3k")
+│   ├── Arrays
+│   │   ├── Create
+│   │   │   ├── variables_set (data-id: "8==W*8/Z865%=]SjUh@*")
+│   │   │   ├── variables_set (data-id: "Ja5,xKpb`sdl#K*y[?`e")
+│   │   │   └── lists_create_with (data-id: "qmWb_2)ZR/Gt6TrDKv^:")
+│   │   ├── Read
+│   │   │   ├── lists_length (data-id: "+bf5;xMhsph67WxWfq8{")
+│   │   │   ├── lists_index_get (data-id: "@?M7}0kq2}@I$mr|=NDY")
+│   │   │   ├── array_removeat (data-id: "$g|C-2c,-k^cj`lq,DKj")
+│   │   │   ├── array_pop (data-id: "zK}{d0RhD3^jq`!#V8Lj")
+│   │   │   ├── array_shift (data-id: "G^?1/Ghl:(W.XX_Ji]UC")
+│   │   │   └── array_pickRandom (data-id: "um[=*wVx7eXGU;50$k5[")
+│   │   ├── Modify
+│   │   │   ├── lists_index_set (data-id: ",@J8I58[ZIYTqo/O?@Cc")
+│   │   │   ├── array_push (data-id: ":tEjSP,1ib^U`x*AdZ*~")
+│   │   │   ├── array_pop_statement (data-id: "[B/@bX+YSDKC~($ZU+Yy")
+│   │   │   ├── array_shift_statement (data-id: "sxo3Yn`-%;BoBv:|el=%")
+│   │   │   ├── array_unshift (data-id: "T!-I7zrx_@~J,b,8.joA")
+│   │   │   ├── array_unshift_statement (data-id: "hlu%r,IxZp~C.Kj?gH~v")
+│   │   │   ├── array_insertAt (data-id: "69~JOO}`TjVg?d~PRIw:")
+│   │   │   └── array_removeat_statement (data-id: "PwLyNC/4F?0XXYEqOX`P")
+│   │   └── Operations
+│   │       ├── array_indexof (data-id: "{e!DQH^lsnP=kKr`aSTY")
+│   │       └── array_reverse (data-id: ";8#yt7Vx?@d3_[@a6Z{Z")
+│   ├── Text
+│   │   ├── text (data-id: "z?AJD;.uUWU/=!3h#r=a")
+│   │   ├── text_length (data-id: "w,gJ2lHyr;#UgKmw;d5X")
+│   │   ├── text_join (data-id: "[T?2E]j~?T7Z3vusYBgL")
+│   │   ├── string_parsefloat (data-id: "ZmAo9P!D}mOm%TaApdKf")
+│   │   ├── string_split (data-id: "($_:sNb``Gq3MiI?%8(k")
+│   │   ├── string_includes (data-id: "|W!!;Sr!jLgBwuhs`]oN")
+│   │   ├── string_indexof (data-id: "N,NVffZ~b`{la]]Xd*+=")
+│   │   ├── string_isempty (data-id: "WD/ei(bHxft]YvIC91Vo")
+│   │   ├── string_substr_new (data-id: "B.3n5H#R*h-5A:**H}E0")
+│   │   ├── string_compare (data-id: "TWbw?ssvKL1{j:`.u$LC")
+│   │   ├── string_get (data-id: "tbeH]dG.?l0rHo#{H*(_")
+│   │   ├── string_charcode_at (data-id: "33Q$se+/v)z!2K{CY1g`")
+│   │   ├── variable_to_text (data-id: "|iz:NfMP5FY6GYruE2AJ")
+│   │   └── stringFromCharCode (data-id: "2Pq*$?eQGF_mTw3TVZ?4")
+│   └── Console
+│       ├── console_log (data-id: "*O+#^63!)#DP{tU|;hEO")
+│       └── console_log_value (data-id: "{n5}z/6u$!fy4bh!Ky~[")
+└── Extensions  [opens extension gallery (no blocks)]
