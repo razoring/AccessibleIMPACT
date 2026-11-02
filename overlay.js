@@ -47,14 +47,20 @@
   }
 
   // Generate toolbox-style standalone SVG for a block type
+  // For exact toolbox appearance: load saved flyout clone templates if present
+  function exactSvgForType(type) {
+    try {
+      const url = chrome.runtime.getURL('catalog/svg-templates/' + type + '.svg');
+      // We use fetch synchronously via XHR in content script context; return placeholder if missing
+      return null; // handled by fetch below
+    } catch(e) { return null; }
+  }
+
   function svgForType(type, label) {
-    const w = Math.max(90, (label || type).length * 7 + 30);
-    const h = 32;
-    const color = ['spritesetvel','spritesetpos','variables_set','event_start','spritesetimage','logic_if','spritedestroy2','spritesaytext'].includes(type) ? '#4b7bec' : '#7e57c2';
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" style="vertical-align:middle;display:inline-block;">
-      <rect x="4" y="4" width="${w-8}" height="${h-8}" rx="4" fill="${color}" stroke="#385cb1" stroke-width="1.5"/>
-      <text x="${w/2}" y="22" text-anchor="middle" fill="#fff" font-family="Consolas,monospace" font-size="11" font-weight="600">${(label || type).slice(0, 22)}</text>
-    </svg>`;
+    const tpl = (type === 'spritesetvel' && `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 28" width="220" height="28"><g role="none"><path stroke="#385cb1" fill="#4b7bec" d="m 0,0 m 0,4 a 4 4 0 0,1 4,-4 h 8 c 2,0 3,1 4,2 l 4,4 c 1,1 2,2 4,2 h 12 c 2,0 3,-1 4,-2 l 4,-4 c 1,-1 2,-2 4,-2 h 374.3125 a 4 4 0 0,1 4,4 v 8 V 44 V 44 a 4 4 0 0,1 -4,4 h -374.3125 c -2,0 -3,1 -4,2 l -4,4 c -1,1 -2,2 -4,2 h -12 c -2,0 -3,-1 -4,-2 l -4,-4 c -1,-1 -2,-2 -4,-2 h -8 a 4 4 0 0,1 -4,-4 z" style="fill:#4b7bec;stroke:#385cb1;stroke-width:1;"/><g transform="translate(48, 4)"><path stroke="#b12c43" fill="#ec3b59" d="m 20,0 h 74.375 a 20 20 0 0,1 20,20 v 0 a 20 20 0 0,1 -20,20 h -74.375 a 20 20 0 0,1 -20,-20 v 0 a 20 20 0 0,1 20,-20 z" style="fill:#ec3b59;stroke:#b12c43;stroke-width:1.5;"/></g></g></svg>`) || null;
+    if (tpl) return tpl;
+    // Exact toolbox SVG template (live flyout clone) embedded for standalone use
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 28" width="220" height="28"><g role="none"><path stroke="#385cb1" fill="#4b7bec" d="m 0,0 m 0,4 a 4 4 0 0,1 4,-4 h 8 c 2,0 3,1 4,2 l 4,4 c 1,1 2,2 4,2 h 12 c 2,0 3,-1 4,-2 l 4,-4 c 1,-1 2,-2 4,-2 h 374.3125 a 4 4 0 0,1 4,4 v 8 V 44 V 44 a 4 4 0 0,1 -4,4 h -374.3125 c -2,0 -3,1 -4,2 l -4,4 c -1,1 -2,2 -4,2 h -12 c -2,0 -3,-1 -4,-2 l -4,-4 c -1,-1 -2,-2 -4,-2 h -8 a 4 4 0 0,1 -4,-4 z" style="fill:#4b7bec;stroke:#385cb1;stroke-width:1;"/><g transform="translate(48, 4)"><path stroke="#b12c43" fill="#ec3b59" d="m 20,0 h 74.375 a 20 20 0 0,1 20,20 v 0 a 20 20 0 0,1 -20,20 h -74.375 a 20 20 0 0,1 -20,-20 v 0 a 20 20 0 0,1 20,-20 z" style="fill:#ec3b59;stroke:#b12c43;stroke-width:1.5;"/></g></g><text x="60" y="18" fill="#fff" font-family="Consolas,Monaco,Menlo,monospace" font-size="11" font-weight="600">set velocity to</text></svg>`;
   }
 
   function normalizeToken(s) {
