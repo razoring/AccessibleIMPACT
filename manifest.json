@@ -6,7 +6,9 @@
   "host_permissions": [
     "https://impact.codeninjas.com/*",
     "https://api.impact.codeninjas.com/*",
+    "https://*.impact.codeninjas.com/*",
     "https://arcade.makecode.com/*",
+    "https://api.makecode.com/*",
     "https://cdn.makecode.com/*"
   ],
   "permissions": [
