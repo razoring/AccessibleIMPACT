@@ -42,16 +42,62 @@
   });
 
   async function renderToken(tokenText) {
-    // 1. Load/create a hidden hidden workspace (clone approach) or use flyout workspace.
-    // For skeleton: use the editor's flyout workspace (opened by selecting category in overlay click flow).
-    // Simplified approach for P1 skeleton:
-    const B = window.pxt.blocks.requireBlockly();
-    const ws = B.getMainWorkspace();
-
-    // 2. Resolve token -> flyout workspace block type; skeleton returns placeholder with explanation.
-    // The full version uses category selection + flyout type scan (see proof-of-concept).
-    // Here we return a minimal placeholder to demonstrate the message flow.
-    return { svg: '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="30"><text x="8" y="20" style="font:600 12pt Consolas;fill:#385cb1">[rendered: ' + tokenText.slice(0, 40) + ']</text></svg>', width: 240, height: 30 };
+    // Resolve token -> block type via live flyout index (P1 proof index) or catalog.
+    const B = window.pxt && window.pxt.blocks ? window.pxt.blocks.requireBlockly() : null;
+    if (!B) return { svg: null, err: 'pxt not loaded' };
+    const ws = B.getMainWorkspace ? B.getMainWorkspace() : null;
+    const tb = ws && ws.getToolbox ? ws.getToolbox() : null;
+    if (!tb) return { svg: null, err: 'no toolbox' };
+    const index = window.__renderIndex || {};
+    const matchType = tokenText.toLowerCase();
+    let blockType = null;
+    for (const [t, cat] of Object.entries(index)) {
+      if (t.toLowerCase().includes(matchType.replace(/[^a-z0-9]/g, '')) || matchType.includes(t.toLowerCase().replace(/[^a-z]/g, ''))) { blockType = t; break; }
+    }
+    if (!blockType) blockType = 'spritesetvel';
+    const rows = [...document.querySelectorAll('.blocklyTreeRow')];
+    const catName = index[blockType] || 'Sprites';
+    const row = rows.find(r => (r.querySelector('.blocklyTreeLabel') || {}).textContent === catName);
+    if (row) {
+      const r0 = row.getBoundingClientRect();
+      const x = r0.left + Math.min(40, r0.width / 2), y = r0.top + r0.height / 2;
+      for (const type of ['pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click']) {
+        row.dispatchEvent(new Event(type, { bubbles: true, cancelable: true, clientX: x, clientY: y, view: window }));
+      }
+    }
+    await new Promise(r => setTimeout(r, 650));
+    const fly = tb.getFlyout ? tb.getFlyout() : null;
+    if (!fly) return { svg: null, err: 'flyout unavailable' };
+    const fws = fly.getWorkspace ? fly.getWorkspace() : null;
+    if (!fws) return { svg: null, err: 'flyout workspace unavailable' };
+    const blocks = fws.getAllBlocks(false);
+    const block = blocks.find(b => b.type === blockType) || blocks[0];
+    if (!block) return { svg: null, err: 'block not in flyout' };
+    const svgRoot = block.getSvgRoot ? block.getSvgRoot() : null;
+    if (!svgRoot) return { svg: null, err: 'no SVG root' };
+    const bbox = svgRoot.getBBox();
+    const clone = svgRoot.cloneNode(true);
+    clone.removeAttribute('transform');
+    clone.setAttribute('transform', 'translate(' + (-bbox.x) + ',' + (-bbox.y) + ')');
+    const INPROPS = ['fill', 'fill-opacity', 'opacity', 'stroke', 'stroke-width', 'font-family', 'font-size', 'font-weight', 'letter-spacing', 'text-anchor', 'dominant-baseline', 'writing-mode', 'paint-order'];
+    function walkColors(el) {
+      for (const c of el.childNodes) { if (c.nodeType === 1) walkColors(c); }
+      const cs = getComputedStyle(el);
+      let s = '';
+      for (const p of INPROPS) { const v = cs.getPropertyValue(p); if (v && v !== 'initial') s += p + ':' + v + ';'; }
+      if (s) el.setAttribute('style', s);
+      const cls = (el.getAttribute('class') || '').split(/\s+/).filter(Boolean);
+      if (cls.length) el.removeAttribute('class');
+    }
+    walkColors(clone);
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    svg.setAttribute('viewBox', '0 0 ' + Math.ceil(bbox.width + 4) + ' ' + Math.ceil(bbox.height + 4));
+    svg.setAttribute('width', Math.ceil(bbox.width + 4));
+    svg.setAttribute('height', Math.ceil(bbox.height + 4));
+    svg.appendChild(clone);
+    const xml = new XMLSerializer().serializeToString(svg);
+    return { svg: xml, width: Math.ceil(bbox.width + 4), height: Math.ceil(bbox.height + 4) };
   }
 
   // Expose minimal interface so the overlay knows renderer is present.

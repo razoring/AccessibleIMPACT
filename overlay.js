@@ -14,42 +14,59 @@
     return s.toLowerCase().replace(/\s+/g, ' ').trim();
   }
 
-  // Token regex: bracket blocks ([...]), including nested parameters.
-  // Matches tokens like [set background color to] or [set sprite [x]].
-  const TOKEN_PATTERN = /\[[^\[\]]*(?:\[[^\[\]]*\][^\[\]]*)*\]/g;
+  const TOKEN_REGEX = /\[[^\n\r\[\]]*(?:\[[^\n\r\[\]]*\][^\n\r\[\]]*)*\]/g;
+
+  // Only apply to instruction panel / content area; do NOT touch standalone bubbles/prose.
+  function isInstructionArea(el) {
+    if (!el) return false;
+    const best = el.closest ? el.closest('[data-instruction], .primary-section, article, .lesson-content') : null;
+    if (best) return true;
+    return false;
+  }
 
   // Cache of resolved SVGs keyed by a small hash of the token string + category hint.
   // The real mapping is rebuilt from the rendered flyout categories (see renderer.js).
   const CACHE_KEY_PREFIX = 'aifx';
 
   function replaceInNode(node) {
-    if (!node || node.nodeType !== 3 || node.parentElement && node.parentElement.closest('.aifx-replaced')) return;
+    if (!node || node.nodeType !== 3 || node.parentElement && node.parentElement.closest('.aifx-rendered')) return;
     const text = node.nodeValue || '';
-    const matches = text.match(TOKEN_PATTERN);
+    const matches = text.match(TOKEN_REGEX);
     if (!matches) return;
     const parent = node.parentElement;
-    if (!parent) return;
-    const parts = text.split(TOKEN_PATTERN);
+    if (!parent || !isInstructionArea(parent)) return; // don't touch bubbles/prose outside instruction area
     const fragment = document.createDocumentFragment();
     let replaced = false;
-    for (let i = 0; i < matches.length; i++) {
-      if (i > 0 || parts[0]) {
-        fragment.appendChild(document.createTextNode(parts[i]));
+    const parts = text.split(TOKEN_REGEX);
+    for (let i = 0; i < parts.length; i++) {
+      if (i > 0 && matches[i - 1]) { // after each token
+        const tokenText = matches[i - 1];
+        const placeholder = document.createElement('span');
+        placeholder.className = 'aifx-rendered';
+        placeholder.setAttribute('data-token', tokenText);
+        placeholder.textContent = tokenText; // original text preserved (accessible fallback)
+        placeholder.style.display = 'inline-block';
+        placeholder.style.verticalAlign = 'middle';
+        placeholder.setAttribute('aria-label', 'MakeCode block: ' + tokenText);
+        fragment.appendChild(placeholder);
+        try {
+          chrome.runtime.sendMessage({ action: 'renderToken', token: tokenText }, (res) => {
+            if (res && res.svg && placeholder && placeholder.parentElement) {
+              placeholder.innerHTML = res.svg;
+              placeholder.setAttribute('data-rendered', 'true');
+            } else {
+              placeholder.style.color = '#b12c43';
+              placeholder.style.fontWeight = '600';
+            }
+          });
+        } catch (e) {
+          // Extension message unavailable; keep original token text (never invent block)
+        }
+        replaced = true;
       }
-      const token = matches[i];
-      const span = document.createElement('span');
-      span.className = 'aifx-replaced';
-      span.setAttribute('data-token', token);
-      span.textContent = token; // placeholder; renderer.js injects SVG here
-      span.setAttribute('aria-label', 'MakeCode block: ' + token);
-      span.style.display = 'inline-block';
-      span.style.verticalAlign = 'middle';
-      fragment.appendChild(span);
-      replaced |= true;
+      if (parts[i]) fragment.appendChild(document.createTextNode(parts[i]));
     }
-    if (replaced) {
-      parent.replaceChild(fragment, node);
-    }
+    if (replaced) parent.replaceChild(fragment, node);
   }
 
   function scan() {
