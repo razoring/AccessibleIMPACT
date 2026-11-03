@@ -5,8 +5,8 @@
 (function () {
   'use strict';
 
-  // Matches [nested [bracket]] blocks, parenthesized bubbles, and <true>
-  const TOKEN_REGEX = /\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\([^\)\r\n]+\)|<true>/g;
+  // Matches [nested [bracket]] blocks, parenthesized (nested (bubbles)), and <true>
+  const TOKEN_REGEX = /\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\((?:[^\(\)\r\n]|\([^\)\r\n]*\))+\)|<true>/g;
   const svgCache = new Map();
   let scanTimer = null;
 
@@ -64,9 +64,30 @@
     return !!el.closest('app-step-information, [data-instruction], .primary-section, article, .lesson-content');
   }
 
+  // Heal inline tags (e.g. <strong>[function</strong> <strong>loadTilemap]</strong>) splitting tokens
+  function healHtml(container) {
+    if (!container) return;
+    const pars = container.querySelectorAll('p, li, div');
+    for (const p of pars) {
+      if (!p.children || !p.children.length) continue;
+      const html = p.innerHTML;
+      if (!html.includes('[') && !html.includes('(')) continue;
+      // Do not re-heal already rendered containers
+      if (p.querySelector('.aifx-rendered')) continue;
+
+      const healed = html
+        .replace(/\[(?:[^\[\]]|\[[^\]]*\])+\]/g, (m) => m.replace(/<\/?(strong|em|span|b|i)[^>]*>/gi, ''))
+        .replace(/\((?:[^\(\)]|\([^\)]*\))+\)/g, (m) => m.replace(/<\/?(strong|em|span|b|i)[^>]*>/gi, ''));
+
+      if (healed !== html) {
+        p.innerHTML = healed;
+      }
+    }
+  }
+
   function applySvg(span, data) {
     if (!span || !data || !data.svg) return;
-    const isMultiLine = data.isMultiLine || data.height > 58;
+    const isMultiLine = data.isMultiLine || data.height > 70;
     span.className = 'aifx-rendered ' + (isMultiLine ? 'aifx-multiline' : 'aifx-inline');
     span.innerHTML = data.svg;
     span.setAttribute('data-rendered', 'true');
@@ -89,7 +110,7 @@
 
   function replaceInNode(node) {
     if (!node || node.nodeType !== 3) return;
-    if (node.parentElement && node.parentElement.closest('.aifx-rendered')) return;
+    if (node.parentElement && (node.parentElement.closest('.aifx-rendered') || node.parentElement.closest('[data-token]'))) return;
 
     const text = node.nodeValue || '';
     if (!text.includes('[') && !text.includes('(') && !text.includes('<true>')) return;
@@ -112,6 +133,7 @@
       if (i < matches.length) {
         const tokenText = matches[i];
         const span = document.createElement('span');
+        span.className = 'aifx-rendered'; // Set immediately to prevent re-wrapping
         span.setAttribute('data-token', tokenText);
 
         if (svgCache.has(tokenText)) {
@@ -133,12 +155,10 @@
                 applySvg(span, res);
               } else {
                 svgCache.set(tokenText, { svg: null });
-                // Leave token as-is
                 span.textContent = tokenText;
               }
             });
           } catch (e) {
-            // Leave token as-is
             span.textContent = tokenText;
           }
         }
@@ -157,16 +177,21 @@
     injectStyles();
     const areas = document.querySelectorAll('app-step-information, [data-instruction], .primary-section, article, .lesson-content');
     for (const area of areas) {
+      healHtml(area);
+
       const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT, {
         acceptNode(n) {
           if (!n || !n.nodeValue) return NodeFilter.FILTER_REJECT;
-          if (n.parentElement && n.parentElement.closest('.aifx-rendered')) return NodeFilter.FILTER_REJECT;
+          if (n.parentElement && (n.parentElement.closest('.aifx-rendered') || n.parentElement.closest('[data-token]'))) {
+            return NodeFilter.FILTER_REJECT;
+          }
           if (n.nodeValue.includes('[') || n.nodeValue.includes('(') || n.nodeValue.includes('<true>')) {
             return NodeFilter.FILTER_ACCEPT;
           }
           return NodeFilter.FILTER_REJECT;
         }
       });
+
       const textNodes = [];
       while (walker.nextNode()) {
         textNodes.push(walker.currentNode);

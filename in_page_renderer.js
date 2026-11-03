@@ -24,6 +24,58 @@
     return { B, ws };
   }
 
+  // Ensure built-in extension blocks (e.g. Scroller) are defined in Blockly.Blocks
+  function ensureExtensionBlocks(B) {
+    if (!B || !B.Blocks) return;
+
+    if (!B.Blocks['scroller_scrollBackgroundWithCamera']) {
+      B.Blocks['scroller_scrollBackgroundWithCamera'] = {
+        init: function () {
+          this.setColour('#4b6584');
+          this.appendDummyInput()
+            .appendField('scroll background with camera')
+            .appendField(new B.FieldDropdown([
+              ['only horizontally', 'OnlyHorizontal'],
+              ['only vertically', 'OnlyVertical'],
+              ['both directions', 'BothDirections']
+            ]), 'mode');
+          this.setPreviousStatement(true);
+          this.setNextStatement(true);
+        }
+      };
+    }
+
+    if (!B.Blocks['scroller_setBackgroundScrollOffset']) {
+      B.Blocks['scroller_setBackgroundScrollOffset'] = {
+        init: function () {
+          this.setColour('#4b6584');
+          this.appendDummyInput()
+            .appendField('set background offset to')
+            .appendField('x')
+            .appendField(new B.FieldNumber(0), 'x')
+            .appendField('y')
+            .appendField(new B.FieldNumber(0), 'y');
+          this.setPreviousStatement(true);
+          this.setNextStatement(true);
+        }
+      };
+    }
+
+    if (!B.Blocks['scroller_mode_bubble']) {
+      B.Blocks['scroller_mode_bubble'] = {
+        init: function () {
+          this.setColour('#4b6584');
+          this.appendDummyInput().appendField(new B.FieldDropdown([
+            ['only vertically', 'OnlyVertical'],
+            ['only horizontally', 'OnlyHorizontal']
+          ]), 'mode');
+          this.setOutput(true);
+          this.setOutputShape(2); // ROUND
+        }
+      };
+    }
+  }
+
   function normalize(s) {
     return (s || '')
       .toLowerCase()
@@ -68,6 +120,33 @@
   }
 
   const CANONICAL_MAP = [
+    // Scroller extension
+    {
+      match: /^\[?\s*scroll\s+background\s+with\s+camera(?:\s*\[?(only\s+horizontally|only\s+vertically|both\s+directions)?\]?)?\s*\]?$/i,
+      type: 'scroller_scrollBackgroundWithCamera',
+      mutator: (b, ws, raw) => {
+        const mode = /vertically/i.test(raw) ? 'OnlyVertical' : 'OnlyHorizontal';
+        const f = b.getField('mode');
+        if (f) f.setValue(mode);
+      },
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*set\s+background\s+offset\s+to(?:\s*x\s*y)?\s*\]?$/i,
+      type: 'scroller_setBackgroundScrollOffset',
+      conf: 1.0
+    },
+    {
+      match: /^[\[\(]\s*only\s+(?:vertically|horizontally)\s*[\]\)]$/i,
+      type: 'scroller_mode_bubble',
+      mutator: (b, ws, raw) => {
+        const mode = /vertically/i.test(raw) ? 'OnlyVertical' : 'OnlyHorizontal';
+        const f = b.getField('mode');
+        if (f) f.setValue(mode);
+      },
+      conf: 1.0
+    },
+
     // Sprites
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+to\s+sprite(?:\s+of\s+kind)?\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
     { match: /^\[?\s*sprite\s*(?:\(img\))?\s*of\s*kind\s*(?:\(kind\))?\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
@@ -101,6 +180,7 @@
     { match: /^\[?\s*on\s+game\s+update\s*\]?$/i, type: 'gameupdate', conf: 1.0 },
     { match: /^\[?\s*forever\s*\]?$/i, type: 'forever', conf: 1.0 },
     { match: /^\[?\s*(?:if\s+then|if\s+true\s+then|if)\s*\]?$/i, type: 'controls_if', conf: 1.0 },
+    { match: /^\[?\s*else\s*if\s*\]?$/i, type: 'controls_if', conf: 1.0 },
     { match: /^\[?\s*else\s*\]?$/i, type: 'controls_if', conf: 0.9 },
     { match: /^\[?\s*repeat\s*(?:times)?\s*\]?$/i, type: 'controls_repeat_ext', conf: 1.0 },
     { match: /^\[?\s*(?:for\s+index|for)\s*\]?$/i, type: 'controls_simple_for', conf: 0.9 },
@@ -127,12 +207,14 @@
     { match: /^\[?\s*start\s+countdown\s*\]?$/i, type: 'gamecountdown', conf: 1.0 },
     { match: /^\[?\s*on\s+countdown\s+end\s*\]?$/i, type: 'gamecountdownevent', conf: 1.0 },
 
-    // Game & Scene
+    // Game & Scene & Images
     { match: /^\[?\s*game\s+over(?:\s*\(true\)|\s*\(false\))?\s*\]?$/i, type: 'gameOver2', conf: 1.0 },
     { match: /^\[?\s*splash(?:\s*\(title\))?\s*\]?$/i, type: 'gameSplash', conf: 1.0 },
     { match: /^\[?\s*show\s+long\s+text(?:\s*\(str\)\s*\(layout\))?\s*\]?$/i, type: 'game_show_long_text', conf: 1.0 },
     { match: /^\[?\s*set\s+background\s+color\s+to(?:\s*\(color\))?\s*\]?$/i, type: 'gamesetbackgroundcolor', conf: 1.0 },
-    { match: /^\[?\s*set\s+background\s+image\s+to\s*\]?$/i, type: 'gamesetbackgroundimage', conf: 1.0 },
+    { match: /^\[?\s*set\s+background\s+image(?:\s+to)?\s*\]?$/i, type: 'gamesetbackgroundimage', conf: 1.0 },
+    { match: /^\(?\s*background\s+image\s*\)?$/i, type: 'gamebackgroundimage', conf: 1.0 },
+    { match: /^\[?\s*change\s+color\s+in\s+.*from.*to.*\]?$/i, type: 'Image_replace', conf: 1.0 },
     { match: /^\[?\s*(?:start\s+screen\s+effect|confetti)\s*\]?$/i, type: 'particlesStartScreenAnimation', conf: 1.0 },
     { match: /^\[?\s*camera\s+follow(?:\s+sprite)?\s*\]?$/i, type: 'camerafollow', conf: 1.0 },
     { match: /^\[?\s*camera\s+shake\s*\]?$/i, type: 'camerashake', conf: 1.0 },
@@ -167,7 +249,8 @@
     // Arrays / Lists
     { match: /^\(?\s*length\s+of\s+array\s*\)?$/i, type: 'lists_length', conf: 1.0 },
     { match: /^\[?\s*list\s+add\s+value\s+to\s+end\s*\]?$/i, type: 'lists_setIndex', conf: 1.0 },
-    { match: /^\(?\s*empty\s+array\s*\)?$/i, type: 'lists_create_empty', conf: 1.0 }
+    { match: /^\(?\s*empty\s+array\s*\)?$/i, type: 'lists_create_empty', conf: 1.0 },
+    { match: /^\(?\s*get\s+random\s+value\s+from\s*\(?[a-zA-Z0-9_ ]+\)?\s*\)?$/i, type: 'array_pickRandom', conf: 1.0 }
   ];
 
   function serializeBlock(block) {
@@ -214,11 +297,15 @@
     svg.setAttribute('height', height);
     svg.appendChild(clone);
 
+    // True container/multiline blocks have statement slots or height > 70
+    const hasStatement = block.inputList && block.inputList.some(i => i.name === 'STACK' || i.name === 'DO0' || i.name === 'HANDLER');
+    const isMultiLine = hasStatement || height > 70;
+
     return {
       svg: new XMLSerializer().serializeToString(svg),
       width: width,
       height: height,
-      isMultiLine: height > 58
+      isMultiLine: isMultiLine
     };
   }
 
@@ -233,13 +320,14 @@
     }
   }
 
-  function renderDynamicBlock(type, mutator) {
+  function renderDynamicBlock(type, mutator, rawText) {
     const tc = toolchain();
     if (!tc || !tc.ws) return null;
     try {
+      ensureExtensionBlocks(tc.B);
       const b = tc.ws.newBlock(type);
       if (!b) return null;
-      if (mutator) mutator(b, tc.ws);
+      if (mutator) mutator(b, tc.ws, rawText);
       b.initSvg();
       b.render();
       const res = serializeBlock(b);
@@ -299,7 +387,7 @@
     // 1. Canonical rule match
     for (const entry of CANONICAL_MAP) {
       if (entry.match.test(raw)) {
-        return { confidence: entry.conf, type: entry.type, name: raw };
+        return { confidence: entry.conf, type: entry.type, mutator: entry.mutator, name: raw };
       }
     }
 
@@ -374,7 +462,10 @@
       if (['life', 'hudlife'].includes(name.toLowerCase())) {
         return { confidence: 1.0, type: 'hudLife', name: raw };
       }
-      if (['othersprite', 'sprite', 'location'].includes(name.toLowerCase())) {
+      if (['background image'].includes(name.toLowerCase())) {
+        return { confidence: 1.0, type: 'gamebackgroundimage', name: raw };
+      }
+      if (['othersprite', 'sprite', 'location', 'picture'].includes(name.toLowerCase())) {
         return {
           confidence: 1.0,
           type: 'argument_reporter_custom',
@@ -438,7 +529,7 @@
       return { svg: null, err: 'Block not found or confidence < 80%: ' + tokenText };
     }
 
-    const res = renderDynamicBlock(match.type, match.mutator);
+    const res = renderDynamicBlock(match.type, match.mutator, tokenText);
     if (res && res.svg) {
       CACHE[tokenText] = res;
       return res;
