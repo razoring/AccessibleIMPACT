@@ -59,6 +59,7 @@
       if (chrome.runtime.lastError || !items) return;
       let count = 0;
       for (const [k, v] of Object.entries(items)) {
+        // Do not let stale chrome.storage entries overwrite fresh static definitions
         if (v && v.svg && !svgCache.has(k)) {
           svgCache.set(k, v);
           count++;
