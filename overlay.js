@@ -61,28 +61,8 @@
 
   function isInstructionArea(el) {
     if (!el) return false;
-    return !!el.closest('app-step-information, [data-instruction], .primary-section, article, .lesson-content');
-  }
-
-  // Heal inline tags (e.g. <strong>[function</strong> <strong>loadTilemap]</strong>) splitting tokens
-  function healHtml(container) {
-    if (!container) return;
-    const pars = container.querySelectorAll('p, li, div');
-    for (const p of pars) {
-      if (!p.children || !p.children.length) continue;
-      const html = p.innerHTML;
-      if (!html.includes('[') && !html.includes('(')) continue;
-      // Do not re-heal already rendered containers
-      if (p.querySelector('.aifx-rendered')) continue;
-
-      const healed = html
-        .replace(/\[(?:[^\[\]]|\[[^\]]*\])+\]/g, (m) => m.replace(/<\/?(strong|em|span|b|i)[^>]*>/gi, ''))
-        .replace(/\((?:[^\(\)]|\([^\)]*\))+\)/g, (m) => m.replace(/<\/?(strong|em|span|b|i)[^>]*>/gi, ''));
-
-      if (healed !== html) {
-        p.innerHTML = healed;
-      }
-    }
+    // Strictly match content area — NEVER match stepper, tabs, or navigation controls
+    return !!el.closest('app-step-information content, [data-instruction], article, .lesson-content');
   }
 
   function applySvg(span, data) {
@@ -175,10 +155,9 @@
 
   function scan() {
     injectStyles();
-    const areas = document.querySelectorAll('app-step-information, [data-instruction], .primary-section, article, .lesson-content');
+    // Strictly query content containers only
+    const areas = document.querySelectorAll('app-step-information content, [data-instruction], article, .lesson-content');
     for (const area of areas) {
-      healHtml(area);
-
       const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT, {
         acceptNode(n) {
           if (!n || !n.nodeValue) return NodeFilter.FILTER_REJECT;

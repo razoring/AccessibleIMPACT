@@ -409,7 +409,7 @@
     }
 
     // 3. Function Definitions: [function <name>]
-    const funcDefMatch = raw.match(/^\[(?:function)\s+([a-zA-Z0-9_]+)\]$/i);
+    const funcDefMatch = raw.match(/^\[?(?:function)\s*([a-zA-Z0-9_]+)\]?$/i);
     if (funcDefMatch) {
       return {
         confidence: 1.0,
@@ -423,7 +423,7 @@
     }
 
     // 4. Function Calls: [call <name>]
-    const funcCallMatch = raw.match(/^\[(?:call)\s+([a-zA-Z0-9_]+)\]$/i);
+    const funcCallMatch = raw.match(/^\[?(?:call)\s*([a-zA-Z0-9_]+)\]?$/i);
     if (funcCallMatch) {
       return {
         confidence: 1.0,
