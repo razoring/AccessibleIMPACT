@@ -24,6 +24,13 @@
     return { B, ws };
   }
 
+  function ensureVariable(ws, name) {
+    if (!ws) return null;
+    let v = ws.getVariable ? ws.getVariable(name) : null;
+    if (!v && ws.createVariable) v = ws.createVariable(name);
+    return v;
+  }
+
   // Ensure built-in extension blocks (e.g. Scroller) are defined in Blockly.Blocks
   function renderToggleToken(rawText) {
     const isWin = /win/i.test(rawText);
@@ -134,6 +141,57 @@
           ]), 'mode');
           this.setOutput(true);
           this.setOutputShape(2); // ROUND
+        }
+      };
+    }
+
+    if (!B.Blocks['tileutil_createSpritesOnTiles']) {
+      B.Blocks['tileutil_createSpritesOnTiles'] = {
+        init: function () {
+          this.setColour('#4b6584');
+          this.appendDummyInput()
+            .appendField('on each')
+            .appendField(new B.FieldDropdown([
+              ['myTile', 'myTile'],
+              ['NPC 1', 'NPC 1'],
+              ['Item 1', 'Item 1'],
+              ['Door 1', 'Door 1']
+            ]), 'tile')
+            .appendField('tile create sprite with image')
+            .appendField(new B.FieldDropdown([
+              ['myImage', 'myImage']
+            ]), 'img')
+            .appendField('and kind')
+            .appendField(new B.FieldDropdown([
+              ['Player', 'SpriteKind.Player'],
+              ['Enemy', 'SpriteKind.Enemy'],
+              ['Food', 'SpriteKind.Food'],
+              ['Item', 'SpriteKind.Item'],
+              ['Projectile', 'SpriteKind.Projectile']
+            ]), 'kind');
+          this.setPreviousStatement(true);
+          this.setNextStatement(true);
+        }
+      };
+    }
+
+    if (!B.Blocks['tileutil_coverAllTiles']) {
+      B.Blocks['tileutil_coverAllTiles'] = {
+        init: function () {
+          this.setColour('#4b6584');
+          this.appendDummyInput()
+            .appendField('cover all')
+            .appendField(new B.FieldDropdown([
+              ['myTile', 'myTile'],
+              ['NPC 1', 'NPC 1'],
+              ['Item 1', 'Item 1']
+            ]), 'tile')
+            .appendField('tiles with')
+            .appendField(new B.FieldDropdown([
+              ['myTile', 'myTile']
+            ]), 'withTile');
+          this.setPreviousStatement(true);
+          this.setNextStatement(true);
         }
       };
     }
@@ -287,6 +345,54 @@
     { match: /^\[?\s*set\s+sprite\s+to\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+position\s+to\s*(?:x\s*y)?\s*[\]\}]?$/i, type: 'spritesetpos', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+velocity\s+to\s*(?:vx\s*vy)?\s*\]?$/i, type: 'spritesetvel', conf: 1.0 },
+    {
+      match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+[\[\(]?(velocity\s*[xy]|vx|vy|ax|ay|x|y|scale)[\]\)]?\s+to(?:\s+[\(\[]?(-?\d+)[\)\]]?)?\s*\]?$/i,
+      type: 'Sprite_blockCombine_set',
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/set\s+(?:sprite|\(?([a-zA-Z0-9_]+)\)?)\s+[\[\(]?(velocity\s*[xy]|vx|vy|ax|ay|x|y|scale)[\]\)]?\s+to(?:\s+[\(\[]?(-?\d+)[\)\]]?)?/i);
+        const sName = m && m[1] ? m[1] : 'sprite';
+        const propRaw = (m && m[2] ? m[2] : 'velocity y').toLowerCase().replace(/\s+/g, '');
+        const valNum = m && m[3] ? m[3] : '0';
+
+        let propVal = 'Sprite.vy@set';
+        if (propRaw === 'velocityx' || propRaw === 'vx') propVal = 'Sprite.vx@set';
+        else if (propRaw === 'velocityy' || propRaw === 'vy') propVal = 'Sprite.vy@set';
+        else if (propRaw === 'x') propVal = 'Sprite.x@set';
+        else if (propRaw === 'y') propVal = 'Sprite.y@set';
+        else if (propRaw === 'ax') propVal = 'Sprite.ax@set';
+        else if (propRaw === 'ay') propVal = 'Sprite.ay@set';
+        else if (propRaw === 'scale') propVal = 'Sprite.scale@set';
+
+        const fProp = b.getField('property');
+        if (fProp) fProp.setValue(propVal);
+
+        if (ws) {
+          const inSprite = b.getInput('mySprite');
+          if (inSprite && inSprite.connection && !inSprite.connection.targetConnection) {
+            try {
+              const vb = ws.newBlock('variables_get');
+              const v = ensureVariable(ws, sName);
+              if (v && vb.getField('VAR')) vb.getField('VAR').setValue(v.getId());
+              vb.initSvg();
+              vb.render();
+              inSprite.connection.connect(vb.outputConnection);
+            } catch (e) {}
+          }
+          const inVal = b.getInput('value');
+          if (inVal && inVal.connection && !inVal.connection.targetConnection) {
+            try {
+              const nb = ws.newBlock('math_number');
+              const fn = nb.getField('NUM');
+              if (fn) fn.setValue(valNum);
+              nb.initSvg();
+              nb.render();
+              inVal.connection.connect(nb.outputConnection);
+            } catch (e) {}
+          }
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+image\s+to\s*\]?$/i, type: 'spritesetimage', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+kind\s+to\s*\]?$/i, type: 'spritesetkind', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+stay\s+in\s+screen\s*\]?$/i, type: 'spritesetsetstayinscreen', conf: 1.0 },
@@ -301,8 +407,65 @@
       }, conf: 1.0 },
     { match: /^\[?\s*move\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+with\s+buttons\s*\]?$/i, type: 'game_control_sprite', conf: 1.0 },
     { match: /^\[?\s*destroy\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s*\]?$/i, type: 'spritedestroy2', conf: 1.0 },
+    {
+      match: /^\[?\s*destroy\s+all\s+sprites\s+of\s+kind(?:\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?)?\s*\]?$/i,
+      type: 'sprites_destroy_all_sprites_of_kind',
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/destroy\s+all\s+sprites\s+of\s+kind(?:\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?)?/i);
+        const kind = m && m[1] ? m[1] : 'Enemy';
+        const inKind = b.getInput('kind');
+        if (ws && inKind && inKind.connection && !inKind.connection.targetConnection) {
+          try {
+            const kb = ws.newBlock('spritekind');
+            const f = kb.getField('MEMBER');
+            if (f) f.setValue(kind);
+            kb.initSvg();
+            kb.render();
+            inKind.connection.connect(kb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*(?:sprite\s+say|say)\s*\]?$/i, type: 'spritesaytext', conf: 1.0 },
-    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+follow\s*\]?$/i, type: 'spriteFollowOtherSprite', conf: 1.0 },
+    {
+      match: /^\[?\s*set\s+(?:[\(\[]?([a-zA-Z0-9_]+)[\)\]]?|sprite)\s+follow(?:\s+[\(\[]?([a-zA-Z0-9_]+)[\)\]]?)?\s*\]?$/i,
+      type: 'spriteFollowOtherSprite',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/set\s+(?:[\(\[]?([a-zA-Z0-9_]+)[\)\]]?|sprite)\s+follow(?:\s+[\(\[]?([a-zA-Z0-9_]+)[\)\]]?)?/i);
+        let s1 = m && m[1] ? m[1] : 'sprite';
+        let s2 = m && m[2] ? m[2] : 'mySprite';
+        if (/sprite/i.test(s1)) s1 = 'sprite';
+
+        function ensureVar(name) {
+          let v = ws.getVariable ? ws.getVariable(name) : null;
+          if (!v && ws.createVariable) v = ws.createVariable(name);
+          return v ? v.getId() : name;
+        }
+
+        const inSprite = b.getInput('sprite');
+        if (inSprite && inSprite.connection && !inSprite.connection.targetConnection) {
+          const v1 = ws.newBlock('variables_get');
+          v1.getField('VAR').setValue(ensureVar(s1));
+          v1.initSvg();
+          v1.render();
+          try { inSprite.connection.connect(v1.outputConnection); } catch (e) {}
+        }
+
+        const inTarget = b.getInput('target');
+        if (inTarget && inTarget.connection && !inTarget.connection.targetConnection) {
+          const v2 = ws.newBlock('variables_get');
+          v2.getField('VAR').setValue(ensureVar(s2));
+          v2.initSvg();
+          v2.render();
+          try { inTarget.connection.connect(v2.outputConnection); } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
+    { match: /^\[?\s*(?:follow\s+sprite|sprite\s+follow)\s*\]?$/i, type: 'spriteFollowOtherSprite', conf: 1.0 },
+    { match: /^\[?\s*set\s+(?:[\(\[]?[a-zA-Z0-9_]+[\)\]]?|sprite|this)\s+unfollow\s*\]?$/i, type: 'spriteUnfollow', conf: 1.0 },
     { match: /^\[?\s*start\s+effect\s+on\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s*\]?$/i, type: 'startEffectOnSprite', conf: 1.0 },
     { match: /^\[?\s*sprite\s+start\s+effect\s*\]?$/i, type: 'startEffectOnSprite', conf: 1.0 },
     {
@@ -363,9 +526,12 @@
     { match: /^\[?\s*(?:on\s+)?sprite\s+overlaps\s+tile\s*\]?$/i, type: 'spriteshittile', conf: 1.0 },
     { match: /^\[?\s*(?:on\s+)?sprite\s+hits\s+wall\s*\]?$/i, type: 'spriteshitwall', conf: 1.0 },
     {
-      match: /^\[?\s*(?:on\s+)?created(?:\s+container)?\s*\]?$/i,
+      match: /^\[?\s*(?:on\s+)?created(?:\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?))?(?:\s+of\s+kind)?(?:\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?)?(?:\s+container)?\s*\]?$/i,
       type: 'spritesoncreated',
-      mutator: (b, ws) => {
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/(?:of\s+kind|created)\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?/i);
+        let kind = m && m[1] ? m[1] : 'Enemy';
+        if (/sprite|container/i.test(kind)) kind = 'Enemy';
         const spriteParamInput = b.getInput('HANDLER_DRAG_PARAM_sprite');
         if (spriteParamInput && ws) {
           const rep = ws.newBlock('argument_reporter_custom');
@@ -379,7 +545,7 @@
         if (kindInput && ws) {
           const kindBlock = ws.newBlock('spritekind');
           const kf = kindBlock.getField('MEMBER');
-          if (kf) kf.setValue('Player');
+          if (kf) kf.setValue(kind);
           kindBlock.initSvg();
           kindBlock.render();
           try { kindInput.connection.connect(kindBlock.outputConnection); } catch (e) {}
@@ -424,7 +590,54 @@
     { match: /^\[?\s*on\s+game\s+update\s+every\s+ms\s*\]?$/i, type: 'gameinterval', conf: 1.0 },
     { match: /^\[?\s*on\s+game\s+update\s*\]?$/i, type: 'gameupdate', conf: 1.0 },
     { match: /^\[?\s*forever\s*\]?$/i, type: 'forever', conf: 1.0 },
-    { match: /^\[?\s*(?:if\s+then|if\s+true\s+then|if)\s*\]?$/i, type: 'controls_if', conf: 1.0 },
+    {
+      match: /^\[?\s*if(?:\s+true)?\s+then\s*[\/\\]\s*else\s*\]?$/i,
+      type: 'controls_if',
+      mutator: (b, ws, raw) => {
+        b.elseCount_ = 1;
+        if (b.updateShape_) b.updateShape_();
+        if (ws && /true/i.test(raw)) {
+          const inIf = b.getInput('IF0');
+          if (inIf && inIf.connection && !inIf.connection.targetConnection) {
+            const tb = ws.newBlock('logic_boolean');
+            const f = tb.getField('BOOL');
+            if (f) f.setValue('TRUE');
+            tb.initSvg();
+            tb.render();
+            try { inIf.connection.connect(tb.outputConnection); } catch (e) {}
+          }
+        }
+      },
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*if(?:\s+then)?\s*[\/\s]+else\s*\]?$/i,
+      type: 'controls_if',
+      mutator: (b) => {
+        b.elseCount_ = 1;
+        if (b.updateShape_) b.updateShape_();
+      },
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*if\s+true\s+then\s*\]?$/i,
+      type: 'controls_if',
+      mutator: (b, ws) => {
+        if (!ws) return;
+        const inIf = b.getInput('IF0');
+        if (inIf && inIf.connection && !inIf.connection.targetConnection) {
+          const tb = ws.newBlock('logic_boolean');
+          const f = tb.getField('BOOL');
+          if (f) f.setValue('TRUE');
+          tb.initSvg();
+          tb.render();
+          try { inIf.connection.connect(tb.outputConnection); } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
+    { match: /^\[?\s*if\s+then\s*\]?$/i, type: 'controls_if', conf: 1.0 },
+    { match: /^\[?\s*if\s*\]?$/i, type: 'controls_if', conf: 1.0 },
     { match: /^\[?\s*else\s*if\s*\]?$/i, type: 'controls_if', conf: 1.0 },
     { match: /^\[?\s*else\s*\]?$/i, type: 'controls_if', conf: 0.9 },
     { match: /^\[?\s*(?:repeat\s+)?while(?:\s+loop)?\s*\]?$/i, type: 'device_while', conf: 1.0 },
@@ -436,42 +649,60 @@
     { match: /^\(?\s*pick\s+random\s*\)?$/i, type: 'device_random', conf: 1.0 },
     { match: /^[<\[\(]?\s*%?\s*chance\s*[>\]\)]?$/i, type: 'percentchance', conf: 1.0 },
     { match: /^[<\[\(]?\s*is\s+sprite\s+hitting\s+wall\s*[>\]\)]?$/i, type: 'spritehasobstacle', mutator: (b) => { const f = b.getField('direction'); if (f) f.setValue('CollisionDirection.Bottom'); }, conf: 1.0 },
-    { match: /^[<\[]\s*0\s*(<|<=|>|>=|=)\s*0\s*[>\]]$/i, type: 'logic_compare', mutator: (b, ws, raw) => {
-        const f = b.getField('OP');
-        if (f) {
-          if (raw.includes('<=')) f.setValue('LTE');
-          else if (raw.includes('<')) f.setValue('LT');
-          else if (raw.includes('>=')) f.setValue('GTE');
-          else if (raw.includes('>')) f.setValue('GT');
-          else f.setValue('EQ');
-        }
-      }, conf: 1.0 },
-    { match: /^[<\[]\s*\(?([a-zA-Z_][a-zA-Z0-9_]*)\)?\s*(<|<=|>|>=|=)\s*([0-9]+)\s*[>\]]$/i, type: 'logic_compare', mutator: (b, ws, raw) => {
-        const m = raw.match(/^[<\[]\s*\(?([a-zA-Z_][a-zA-Z0-9_]*)\)?\s*(<|<=|>|>=|=)\s*([0-9]+)\s*[>\]]$/i);
+    {
+      match: /^[<\[]\s*([^<>=]+?)\s*(<=|>=|=>|=<|<|>|=|==)\s*([^<>=]+?)\s*[>\]]$/i,
+      type: 'logic_compare',
+      mutator: (b, ws, raw) => {
+        const m = raw.match(/^[<\[]\s*([^<>=]+?)\s*(<=|>=|=>|=<|<|>|=|==)\s*([^<>=]+?)\s*[>\]]$/i);
         if (!m) return;
-        const varName = m[1];
+        const leftExpr = m[1].trim();
         const op = m[2];
-        const numVal = m[3];
+        const rightExpr = m[3].trim();
         const f = b.getField('OP');
         if (f) {
-          if (op === '<=') f.setValue('LTE');
+          if (op === '<=' || op === '=<') f.setValue('LTE');
           else if (op === '<') f.setValue('LT');
-          else if (op === '>=') f.setValue('GTE');
+          else if (op === '>=' || op === '=>') f.setValue('GTE');
           else if (op === '>') f.setValue('GT');
           else f.setValue('EQ');
         }
-        if (ws && b.getInput('A')) {
-          try {
-            const vBlock = ws.newBlock('variables_get');
-            const v = ensureVariable(ws, varName);
-            if (v && vBlock.getField('VAR')) vBlock.getField('VAR').setValue(v.getId());
-            vBlock.initSvg();
-            vBlock.render();
-            b.getInput('A').connection.connect(vBlock.outputConnection);
-          } catch (e) {}
+
+        function attachOperand(inputName, expr) {
+          if (!ws) return;
+          const inp = b.getInput(inputName);
+          if (!inp || !inp.connection || inp.connection.targetConnection) return;
+          const clean = expr.replace(/[\[\]\(\)<>]/g, '').trim();
+          if (/^-?\d+(?:\.\d+)?$/.test(clean)) {
+            try {
+              const nb = ws.newBlock('math_number');
+              const fn = nb.getField('NUM');
+              if (fn) fn.setValue(clean);
+              nb.initSvg();
+              nb.render();
+              inp.connection.connect(nb.outputConnection);
+            } catch (e) {}
+          } else if (clean) {
+            try {
+              const vb = ws.newBlock('variables_get');
+              function ensureVar(name) {
+                let v = ws.getVariable ? ws.getVariable(name) : null;
+                if (!v && ws.createVariable) v = ws.createVariable(name);
+                return v ? v.getId() : name;
+              }
+              const fv = vb.getField('VAR');
+              if (fv) fv.setValue(ensureVar(clean));
+              vb.initSvg();
+              vb.render();
+              inp.connection.connect(vb.outputConnection);
+            } catch (e) {}
+          }
         }
-        if (b.getField('B')) b.getField('B').setValue(numVal);
-      }, conf: 1.0 },
+
+        attachOperand('A', leftExpr);
+        attachOperand('B', rightExpr);
+      },
+      conf: 1.0
+    },
     { match: /^\(?\s*0\s*[\+\-\*\/]\s*0\s*\)?$/i, type: 'math_arithmetic', mutator: (b, ws, raw) => {
         const f = b.getField('OP');
         if (f) {
@@ -517,8 +748,68 @@
     },
 
     // Controller
-    { match: /^\[?\s*(?:on\s+)?(?:a\s+)?button\s+pressed\s*\]?$/i, type: 'keyonevent', conf: 1.0 },
-    { match: /^\[?\s*run\s+code\s+on\s+\(?[a-zA-Z0-9_]+\)?\s+button\s+\(?[a-zA-Z0-9_]+\)?\s*\]?$/i, type: 'keyonevent', conf: 0.95 },
+    {
+      match: /^\[?\s*on\s+(?:[\[\(]?([a-zA-Z0-9_]+)[\]\)]?\s+)?button(?:\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?)?\s*\]?$/i,
+      type: 'keyonevent',
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/on\s+(?:[\[\(]?([a-zA-Z0-9_]+)[\]\)]?\s+)?button(?:\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?)?/i);
+        let btn = (m && m[1] ? m[1] : 'A').toLowerCase();
+        let ev = (m && m[2] ? m[2] : 'pressed').toLowerCase();
+        if (['pressed', 'released', 'repeat', 'repeated'].includes(btn) && !m[2]) {
+          ev = btn;
+          btn = 'a';
+        }
+        const fBtn = b.getField('button');
+        if (fBtn) {
+          if (btn === 'b') fBtn.setValue('controller.B');
+          else if (btn === 'left') fBtn.setValue('controller.left');
+          else if (btn === 'right') fBtn.setValue('controller.right');
+          else if (btn === 'up') fBtn.setValue('controller.up');
+          else if (btn === 'down') fBtn.setValue('controller.down');
+          else if (btn === 'menu') fBtn.setValue('controller.menu');
+          else if (btn === 'any') fBtn.setValue('controller.anyButton');
+          else fBtn.setValue('controller.A');
+        }
+        const fEv = b.getField('event');
+        if (fEv) {
+          if (ev === 'released') fEv.setValue('ControllerButtonEvent.Released');
+          else if (ev === 'repeat' || ev === 'repeated') fEv.setValue('ControllerButtonEvent.Repeated');
+          else fEv.setValue('ControllerButtonEvent.Pressed');
+        }
+      },
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*(?:run\s+code\s+on\s+)?(?:[\[\(]?([a-zA-Z0-9_]+)[\]\)]?\s+)?button\s+(?:[\[\(]?([a-zA-Z0-9_]+)[\]\)]?)\s*\]?$/i,
+      type: 'keyonevent',
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/(?:run\s+code\s+on\s+)?(?:[\[\(]?([a-zA-Z0-9_]+)[\]\)]?\s+)?button\s+(?:[\[\(]?([a-zA-Z0-9_]+)[\]\)]?)/i);
+        let btn = (m && m[1] ? m[1] : 'A').toLowerCase();
+        let ev = (m && m[2] ? m[2] : 'pressed').toLowerCase();
+        if (['pressed', 'released', 'repeat', 'repeated'].includes(btn) && !m[2]) {
+          ev = btn;
+          btn = 'a';
+        }
+        const fBtn = b.getField('button');
+        if (fBtn) {
+          if (btn === 'b') fBtn.setValue('controller.B');
+          else if (btn === 'left') fBtn.setValue('controller.left');
+          else if (btn === 'right') fBtn.setValue('controller.right');
+          else if (btn === 'up') fBtn.setValue('controller.up');
+          else if (btn === 'down') fBtn.setValue('controller.down');
+          else if (btn === 'menu') fBtn.setValue('controller.menu');
+          else if (btn === 'any') fBtn.setValue('controller.anyButton');
+          else fBtn.setValue('controller.A');
+        }
+        const fEv = b.getField('event');
+        if (fEv) {
+          if (ev === 'released') fEv.setValue('ControllerButtonEvent.Released');
+          else if (ev === 'repeat' || ev === 'repeated') fEv.setValue('ControllerButtonEvent.Repeated');
+          else fEv.setValue('ControllerButtonEvent.Pressed');
+        }
+      },
+      conf: 0.95
+    },
     {
       match: /^[\[\(<]\s*is\s+(?:\[?\s*([a-zA-Z0-9_]+)\s*\]?\s+)?button\s+pressed\s*[\]\)>]$/i,
       type: 'keyispressed',
@@ -590,19 +881,172 @@
     { match: /^\[?\s*set\s+tilemap\s+to(?:\s*\(tilemap\))?\s*\]?$/i, type: 'set_current_tilemap', conf: 1.0 },
     { match: /^\[?\s*place\s+.*on\s+top\s+of\s+random(?:\s+tile)?\s*\]?$/i, type: 'mapplaceonrandomtile', conf: 1.0 },
     { match: /^\[?\s*place\s+.*on\s+random\s+tile\s*\]?$/i, type: 'mapplaceonrandomtile', conf: 1.0 },
-    { match: /^\[?\s*place\s+.*on\s+top\s+of(?:\s+tile)?\s*\]?$/i, type: 'mapplaceontile', conf: 1.0 },
+    {
+      match: /^\[?\s*place\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+on\s+top\s+of\s+(?:location|\(?[a-zA-Z0-9_\s]+\)?)\s*\]?$/i,
+      type: 'mapplaceontile',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/place\s+(?:sprite|\(?([a-zA-Z0-9_]+)\)?)\s+on\s+top\s+of\s+(?:location|\(?([a-zA-Z0-9_\s]+)\)?)/i);
+        const sName = m && m[1] ? m[1] : 'sprite';
+        const inSprite = b.getInput('sprite');
+        if (inSprite && inSprite.connection && !inSprite.connection.targetConnection) {
+          try {
+            const vb = ws.newBlock('variables_get');
+            const v = ensureVariable(ws, sName);
+            if (v && vb.getField('VAR')) vb.getField('VAR').setValue(v.getId());
+            vb.initSvg();
+            vb.render();
+            inSprite.connection.connect(vb.outputConnection);
+          } catch (e) {}
+        }
+        const inLoc = b.getInput('loc');
+        if (inLoc && inLoc.connection && !inLoc.connection.targetConnection) {
+          try {
+            const locB = ws.newBlock('variables_get');
+            const v = ensureVariable(ws, 'location');
+            if (v && locB.getField('VAR')) locB.getField('VAR').setValue(v.getId());
+            locB.initSvg();
+            locB.render();
+            inLoc.connection.connect(locB.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
+    { match: /^\[?\s*place\s+.*on\s+top\s+of(?:\s+tile)?\s*\]?$/i, type: 'mapplaceontile', conf: 0.9 },
     { match: /^\[?\s*set\s+wall\s+at(?:\s+to)?\s*\]?$/i, type: 'mapsetwallat', conf: 1.0 },
     { match: /^\[?\s*(?:tile\s+at\s+(?:location\s+)?is\s+wall|set\s+tile\s+at\s+location\s+is\s+wall)\s*\]?$/i, type: 'tiles_tile_at_location_is_wall', conf: 1.0 },
-    { match: /^\[?\s*set\s+tile\s+at(?:\s+location)?\s*\]?$/i, type: 'mapsettileat', conf: 1.0 },
+    {
+      match: /^\[?\s*set\s+tile\s+at(?:\s+location)?\s*\]?$/i,
+      type: 'mapsettileat',
+      mutator: (b, ws) => {
+        if (!ws) return;
+        const inTile = b.getInput('tile');
+        if (inTile && inTile.connection && !inTile.connection.targetConnection) {
+          try {
+            const bTile = ws.newBlock('tileset_tile_picker');
+            bTile.initSvg();
+            bTile.render();
+            inTile.connection.connect(bTile.outputConnection);
+          } catch (e) {}
+        }
+        const inLoc = b.getInput('loc');
+        if (inLoc && inLoc.connection && !inLoc.connection.targetConnection) {
+          try {
+            const bGet = ws.newBlock('mapgettile');
+            const inCol = bGet.getInput('col');
+            if (inCol && inCol.connection && !inCol.connection.targetConnection) {
+              const nCol = ws.newBlock('math_number');
+              const fnCol = nCol.getField('NUM');
+              if (fnCol) fnCol.setValue('0');
+              nCol.initSvg();
+              nCol.render();
+              inCol.connection.connect(nCol.outputConnection);
+            }
+            const inRow = bGet.getInput('row');
+            if (inRow && inRow.connection && !inRow.connection.targetConnection) {
+              const nRow = ws.newBlock('math_number');
+              const fnRow = nRow.getField('NUM');
+              if (fnRow) fnRow.setValue('0');
+              nRow.initSvg();
+              nRow.render();
+              inRow.connection.connect(nRow.outputConnection);
+            }
+            bGet.initSvg();
+            bGet.render();
+            inLoc.connection.connect(bGet.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
+    {
+      match: /^[\[\(]\s*tilemap\s+location\s+of(?:\s+\(?[a-zA-Z0-9_]+\)?)?\s*[\]\)]$/i,
+      type: 'tiles_location_of_sprite',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/tilemap\s+location\s+of(?:\s+\(?([a-zA-Z0-9_]+)\)?)?/i);
+        const sName = m && m[1] ? m[1] : 'sprite';
+        const inThis = b.getInput('this');
+        if (inThis && inThis.connection && !inThis.connection.targetConnection) {
+          try {
+            const vb = ws.newBlock('variables_get');
+            const v = ensureVariable(ws, sName);
+            if (v && vb.getField('VAR')) vb.getField('VAR').setValue(v.getId());
+            vb.initSvg();
+            vb.render();
+            inThis.connection.connect(vb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*connect\s+.*and\s+.*by\s+.*\]?$/i, type: 'tileUtil_connectMapById', conf: 1.0 },
     { match: /^\[?\s*load\s+tilemap\s+connected\s+by\s*.*\]?$/i, type: 'tileUtil_loadConnectedMap', conf: 1.0 },
     { match: /^\[?\s*unload\s+current\s+tilemap\s*\]?$/i, type: 'tileUtil_unloadTilemap', conf: 1.0 },
-    { match: /^\[?\s*cover\s+all\s+.*tiles\s+with\s*.*\]?$/i, type: 'tileUtil_coverAllTiles', conf: 1.0 },
-    { match: /^\[?\s*on\s+each\s+.*tile\s+create\s+sprite\s*.*\]?$/i, type: 'tileUtil_createSpritesOnTiles', conf: 1.0 },
+    { match: /^\[?\s*cover\s+all\s+.*tiles\s+with\s*.*\]?$/i, type: 'tileutil_coverAllTiles', conf: 1.0 },
+    {
+      match: /^\[?\s*on\s+each(?:\s+[\[\(]?[a-zA-Z0-9_\s]+[\]\)]?)?\s+tile\s+create\s+sprite(?:\s+with\s+image)?\s+(?:and\s+)?(?:of\s+)?kind(?:\s+[\[\(]?[a-zA-Z0-9_\s]+[\]\)]?)?\s*\]?$/i,
+      type: 'tileutil_createSpritesOnTiles',
+      mutator: (b, ws, raw) => {
+        const mTile = (raw || '').match(/on\s+each\s+[\[\(]?([a-zA-Z0-9_\s]+?)[\]\)]?\s+tile/i);
+        const mKind = (raw || '').match(/kind\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?/i);
+        if (mTile && mTile[1]) {
+          const fTile = b.getField('tile');
+          if (fTile) try { fTile.setValue(mTile[1].trim()); } catch (e) {}
+        }
+        if (mKind && mKind[1]) {
+          const fKind = b.getField('kind');
+          if (fKind) {
+            const k = mKind[1].trim();
+            try { fKind.setValue('SpriteKind.' + k); } catch (e) {}
+          }
+        }
+      },
+      conf: 1.0
+    },
+    { match: /^\[?\s*on\s+each\s+.*tile\s+create\s+sprite\s*.*\]?$/i, type: 'tileutil_createSpritesOnTiles', conf: 1.0 },
     { match: /^\(?\s*array\s+of\s+all(?:\s+tile)?\s+locations\s*\)?$/i, type: 'mapgettilestype', conf: 1.0 },
     { match: /^\(?\s*current\s+tilemap\s*\)?$/i, type: 'tileUtil_getLoadedMap', conf: 1.0 },
 
+    // Game Effects
+    {
+      match: /^\[?\s*use\s+effect(?:\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?)?(?:\s+for.*)?\s*\]?$/i,
+      type: 'game_setgameovereffect',
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/use\s+effect\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?/i);
+        const effectName = m && m[1] ? m[1].toLowerCase() : 'confetti';
+        const f = b.getField('effect');
+        if (f) {
+          const val = 'effects.' + effectName;
+          try { f.setValue(val); } catch (e) { f.setValue('effects.confetti'); }
+        }
+      },
+      conf: 1.0
+    },
+
     // Animation Extension
+    {
+      match: /^\[?\s*animate(?:\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?))?\s+frames(?:\s+interval.*)?\s*\]?$/i,
+      type: 'run_image_animation',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/animate(?:\s+\(?([a-zA-Z0-9_]+)\)?)?\s+frames/i);
+        const sName = m && m[1] ? m[1] : 'sprite';
+        const inSprite = b.getInput('sprite');
+        if (inSprite && inSprite.connection && !inSprite.connection.targetConnection) {
+          try {
+            const vb = ws.newBlock('variables_get');
+            const v = ensureVariable(ws, sName);
+            if (v && vb.getField('VAR')) vb.getField('VAR').setValue(v.getId());
+            vb.initSvg();
+            vb.render();
+            inSprite.connection.connect(vb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*animate\s+.*frames\s+.*interval.*loop.*\]?$/i, type: 'run_image_animation', conf: 1.0 },
     { match: /^\[?\s*animate\s+.*with\s+.*for\s+.*loop.*\]?$/i, type: 'run_movement_animation', conf: 1.0 },
     { match: /^\[?\s*animate\s+image\s*\]?$/i, type: 'run_image_animation', conf: 1.0 },
