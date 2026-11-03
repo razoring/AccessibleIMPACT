@@ -25,6 +25,50 @@
   }
 
   // Ensure built-in extension blocks (e.g. Scroller) are defined in Blockly.Blocks
+  function renderToggleToken(rawText) {
+    const isWin = /win/i.test(rawText);
+    const isLose = /lose/i.test(rawText);
+    const isOn = /on/i.test(rawText);
+    const isOff = /off/i.test(rawText);
+
+    let label = 'OFF';
+    let isRight = false;
+    let thumbFill = '#879599';
+
+    if (isOn) {
+      label = 'ON';
+      isRight = true;
+      thumbFill = '#2ecc71';
+    } else if (isWin) {
+      label = 'WIN';
+      isRight = true;
+      thumbFill = '#2ecc71';
+    } else if (isLose) {
+      label = 'LOSE';
+      isRight = false;
+      thumbFill = '#e74c3c';
+    } else {
+      label = 'OFF';
+      isRight = false;
+      thumbFill = '#879599';
+    }
+
+    const thumbPath = isRight
+      ? 'M 71,3 H 89 L 106,20 L 89,37 H 71 L 54,20 Z'
+      : 'M 20,3 H 38 L 55,20 L 38,37 H 20 L 3,20 Z';
+    const textX = isRight ? 80 : 29;
+
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 109 40" width="109" height="40" style="display: inline-block; vertical-align: middle; height: 2.25em !important; width: auto !important; margin: 0 3px !important;"><path d="M 20,0 H 89 L 109,20 L 89,40 H 20 L 0,20 Z" fill="#52447c" stroke="#413663" stroke-width="1" /><path d="${thumbPath}" fill="${thumbFill}" /><text x="${textX}" y="20" fill="#ffffff" font-family="'Segoe UI', 'Lucida Grande', Ubuntu, sans-serif" font-weight="700" font-size="13px" text-anchor="middle" dominant-baseline="central">${label}</text></svg>`;
+
+    return {
+      svg: svg,
+      width: 109,
+      height: 40,
+      isMultiLine: false
+    };
+  }
+
+  // Ensure built-in extension blocks (e.g. Scroller) are defined in Blockly.Blocks
   function ensureExtensionBlocks(B) {
     if (!B || !B.Blocks) return;
 
@@ -191,10 +235,10 @@
     { match: /^\[?\s*%?\s*chance\s*\]?$/i, type: 'percentchance', conf: 1.0 },
     { match: /^\[?\s*0\s*=\s*0\s*\]?$/i, type: 'logic_compare', conf: 1.0 },
     { match: /^<\s*0\s*=\s*0\s*>$/i, type: 'logic_compare', mutator: (b) => { const f = b.getField('OP'); if (f) f.setValue('EQ'); }, conf: 1.0 },
-    { match: /^<\s*on\s*>$/i, type: 'toggleOnOff', mutator: (b) => { const f = b.getField('on'); if (f) f.setValue('true'); }, conf: 1.0 },
-    { match: /^<\s*off\s*>$/i, type: 'toggleOnOff', mutator: (b) => { const f = b.getField('on'); if (f) f.setValue('false'); }, conf: 1.0 },
-    { match: /^<\s*win\s*>$/i, type: 'toggleWinLose', mutator: (b) => { const f = b.getField('win'); if (f) f.setValue('true'); }, conf: 1.0 },
-    { match: /^<\s*lose\s*>$/i, type: 'toggleWinLose', mutator: (b) => { const f = b.getField('win'); if (f) f.setValue('false'); }, conf: 1.0 },
+    { match: /^[<\[]\s*on\s*[>\]]$/i, type: 'toggleOnOff', custom: () => renderToggleToken('<ON>'), conf: 1.0 },
+    { match: /^[<\[]\s*off\s*[>\]]$/i, type: 'toggleOnOff', custom: () => renderToggleToken('<OFF>'), conf: 1.0 },
+    { match: /^[<\[]\s*win\s*[>\]]$/i, type: 'toggleWinLose', custom: () => renderToggleToken('<WIN>'), conf: 1.0 },
+    { match: /^[<\[]\s*lose\s*[>\]]$/i, type: 'toggleWinLose', custom: () => renderToggleToken('<LOSE>'), conf: 1.0 },
     { match: /^<\s*true\s*>$/i, type: 'logic_boolean', mutator: (b) => { const f = b.getField('BOOL'); if (f) f.setValue('TRUE'); }, conf: 1.0 },
     { match: /^<\s*false\s*>$/i, type: 'logic_boolean', mutator: (b) => { const f = b.getField('BOOL'); if (f) f.setValue('FALSE'); }, conf: 1.0 },
     { match: /^<\s*and\s*>$/i, type: 'logic_operation', mutator: (b) => { const f = b.getField('OP'); if (f) f.setValue('AND'); }, conf: 1.0 },
@@ -239,7 +283,8 @@
     { match: /^\[?\s*place\s+.*on\s+top\s+of\s+random(?:\s+tile)?\s*\]?$/i, type: 'mapplaceonrandomtile', conf: 1.0 },
     { match: /^\[?\s*place\s+.*on\s+random\s+tile\s*\]?$/i, type: 'mapplaceonrandomtile', conf: 1.0 },
     { match: /^\[?\s*place\s+.*on\s+top\s+of(?:\s+tile)?\s*\]?$/i, type: 'mapplaceontile', conf: 1.0 },
-    { match: /^\[?\s*set\s+(?:wall\s+at|tile\s+at\s+location\s+is\s+wall)\s*\]?$/i, type: 'tiles_tile_at_location_is_wall', conf: 1.0 },
+    { match: /^\[?\s*set\s+wall\s+at(?:\s+to)?\s*\]?$/i, type: 'mapsetwallat', conf: 1.0 },
+    { match: /^\[?\s*(?:tile\s+at\s+(?:location\s+)?is\s+wall|set\s+tile\s+at\s+location\s+is\s+wall)\s*\]?$/i, type: 'tiles_tile_at_location_is_wall', conf: 1.0 },
     { match: /^\[?\s*set\s+tile\s+at(?:\s+location)?\s*\]?$/i, type: 'mapsettileat', conf: 1.0 },
     { match: /^\[?\s*connect\s+.*and\s+.*by\s+.*\]?$/i, type: 'tileUtil_connectMapById', conf: 1.0 },
     { match: /^\[?\s*load\s+tilemap\s+connected\s+by\s*.*\]?$/i, type: 'tileUtil_loadConnectedMap', conf: 1.0 },
@@ -286,16 +331,41 @@
         if (c.nodeType === 1) walkColors(c);
       }
       try {
+        const tag = el.tagName.toLowerCase();
         const cs = getComputedStyle(el);
         let s = '';
-        for (const p of INPROPS) {
-          const v = cs.getPropertyValue(p);
-          if (v && v !== 'initial') s += p + ':' + v + ';';
+
+        if (tag === 'g') {
+          // Never inline fill/stroke on group containers, let them cascade to children
+          const opacity = cs.getPropertyValue('opacity');
+          if (opacity && opacity !== '1') s += 'opacity:' + opacity + ';';
+          const display = cs.getPropertyValue('display');
+          if (display && display === 'none') s += 'display:none;';
+        } else if (tag === 'text') {
+          // MakeCode block text is crisp white 600 weight
+          s += 'fill:#ffffff !important;font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;font-size:16px !important;font-weight:600 !important;text-anchor:start;dominant-baseline:central;';
+        } else if (tag === 'rect') {
+          // Toggles and dropdowns
+          const isToggle = el.getAttribute('cursor') === 'pointer' || el.classList.contains('blocklyToggleRect');
+          if (isToggle) {
+            // Authentic MakeCode switch styling
+            s += 'fill:#808e9b !important;stroke:#485460 !important;stroke-width:1.5px !important;rx:4px !important;ry:4px !important;';
+          } else {
+            for (const p of INPROPS) {
+              const v = cs.getPropertyValue(p);
+              if (v && v !== 'initial') s += p + ':' + v + ';';
+            }
+          }
+        } else {
+          // path, circle, polygon, etc.
+          for (const p of INPROPS) {
+            const v = cs.getPropertyValue(p);
+            if (v && v !== 'initial') s += p + ':' + v + ';';
+          }
         }
+
         if (s) el.setAttribute('style', s);
-        const cls = (el.getAttribute('class') || '').trim();
-        if (cls) el.removeAttribute('class');
-      } catch (e) { /* keep classes */ }
+      } catch (e) { /* keep element intact */ }
     })(clone);
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -305,6 +375,24 @@
     svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
     svg.setAttribute('width', width);
     svg.setAttribute('height', height);
+
+    // Embed style tag for absolute rendering fidelity
+    const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    styleEl.textContent = `
+      text, .blocklyText {
+        fill: #ffffff !important;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+      }
+      rect[cursor="pointer"] {
+        fill: #808e9b !important;
+        stroke: #485460 !important;
+        rx: 4px !important;
+        ry: 4px !important;
+      }
+    `;
+    svg.appendChild(styleEl);
     svg.appendChild(clone);
 
     // True container/multiline blocks have statement slots or height > 70
@@ -331,6 +419,9 @@
   }
 
   function renderDynamicBlock(type, mutator, rawText) {
+    if (type === 'toggleOnOff' || type === 'toggleWinLose') {
+      return renderToggleToken(rawText || type);
+    }
     const tc = toolchain();
     if (!tc || !tc.ws) return null;
     try {
@@ -397,7 +488,7 @@
     // 1. Canonical rule match
     for (const entry of CANONICAL_MAP) {
       if (entry.match.test(raw)) {
-        return { confidence: entry.conf, type: entry.type, mutator: entry.mutator, name: raw };
+        return { confidence: entry.conf, type: entry.type, mutator: entry.mutator, custom: entry.custom, name: raw };
       }
     }
 
@@ -552,6 +643,14 @@
     const match = resolveTokenMatch(tokenText, tc);
     if (!match || match.confidence < 0.80 || !match.type) {
       return { svg: null, err: 'Block not found or confidence < 80%: ' + tokenText };
+    }
+
+    if (match.custom) {
+      const res = match.custom();
+      if (res && res.svg) {
+        CACHE[tokenText] = res;
+        return res;
+      }
     }
 
     const res = renderDynamicBlock(match.type, match.mutator, tokenText);

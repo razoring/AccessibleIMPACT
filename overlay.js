@@ -18,21 +18,20 @@
       .aifx-rendered.aifx-inline {
         display: inline-block !important;
         vertical-align: middle !important;
-        margin: 0 4px !important;
+        margin: 0 3px !important;
         line-height: 1 !important;
       }
       .aifx-rendered.aifx-inline svg {
         display: inline-block !important;
         vertical-align: middle !important;
-        height: auto !important;
-        max-height: 44px !important;
+        height: 2.25em !important;
         width: auto !important;
         max-width: 100% !important;
         filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)) !important;
         transition: transform 0.15s ease !important;
       }
       .aifx-rendered.aifx-inline:hover svg {
-        transform: scale(1.1) !important;
+        transform: scale(1.08) !important;
         position: relative !important;
         z-index: 10 !important;
       }
@@ -82,7 +81,7 @@
       } else {
         svgEl.style.display = 'inline-block';
         svgEl.style.verticalAlign = 'middle';
-        if (data.height) svgEl.style.height = Math.min(data.height, 44) + 'px';
+        svgEl.style.height = '2.25em';
         svgEl.style.width = 'auto';
       }
     }
