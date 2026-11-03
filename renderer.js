@@ -8,11 +8,11 @@
 
   window.addEventListener('message', (event) => {
     if (!event.data || event.data.action !== 'AIFX_BLOCK_RENDERED') return;
-    const { id, svg, err } = event.data;
+    const { id, svg, width, height, isMultiLine, err } = event.data;
     if (pending.has(id)) {
       const resolver = pending.get(id);
       pending.delete(id);
-      resolver({ svg, err });
+      resolver({ svg, width, height, isMultiLine, err });
     }
   });
 

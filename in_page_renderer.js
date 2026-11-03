@@ -5,8 +5,8 @@
 (function () {
   'use strict';
 
-  const CACHE = { byType: {}, byKey: {} };
-  let buildPromise = null;
+  const CACHE = {};
+  let catalogCache = null;
 
   function blockly() {
     try {
@@ -21,124 +21,154 @@
     if (!B) return null;
     const ws = B.getMainWorkspace ? B.getMainWorkspace() : null;
     if (!ws) return null;
-    const tb = ws.getToolbox ? ws.getToolbox() : null;
-    const fly = tb && tb.getFlyout ? tb.getFlyout() : null;
-    const fws = fly && fly.getWorkspace ? fly.getWorkspace() : null;
-    return { B, ws, tb, fly, fws };
+    return { B, ws };
   }
 
-  const BLOCK_MAP = {
-    // Sprite creation & properties
-    'set sprite to': { type: 'spritescreate' },
-    'sprite img of kind kind': { type: 'spritescreate' },
-    'set sprite position to': { type: 'spritesetpos' },
-    'set sprite velocity to': { type: 'spritesetvel' },
-    'set sprite image to': { type: 'spritesetimage' },
-    'set sprite kind to': { type: 'spritesetkind' },
-    'set sprite stay in screen': { type: 'spritesetsetstayinscreen' },
-    'set sprite bounce on wall': { type: 'spritesetsetbounceonwall' },
-    'destroy sprite': { type: 'spritedestroy2' },
-    'sprite say': { type: 'spritesaytext' },
-    'say': { type: 'spritesaytext' },
-    'set sprite follow': { type: 'spriteFollowOtherSprite' },
-    'move sprite with buttons': { type: 'game_control_sprite' },
-    'on sprite overlaps sprite': { type: 'spritesoverlap' },
-    'on sprite overlaps tile': { type: 'spritesoverlap' },
-    'on sprite hits wall': { type: 'spriteshitwall' },
-    'on created': { type: 'spritesoncreated' },
-    'on destroyed': { type: 'spritesondestroyed' },
-    'sprite start effect': { type: 'startEffectOnSprite' },
-    'use effect': { type: 'startEffectOnSprite' },
-
-    // Dynamic Sprite_blockCombine_set properties
-    'set sprite x to': { type: 'Sprite_blockCombine_set', field: 'property', value: 'Sprite.x@set' },
-    'set sprite y to': { type: 'Sprite_blockCombine_set', field: 'property', value: 'Sprite.y@set' },
-    'set sprite vx to': { type: 'Sprite_blockCombine_set', field: 'property', value: 'Sprite.vx@set' },
-    'set sprite vy to': { type: 'Sprite_blockCombine_set', field: 'property', value: 'Sprite.vy@set' },
-    'set sprite ax to': { type: 'Sprite_blockCombine_set', field: 'property', value: 'Sprite.ax@set' },
-    'set sprite ay to': { type: 'Sprite_blockCombine_set', field: 'property', value: 'Sprite.ay@set' },
-    'change sprite x': { type: 'Sprite_blockCombine_set', field: 'property', value: 'Sprite.x@set' },
-    'change sprite x to': { type: 'Sprite_blockCombine_set', field: 'property', value: 'Sprite.x@set' },
-    'change sprite y': { type: 'Sprite_blockCombine_set', field: 'property', value: 'Sprite.y@set' },
-    'change sprite y to': { type: 'Sprite_blockCombine_set', field: 'property', value: 'Sprite.y@set' },
-
-    // Projectiles
-    'set projectile to projectile from side': { type: 'spritescreateprojectilefromside' },
-    'set projectile to projectile from sprite': { type: 'spritescreateprojectilefromsprite' },
-
-    // Events & Game loops
-    'on start': { type: 'pxt-on-start' },
-    'on game update every ms': { type: 'gameinterval' },
-    'on a button pressed': { type: 'keyonevent' },
-    'on button pressed': { type: 'keyonevent' },
-    'game over': { type: 'gameOver2' },
-    'splash': { type: 'gameSplash' },
-    'show long text': { type: 'game_show_long_text' },
-
-    // Scene & Background & Tilemap
-    'set background color to': { type: 'gamesetbackgroundcolor' },
-    'set background image to img': { type: 'gamesetbackgroundimage' },
-    'set background image to': { type: 'gamesetbackgroundimage' },
-    'start screen effect': { type: 'particlesStartScreenAnimation' },
-    'confetti': { type: 'particlesStartScreenAnimation' },
-    'camera follow sprite': { type: 'camerafollow' },
-    'camera shake': { type: 'camerashake' },
-    'set tilemap to': { type: 'set_current_tilemap' },
-    'place sprite on top of': { type: 'mapplaceonrandomtile' },
-    'place sprite on top of random tile': { type: 'mapplaceonrandomtile' },
-    'set wall at': { type: 'tiles_tile_at_location_is_wall' },
-
-    // Info: Life & Score & Countdown
-    'set life to': { type: 'hudSetLife' },
-    'change life by': { type: 'hudChangeLifeBy' },
-    'on life zero': { type: 'gamelifeevent' },
-    'set score to': { type: 'hudsetScore' },
-    'change score by': { type: 'hudChangeScoreBy' },
-    'score value block': { type: 'hudScore' },
-    'start countdown': { type: 'gamecountdown' },
-    'on countdown end': { type: 'gamecountdownevent' },
-
-    // Music & Sound
-    'play sound': { type: 'music_playable_play' },
-    'ba ding': { type: 'music_playable_play' },
-    'play melody': { type: 'music_melody_playable' },
-    'stop all sounds': { type: 'music_stop_all_sounds' },
-    'set volume': { type: 'synth_set_volume' },
-
-    // Logic & Math & Loops
-    'pick random': { type: 'device_random' },
-    'if true then': { type: 'controls_if' },
-    'if true then else': { type: 'controls_if' },
-    'else': { type: 'controls_if' },
-    '0=0': { type: 'logic_compare' },
-    '0 = 0': { type: 'logic_compare' },
-    'true': { type: 'logic_boolean' },
-    'looping in background': { type: 'forever' },
-    'until done': { type: 'forever' },
-    'repeat times': { type: 'controls_repeat_ext' },
-
-    // Variables & Animation
-    'set name to': { type: 'variables_set' },
-    'animate image': { type: 'run_image_animation' },
-    'animate movement': { type: 'run_image_animation' },
-    'ask for string': { type: 'gameaskforstring' },
-    'othersprite': { type: 'argument_reporter_custom' },
-    'sprite': { type: 'argument_reporter_custom' },
-    'score': { type: 'hudScore' },
-    'chance': { type: 'percentchance' },
-    '% chance': { type: 'percentchance' },
-    'percent chance': { type: 'percentchance' }
-  };
-
-  function normalizeKey(str) {
-    return (str || '')
+  function normalize(s) {
+    return (s || '')
       .toLowerCase()
-      .replace(/^[\[\(\<]+|[\]\)\>]+$/g, '')
-      .replace(/[\[\]\(\)\<\>]/g, ' ')
-      .replace(/[^a-z0-9\s=\.%]/g, '')
+      .replace(/[\[\]\(\)\<\>"]/g, ' ')
+      .replace(/[^a-z0-9\s=%_]/g, ' ')
       .replace(/\s+/g, ' ')
       .trim();
   }
+
+  function wordTokens(s) {
+    return new Set(normalize(s).split(/\s+/).filter(w => w.length > 0));
+  }
+
+  function charBigrams(s) {
+    const norm = normalize(s).replace(/\s+/g, '');
+    const bg = new Set();
+    for (let i = 0; i < norm.length - 1; i++) {
+      bg.add(norm.slice(i, i + 2));
+    }
+    return bg;
+  }
+
+  function diceSimilarity(set1, set2) {
+    if (!set1.size && !set2.size) return 1.0;
+    if (!set1.size || !set2.size) return 0.0;
+    let matches = 0;
+    for (const item of set1) {
+      if (set2.has(item)) matches++;
+    }
+    return (2 * matches) / (set1.size + set2.size);
+  }
+
+  function jaccardSimilarity(set1, set2) {
+    if (!set1.size && !set2.size) return 1.0;
+    if (!set1.size || !set2.size) return 0.0;
+    let matches = 0;
+    for (const item of set1) {
+      if (set2.has(item)) matches++;
+    }
+    const union = set1.size + set2.size - matches;
+    return matches / union;
+  }
+
+  const CANONICAL_MAP = [
+    // Sprites
+    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+to\s+sprite(?:\s+of\s+kind)?\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
+    { match: /^\[?\s*sprite\s*(?:\(img\))?\s*of\s*kind\s*(?:\(kind\))?\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
+    { match: /^\[?\s*set\s+sprite\s+to\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
+    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+position\s+to\s*(?:x\s*y)?\s*\]?$/i, type: 'spritesetpos', conf: 1.0 },
+    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+velocity\s+to\s*(?:vx\s*vy)?\s*\]?$/i, type: 'spritesetvel', conf: 1.0 },
+    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+image\s+to\s*\]?$/i, type: 'spritesetimage', conf: 1.0 },
+    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+kind\s+to\s*\]?$/i, type: 'spritesetkind', conf: 1.0 },
+    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+stay\s+in\s+screen\s*\]?$/i, type: 'spritesetsetstayinscreen', conf: 1.0 },
+    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+bounce\s+on\s+wall\s*\]?$/i, type: 'spritesetsetbounceonwall', conf: 1.0 },
+    { match: /^\[?\s*move\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+with\s+buttons\s*\]?$/i, type: 'game_control_sprite', conf: 1.0 },
+    { match: /^\[?\s*destroy\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s*\]?$/i, type: 'spritedestroy2', conf: 1.0 },
+    { match: /^\[?\s*(?:sprite\s+say|say)\s*\]?$/i, type: 'spritesaytext', conf: 1.0 },
+    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+follow\s*\]?$/i, type: 'spriteFollowOtherSprite', conf: 1.0 },
+    { match: /^\[?\s*start\s+effect\s+on\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s*\]?$/i, type: 'startEffectOnSprite', conf: 1.0 },
+    { match: /^\[?\s*sprite\s+start\s+effect\s*\]?$/i, type: 'startEffectOnSprite', conf: 1.0 },
+    { match: /^\[?\s*(?:on\s+)?sprite\s+overlaps\s+sprite\s*\]?$/i, type: 'spritesoverlap', conf: 1.0 },
+    { match: /^\[?\s*run code on\s+.*overlaps.*otherkind.*\]?$/i, type: 'spritesoverlap', conf: 1.0 },
+    { match: /^\[?\s*(?:on\s+)?sprite\s+overlaps\s+tile\s*\]?$/i, type: 'spriteshittile', conf: 1.0 },
+    { match: /^\[?\s*(?:on\s+)?sprite\s+hits\s+wall\s*\]?$/i, type: 'spriteshitwall', conf: 1.0 },
+
+    // Projectiles
+    { match: /^\[?\s*set\s+projectile\s+to\s+projectile\s+from\s+side\s*\]?$/i, type: 'spritescreateprojectilefromside', conf: 1.0 },
+    { match: /^\[?\s*set\s+projectile\s+to\s+projectile\s+from\s+sprite\s*\]?$/i, type: 'spritescreateprojectilefromsprite', conf: 1.0 },
+    { match: /^\[?\s*projectile\s+.*from\s+side.*\]?$/i, type: 'spritescreateprojectilefromside', conf: 1.0 },
+    { match: /^\[?\s*projectile\s+.*from\s+.*with\s+vx.*\]?$/i, type: 'spritescreateprojectilefromsprite', conf: 1.0 },
+
+    // Loops & Logic & Math
+    { match: /^\[?\s*on\s+start\s*\]?$/i, type: 'pxt-on-start', conf: 1.0 },
+    { match: /^\[?\s*on\s+game\s+update\s+every\s+ms\s*\]?$/i, type: 'gameinterval', conf: 1.0 },
+    { match: /^\[?\s*on\s+game\s+update\s*\]?$/i, type: 'gameupdate', conf: 1.0 },
+    { match: /^\[?\s*forever\s*\]?$/i, type: 'forever', conf: 1.0 },
+    { match: /^\[?\s*(?:if\s+then|if\s+true\s+then|if)\s*\]?$/i, type: 'controls_if', conf: 1.0 },
+    { match: /^\[?\s*else\s*\]?$/i, type: 'controls_if', conf: 0.9 },
+    { match: /^\[?\s*repeat\s*(?:times)?\s*\]?$/i, type: 'controls_repeat_ext', conf: 1.0 },
+    { match: /^\[?\s*(?:for\s+index|for)\s*\]?$/i, type: 'controls_simple_for', conf: 0.9 },
+    { match: /^\[?\s*for\s+element\s*\]?$/i, type: 'pxt_controls_for_of', conf: 0.95 },
+    { match: /^\[?\s*pause\s*(?:\(\d+\))?\s*ms\s*\]?$/i, type: 'device_pause', conf: 1.0 },
+    { match: /^\[?\s*pick\s+random\s*\]?$/i, type: 'device_random', conf: 1.0 },
+    { match: /^\(?\s*pick\s+random\s*\)?$/i, type: 'device_random', conf: 1.0 },
+    { match: /^\[?\s*%?\s*chance\s*\]?$/i, type: 'percentchance', conf: 1.0 },
+    { match: /^\[?\s*0\s*=\s*0\s*\]?$/i, type: 'logic_compare', conf: 1.0 },
+    { match: /^<true>$/i, type: 'logic_boolean', conf: 1.0 },
+
+    // Controller
+    { match: /^\[?\s*(?:on\s+)?(?:a\s+)?button\s+pressed\s*\]?$/i, type: 'keyonevent', conf: 1.0 },
+    { match: /^\[?\s*run\s+code\s+on\s+\(?[a-zA-Z0-9_]+\)?\s+button\s+\(?[a-zA-Z0-9_]+\)?\s*\]?$/i, type: 'keyonevent', conf: 0.95 },
+
+    // Info
+    { match: /^\[?\s*set\s+score\s+to\s*\]?$/i, type: 'hudsetScore', conf: 1.0 },
+    { match: /^\[?\s*change\s+score\s+by\s*\]?$/i, type: 'hudChangeScoreBy', conf: 1.0 },
+    { match: /^\(?\s*score\s*\)?$/i, type: 'hudScore', conf: 1.0 },
+    { match: /^\[?\s*set\s+life\s+to\s*\]?$/i, type: 'hudSetLife', conf: 1.0 },
+    { match: /^\[?\s*change\s+life\s+by\s*\]?$/i, type: 'hudChangeLifeBy', conf: 1.0 },
+    { match: /^\(?\s*life\s*\)?$/i, type: 'hudLife', conf: 1.0 },
+    { match: /^\[?\s*on\s+life\s+zero\s*\]?$/i, type: 'gamelifeevent', conf: 1.0 },
+    { match: /^\[?\s*start\s+countdown\s*\]?$/i, type: 'gamecountdown', conf: 1.0 },
+    { match: /^\[?\s*on\s+countdown\s+end\s*\]?$/i, type: 'gamecountdownevent', conf: 1.0 },
+
+    // Game & Scene
+    { match: /^\[?\s*game\s+over(?:\s*\(true\)|\s*\(false\))?\s*\]?$/i, type: 'gameOver2', conf: 1.0 },
+    { match: /^\[?\s*splash(?:\s*\(title\))?\s*\]?$/i, type: 'gameSplash', conf: 1.0 },
+    { match: /^\[?\s*show\s+long\s+text(?:\s*\(str\)\s*\(layout\))?\s*\]?$/i, type: 'game_show_long_text', conf: 1.0 },
+    { match: /^\[?\s*set\s+background\s+color\s+to(?:\s*\(color\))?\s*\]?$/i, type: 'gamesetbackgroundcolor', conf: 1.0 },
+    { match: /^\[?\s*set\s+background\s+image\s+to\s*\]?$/i, type: 'gamesetbackgroundimage', conf: 1.0 },
+    { match: /^\[?\s*(?:start\s+screen\s+effect|confetti)\s*\]?$/i, type: 'particlesStartScreenAnimation', conf: 1.0 },
+    { match: /^\[?\s*camera\s+follow(?:\s+sprite)?\s*\]?$/i, type: 'camerafollow', conf: 1.0 },
+    { match: /^\[?\s*camera\s+shake\s*\]?$/i, type: 'camerashake', conf: 1.0 },
+
+    // Music
+    { match: /^\[?\s*play\s+sound\s*\]?$/i, type: 'music_play_sound', conf: 1.0 },
+    { match: /^\[?\s*play\s+melody\s*\]?$/i, type: 'music_melody_playable', conf: 1.0 },
+    { match: /^\[?\s*stop\s+all\s+sounds\s*\]?$/i, type: 'music_stop_all_sounds', conf: 1.0 },
+
+    // Tilemap & Tilemap Extension
+    { match: /^\[?\s*set\s+tilemap\s+to(?:\s*\(tilemap\))?\s*\]?$/i, type: 'set_current_tilemap', conf: 1.0 },
+    { match: /^\[?\s*place\s+.*on\s+top\s+of\s+random(?:\s+tile)?\s*\]?$/i, type: 'mapplaceonrandomtile', conf: 1.0 },
+    { match: /^\[?\s*place\s+.*on\s+random\s+tile\s*\]?$/i, type: 'mapplaceonrandomtile', conf: 1.0 },
+    { match: /^\[?\s*place\s+.*on\s+top\s+of(?:\s+tile)?\s*\]?$/i, type: 'mapplaceontile', conf: 1.0 },
+    { match: /^\[?\s*set\s+(?:wall\s+at|tile\s+at\s+location\s+is\s+wall)\s*\]?$/i, type: 'tiles_tile_at_location_is_wall', conf: 1.0 },
+    { match: /^\[?\s*set\s+tile\s+at(?:\s+location)?\s*\]?$/i, type: 'mapsettileat', conf: 1.0 },
+    { match: /^\[?\s*connect\s+.*and\s+.*by\s+.*\]?$/i, type: 'tileUtil_connectMapById', conf: 1.0 },
+    { match: /^\[?\s*load\s+tilemap\s+connected\s+by\s*.*\]?$/i, type: 'tileUtil_loadConnectedMap', conf: 1.0 },
+    { match: /^\[?\s*unload\s+current\s+tilemap\s*\]?$/i, type: 'tileUtil_unloadTilemap', conf: 1.0 },
+    { match: /^\[?\s*cover\s+all\s+.*tiles\s+with\s*.*\]?$/i, type: 'tileUtil_coverAllTiles', conf: 1.0 },
+    { match: /^\[?\s*on\s+each\s+.*tile\s+create\s+sprite\s*.*\]?$/i, type: 'tileUtil_createSpritesOnTiles', conf: 1.0 },
+    { match: /^\(?\s*array\s+of\s+all(?:\s+tile)?\s+locations\s*\)?$/i, type: 'mapgettilestype', conf: 1.0 },
+    { match: /^\(?\s*current\s+tilemap\s*\)?$/i, type: 'tileUtil_getLoadedMap', conf: 1.0 },
+
+    // Animation Extension
+    { match: /^\[?\s*animate\s+.*frames\s+.*interval.*loop.*\]?$/i, type: 'run_image_animation', conf: 1.0 },
+    { match: /^\[?\s*animate\s+.*with\s+.*for\s+.*loop.*\]?$/i, type: 'run_movement_animation', conf: 1.0 },
+    { match: /^\[?\s*animate\s+image\s*\]?$/i, type: 'run_image_animation', conf: 1.0 },
+    { match: /^\[?\s*animate\s+movement\s*\]?$/i, type: 'run_movement_animation', conf: 1.0 },
+    { match: /^\[?\s*stop\s+.*animations\s+on\s*.*\]?$/i, type: 'stop_animations', conf: 1.0 },
+
+    // Arrays / Lists
+    { match: /^\(?\s*length\s+of\s+array\s*\)?$/i, type: 'lists_length', conf: 1.0 },
+    { match: /^\[?\s*list\s+add\s+value\s+to\s+end\s*\]?$/i, type: 'lists_setIndex', conf: 1.0 },
+    { match: /^\(?\s*empty\s+array\s*\)?$/i, type: 'lists_create_empty', conf: 1.0 }
+  ];
 
   function serializeBlock(block) {
     if (!block) return null;
@@ -177,16 +207,30 @@
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    svg.setAttribute('viewBox', '0 0 ' + Math.ceil(bbox.width + 4) + ' ' + Math.ceil(bbox.height + 4));
-    svg.setAttribute('width', Math.ceil(bbox.width + 4));
-    svg.setAttribute('height', Math.ceil(bbox.height + 4));
+    const width = Math.ceil(bbox.width + 4);
+    const height = Math.ceil(bbox.height + 4);
+    svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+    svg.setAttribute('width', width);
+    svg.setAttribute('height', height);
     svg.appendChild(clone);
 
     return {
       svg: new XMLSerializer().serializeToString(svg),
-      width: Math.ceil(bbox.width + 4),
-      height: Math.ceil(bbox.height + 4)
+      width: width,
+      height: height,
+      isMultiLine: height > 58
     };
+  }
+
+  function ensureVariable(ws, name) {
+    if (!ws) return null;
+    try {
+      let v = ws.getVariable ? ws.getVariable(name) : null;
+      if (!v && ws.createVariable) v = ws.createVariable(name);
+      return v;
+    } catch (e) {
+      return null;
+    }
   }
 
   function renderDynamicBlock(type, mutator) {
@@ -195,7 +239,7 @@
     try {
       const b = tc.ws.newBlock(type);
       if (!b) return null;
-      if (mutator) mutator(b);
+      if (mutator) mutator(b, tc.ws);
       b.initSvg();
       b.render();
       const res = serializeBlock(b);
@@ -207,95 +251,203 @@
     }
   }
 
-  async function buildCatalog() {
-    const tc = toolchain();
-    if (!tc || !tc.tb || !tc.fws) {
-      buildPromise = null;
-      return;
+  function getCatalogEntries(B, ws) {
+    if (catalogCache) return catalogCache;
+    const entries = [];
+    if (!B || !B.Blocks) return entries;
+
+    for (const type of Object.keys(B.Blocks)) {
+      try {
+        const b = ws.newBlock(type);
+        const texts = [];
+        if (b.inputList) {
+          for (const input of b.inputList) {
+            for (const field of input.fieldRow) {
+              const val = field.getText ? field.getText() : (field.getValue ? field.getValue() : '');
+              if (val) texts.push(val);
+            }
+          }
+        }
+        b.dispose();
+        const fullText = texts.join(' ');
+        if (fullText) {
+          entries.push({
+            type,
+            rawText: fullText,
+            normText: normalize(fullText),
+            words: wordTokens(fullText),
+            bigrams: charBigrams(fullText)
+          });
+        }
+      } catch (e) {
+        // Skip blocks that fail parameterless init
+      }
+    }
+    catalogCache = entries;
+    return catalogCache;
+  }
+
+  function resolveTokenMatch(tokenText, tc) {
+    const raw = tokenText.trim();
+    if (raw === '[]' || raw === '()' || raw === '[ ]' || raw === '( )') {
+      return { confidence: 0, type: null, reason: 'empty token' };
+    }
+    if (/ctrl\s*\+/i.test(raw)) {
+      return { confidence: 0, type: null, reason: 'keyboard shortcut' };
     }
 
-    const rows = Array.from(document.querySelectorAll('.blocklyTreeRow[data-ns]'));
-    if (!rows.length) return;
-
-    for (const row of rows) {
-      row.click();
-      await new Promise(r => setTimeout(r, 160));
-      let blocks = [];
-      try { blocks = tc.fws.getAllBlocks(false); } catch (e) { continue; }
-      for (const b of blocks) {
-        if (!CACHE.byType[b.type]) {
-          const out = serializeBlock(b);
-          if (out) CACHE.byType[b.type] = out;
-        }
+    // 1. Canonical rule match
+    for (const entry of CANONICAL_MAP) {
+      if (entry.match.test(raw)) {
+        return { confidence: entry.conf, type: entry.type, name: raw };
       }
     }
 
-    try { tc.tb.getFlyout().hide(); } catch (e) {}
-    console.info('[AIFX in-page] catalog ready, cached types:', Object.keys(CACHE.byType).length);
+    // 2. Sprite Property: [set sprite x to], [change sprite y by], [set sprite [x]
+    const spritePropMatch = raw.match(/(?:set|change)\s+sprite\s+\[?([xy]|vx|vy|ax|ay)\]?(?:\s+(?:to|by))?/i);
+    if (spritePropMatch) {
+      const prop = spritePropMatch[1].toLowerCase();
+      const isChange = /change/i.test(raw);
+      const type = isChange ? 'Sprite_blockCombine_change' : 'Sprite_blockCombine_set';
+      return {
+        confidence: 1.0,
+        type,
+        mutator: (b) => {
+          const f = b.getField('property');
+          if (f) f.setValue(`Sprite.${prop}@${isChange ? 'change' : 'set'}`);
+        },
+        name: raw
+      };
+    }
+
+    // 3. Function Definitions: [function <name>]
+    const funcDefMatch = raw.match(/^\[(?:function)\s+([a-zA-Z0-9_]+)\]$/i);
+    if (funcDefMatch) {
+      return {
+        confidence: 1.0,
+        type: 'function_definition',
+        mutator: (b) => {
+          const f = b.getField('function_name');
+          if (f) f.setValue(funcDefMatch[1]);
+        },
+        name: raw
+      };
+    }
+
+    // 4. Function Calls: [call <name>]
+    const funcCallMatch = raw.match(/^\[(?:call)\s+([a-zA-Z0-9_]+)\]$/i);
+    if (funcCallMatch) {
+      return {
+        confidence: 1.0,
+        type: 'function_call',
+        mutator: (b) => {
+          const f = b.getField('function_name');
+          if (f) f.setValue(funcCallMatch[1]);
+        },
+        name: raw
+      };
+    }
+
+    // 5. Variable Setters: [set <name> to]
+    const varSetMatch = raw.match(/^\[set\s+([a-zA-Z0-9_ ]+?)\s+to\]$/i);
+    if (varSetMatch) {
+      const varName = varSetMatch[1].trim();
+      return {
+        confidence: 1.0,
+        type: 'variables_set',
+        mutator: (b, ws) => {
+          const v = ensureVariable(ws, varName);
+          const f = b.getField('VAR');
+          if (f && v) f.setValue(v.getId());
+        },
+        name: raw
+      };
+    }
+
+    // 6. Standalone identifier bubbles: (mySprite), (otherSprite), (sprite), (location), (score)
+    const bubbleMatch = raw.match(/^\(([a-zA-Z_][a-zA-Z0-9_ ]*)\)$/);
+    if (bubbleMatch) {
+      const name = bubbleMatch[1].trim();
+      if (['score', 'hudscore'].includes(name.toLowerCase())) {
+        return { confidence: 1.0, type: 'hudScore', name: raw };
+      }
+      if (['life', 'hudlife'].includes(name.toLowerCase())) {
+        return { confidence: 1.0, type: 'hudLife', name: raw };
+      }
+      if (['othersprite', 'sprite', 'location'].includes(name.toLowerCase())) {
+        return {
+          confidence: 1.0,
+          type: 'argument_reporter_custom',
+          mutator: (b) => {
+            const f = b.getField('VALUE');
+            if (f) f.setValue(name);
+          },
+          name: raw
+        };
+      }
+      return {
+        confidence: 0.95,
+        type: 'variables_get',
+        mutator: (b, ws) => {
+          const v = ensureVariable(ws, name);
+          const f = b.getField('VAR');
+          if (f && v) f.setValue(v.getId());
+        },
+        name: raw
+      };
+    }
+
+    // 7. General Heuristic Matcher against MakeCode Catalog (Minimum 80% threshold)
+    if (tc && tc.B && tc.ws) {
+      const catalog = getCatalogEntries(tc.B, tc.ws);
+      const norm = normalize(raw);
+      const wTok = wordTokens(norm);
+      const bgTok = charBigrams(norm);
+      let best = null;
+      let highestScore = 0;
+
+      for (const b of catalog) {
+        let score = (jaccardSimilarity(wTok, b.words) * 0.5) + (diceSimilarity(bgTok, b.bigrams) * 0.5);
+        if (b.normText.length >= 4 && (norm.includes(b.normText) || b.normText.includes(norm))) {
+          score = Math.max(score, 0.85);
+        }
+        if (score > highestScore) {
+          highestScore = score;
+          best = b;
+        }
+      }
+
+      if (highestScore >= 0.80 && best) {
+        return { confidence: highestScore, type: best.type, name: raw };
+      }
+    }
+
+    return { confidence: 0, type: null, reason: 'below 80% threshold' };
   }
 
   async function renderToken(tokenText) {
-    const key = normalizeKey(tokenText);
-    const mapping = BLOCK_MAP[key];
+    if (CACHE[tokenText]) return CACHE[tokenText];
 
-    // 1. Dynamic property mutation (e.g. Sprite.x@set vs Sprite.y@set)
-    if (mapping && mapping.field && mapping.value) {
-      const dyn = renderDynamicBlock(mapping.type, (b) => {
-        const f = b.getField(mapping.field);
-        if (f) f.setValue(mapping.value);
-      });
-      if (dyn) return dyn;
-    }
-
-    // 2. Mapped block type
-    if (mapping && mapping.type) {
-      if (CACHE.byType[mapping.type]) return CACHE.byType[mapping.type];
-      const direct = renderDynamicBlock(mapping.type);
-      if (direct) {
-        CACHE.byType[mapping.type] = direct;
-        return direct;
-      }
-    }
-
-    // 3. Check catalog; warm up if needed
-    if (Object.keys(CACHE.byType).length === 0) {
-      if (!buildPromise) buildPromise = buildCatalog().catch(() => { buildPromise = null; });
-      await buildPromise;
-    }
-
-    if (mapping && mapping.type && CACHE.byType[mapping.type]) {
-      return CACHE.byType[mapping.type];
-    }
-
-    // 4. Exact block type requested
-    if (CACHE.byType[tokenText]) {
-      return CACHE.byType[tokenText];
-    }
-
-    // 5. Direct fallback generation from Blockly.Blocks[type]
     const tc = toolchain();
-    if (tc && tc.B && tc.B.Blocks) {
-      const typeCandidates = [
-        key.replace(/\s+/g, '_'),
-        key.replace(/\s+/g, ''),
-        mapping ? mapping.type : null
-      ].filter(Boolean);
-
-      for (const t of typeCandidates) {
-        if (tc.B.Blocks[t]) {
-          const out = renderDynamicBlock(t);
-          if (out) {
-            CACHE.byType[t] = out;
-            return out;
-          }
-        }
-      }
+    if (!tc) {
+      return { svg: null, err: 'Blockly toolchain not ready' };
     }
 
-    return { svg: null, err: 'Block not found: ' + tokenText };
+    const match = resolveTokenMatch(tokenText, tc);
+    if (!match || match.confidence < 0.80 || !match.type) {
+      return { svg: null, err: 'Block not found or confidence < 80%: ' + tokenText };
+    }
+
+    const res = renderDynamicBlock(match.type, match.mutator);
+    if (res && res.svg) {
+      CACHE[tokenText] = res;
+      return res;
+    }
+
+    return { svg: null, err: 'Failed to render block: ' + tokenText };
   }
 
-  // Listen for render requests dispatched from renderer.js (isolated world)
+  // Listen for render requests dispatched from renderer.js
   window.addEventListener('message', (event) => {
     if (!event.data || event.data.action !== 'AIFX_RENDER_BLOCK') return;
     const { id, token } = event.data;
@@ -306,6 +458,9 @@
           action: 'AIFX_BLOCK_RENDERED',
           id: id,
           svg: res ? res.svg : null,
+          width: res ? res.width : 0,
+          height: res ? res.height : 0,
+          isMultiLine: res ? res.isMultiLine : false,
           err: res ? res.err : null
         }, '*');
       })
@@ -314,17 +469,13 @@
           action: 'AIFX_BLOCK_RENDERED',
           id: id,
           svg: null,
+          width: 0,
+          height: 0,
+          isMultiLine: false,
           err: String(err)
         }, '*');
       });
   });
 
-  // Warm up catalog after editor initializes
-  try {
-    setTimeout(() => {
-      if (!buildPromise) buildPromise = buildCatalog().catch(() => { buildPromise = null; });
-    }, 2000);
-  } catch (e) {}
-
-  console.info('[AIFX in-page] MAIN world renderer active');
+  console.info('[AIFX in-page] MAIN world renderer active with 80% heuristic & bubble mutators');
 })();

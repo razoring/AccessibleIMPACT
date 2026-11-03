@@ -1,0 +1,3452 @@
+{
+  "total": 689,
+  "tokens": [
+    [
+      "[on start]",
+      146
+    ],
+    [
+      "[if then]",
+      73
+    ],
+    [
+      "[on sprite overlaps sprite]",
+      71
+    ],
+    [
+      "[set sprite to]",
+      63
+    ],
+    [
+      "[ ]",
+      53
+    ],
+    [
+      "[sprite (img) of kind (kind)]",
+      51
+    ],
+    [
+      "[on game update every ms]",
+      45
+    ],
+    [
+      "[show long text]",
+      45
+    ],
+    [
+      "[game over]",
+      42
+    ],
+    [
+      "[on button pressed]",
+      37
+    ],
+    [
+      "[show long text (str) (layout)]",
+      33
+    ],
+    [
+      "(otherSprite)",
+      33
+    ],
+    [
+      "[set (mySprite) position to x y]",
+      32
+    ],
+    [
+      "[place sprite on top of]",
+      31
+    ],
+    [
+      "(mySprite)",
+      29
+    ],
+    [
+      "[place sprite on top of random tile]",
+      28
+    ],
+    [
+      "[set sprite position to]",
+      25
+    ],
+    [
+      "[if]",
+      24
+    ],
+    [
+      "(Ctrl + V)",
+      23
+    ],
+    [
+      "[set sprite [x]",
+      23
+    ],
+    [
+      "[set sprite image to]",
+      22
+    ],
+    [
+      "[forever]",
+      21
+    ],
+    [
+      "[set background color to (color)]",
+      20
+    ],
+    [
+      "[repeat]",
+      20
+    ],
+    [
+      "[on countdown end]",
+      20
+    ],
+    [
+      "(Ctrl + C)",
+      19
+    ],
+    [
+      "(sprite)",
+      19
+    ],
+    [
+      "[if true then]",
+      19
+    ],
+    [
+      "[set tilemap to]",
+      19
+    ],
+    [
+      "( )",
+      18
+    ],
+    [
+      "(length of array)",
+      18
+    ],
+    [
+      "[on sprite overlaps tile]",
+      18
+    ],
+    [
+      "[for]",
+      17
+    ],
+    [
+      "[move sprite with buttons]",
+      17
+    ],
+    [
+      "[play sound]",
+      17
+    ],
+    [
+      "[bottom]",
+      17
+    ],
+    [
+      "(pick random)",
+      17
+    ],
+    [
+      "(list)",
+      17
+    ],
+    [
+      "(join)",
+      17
+    ],
+    [
+      "[run code on (sprite) of kind (kind) overlaps (otherSprite) of kind (otherKind)]",
+      16
+    ],
+    [
+      "[change score by]",
+      16
+    ],
+    [
+      "[sprite start effect]",
+      16
+    ],
+    [
+      "(1)",
+      15
+    ],
+    [
+      "[for index]",
+      15
+    ],
+    [
+      "[run code on (button) button (event)]",
+      14
+    ],
+    [
+      "[pause (100) ms]",
+      14
+    ],
+    [
+      "[for element]",
+      14
+    ],
+    [
+      "[start countdown]",
+      14
+    ],
+    [
+      "[destroy sprite]",
+      14
+    ],
+    [
+      "[(this) say (:))]",
+      14
+    ],
+    [
+      "[game over (true)]",
+      13
+    ],
+    [
+      "[move (mySprite) with buttons]",
+      13
+    ],
+    [
+      "[set score to]",
+      13
+    ],
+    [
+      "[vy (velocity y)]",
+      12
+    ],
+    [
+      "[else]",
+      12
+    ],
+    [
+      "[set tile at location]",
+      12
+    ],
+    [
+      "[set list to]",
+      12
+    ],
+    [
+      "[splash (title)]",
+      11
+    ],
+    [
+      "(score)",
+      11
+    ],
+    [
+      "(array of all tile locations)",
+      11
+    ],
+    [
+      "(location)",
+      11
+    ],
+    [
+      "[set sprite velocity to]",
+      11
+    ],
+    [
+      "[set life to]",
+      11
+    ],
+    [
+      "(color)",
+      11
+    ],
+    [
+      "[use effect]",
+      11
+    ],
+    [
+      "[set [variable]",
+      11
+    ],
+    [
+      "(ms)",
+      11
+    ],
+    [
+      "[set (mySprite) (SpriteFlag.AutoDestroy) (on)]",
+      10
+    ],
+    [
+      "[ay (acceleration y)]",
+      10
+    ],
+    [
+      "[on (Player) overlaps (Enemy)]",
+      10
+    ],
+    [
+      "[0=0]",
+      10
+    ],
+    [
+      "[change life by]",
+      10
+    ],
+    [
+      "[set sprite follow]",
+      10
+    ],
+    [
+      "(UX)",
+      9
+    ],
+    [
+      "[run code on game update every (period) ms]",
+      9
+    ],
+    [
+      "[play melody]",
+      9
+    ],
+    [
+      "[destroy (mySprite)]",
+      9
+    ],
+    [
+      "(value)",
+      9
+    ],
+    [
+      "(ay)",
+      9
+    ],
+    [
+      "[on (Player) overlaps (Food)]",
+      9
+    ],
+    [
+      "[else if]",
+      9
+    ],
+    [
+      "[play (toPlay) (playbackMode)]",
+      9
+    ],
+    [
+      "[change score by (1)]",
+      8
+    ],
+    [
+      "[set background image to (img)]",
+      8
+    ],
+    [
+      "[set (mySprite) stay in screen (true)]",
+      8
+    ],
+    [
+      "(  25  )",
+      8
+    ],
+    [
+      "(tilemap location of (sprite)",
+      8
+    ],
+    [
+      "(0)",
+      8
+    ],
+    [
+      "[set tile at]",
+      8
+    ],
+    [
+      "(ask for string)",
+      8
+    ],
+    [
+      "[on destroyed]",
+      8
+    ],
+    [
+      "(12)",
+      8
+    ],
+    [
+      "(true)",
+      8
+    ],
+    [
+      "[say]",
+      8
+    ],
+    [
+      "(octopus)",
+      8
+    ],
+    [
+      "(array of sprites of kind)",
+      8
+    ],
+    [
+      "(0-160)",
+      7
+    ],
+    [
+      "(0-120)",
+      7
+    ],
+    [
+      "[start countdown (10) (s)]",
+      7
+    ],
+    [
+      "[sprite say]",
+      7
+    ],
+    [
+      "[mySprite]",
+      7
+    ],
+    [
+      "[splash]",
+      7
+    ],
+    [
+      "[until done]",
+      7
+    ],
+    [
+      "[set sprite bounce on wall]",
+      7
+    ],
+    [
+      "[left]",
+      7
+    ],
+    [
+      "[pick random]",
+      7
+    ],
+    [
+      "[set wall at]",
+      7
+    ],
+    [
+      "[set background color to]",
+      7
+    ],
+    [
+      "[while]",
+      7
+    ],
+    [
+      "(null)",
+      7
+    ],
+    [
+      "[set sprite lifespan]",
+      7
+    ],
+    [
+      "(13)",
+      7
+    ],
+    [
+      "( == )",
+      7
+    ],
+    [
+      "(shark)",
+      7
+    ],
+    [
+      "[if else]",
+      6
+    ],
+    [
+      "(6)",
+      6
+    ],
+    [
+      "[lifespan]",
+      6
+    ],
+    [
+      "[set (mySprite) kind to (value)]",
+      6
+    ],
+    [
+      "[randint]",
+      6
+    ],
+    [
+      "( 0 )",
+      6
+    ],
+    [
+      "[list add value to end]",
+      6
+    ],
+    [
+      "(get value at index)",
+      6
+    ],
+    [
+      "[set background image]",
+      6
+    ],
+    [
+      "(0, 0)",
+      6
+    ],
+    [
+      "(tilemap2)",
+      6
+    ],
+    [
+      "(+)",
+      6
+    ],
+    [
+      "(11)",
+      6
+    ],
+    [
+      "( + )",
+      6
+    ],
+    [
+      "[animate movement]",
+      6
+    ],
+    [
+      "[call makeBee]",
+      6
+    ],
+    [
+      "(5)",
+      6
+    ],
+    [
+      "[change (statusbar) [value]",
+      6
+    ],
+    [
+      "(x, y)",
+      6
+    ],
+    [
+      "[set score to (value)]",
+      5
+    ],
+    [
+      "[set dialog frame to (frame)]",
+      5
+    ],
+    [
+      "[reset game]",
+      5
+    ],
+    [
+      "[set tilemap to (tilemap)]",
+      5
+    ],
+    [
+      "[function doSomething]",
+      5
+    ],
+    [
+      "(Ctrl + X)",
+      5
+    ],
+    [
+      "[right]",
+      5
+    ],
+    [
+      "[camera shake]",
+      5
+    ],
+    [
+      "(vy)",
+      5
+    ],
+    [
+      "(-1)",
+      5
+    ],
+    [
+      "[set projectile to projectile from side]",
+      5
+    ],
+    [
+      "(column)",
+      5
+    ],
+    [
+      "(UI)",
+      5
+    ],
+    [
+      "( Ctrl + V)",
+      5
+    ],
+    [
+      "[if/else]",
+      5
+    ],
+    [
+      "(false)",
+      5
+    ],
+    [
+      "(on)",
+      5
+    ],
+    [
+      "(name)",
+      5
+    ],
+    [
+      "[animate image]",
+      5
+    ],
+    [
+      "(index)",
+      5
+    ],
+    [
+      "(text)",
+      5
+    ],
+    [
+      "[value]",
+      5
+    ],
+    [
+      "(100)",
+      5
+    ],
+    [
+      "(14)",
+      5
+    ],
+    [
+      "[cover all tiles with tile]",
+      5
+    ],
+    [
+      "(SpriteKind.Player)",
+      4
+    ],
+    [
+      "[0]",
+      4
+    ],
+    [
+      "[(mySprite) overlaps with (otherSprite)]",
+      4
+    ],
+    [
+      "[run code on countdown end]",
+      4
+    ],
+    [
+      "[run code on (sprite) of kind (kind) overlaps (tile) at (location)]",
+      4
+    ],
+    [
+      "(current tilemap)",
+      4
+    ],
+    [
+      "(tilemap1)",
+      4
+    ],
+    [
+      "[last answer equals (choice)]",
+      4
+    ],
+    [
+      "(25 + (25 * i)",
+      4
+    ],
+    [
+      "[set sprite stay in screen]",
+      4
+    ],
+    [
+      "[set sprite auto destroy]",
+      4
+    ],
+    [
+      "[pause]",
+      4
+    ],
+    [
+      "[% chance]",
+      4
+    ],
+    [
+      "[start screen effect]",
+      4
+    ],
+    [
+      "[camera follow sprite]",
+      4
+    ],
+    [
+      "[projectile (img) from (mySprite) with vx (vx) vy (vy)]",
+      4
+    ],
+    [
+      "[set sprite x to]",
+      4
+    ],
+    [
+      "( = )",
+      4
+    ],
+    [
+      "[set sprite vy (velocity y)]",
+      4
+    ],
+    [
+      "[set [invincible]",
+      4
+    ],
+    [
+      "[scroll background with camera [only horizontally]",
+      4
+    ],
+    [
+      "(get random value from (list)",
+      4
+    ],
+    [
+      "(row)",
+      4
+    ],
+    [
+      "( Ctrl + C )",
+      4
+    ],
+    [
+      "[on created]",
+      4
+    ],
+    [
+      "[set position to]",
+      4
+    ],
+    [
+      "[on A button pressed]",
+      4
+    ],
+    [
+      "(duration, particlesPerSecond)",
+      4
+    ],
+    [
+      "[set (mySprite) scale to (1) anchor (ScaleAnchor.Middle)]",
+      4
+    ],
+    [
+      "(statusbar)",
+      4
+    ],
+    [
+      "(\"\")",
+      4
+    ],
+    [
+      "[call setLevel]",
+      4
+    ],
+    [
+      "[on each tile create sprite with image and kind]",
+      4
+    ],
+    [
+      "[run code forever]",
+      3
+    ],
+    [
+      "[place mySprite on top of (loc)]",
+      3
+    ],
+    [
+      "[array of all (tile) locations]",
+      3
+    ],
+    [
+      "(img` `)",
+      3
+    ],
+    [
+      "[set (tile) at (loc)]",
+      3
+    ],
+    [
+      "[print (:)) at camera x (80) y (90) in box width (150) height (50)]",
+      3
+    ],
+    [
+      "(color of the text)",
+      3
+    ],
+    [
+      "(color behind the text)",
+      3
+    ],
+    [
+      "[show player choices (choice1) (choice2)]",
+      3
+    ],
+    [
+      "[text sprite (text)]",
+      3
+    ],
+    [
+      "[set (mySprite) position to x (x) y (y)]",
+      3
+    ],
+    [
+      "[array of sprites of kind (kind)]",
+      3
+    ],
+    [
+      "[set background color]",
+      3
+    ],
+    [
+      "(mySprite image)",
+      3
+    ],
+    [
+      "(picture)",
+      3
+    ],
+    [
+      "[set sprite x]",
+      3
+    ],
+    [
+      "(&gt;)",
+      3
+    ],
+    [
+      "(0-0)",
+      3
+    ],
+    [
+      "(0+0)",
+      3
+    ],
+    [
+      "[set dialog frame to]",
+      3
+    ],
+    [
+      "[set dialog text color to]",
+      3
+    ],
+    [
+      "(right and left)",
+      3
+    ],
+    [
+      "(vx)",
+      3
+    ],
+    [
+      "[set life to (3)]",
+      3
+    ],
+    [
+      "(3)",
+      3
+    ],
+    [
+      "[change life by (-1)]",
+      3
+    ],
+    [
+      "(function()",
+      3
+    ],
+    [
+      "(human)",
+      3
+    ],
+    [
+      "(500, function()",
+      3
+    ],
+    [
+      "(  =  )",
+      3
+    ],
+    [
+      "(min, max)",
+      3
+    ],
+    [
+      "[set (player) score to (0)]",
+      3
+    ],
+    [
+      "[destroy]",
+      3
+    ],
+    [
+      "(frog)",
+      3
+    ],
+    [
+      "(cake)",
+      3
+    ],
+    [
+      "(powerUp)",
+      3
+    ],
+    [
+      "(0 x 0)",
+      3
+    ],
+    [
+      "[#, #]",
+      3
+    ],
+    [
+      "[stop all sounds]",
+      3
+    ],
+    [
+      "[ask for number (msg)]",
+      3
+    ],
+    [
+      "(img`...`, SpriteKind.Player)",
+      3
+    ],
+    [
+      "(let i = 0; i &lt; 5; i++)",
+      3
+    ],
+    [
+      "[set (mySprite) image to (img)]",
+      3
+    ],
+    [
+      "[set image for (layer) to (image)]",
+      3
+    ],
+    [
+      "(speed)",
+      3
+    ],
+    [
+      "(array of sprites of kind (Bees)",
+      3
+    ],
+    [
+      "[for (column)]",
+      3
+    ],
+    [
+      "[for (row)]",
+      3
+    ],
+    [
+      "[change sprite [x]",
+      3
+    ],
+    [
+      "[ on game update every ms]",
+      3
+    ],
+    [
+      "(≥)",
+      3
+    ],
+    [
+      "[animate (mySprite) frames (frames) interval (ms) (500) loop (loop)]",
+      3
+    ],
+    [
+      "[attach (statusbar) to (sprite)]",
+      3
+    ],
+    [
+      "[set (statusbar) [value]",
+      3
+    ],
+    [
+      "[max]",
+      3
+    ],
+    [
+      "[on B button pressed]",
+      3
+    ],
+    [
+      "[ start screen (effect) effect]",
+      3
+    ],
+    [
+      "[play (to play) (playbackMode)]",
+      3
+    ],
+    [
+      "(music.Melody)",
+      3
+    ],
+    [
+      "(Hunger)",
+      3
+    ],
+    [
+      "[arrayNum]",
+      3
+    ],
+    [
+      "[ask for number (message)]",
+      3
+    ],
+    [
+      "(foundFossils)",
+      3
+    ],
+    [
+      "[animate frames]",
+      3
+    ],
+    [
+      "[call createCookie]",
+      3
+    ],
+    [
+      "(columnNumber)",
+      3
+    ],
+    [
+      "(question)",
+      3
+    ],
+    [
+      "(0 + 0)",
+      3
+    ],
+    [
+      "(  Ctrl + V)",
+      3
+    ],
+    [
+      "[on tilemap loaded]",
+      3
+    ],
+    [
+      "[destroy all sprites of kind]",
+      3
+    ],
+    [
+      "[destroy all sprites of kind (kind)]",
+      2
+    ],
+    [
+      "[1]",
+      2
+    ],
+    [
+      "[set (myEnemy) follow (mySprite)]",
+      2
+    ],
+    [
+      "(  Ctrl + C  )",
+      2
+    ],
+    [
+      "(  Ctrl + V  )",
+      2
+    ],
+    [
+      "( Ctrl + V )",
+      2
+    ],
+    [
+      "[camera follow sprite (mySprite)]",
+      2
+    ],
+    [
+      "(tiles.getTileLocation(0, 0)",
+      2
+    ],
+    [
+      "[set wall (on) at (loc)]",
+      2
+    ],
+    [
+      "[run code on (sprite) of kind (kind) hits wall at (location)]",
+      2
+    ],
+    [
+      "[set volume]",
+      2
+    ],
+    [
+      "(such as dithering, complementary colors, and highlights/shadows)",
+      2
+    ],
+    [
+      "(such as zoom in/out, marquee, and canvas pan)",
+      2
+    ],
+    [
+      "[set (textSprite) max font height (height)]",
+      2
+    ],
+    [
+      "[run code on (sprite) of (kind) update every (500) ms]",
+      2
+    ],
+    [
+      "(7)",
+      2
+    ],
+    [
+      "(enemy)",
+      2
+    ],
+    [
+      "(mySprite x)",
+      2
+    ],
+    [
+      "[y]",
+      2
+    ],
+    [
+      "[if true then / else]",
+      2
+    ],
+    [
+      "[set [bridgeLength]",
+      2
+    ],
+    [
+      "(ask for number)",
+      2
+    ],
+    [
+      "( ≤ )",
+      2
+    ],
+    [
+      "(bridgeLength)",
+      2
+    ],
+    [
+      "[set [startingColumn]",
+      2
+    ],
+    [
+      "((location)",
+      2
+    ],
+    [
+      "[change [startingColumn]",
+      2
+    ],
+    [
+      "(startingColumn)",
+      2
+    ],
+    [
+      "(string, layout)",
+      2
+    ],
+    [
+      "[place sprite on random tile]",
+      2
+    ],
+    [
+      "[ask (title)]",
+      2
+    ],
+    [
+      "(img` `, mySprite, 50, 50)",
+      2
+    ],
+    [
+      "[projectile (img) from side with vx (vx) vy (vy)]",
+      2
+    ],
+    [
+      "[(percentage) % chance]",
+      2
+    ],
+    [
+      "[  start screen (effect) effect]",
+      2
+    ],
+    [
+      "(computer)",
+      2
+    ],
+    [
+      "(  0  )",
+      2
+    ],
+    [
+      "(0, 10)",
+      2
+    ],
+    [
+      "[change (player) score by (1)]",
+      2
+    ],
+    [
+      "(10)",
+      2
+    ],
+    [
+      "[set sprite [vy (velocity y)]",
+      2
+    ],
+    [
+      "[set text list to]",
+      2
+    ],
+    [
+      "(empty array)",
+      2
+    ],
+    [
+      "[tile to (direction) of (mySprite) is (tile)]",
+      2
+    ],
+    [
+      "[ghost through walls]",
+      2
+    ],
+    [
+      "(invincible)",
+      2
+    ],
+    [
+      "[set sprite kind to]",
+      2
+    ],
+    [
+      "[change color in (picture) from (from) to (to)]",
+      2
+    ],
+    [
+      "[only vertically]",
+      2
+    ],
+    [
+      "[set background offset to]",
+      2
+    ],
+    [
+      "[change color in (picture) from () to ()]",
+      2
+    ],
+    [
+      "(8)",
+      2
+    ],
+    [
+      "[looping in background]",
+      2
+    ],
+    [
+      "[on life zero]",
+      2
+    ],
+    [
+      "(place)",
+      2
+    ],
+    [
+      "(thing)",
+      2
+    ],
+    [
+      "(5, 15)",
+      2
+    ],
+    [
+      "(=)",
+      2
+    ],
+    [
+      "( Ctrl + C)",
+      2
+    ],
+    [
+      "(&lt;)",
+      2
+    ],
+    [
+      "[set (mySprite) velocity to vx vy]",
+      2
+    ],
+    [
+      "(50, 50)",
+      2
+    ],
+    [
+      "(vx, vy)",
+      2
+    ],
+    [
+      "[set (mySprite) bounce on wall (true)]",
+      2
+    ],
+    [
+      "(box.width + spacing)",
+      2
+    ],
+    [
+      "[scroll background with vx (-50) vy (-50)]",
+      2
+    ],
+    [
+      "[function makeBee]",
+      2
+    ],
+    [
+      "( Ctrl + X)",
+      2
+    ],
+    [
+      "[score]",
+      2
+    ],
+    [
+      "[call createBubbles]",
+      2
+    ],
+    [
+      "[function createBubbles]",
+      2
+    ],
+    [
+      "(array of sprites of kind (Bubble)",
+      2
+    ],
+    [
+      "(coinSprite)",
+      2
+    ],
+    [
+      "(tilemap location of ((sprite)",
+      2
+    ],
+    [
+      "[otherSprite]",
+      2
+    ],
+    [
+      "(4)",
+      2
+    ],
+    [
+      "[on sprite hits wall]",
+      2
+    ],
+    [
+      "[(mySprite) start (effect) effect]",
+      2
+    ],
+    [
+      "[ask for string]",
+      2
+    ],
+    [
+      "[userIndex]",
+      2
+    ],
+    [
+      "[ set background image to (img)]",
+      2
+    ],
+    [
+      "[if then else]",
+      2
+    ],
+    [
+      "(  100  )",
+      2
+    ],
+    [
+      "(music.melodyPlayable(music.baDing)",
+      2
+    ],
+    [
+      "( vx )",
+      2
+    ],
+    [
+      "[start screen (effect) effect]",
+      2
+    ],
+    [
+      "[set sprite position]",
+      2
+    ],
+    [
+      "[use effect (effects.confetti) for (true)]",
+      2
+    ],
+    [
+      "(ControllerButtonEvent.Pressed)",
+      2
+    ],
+    [
+      "[ask for string (message)]",
+      2
+    ],
+    [
+      "(customerSprite)",
+      2
+    ],
+    [
+      "[set (statusbar) fill background]",
+      2
+    ],
+    [
+      "[on (Food) overlaps (Customer)]",
+      2
+    ],
+    [
+      "(status bar kind attached to sprite)",
+      2
+    ],
+    [
+      "((statusbar)",
+      2
+    ],
+    [
+      "[animate (mySprite) with (pathString) for (ms) (2000) loop (loop)]",
+      2
+    ],
+    [
+      "(8x8)",
+      2
+    ],
+    [
+      "(32x32)",
+      2
+    ],
+    [
+      "[set projectile to projectile from sprite]",
+      2
+    ],
+    [
+      "[change (mySprite) scale to (1) anchor (ScaleAnchor.Middle)]",
+      2
+    ],
+    [
+      "(starfish)",
+      2
+    ],
+    [
+      "[i]",
+      2
+    ],
+    [
+      "(i + 1)",
+      2
+    ],
+    [
+      "[set sprite [ay (acceleration y)]",
+      2
+    ],
+    [
+      "[change [variable]",
+      2
+    ],
+    [
+      "(hiddenFossils)",
+      2
+    ],
+    [
+      "[invisible]",
+      2
+    ],
+    [
+      "( length of array)",
+      2
+    ],
+    [
+      "[Make a Function...]",
+      2
+    ],
+    [
+      "[function createCookie]",
+      2
+    ],
+    [
+      "[set (textSprite) text (text)]",
+      2
+    ],
+    [
+      "(1, 6)",
+      2
+    ],
+    [
+      "[function makeSnowflake]",
+      2
+    ],
+    [
+      "[call makeSnowflake]",
+      2
+    ],
+    [
+      "(level)",
+      2
+    ],
+    [
+      "(-)",
+      2
+    ],
+    [
+      "[then]",
+      2
+    ],
+    [
+      "(seaweedList)",
+      2
+    ],
+    [
+      "[question]",
+      2
+    ],
+    [
+      "[create status bar sprite width (20) height (4) kind (kind)]",
+      2
+    ],
+    [
+      "[createWatermelon]",
+      2
+    ],
+    [
+      "(  Ctrl + C)",
+      2
+    ],
+    [
+      "[connect (tilemap 1) and (tilemap2) by (Door1)]",
+      2
+    ],
+    [
+      "[place sprite on top of location]",
+      2
+    ],
+    [
+      "[load tilemap connected by (Door1)]",
+      2
+    ],
+    [
+      "[call switchTilemap]",
+      2
+    ],
+    [
+      "(  CTRL + C  )",
+      1
+    ],
+    [
+      "(CTRL + V)",
+      1
+    ],
+    [
+      "( &amp;&amp; )",
+      1
+    ],
+    [
+      "[is button (button) pressed]",
+      1
+    ],
+    [
+      "[set (this) unfollow]",
+      1
+    ],
+    [
+      "( Ctrl + X )",
+      1
+    ],
+    [
+      "(6 - throwsMade)",
+      1
+    ],
+    [
+      "[myself sprite]",
+      1
+    ],
+    [
+      "[toggle current view mode]",
+      1
+    ],
+    [
+      "(SpriteKind.Player, function(sprite: Sprite, location: tiles.Location)",
+      1
+    ],
+    [
+      "[connect (tilemap) to (tilemap) by (Door1)]",
+      1
+    ],
+    [
+      "(for example, going for a walk outside or eating breakfast indoors)",
+      1
+    ],
+    [
+      "(\":)",
+      1
+    ],
+    [
+      "(questionOne[0], questionOne[1])",
+      1
+    ],
+    [
+      "(0-9)",
+      1
+    ],
+    [
+      "(A-F)",
+      1
+    ],
+    [
+      "[on each (tile) create sprite with (image) and (kind)]",
+      1
+    ],
+    [
+      "(with the provided image and kind)",
+      1
+    ],
+    [
+      "[cover all (tileKind) tiles with (cover)]",
+      1
+    ],
+    [
+      "(to be covered)",
+      1
+    ],
+    [
+      "(in the inner conditional)",
+      1
+    ],
+    [
+      "[get all sprites of (kind) within (50) pixels from (mySprite)]",
+      1
+    ],
+    [
+      "[set (mySprite) velocity at (angle) (speed)]",
+      1
+    ],
+    [
+      "[angle from (mySprite) to (myEnemy)]",
+      1
+    ],
+    [
+      "[set (mySprite) velocity to vx (vx) vy (vy)]",
+      1
+    ],
+    [
+      "[  move sprite with buttons]",
+      1
+    ],
+    [
+      "[makeEnemy]",
+      1
+    ],
+    [
+      "[function makeEnemy]",
+      1
+    ],
+    [
+      "[call makeEnemy]",
+      1
+    ],
+    [
+      "[vx (velocity x)]",
+      1
+    ],
+    [
+      "[on game update]",
+      1
+    ],
+    [
+      "(array of sprites of kind Enemy)",
+      1
+    ],
+    [
+      "[flip picture horizontally]",
+      1
+    ],
+    [
+      "[destroy (otherSprite)]",
+      1
+    ],
+    [
+      "[snakesStomped]",
+      1
+    ],
+    [
+      "[ghost through sprites]",
+      1
+    ],
+    [
+      "[set sprite ghost through sprites]",
+      1
+    ],
+    [
+      "[makeCoin]",
+      1
+    ],
+    [
+      "[call makeCoin]",
+      1
+    ],
+    [
+      "(coin)",
+      1
+    ],
+    [
+      "(snakesStomped)",
+      1
+    ],
+    [
+      "[move with buttons]",
+      1
+    ],
+    [
+      "[bridgeLength]",
+      1
+    ],
+    [
+      "( (location)",
+      1
+    ],
+    [
+      "[row]",
+      1
+    ],
+    [
+      "((tilemap location of (sprite)",
+      1
+    ],
+    [
+      "(tilemap location [left] of (tilemap location of (playerSprite)",
+      1
+    ],
+    [
+      "( column ,  row )",
+      1
+    ],
+    [
+      "[set sprite velocity]",
+      1
+    ],
+    [
+      "[change life by ]",
+      1
+    ],
+    [
+      "(using the columns and rows)",
+      1
+    ],
+    [
+      "[setLevel]",
+      1
+    ],
+    [
+      "[function setLevel]",
+      1
+    ],
+    [
+      "[call function]",
+      1
+    ],
+    [
+      "[is (sprite) hitting wall (direction)]",
+      1
+    ],
+    [
+      "(Collision    Direction.Left)",
+      1
+    ],
+    [
+      "(in that order)",
+      1
+    ],
+    [
+      "[run code on created (sprite) of kind (kind)]",
+      1
+    ],
+    [
+      "(SpriteKind.Player, function(sprite: Sprite)",
+      1
+    ],
+    [
+      "(-2)",
+      1
+    ],
+    [
+      "[run code on life zero]",
+      1
+    ],
+    [
+      "[time since start (ms)]",
+      1
+    ],
+    [
+      "(duration and particlesPerSecond)",
+      1
+    ],
+    [
+      "(  fx  )",
+      1
+    ],
+    [
+      "(bouncing up, or being pulled down)",
+      1
+    ],
+    [
+      "[abs]",
+      1
+    ],
+    [
+      "(+/-)",
+      1
+    ],
+    [
+      "(sprite.vy)",
+      1
+    ],
+    [
+      "(in ms)",
+      1
+    ],
+    [
+      "(  10  )",
+      1
+    ],
+    [
+      "[set userResponseList to]",
+      1
+    ],
+    [
+      "(n)",
+      1
+    ],
+    [
+      "[userResponseList]",
+      1
+    ],
+    [
+      "(get and remove first value from list)",
+      1
+    ],
+    [
+      "[text list]",
+      1
+    ],
+    [
+      "[minimap]",
+      1
+    ],
+    [
+      "[draw (mySprite) on (myMinimap)]",
+      1
+    ],
+    [
+      "(myMinimap, mySprite)",
+      1
+    ],
+    [
+      "[minimap (image)]",
+      1
+    ],
+    [
+      "(let myMinimap = minimap.minimap()",
+      1
+    ],
+    [
+      "(or a floating platform)",
+      1
+    ],
+    [
+      "(TileDirection.Left,     img` `)",
+      1
+    ],
+    [
+      "(if any)",
+      1
+    ],
+    [
+      "[Make a Variable]",
+      1
+    ],
+    [
+      "[set [powerUp]",
+      1
+    ],
+    [
+      "[function makeUmbrella]",
+      1
+    ],
+    [
+      "[call makeUmbrella]",
+      1
+    ],
+    [
+      "[%&nbsp; chance]",
+      1
+    ],
+    [
+      "[0, 0]",
+      1
+    ],
+    [
+      "[[#, #]",
+      1
+    ],
+    [
+      "(or the value at the 0 index)",
+      1
+    ],
+    [
+      "(positionArray[levelNum][0], positionArray[levelNum][1])",
+      1
+    ],
+    [
+      "(  15  )",
+      1
+    ],
+    [
+      "(  20  )",
+      1
+    ],
+    [
+      "(15 + (20 * i)",
+      1
+    ],
+    [
+      "[set (picture) color at x (x) y (y) to (c)]",
+      1
+    ],
+    [
+      "(0, 0, 0)",
+      1
+    ],
+    [
+      "[(picture) color at x (x) y (y)]",
+      1
+    ],
+    [
+      "[function   loadTilemap]",
+      1
+    ],
+    [
+      "[scroll background with camera]",
+      1
+    ],
+    [
+      "[function loadTilemap]",
+      1
+    ],
+    [
+      "(background image)",
+      1
+    ],
+    [
+      "(tilemap``)",
+      1
+    ],
+    [
+      "[place (mySprite) on top of (loc)]",
+      1
+    ],
+    [
+      "(mySprite, tiles.getTileLocation(0, 0)",
+      1
+    ],
+    [
+      "[create image width (width) height (height)]",
+      1
+    ],
+    [
+      "( -= )",
+      1
+    ],
+    [
+      "(9)",
+      1
+    ],
+    [
+      "( Ctrl + V  )",
+      1
+    ],
+    [
+      "( &gt; )",
+      1
+    ],
+    [
+      "( - )",
+      1
+    ],
+    [
+      "(0, 9)",
+      1
+    ],
+    [
+      "(userGuess == randNum1 || userGuess == randNum2)",
+      1
+    ],
+    [
+      "(10, 99)",
+      1
+    ],
+    [
+      "(userGuess == randNum1 || userGuess == randNum2 || userGuess == randNum3)",
+      1
+    ],
+    [
+      "(100, 999)",
+      1
+    ],
+    [
+      "[bounce on walls]",
+      1
+    ],
+    [
+      "(text  )",
+      1
+    ],
+    [
+      "[is (button) button pressed]",
+      1
+    ],
+    [
+      "[pause (100)ms]",
+      1
+    ],
+    [
+      "(scroller.    BackgroundLayer, img` `)",
+      1
+    ],
+    [
+      "(-50, -50)",
+      1
+    ],
+    [
+      "[place (mySprite) on top of random (tile)]",
+      1
+    ],
+    [
+      "(mySprite, img` `)",
+      1
+    ],
+    [
+      "[camera shake by (4) pixels for (500) ms]",
+      1
+    ],
+    [
+      "(4, 500)",
+      1
+    ],
+    [
+      "[set [name]",
+      1
+    ],
+    [
+      "(snack)",
+      1
+    ],
+    [
+      "[set velocity to]",
+      1
+    ],
+    [
+      "[makeBee]",
+      1
+    ],
+    [
+      "(Ctrl + V )",
+      1
+    ],
+    [
+      "[scroll background with vx(-50) vy (-50)]",
+      1
+    ],
+    [
+      "[background offset x]",
+      1
+    ],
+    [
+      "[set background offset to x(0) y(0)]",
+      1
+    ],
+    [
+      "[set background offset to x(0) y (0)]",
+      1
+    ],
+    [
+      "[stop (type) animations on (sprite)]",
+      1
+    ],
+    [
+      "(animation.    AnimationTypes.All, mySprite)",
+      1
+    ],
+    [
+      "[createBubbles]",
+      1
+    ],
+    [
+      "[set [column]",
+      1
+    ],
+    [
+      "[set column to]",
+      1
+    ],
+    [
+      "[on (Marble) overlaps (Paddle)]",
+      1
+    ],
+    [
+      "[on (Marble) overlaps (Bubble)]",
+      1
+    ],
+    [
+      "[scroll background with camera [both directions]",
+      1
+    ],
+    [
+      "[scroll background with]",
+      1
+    ],
+    [
+      "[set background camera scroll multipliers to]",
+      1
+    ],
+    [
+      "[down]",
+      1
+    ],
+    [
+      "[up]",
+      1
+    ],
+    [
+      "[  change sprite [x]",
+      1
+    ],
+    [
+      "(playerSprite)",
+      1
+    ],
+    [
+      "[on (Player) overlaps (Coin)]",
+      1
+    ],
+    [
+      "(sprite x)",
+      1
+    ],
+    [
+      "[ cash  value]",
+      1
+    ],
+    [
+      "(fgColor, bgColor, fontSize, xPos, yPos)",
+      1
+    ],
+    [
+      "(icon)",
+      1
+    ],
+    [
+      "(nested inside the condition when   sceneNum   equals 1)",
+      1
+    ],
+    [
+      "[top]",
+      1
+    ],
+    [
+      "[set sprite [auto destroy]",
+      1
+    ],
+    [
+      "[destroy on wall]",
+      1
+    ],
+    [
+      "(z)",
+      1
+    ],
+    [
+      "(fully yellow)",
+      1
+    ],
+    [
+      "[B]",
+      1
+    ],
+    [
+      "(tilemap location   [left] of (location)",
+      1
+    ],
+    [
+      "(bottom)",
+      1
+    ],
+    [
+      "(tilemap location     [bottom] of (location)",
+      1
+    ],
+    [
+      "(tilemap location [bottom] of (tilemap location of (sprite)",
+      1
+    ],
+    [
+      "(50)",
+      1
+    ],
+    [
+      "(percentage)",
+      1
+    ],
+    [
+      "(effects.spray)",
+      1
+    ],
+    [
+      "(in milliseconds)",
+      1
+    ],
+    [
+      "[starfish, octopus, fish, turtle]",
+      1
+    ],
+    [
+      "(hidingSprite)",
+      1
+    ],
+    [
+      "(SpriteFlag.AutoDestroy, false)",
+      1
+    ],
+    [
+      "(userGuess)",
+      1
+    ],
+    [
+      "[userindex]",
+      1
+    ],
+    [
+      "(userIndex)",
+      1
+    ],
+    [
+      "[place sprite on top of tile]",
+      1
+    ],
+    [
+      "[ba ding]",
+      1
+    ],
+    [
+      "[confetti]",
+      1
+    ],
+    [
+      "(text, timeOnScreen, animated, textColor, textBoxColor)",
+      1
+    ],
+    [
+      "(music.baDing)",
+      1
+    ],
+    [
+      "[wizard, crystalBall, catStatue]",
+      1
+    ],
+    [
+      "[“I think yes”, “Ask again later”]",
+      1
+    ],
+    [
+      "[2, 4, 5, 6, 10]",
+      1
+    ],
+    [
+      "(1, ScaleAnchor.Middle)",
+      1
+    ],
+    [
+      "[unload current tilemap]",
+      1
+    ],
+    [
+      "[set life]",
+      1
+    ],
+    [
+      "(true, effects.confetti)",
+      1
+    ],
+    [
+      "(img)",
+      1
+    ],
+    [
+      "(toppingName:string, toppingImage: Image)",
+      1
+    ],
+    [
+      "(“pepperoni”, pepperoni)",
+      1
+    ],
+    [
+      "(velocity y)",
+      1
+    ],
+    [
+      "[set [statusbar]",
+      1
+    ],
+    [
+      "(Health)",
+      1
+    ],
+    [
+      "[set [statusBar]",
+      1
+    ],
+    [
+      "[tile at (location) is (tile)]",
+      1
+    ],
+    [
+      "(tiles.getTile    Location(0, 0)",
+      1
+    ],
+    [
+      "[flip image horizontally]",
+      1
+    ],
+    [
+      "(from the  Gallery )",
+      1
+    ],
+    [
+      "[on (Player) overlaps (Key)]",
+      1
+    ],
+    [
+      "[on (Player) overlaps (Castle)]",
+      1
+    ],
+    [
+      "(or the base number of strokes it takes to complete a hole)",
+      1
+    ],
+    [
+      "(and the various brush sizes)",
+      1
+    ],
+    [
+      "(second)",
+      1
+    ],
+    [
+      "(\"\", \"\")",
+      1
+    ],
+    [
+      "[(sprite) move to x (x) y (y) with speed (100)]",
+      1
+    ],
+    [
+      "(sprite, 0, 0, 100)",
+      1
+    ],
+    [
+      "[(sprite) say (:))]",
+      1
+    ],
+    [
+      "(sprite, \":)",
+      1
+    ],
+    [
+      "[stop countdown]",
+      1
+    ],
+    [
+      "(uppercase)",
+      1
+    ],
+    [
+      "[sprite]",
+      1
+    ],
+    [
+      "[invincible]",
+      1
+    ],
+    [
+      "(16x16)",
+      1
+    ],
+    [
+      "[currentArray]",
+      1
+    ],
+    [
+      "(birthdayMonth.toString()",
+      1
+    ],
+    [
+      "[projectile]",
+      1
+    ],
+    [
+      "[on (Player) overlaps (Projectile)]",
+      1
+    ],
+    [
+      "(Projectile)",
+      1
+    ],
+    [
+      "[speed]",
+      1
+    ],
+    [
+      "[set projectile to]",
+      1
+    ],
+    [
+      "[change variable by]",
+      1
+    ],
+    [
+      "(and how many times the Player sprite has jumped over it)",
+      1
+    ],
+    [
+      "[set sprite invisible]",
+      1
+    ],
+    [
+      "[on (Player) overlaps (Fossil)]",
+      1
+    ],
+    [
+      "[ghost]",
+      1
+    ],
+    [
+      "(by pressing the A button)",
+      1
+    ],
+    [
+      "( -)",
+      1
+    ],
+    [
+      "[foundFossils]",
+      1
+    ],
+    [
+      "[length of array]",
+      1
+    ],
+    [
+      "(archaeologist)",
+      1
+    ],
+    [
+      "( x ,  y , and  scale )",
+      1
+    ],
+    [
+      "(randX, randY, 1)",
+      1
+    ],
+    [
+      "(otherSprite.x, otherSprite.y, newScale)",
+      1
+    ],
+    [
+      "[ start background image to (img)]",
+      1
+    ],
+    [
+      "[set background img to (img)]",
+      1
+    ],
+    [
+      "(null, DialogLayout.Bottom)",
+      1
+    ],
+    [
+      "[set (mySprite) position to x(x) y(y)]",
+      1
+    ],
+    [
+      "(not the path tiles)",
+      1
+    ],
+    [
+      "(SpriteKind.Player, img` `, function(sprite: Sprite, location: tiles.Location)",
+      1
+    ],
+    [
+      "[set dialog cursor to (cursor)]",
+      1
+    ],
+    [
+      "[set (textsprite) outline) (1) (6)]",
+      1
+    ],
+    [
+      "[set (textSprite) border (1) (6)]",
+      1
+    ],
+    [
+      "[set (textSprite) icon (icon)]",
+      1
+    ],
+    [
+      "(img`...`, 50, 50)",
+      1
+    ],
+    [
+      "( vy )",
+      1
+    ],
+    [
+      "( 50, 50 )",
+      1
+    ],
+    [
+      "(120)",
+      1
+    ],
+    [
+      "(8 or 9)",
+      1
+    ],
+    [
+      "(such as spikes or bristles)",
+      1
+    ],
+    [
+      "(not cut off)",
+      1
+    ],
+    [
+      "[stay in screen]",
+      1
+    ],
+    [
+      "(target, speed)",
+      1
+    ],
+    [
+      "[set sprite to projectile from sprite]",
+      1
+    ],
+    [
+      "(let chances = 3; chances &gt; 0; chances--)",
+      1
+    ],
+    [
+      "(mySprite, [], 500, false)",
+      1
+    ],
+    [
+      "[change (mySprite) scale by (1) anchor (ScaleAnchor.Middle)]",
+      1
+    ],
+    [
+      "(mySprite, animation.animationPresets    (animation.flyToCenter)",
+      1
+    ],
+    [
+      "(a beat of silence)",
+      1
+    ],
+    [
+      "(fishSprite)",
+      1
+    ],
+    [
+      "(seaweedSprite)",
+      1
+    ],
+    [
+      "(get and remove first value from (list)",
+      1
+    ],
+    [
+      "[columnNumber]",
+      1
+    ],
+    [
+      "[set variable to]",
+      1
+    ],
+    [
+      "(  length of array (array of sprites of kind)",
+      1
+    ],
+    [
+      "(20, 4, StatusBarKind.Health)",
+      1
+    ],
+    [
+      "[set (statusbar) fill to (7) background (2)]",
+      1
+    ],
+    [
+      "(7, 2)",
+      1
+    ],
+    [
+      "[attach (statusbar) to (mySprite)]",
+      1
+    ],
+    [
+      "[status bar kind (kind) attached to (mySprite)]",
+      1
+    ],
+    [
+      "(    StatusBarKind.Health, null)",
+      1
+    ],
+    [
+      "[run code for (action) at most once every (500) do]",
+      1
+    ],
+    [
+      "(“action”, 500, function()",
+      1
+    ],
+    [
+      "[run code after (500) do]",
+      1
+    ],
+    [
+      "[call createStrawberry]",
+      1
+    ],
+    [
+      "[set (mySprite) bounce on wall]",
+      1
+    ],
+    [
+      "(text, timeOnScreen)",
+      1
+    ],
+    [
+      "(“text, timeOnScreen, animated, textColor, textBoxColor)",
+      1
+    ],
+    [
+      "(  Ctrl + X)",
+      1
+    ],
+    [
+      "(  +  )",
+      1
+    ],
+    [
+      "(0, screen.width)",
+      1
+    ],
+    [
+      "(0, screen.height)",
+      1
+    ],
+    [
+      "(other)",
+      1
+    ],
+    [
+      "(info.score()",
+      1
+    ],
+    [
+      "[set variable to (tilemap)]",
+      1
+    ],
+    [
+      "( tilemap1)",
+      1
+    ],
+    [
+      "[ay]",
+      1
+    ],
+    [
+      "(2, 6)",
+      1
+    ],
+    [
+      "[on [A]",
+      1
+    ],
+    [
+      "(spriteJump)",
+      1
+    ],
+    [
+      "[set sprite [velocity y]",
+      1
+    ],
+    [
+      "[on each tile create sprite of kind]",
+      1
+    ],
+    [
+      "[on created sprite of kind]",
+      1
+    ],
+    [
+      "[on [B]",
+      1
+    ],
+    [
+      "[on (Projectile) overlaps (Enemy)]",
+      1
+    ],
+    [
+      "[puppyImage, catImage, snakeImage]",
+      1
+    ],
+    [
+      "(mySprite.width + spacing)",
+      1
+    ],
+    [
+      "[   ]",
+      1
+    ],
+    [
+      "[(player) score]",
+      1
+    ],
+    [
+      "(80, 90)",
+      1
+    ],
+    [
+      "(img`...`)",
+      1
+    ],
+    [
+      "(“:)",
+      1
+    ]
+  ],
+  "contexts": {
+    "[ ]": "ent operator and a pair of brackets [ ] , then type 5-7 of the image variable ",
+    "[for]": " 36 . Open Loops and drag [for] underneath the existing code under ",
+    "[sprite (img) of kind (kind)]": "imes. Open Sprites and drag [sprite (img) of kind (kind)] inside the curly brackets { } o",
+    "[run code on (button) button (event)]": "d! Open Controller and drag [run code on (button) button (event)] underneath // game events . Use th",
+    "(  CTRL + C  )": "geArray array minus 1. Copy ( CTRL + C ) the code that sets the card sprite’s x ",
+    "(CTRL + V)": "the previous for loop, then paste (CTRL + V) it inside the curly brackets { } ",
+    "( )": "n tool and type a pair of parentheses ( ) . Inside the parentheses, type the nam",
+    "[destroy all sprites of kind (kind)]": "for loop. Open Sprites and drag [destroy all sprites of kind (kind)] onto the blank line. Notice how the c",
+    "(SpriteKind.Player)": "xt: sprites.destroyAllSpritesOfKind(SpriteKind.Player) The destroyAllSpritesOfKind f",
+    "[set score to (value)]": "pressed! Open Info and drag [set score to (value)] underneath // game set up . Change",
+    "[change score by (1)]": "the top. Open Info again and drag [change score by (1)] onto the blank line. Change the value",
+    "[if else]": "mages match! Open Logic and drag [if else] underneath the for loop inside the ",
+    "[0]": " The code might look like: displayArray[0].image == displayArray[1].image Next, ",
+    "[1]": ": displayArray[0].image == displayArray[1].image Next, type a Boolean AND operat",
+    "(Ctrl + C)": "rst and third elements are equal. Copy (Ctrl + C) the statement and paste (Ctrl + V) i",
+    "(Ctrl + V)": "y (Ctrl + C) the statement and paste (Ctrl + V) it to the right of &amp;&amp; , then ",
+    "[if]": "!&nbsp; Open Logic and drag [if] to the bottom of the controller.A ",
+    "[game over (true)]": "al to 0. Then, open Game and drag [game over (true)] inside the curly brackets { } o",
+    "[set background color to (color)]": "irections! Open Scene , drag [set background color to (color)] under // game set up . Set a col",
+    "[set dialog frame to (frame)]": "er 1-15. Open Game and drag [set dialog frame to (frame)] underneath the setBackgroundColor ",
+    "[show long text (str) (layout)]": "gallery. Open Game and drag [show long text (str) (layout)] underneath the setDialogFrame c",
+    "[set background image to (img)]": "to the project. Open Scene , drag [set background image to (img)] under // game set up. Click the ",
+    "[set (mySprite) position to x y]": "ions by opening Sprites and dragging [set (mySprite) position to x y] underneath the code that creates each ",
+    "(0-160)": "e. Update the sprite’s name and the x (0-160) and y (0-120) parameters in each line",
+    "(0-120)": "rite’s name and the x (0-160) and y (0-120) parameters in each line of code so that",
+    "[move (mySprite) with buttons]": "screen. Open Controller and drag [move (mySprite) with buttons] underneath the player sprite’s existin",
+    "[set (mySprite) stay in screen (true)]": "and right. Open Sprites and drag [set (mySprite) stay in screen (true)] underneath the player sprite’s existin",
+    "[run code forever]": "ds the hoop! Open Loops and drag [run code forever] under&nbsp; // game mechanics. Then o",
+    "[(mySprite) overlaps with (otherSprite)]": "if condition. Open Sprites and drag [(mySprite) overlaps with (otherSprite)] inside the parentheses of the if con",
+    "[set (myEnemy) follow (mySprite)]": "llSprite . Open Sprites and drag [set (myEnemy) follow (mySprite)] inside the curly brackets { } of the",
+    "( &amp;&amp; )": "psWith function. The double “and” sign ( &amp;&amp; ) is called a Boolean AND operator . ",
+    "[is button (button) pressed]": ". Then, open Controller and drag [is button (button) pressed] inside the parentheses on the right si",
+    "[pause (100) ms]": "w position. Open Loops and drag a [pause (100) ms] inside the curly brackets { } of ",
+    "[set (this) unfollow]": "to 500 . Open Sprites and drag [set (this) unfollow] underneath.&nbsp; Notice how the code",
+    "(  Ctrl + C  )": "ng the hoop sprite. Find and copy ( Ctrl + C ) the ball sprite’s setPosition cod",
+    "(  Ctrl + V  )": "te’s setPosition code, then paste ( Ctrl + V ) the code inside the if statement to",
+    "[start countdown (10) (s)]": "er reaches 0! Open Info and drag [start countdown (10) (s)] under // game set up , then update th",
+    "[run code on countdown end]": "hoot baskets. Open Info and drag [run code on countdown end] under // on countdown end . Then, ope",
+    "( Ctrl + X )": "ike: throwsMade &gt;= 6 &nbsp; Cut ( Ctrl + X ) the showLongText code and paste ( Ctr",
+    "( Ctrl + V )": "+ X ) the showLongText code and paste ( Ctrl + V ) it inside the curly brackets { } of t",
+    "[reset game]": "on. Last, open Game and drag [reset game] under the conditional to start the ga",
+    "(6 - throwsMade)": "ed from the goal score in parentheses: (6 - throwsMade) &nbsp; Type another + then comple",
+    "[myself sprite]": "project. Open 3D Render and drag [myself sprite] underneath // player sprite . Notice ",
+    "[toggle current view mode]": "t below. Open 3D Render and drag [toggle current view mode] into the button pressed event. Notice ",
+    "(UX)": "me! Improve the User Experience (UX) by adding a title and directions to t",
+    "[sprite say]": "zest!” ❓ Did you change where the [sprite say] block goes in the code? ",
+    "[set tilemap to (tilemap)]": "screen! Open Scene and drag [set tilemap to (tilemap)] underneath // project set up .&nbs",
+    "[place mySprite on top of (loc)]": " My Assets . Open Scene and drag [place mySprite on top of (loc)] underneath the Player sprite’s code. R",
+    "[camera follow sprite (mySprite)]": "&nbsp; Then, open Scene and drag [camera follow sprite (mySprite)] underneath. Replace mySprite with th",
+    "[array of all (tile) locations]": " tile locations. Open Scene and drag [array of all (tile) locations] to the right of the assignment operato",
+    "(img` `)": " JavaScript text: tiles.getTilesByType(img` `)&nbsp; The getTilesByType function t",
+    "[set (tile) at (loc)]": "le selected! Open Scene and drag [set (tile) at (loc)] underneath // exit tile set up . Noti",
+    "(tiles.getTileLocation(0, 0)": "to JavaScript text: tiles.setTileAt(tiles.getTileLocation(0, 0), img` `) The setTileAt function ",
+    "[set wall (on) at (loc)]": "ap it. Open Scene again and drag [set wall (on) at (loc)] below the setTileAt function. Notice",
+    "[run code on (sprite) of kind (kind) overlaps (tile) at (location)]": "t tile! Open Scene and drag [run code on (sprite) of kind (kind) overlaps (tile) at (location)] below // exit tile set up . Keep t",
+    "[run code on game update every (period) ms]": " the tilemap! Open Game and drag [run code on game update every (period) ms] underneath // obstacle tile set up .&",
+    "[run code on (sprite) of kind (kind) hits wall at (location)]": "uch as 1000. Open Scene and drag [run code on (sprite) of kind (kind) hits wall at (location)] underneath // obstacle tile set up . ",
+    "(SpriteKind.Player, function(sprite: Sprite, location: tiles.Location)": "s into JavaScript text: scene.onHitWall(SpriteKind.Player, function(sprite: Sprite, location: tiles.Location) { })&nbsp; The onHitWall function t",
+    "[connect (tilemap) to (tilemap) by (Door1)]": "ap variables should be selected in the [connect (tilemap) to (tilemap) by (Door1)] block? ",
+    "(current tilemap)": " tilemap should be selected in the &lt;(current tilemap) = (tilemap1)&gt; comparison block? ",
+    "(tilemap1)": "elected in the &lt;(current tilemap) = (tilemap1)&gt; comparison block? ",
+    "[set volume]": "ower volume. ❓ Did you change the [set volume] parameter? ",
+    "[play melody]": "change the tempo parameter in the [play melody] block that runs else score is 3 or hi",
+    "(for example, going for a walk outside or eating breakfast indoors)": "ould take place in 2 different settings (for example, going for a walk outside or eating breakfast indoors). ❓ Did you list out the project’s s",
+    "(such as dithering, complementary colors, and highlights/shadows)": "ng place, then use pixel art techniques (such as dithering, complementary colors, and highlights/shadows) to add depth to each part of the image.",
+    "(such as zoom in/out, marquee, and canvas pan)": "ly solid. Use tools in the paint editor (such as zoom in/out, marquee, and canvas pan) to focus attention on one part of the i",
+    "[print (:)) at camera x (80) y (90) in box width (150) height (50)]": "e project. Open Story , then drag [print (:)) at camera x (80) y (90) in box width (150) height (50)] inside the else if condition in the ",
+    "(\":)": "into JavaScript text: story.printDialog(\":)\", 80, 90, 50, 150) The printDialog ",
+    "(color of the text)": "een. ❓ Did you update the foreground (color of the text) and background (color behind the text) ",
+    "(color behind the text)": "ound (color of the text) and background (color behind the text) parameters to create a strong contrast ",
+    "[show player choices (choice1) (choice2)]": " go to next! Open Story and drag [show player choices (choice1) (choice2)] inside the else if condition in the ",
+    "(questionOne[0], questionOne[1])": "like this: story.showPlayerChoices (questionOne[0], questionOne[1]) Create an if/else if conditional",
+    "[last answer equals (choice)]": "elow, then open Story again and drag [last answer equals (choice)] into the parentheses of each condition",
+    "[text sprite (text)]": ". Open Text Sprite and drag [text sprite (text)] underneath the title sprite code in t",
+    "[set (textSprite) max font height (height)]": ". Open Text Sprite and drag [set (textSprite) max font height (height)] underneath the code that creates the ",
+    "(0-9)": "ress Alt + Shift and a color number (0-9) or letter key (A-F) to outline the text",
+    "(A-F)": " and a color number (0-9) or letter key (A-F) to outline the text on the canvas. ",
+    "[on each (tile) create sprite with (image) and (kind)]": "the project. From Tile Util , drag [on each (tile) create sprite with (image) and (kind)] into the coverTiles function defi",
+    "(with the provided image and kind)": "ite kind. The function creates a sprite (with the provided image and kind) on a specific tile on the current tilem",
+    "[cover all (tileKind) tiles with (cover)]": "eated. From Tile Util , drag [cover all (tileKind) tiles with (cover)] into the coverTiles function de",
+    "(to be covered)": "les function takes 2 parameters: tile (to be covered) and cover image. Update the two tile im",
+    "(1)": "e argument. Remove the startWave(1) function call from // run game . T",
+    "(in the inner conditional)": "k if gameWave is true , and then (in the inner conditional) if both enemyCount and enemyNum ",
+    "[run code on (sprite) of (kind) update every (500) ms]": "isting code. From Sprite Utils , drag [run code on (sprite) of (kind) update every (500) ms] under // game play events , after the",
+    "[get all sprites of (kind) within (50) pixels from (mySprite)]": "er sprite. Open Sprite Util and drag [get all sprites of (kind) within (50) pixels from (mySprite)] as the value of target . The ge",
+    "[set (mySprite) velocity at (angle) (speed)]": "el. From Sprite Utils , drag [set (mySprite) velocity at (angle) (speed)] underneath the Projectile code. The ",
+    "[angle from (mySprite) to (myEnemy)]": "bsp; Set the angle parameter to [angle from (mySprite) to (myEnemy)] from Sprite Utils. The angleFro",
+    "(7)": "ht color for the balloon, such as green (7). ❓Did you duplicate the balloon ass",
+    "(6)": "nd an analogous color, such as teal (6), to draw a form shadow on the botto",
+    "(  25  )": "reen! ❓Did you add an xOffset value ( 25 ) with a spacing value ( 25 ), multipli",
+    "(25 + (25 * i)": "the counter variable i like this: (25 + (25 * i)) , to set each sprite’s x-position? ",
+    "[set (mySprite) (SpriteFlag.AutoDestroy) (on)]": " Open Sprites again and drag [set (mySprite) (SpriteFlag.AutoDestroy) (on)] underneath the Enemy sprite creation ",
+    "[function doSomething]": "vanced then open Functions and drag [function doSomething] above the existing code underneath //",
+    "[set (mySprite) position to x (x) y (y)]": "dth.&nbsp; Open Sprites and drag [set (mySprite) position to x (x) y (y)] below the 2 variables. Replace mySpri",
+    "(enemy)": "ode might look like: giveRandomPosition(enemy) Click ▶ to see the project call t",
+    "[set (mySprite) velocity to vx (vx) vy (vy)]": "30.&nbsp; Open Sprites and drag [set (mySprite) velocity to vx (vx) vy (vy)] below the 2 variables. Replace mySpri",
+    "[run code on (sprite) of kind (kind) overlaps (otherSprite) of kind (otherKind)]": "ites! Open Sprites and drag [run code on (sprite) of kind (kind) overlaps (otherSprite) of kind (otherKind)] underneath // game events . Leave ",
+    "[destroy (mySprite)]": " Open Sprites again and drag [destroy (mySprite)] inside the curly brackets of the on",
+    "(Ctrl + X)": "hen set the type to number Cut (Ctrl + X) the setBackgroundColor , enemyImage ",
+    "[splash (title)]": " called. Open Game and drag [splash (title)] below the setBackgroundColor code",
+    "[array of sprites of kind (kind)]": "bsp; Then, open Sprites and drag [array of sprites of kind (kind)] inside the parentheses of the conditio",
+    "[mySprite]": " such as “ham”. Click the ⏷ in the red [mySprite] name box to open the drop down men",
+    "(mySprite)": "ion, and be sure to click the ⏷ on the (mySprite) bubble to select the sprite ’s na",
+    "[set sprite position to]": "ct the correct sprite name in the [set sprite position to] block? ",
+    "[set sprite to]": "select the correct sprite name in the [set sprite to] and [set sprite position to] bloc",
+    "[move sprite with buttons]": "Controller code block menu and drag a [move sprite with buttons] block underneath the fork sprite’s cod",
+    "[set sprite stay in screen]": " Sprite code block menu and drag in a [set sprite stay in screen] block to keep the fork sprite from mov",
+    "[  move sprite with buttons]": "ect the fork sprite name in the [ move sprite with buttons] and [set sprite stay in screen] b",
+    "[on start]": " blocks to a different location in the [on start] block. Click ▶ to check your prog",
+    "[splash]": " the Game code block menu and drag a [splash] block inside the [on start] containe",
+    "[set background color]": " the Scene code block menu to drag a [set background color] block into this project, then open the",
+    "[play sound]": " the Music code block menu to drag a [play sound] block into this project. Allow the sou",
+    "[until done]": " this project. Allow the sound to play [until done] . Click ▶ to see how these bloc",
+    "[set sprite [x]": "on top of, Enemy sprites! Add a [set sprite [x]] block underneath the Player sprite’s",
+    "[ay (acceleration y)]": "ontainer. Use the drop down to select [ay (acceleration y)] . Set the parameter to 600. In t",
+    "[on button pressed]": "et the parameter to 600. In the [on button pressed] container, replace the &lt;true&gt;",
+    "[if then]": "ace the &lt;true&gt; value in the [if then] conditional with an &lt;is sprite h",
+    "[bottom]": " hitting wall&gt; value block. Select [bottom] as the direction the program should che",
+    "[vy (velocity y)]": "k into the conditional and select [vy (velocity y)] from the drop down. Set the parameter",
+    "[makeEnemy]": "lemap! Create a new function named [makeEnemy] . Drag a [repeat] loop into the [fun",
+    "[repeat]": "w function named [makeEnemy] . Drag a [repeat] loop into the [function makeEnemy] c",
+    "[function makeEnemy]": "emy] . Drag a [repeat] loop into the [function makeEnemy] container, and set the parameter to 1",
+    "[call makeEnemy]": "s in the [on start] container with a [call makeEnemy] block. Use a (pick random) in th",
+    "(pick random)": " a [call makeEnemy] block. Use a (pick random) in the column parameter with the range",
+    "[vx (velocity x)]": "Add a [set sprite [x]] block with [vx (velocity x)] selected in the [repeat] loop . Se",
+    "[set sprite bounce on wall]": " the range as -60 to -30. Add a [set sprite bounce on wall] block, toggled &lt;ON&gt; so the ",
+    "[on game update]": "they are moving in! Drag out an [on game update] loop and add a [for element] lo",
+    "[for element]": "n [on game update] loop and add a [for element] loop with the (array of sprites",
+    "(array of sprites of kind Enemy)": "a [for element] loop with the (array of sprites of kind Enemy) as the (list).&nbsp; Drag an ",
+    "(list)": "rray of sprites of kind Enemy) as the (list).&nbsp; Drag an [if then] condit",
+    "(value)": "openings in the &lt;or&gt; . Use a (value) variable from the loop as the sprite ",
+    "[left]": "p as the sprite name value, then select [left] for the first block and [right] for the",
+    "[right]": "n select [left] for the first block and [right] for the other block. From Image",
+    "[flip picture horizontally]": " Images , under Advanced , drag a [flip picture horizontally] block into the conditional . From ",
+    "(mySprite image)": "ional . From Sprites, drag out a (mySprite image) block to replace (picture) then r",
+    "(picture)": " (mySprite image) block to replace (picture) then replace (mySprite) with the ",
+    "[on (Player) overlaps (Enemy)]": "an [if then] conditional into the [on (Player) overlaps (Enemy)] container already in the code editor,",
+    "[destroy (otherSprite)]": "already in the code editor, and add a [destroy (otherSprite)] block inside. Replace &lt;true&gt; ",
+    "(mySprite x)": "block. From Sprites , drag a (mySprite x) block into both parameters of the &",
+    "(sprite)": "side, replace (mySprite) with the (sprite) bubble, then select [bottom] from",
+    "(otherSprite)": "n the code editor, and add a [destroy (otherSprite)] block inside. Replace &lt;true&gt;",
+    "[y]": " (otherSprite) bubble, then select [y] from the drop down. Now, the Enemy sp",
+    "[set sprite x]": "ping on an Enemy sprite by dragging a [set sprite x] block into the conditional , repla",
+    "[snakesStomped]": " Create a new variable named [snakesStomped] . Set the variable to 0 in the [on s",
+    "[else]": "overlaps (Enemy)] container, add an [else] opening to the conditional . Use ",
+    "[change score by]": " opening to the conditional . Use [change score by] and [sprite start effect] blocks ",
+    "[sprite start effect]": "onal . Use [change score by] and [sprite start effect] blocks to make something happen when ",
+    "[set sprite auto destroy]": "er sprite a 1-second recovery, drag 2 [set sprite auto destroy] blocks into the [else] opening. I",
+    "[ghost through sprites]": "with a (sprite) bubble and select [ghost through sprites] in the drop down. Toggle the first bl",
+    "[pause]": "he second block &lt;OFF&gt;. Insert a [pause] block in between, and set the paramet",
+    "[set sprite ghost through sprites]": " [pause] block in between the two [set sprite ghost through sprites] blocks? ",
+    "[makeCoin]": "ct! Create a function named [makeCoin] then drag the coin sprite’s 2 blocks ",
+    "[call makeCoin]": " into the function container. Use a [call makeCoin] block inside an [on game update eve",
+    "[on game update every ms]": "a [call makeCoin] block inside an [on game update every ms] loop that runs every 500ms. ",
+    "(coin)": "] block to the function. Select the (coin) sprite name, [lifespan] from the ",
+    "[lifespan]": "n. Select the (coin) sprite name, [lifespan] from the drop down, and use a (pick",
+    "[forever]": "ing 10 Coin sprites! Drag out a [forever] loop and place an [if then] conditi",
+    "[game over]": "n] conditional inside, then place a [game over] block, toggled to &lt;WIN&gt;, inside",
+    "(score)": " , setting one side to check for the (score) = 10 and the other side to check for ",
+    "(snakesStomped)": " 10 and the other side to check for (snakesStomped) = 10 .&nbsp; Click ▶ to te",
+    "[pick random]": " position to] block and inserting two [pick random] value blocks into its x and y value ",
+    "[move with buttons]": " sprite's name in the parameter of the [move with buttons] and [set sprite stay in screen] bloc",
+    "[on sprite overlaps sprite]": "is treasure inside. Drag out an [on sprite overlaps sprite] container block and set the second sp",
+    "[if true then]": "gic code block menu and drag out an [if true then] conditional into the [on sprite o",
+    "[set sprite image to]": "&nbsp; Drag the treasure-filled [set sprite image to] block into the “if” opening in the ",
+    "[% chance]": "Math code block menu and drag out a [% chance] value block to replace &lt;true",
+    "[if true then / else]": " block into the “else” opening in the [if true then / else] conditional . Replace the sprite name",
+    "[set score to]": " they unlock treasure!&nbsp; Add a [set score to] block into the [on start] container ",
+    "[start countdown]": "own timer to the game!&nbsp; Add a [start countdown] block into the [on start] container,",
+    "[on countdown end]": "r for this game.&nbsp; Drag out an [on countdown end] container block, then place an [if tr",
+    "[0=0]": " Logic code block menu and drag out a [0=0] value block to replace the &lt;true&g",
+    "(&gt;)": "enu of [0=0] , select the greater than (&gt;) sign, then set the number of points the",
+    "[set [bridgeLength]": "ariable named bridgeLength . Drag the [set [bridgeLength] to] block inside the [on button press",
+    "(ask for number)": "container. Open Game and drag an (ask for number) value block into the [set [bridgeLeng",
+    "[bridgeLength]": "le named bridgeLength . Drag the [set [bridgeLength] to] block inside the [on button press",
+    "( ≤ )": "opdown and select less than or equal to ( ≤ ).&nbsp; Drag a (bridgeLength) vari",
+    "(bridgeLength)": "an or equal to ( ≤ ).&nbsp; Drag a (bridgeLength) variable into the left parameter of th",
+    "(length of array)": "ameter of the comparison block. Drag a (length of array) block into the right parameter, and re",
+    "(array of all tile locations)": "rameter, and replace the (list) with (array of all tile locations) . Select the white outline tile.&nbsp",
+    "[set [startingColumn]": "ariable named startingColumn . Drag a [set [startingColumn] to] block inside the [if then] condit",
+    "((location)": "ditional . Open Scene and drag a ((location) column) block into the [set [starting",
+    "(location)": "itional . Open Scene and drag a ((location) column) block into the [set [starting",
+    "(tilemap location of (sprite)": " again and replace (location) with a (tilemap location of (sprite)) block. Select the Player sprite's nam",
+    "[for index]": "p the bridge building code! Drag a [for index] loop into the [if then] conditional, ",
+    "(0-0)": "l, under the variable block. Drag a (0-0) operator into the parameter of the [f",
+    "[change [startingColumn]": "of bridge sections to build. Add a [change [startingColumn] by] block inside the [for index] lo",
+    "[set tile at location]": "ild the bridge in sections! Drag a [set tile at location] block under [change [startingColumn] ",
+    "(startingColumn)": "ect the bridge tile, then drag a (startingColumn) bubble in the col parameter. Dra",
+    "(0+0)": "ble in the col parameter. Drag a (0+0) operator into the row parameter, the",
+    "( (location)": " into the row parameter, then place a ( (location) column) block in the left parameter . ",
+    "[row]": " block in the left parameter . Select [row] , then place a (tilemap location of (s",
+    "[set wall at]": "t of the sprite’s location. Drag a [set wall at] block into the bottom of the [for ind",
+    "((tilemap location of (sprite)": " the (0+0) operator to add 1 to both ((tilemap location of (sprite)) row) blocks? ",
+    "[show long text]": "+ to add an [else] condition. Drag a [show long text] block into the [else] opening. Type ",
+    "[on sprite overlaps tile]": " block set to &lt;LOSE&gt; into the [on sprite overlaps tile] container set to the light blue tile",
+    "(tilemap location [left] of (tilemap location of (playerSprite)": "at direction should be selected in the (tilemap location [left] of (tilemap location of (playerSprite))&nbsp; block? ",
+    "[place sprite on top of]": "emap !&nbsp; Open Scene and drag a [place sprite on top of] block into the [on start] container ",
+    "[set tilemap to]": "tilemap ! Click the square in the [set tilemap to] block to see how different tiles make ",
+    "( column ,  row )": "ferent squares to see their coordinates ( column , row ) in the lower left corner. Hover th",
+    "[set sprite velocity to]": "o be moving targets! Drag out two [set sprite velocity to] blocks. Allow the Enemy sprites to onl",
+    "[set sprite velocity]": " tilemap ! ❓&nbsp;Did you place the [set sprite velocity] and [set sprite bounce on wall] bloc",
+    "[set life to]": "en it overlaps with an Enemy by adding [set life to] and [change life by] blocks into the",
+    "[change life by]": "an Enemy by adding [set life to] and [change life by] blocks into the correct containers. ",
+    "[change life by ]": "ck in the [on start] container and a [change life by ] block in the correct [on sprite overla",
+    "(using the columns and rows)": "o the Player sprite’s starting position (using the columns and rows).&nbsp; Click ▶ to see the Player sp",
+    "[setLevel]": " bugs in the code so that when the [setLevel] function is called, it checks the val",
+    "[function setLevel]": "lt;0=0&gt; comparison blocks of the [function setLevel] container? ",
+    "[call function]": "s been created. ❓Did you reorder the [call function] blocks in the [on start] container? ",
+    "[set dialog frame to]": " the Game code block menu and drag a [set dialog frame to] block on top of the [show long text] ",
+    "[set dialog text color to]": " the Game code block menu and drag a [set dialog text color to] block on top of the [show long text] ",
+    "[set background color to]": "en the Scene code block menu, drag a [set background color to] block and [start screen effect] bloc",
+    "[start screen effect]": " [set background color to] block and [start screen effect] block. Select a background color and s",
+    "(string, layout)": "e layout parameter in game.showLongText(string, layout) to appear on the bottom of the scree",
+    "[place sprite on top of random tile]": " sprites. Open Scene and drag a [place sprite on top of random tile] block into the [on start] container ",
+    "[camera follow sprite]": "ewable screen. Open Scene and drag a [camera follow sprite] block, then set it to the Player sprit",
+    "[set sprite follow]": "g the tan path tile. Drag a [set sprite follow] block and set the Enemy sprite to fol",
+    "[camera shake]": "&nbsp; Open Scene and drag out a [camera shake] block into the&nbsp; [on (Player) over",
+    "[place sprite on random tile]": "make this project more fun! Add a [place sprite on random tile] block and select the tan path tile t",
+    "[destroy sprite]": "re points on overlap. Then, add a [destroy sprite] block to both [on sprite overlaps spr",
+    "(right and left)": "uld only be able to move horizontally (right and left) on the tilemap. &nbsp; Then, set the ",
+    "(ay)": " dot operator to set its y-acceleration (ay) to 500 to “pull” the Player sprite do",
+    "(vy)": "nd a dot operator to set its y-velocity (vy) value to - 200 . &nbsp; Click ▶ ",
+    "[is (sprite) hitting wall (direction)]": "ton press event. Open Scene and drag [is (sprite) hitting wall (direction)] inside the parentheses of the if condi",
+    "(Collision    Direction.Left)": " text:&nbsp; mySprite.isHittingTile(Collision Direction.Left) The isHittingTile function takes",
+    "(vx)": "p; Set the Food sprites’ x-velocity (vx) to a random negative value so that the ",
+    "[while]": ".&nbsp; Open Loops and drag [while] inside the onUpdateInterval fun",
+    "(in that order)": " swimming and salmonCount variables (in that order) using the same values used while the Pl",
+    "[ask (title)]": "lash screen code. Open Game and drag [ask (title)] inside the parentheses of the if con",
+    "(null)": "ns into JavaScript text:&nbsp; game.ask(null) The ask function takes 2 parameters",
+    "[projectile (img) from (mySprite) with vx (vx) vy (vy)]": "ed .&nbsp; Open Sprites and drag [projectile (img) from (mySprite) with vx (vx) vy (vy)] inside the curly brackets { } of the",
+    "(img` `, mySprite, 50, 50)": "le = sprites.createProjectileFromSprite (img` `, mySprite, 50, 50) The createProjectileFromSprite f",
+    "[projectile (img) from side with vx (vx) vy (vy)]": "ll appear. Open Sprites and drag [projectile (img) from side with vx (vx) vy (vy)] inside the curly brackets { } of the",
+    "[set (mySprite) kind to (value)]": " down . Open Sprites and drag [set (mySprite) kind to (value)] inside the curly brackets { } of the",
+    "[run code on created (sprite) of kind (kind)]": " are created! Open Sprites , drag [run code on created (sprite) of kind (kind)] underneath // small asteroid sprite. ",
+    "(SpriteKind.Player, function(sprite: Sprite)": "into JavaScript text: sprites.onCreated(SpriteKind.Player, function(sprite: Sprite) { }) The onCreated event takes 2 pa",
+    "[(percentage) % chance]": "ditions. Then, open Math and drag [(percentage) % chance] inside both sets of parentheses. Repl",
+    "[set life to (3)]": "roid sprites! Open Info and drag [set life to (3)] underneath // game set up . Notice ho",
+    "(3)": " Open Info and drag [set life to (3)] underneath // game set up . Notice h",
+    "[change life by (-1)]": "t with. Open Info again and drag [change life by (-1)] underneath the destroy code inside t",
+    "(-1)": " Info again and drag [change life by (-1)] underneath the destroy code inside ",
+    "(-2)": " parameter to change by a larger amount (-2) for the LargeAsteroid and a smaller amo",
+    "[run code on life zero]": " reset the game. Open Info , drag [run code on life zero] under // game over . Notice how the c",
+    "(function()": " into JavaScript text: info.onLifeZero(function() { }) Open Game , drag [show long te",
+    "[time since start (ms)]": "the game lasted. Open Game , drag [time since start (ms)] after the + . Notice how the code blo",
+    "[  start screen (effect) effect]": "r to follow. Open Scene, drag [ start screen (effect) effect] underneath // game set up . Use th",
+    "(duration and particlesPerSecond)": "e parentheses, fill in the 2 parameters (duration and particlesPerSecond) to customize the screen effect. Use the",
+    "[set sprite x to]": "❓ Did you change the value box in the [set sprite x to] block? ",
+    "(  fx  )": "round, once hit. Set its x-friction ( fx ) value to 50. This value represents th",
+    "(bouncing up, or being pulled down)": "locity is too large in either direction (bouncing up, or being pulled down). Open Math and drag [abs] insid",
+    "[abs]": " pulled down). Open Math and drag [abs] inside the parentheses of the if ",
+    "(+/-)": " the value of a number without its sign (+/-). Update the parameter so that the condi",
+    "(sprite.vy)": "n either direction, like this? Math.abs(sprite.vy) &gt; 50 ",
+    "(human)": "ptions to the project: set up, player 1 (human), player 2 (computer). Start each ",
+    "(computer)": "ect: set up, player 1 (human), player 2 (computer). Start each comment with // a",
+    "(color)": ", drag out [set background color to (color)] underneath // set up . Set a co",
+    "(500, function()": "cript text: game.onUpdateInterval(500, function() {...}) The argument 500 tells the",
+    "(in ms)": "gument 500 tells the loop how often (in ms) to run the code inside the curly bracke",
+    "(  =  )": " a space and an assignment operator ( = ) next to the property. In JavaScript, a ",
+    "[randint]": "mething. Open Math and drag [randint] next to the assignment operator t",
+    "(  0  )": "r. Leave the minimum parameter set to ( 0 ) and replace the maximum parameter with ",
+    "(0, 10)": "ble integers to choose from in randint(0, 10) ? ",
+    "(  10  )": "ue to 80. Replace the maximum parameter ( 10 ) by typing screen.width , so that pla",
+    "(min, max)": "t the minimum possible value in randint(min, max) to half of the screen width? ",
+    "( = )": "dd a space and an assignment operator ( = ). Open Math and drag [randint] n",
+    "( 0 )": "m integer. Leave the minimum set to ( 0 ) and replace the maximum with the screen",
+    "[set (player) score to (0)]": "ultiplayer” subcategory,&nbsp;and drag [set (player) score to (0)] onto a blank line in // set up , unde",
+    "(0)": ",&nbsp;and drag [set (player) score to (0)] onto a blank line in // set up , und",
+    "[change (player) score by (1)]": " or Player 2. Open Info and drag [change (player) score by (1)] onto a blank line inside the curly bra",
+    "(10)": " Open Info and drag [start countdown (10) (s)] under // set up , underneath the",
+    "[set tile at]": "nd drag [place sprite on top of] and [set tile at] blocks into the loop . Select the Ene",
+    "[set sprite [vy (velocity y)]": " from the dropdown menu, then drag the [set sprite [vy (velocity y)]] block into the conditional. Cli",
+    "[destroy]": "verlaps (Enemy)] container, below the [destroy] block.&nbsp; Return the Player spr",
+    "[use effect]": "lt;WIN&gt;, then add an effect with a [use effect] block. Click ▶ to see the",
+    "(join)": "e block menu, open Text , then drag a (join) block into the parameter of the [show",
+    "[set text list to]": "nbsp; Open Arrays and drag out a [set text list to] block into the [on start] container.",
+    "(empty array)": "sponseList.” Open Arrays and drag an (empty array) bubble into the [set userResponseList",
+    "[set userResponseList to]": "rag an (empty array) bubble into the [set userResponseList to] block.&nbsp; ❓ Did you create 2 ",
+    "[list add value to end]": "!&nbsp; Open Arrays and drag the [list add value to end] block into the [on sprite overlaps ti",
+    "(ask for string)": "st.”&nbsp; Open Game and drag an (ask for string) value block into the parameter in the ",
+    "(n)": " for string) value block. Write “Type a(n) “ in the first bubble. This will add th",
+    "[userResponseList]": "s will add the user's responses to the [userResponseList] text list, which will then be used in ",
+    "(get and remove first value from list)": " story. Open Arrays and drag the (get and remove first value from list) block into the second bubble of the (",
+    "[text list]": "d bubble of the (join) block. Select [text list] from the drop-down on the variable lis",
+    "(get value at index)": "sp; Open Arrays and drag a (get value at index) value block into the text bubble for “",
+    "(frog)": "Make something happen when the Player (frog) and Food (cake) sprites touch - or o",
+    "(cake)": "pen when the Player (frog) and Food (cake) sprites touch - or overlap - on scree",
+    "[set background image]": "ct with a background and sound. Drag a [set background image] block on top of the other blocks insid",
+    "[minimap]": "ent.&nbsp; Open Minimap and drag [minimap] underneath. Notice how the code block ",
+    "[draw (mySprite) on (myMinimap)]": "on screen! Open Minimap and drag [draw (mySprite) on (myMinimap)] under the mapSprite ’s code. Notice h",
+    "(myMinimap, mySprite)": "JavaScript text: minimap.includeSprite(myMinimap, mySprite) The includeSprite function draws a ",
+    "[minimap (image)]": " img` ` , then open Minimap and drag [minimap (image)] inside the parentheses. Notice how the",
+    "(let myMinimap = minimap.minimap()": "into JavaScript text: minimap.getImage(let myMinimap = minimap.minimap()) The getImage function retrieves a ",
+    "(or a floating platform)": "tically to connect them from the ground (or a floating platform) to the top of the tilemap. Place the la",
+    "[tile to (direction) of (mySprite) is (tile)]": " the event, then open Scene and drag [tile to (direction) of (mySprite) is (tile)] into the parentheses of the if condi",
+    "(TileDirection.Left,     img` `)": "avaScript text: mySprite.tileKindAt(TileDirection.Left, img` `) The tileKindAt function checks i",
+    "(if any)": "checks if a tile image matches the tile (if any) next to a sprite. It takes 2 parameters",
+    "[set sprite vy (velocity y)]": "e what parameter should be used in the [set sprite vy (velocity y)] block, so that the sprite’s velocity ",
+    "[ghost through walls]": "vy (velocity y)] block, and set it to [ghost through walls] . Set the toggle to &lt;ON&gt;, so that",
+    "[set [invincible]": "gt; Boolean into the parameter of the [set [invincible] to] block. This will set the invincibl",
+    "[on (Player) overlaps (Food)]": " block and place it at the top of the [on (Player) overlaps (Food)] container. Use the drop down to select",
+    "[Make a Variable]": "❓Did you open Variables and click [Make a Variable] to create a new variable? ",
+    "[set [powerUp]": "owerUp . Type “5” in the bubble of the [set [powerUp] to] block. This will represent the num",
+    "(powerUp)": "er) overlaps (Food)] container. Use a (powerUp) variable as the parameter in the [sta",
+    "[set sprite lifespan]": "te start effect] block underneath the [set sprite lifespan] block. Drag a (sprite) bubble into t",
+    "(0 x 0)": "t an effect. Open Math and add a (0 x 0) operator into the parameter of the [s",
+    "(invincible)": " container.&nbsp; Then, drag an (invincible) variable into the parameter of the ",
+    "[function makeUmbrella]": "om the [on start] container into the [function makeUmbrella] container. Add [call makeUmbrella] b",
+    "[call makeUmbrella]": "function makeUmbrella] container. Add [call makeUmbrella] blocks into the [on start] and [on ",
+    "[set projectile to projectile from side]": " Sprites code block menu then drag a [set projectile to projectile from side] block into the [on game update every ",
+    "[set sprite kind to]": " Sprites code block menu then drag a [set sprite kind to] block into the [on game update every ",
+    "[%&nbsp; chance]": "you replace &lt;true&gt; with the [%&nbsp; chance] value block, then update the % parame",
+    "[0, 0]": "inside a pair of brackets, like this: [0, 0] . Add the remaining coordinates inside",
+    "[[#, #]": "tes in the positionArray like this? [[#, #], [#, #], [#, #], [#, #]] ",
+    "[#, #]": "es in the positionArray like this? [[#, #], [#, #], [#, #], [#, #]] ",
+    "(or the value at the 0 index)": " This will locate the column coordinate (or the value at the 0 index) of the specified pair. Then, copy",
+    "(positionArray[levelNum][0], positionArray[levelNum][1])": "eOnTile &nbsp; function, like this? (positionArray[levelNum][0], positionArray[levelNum][1])) ",
+    "(  15  )": "age. ❓ Did you add an xOffset value ( 15 ) with a spacing value ( 20 ), multipli",
+    "(  20  )": "set value ( 15 ) with a spacing value ( 20 ), multiplied by the counter variable i",
+    "(15 + (20 * i)": "the counter variable i like this: (15 + (20 * i)) , to set each Player sprite’s x-p",
+    "[on destroyed]": " new [set sprite to] block in the [on destroyed] container? ",
+    "[set (picture) color at x (x) y (y) to (c)]": "nced , then open Images and drag [set (picture) color at x (x) y (y) to (c)] inside the conditional in the onUpd",
+    "(0, 0, 0)": "into JavaScript text: picture.setPixel(0, 0, 0) . The setPixel function ta",
+    "[change color in (picture) from (from) to (to)]": "array! Open Images and drag [change color in (picture) from (from) to (to)] inside the for loop. Notice how",
+    "(0, 0)": " into JavaScript text: picture.replace(0, 0) . The replace function tak",
+    "[(picture) color at x (x) y (y)]": " variable. Open Images and drag [(picture) color at x (x) y (y)] to the right of the assignment operat",
+    "[scroll background with camera [only horizontally]": "oss a road. Open Scroller and drag a [scroll background with camera [only horizontally]] block into the first opening of the ",
+    "(tilemap2)": "ing background to this project! In (tilemap2), the tilemap is a top-down view, and t",
+    "[else if]": "a [only horizontally]] block into the [else if] opening of the [if then] conditional ",
+    "[function   loadTilemap]": " of the [if then] conditional in the [function loadTilemap] container. Click the dropdown and sele",
+    "[only vertically]": "ntainer. Click the dropdown and select [only vertically] as the direction the background will s",
+    "[set background offset to]": "e! Open Scroller and drag a [set background offset to] block into the first opening of the ",
+    "[scroll background with camera]": "[if then] conditional on top of the [scroll background with camera] block in the [function loadTile",
+    "[function loadTilemap]": "round with camera] block in the [function loadTilemap] container. Leave the parameters set t",
+    "[set list to]": "ground! Create an array by using a [set list to] block. Set the array equal to a list o",
+    "[change color in (picture) from () to ()]": "Advanced, then Images to find the [change color in (picture) from () to ()] block. Place it under the [set back",
+    "(background image)": "p; Open Scene to drag out a (background image) bubble to replace the (picture) p",
+    "(get random value from (list)": " in the first color parameter. Drag a (get random value from (list)) block into the second color paramete",
+    "(+)": " in My Assets!&nbsp; Click the green (+) to add a new asset to My Assets . ",
+    "(tilemap``)": "ipt text:&nbsp; tiles.setCurrentTilemap(tilemap``) The setCurrentTilemap function take",
+    "[place (mySprite) on top of (loc)]": "shelf tiles. Open Scene and drag [place (mySprite) on top of (loc)] under the code that sets one of the it",
+    "(mySprite, tiles.getTileLocation(0, 0)": "avaScript text:&nbsp; tiles.placeOnTile(mySprite, tiles.getTileLocation(0, 0)) The placeOnTile function takes ",
+    "(column)": "in at 0 and increase from left to right (column) and top to bottom (row)? ",
+    "(row)": "eft to right (column) and top to bottom (row)? ",
+    "(UI)": "perience and enhance the User Interface (UI) by designing an interactive Inventory m",
+    "[create image width (width) height (height)]": "tangle shape. In Images , drag out [create image width (width) height (height)] . The image.create function create",
+    "(8)": " to fill the empty shape with dark blue (8).&nbsp; Under // run game , cal",
+    "[looping in background]": " block to change the playback mode to [looping in background] .&nbsp; Open the Music code block",
+    "[stop all sounds]": " Music code block menu and drag a [stop all sounds] block above the [play melody] ",
+    "[on life zero]": " the [game over] block inside the [on life zero] container block. Click ▶ ",
+    "(place)": " [show long text] block retrieves the (place) value and the fourth [show long text]",
+    "(thing)": " [show long text] block retrieves the (thing) value. ❓ What index value in the us",
+    "[set [variable]": " ❓ Did you rename the variable in the [set [variable] to] block? ",
+    "( -= )": "use a subtraction assignment operator ( -= ) to subtract a value from cookieY ? ",
+    "(9)": "olor for the marble, such as light blue (9). ❓Did you use the circle tool to d",
+    "(13)": "r left side. Select the tan color (13) to draw a few pixels to create a high",
+    "(12)": "age. Select the dark purple color (12) to draw a cast shadow on the lower ",
+    "(11)": "using a neutral color like light purple (11) to make the marble appear more rounded ",
+    "(5, 15)": " Add another space, then type randint(5, 15) to assign the variable cash an ini",
+    "(=)": "y.x , then use an assignment operator (=) and randint to place the sprite somew",
+    "[(this) say (:))]": "le. &nbsp; Open Sprites, then drag [(this) say (:))] inside the curly brackets { } of t",
+    "( Ctrl + C)": " pizza and update its image. Copy ( Ctrl + C) the code that sets the candy sprite’s ",
+    "( Ctrl + V)": "le from the controller.A event. Paste ( Ctrl + V) the code inside the curly brackets ",
+    "( Ctrl + C )": "h food sprites appear. ❓ Did you copy ( Ctrl + C ) and paste ( Ctrl + V ) the code from ",
+    "( Ctrl + V  )": " ❓ Did you copy ( Ctrl + C ) and paste ( Ctrl + V ) the code from // on A button pressed ",
+    "[if/else]": "uttons. Open Logic and drag [if/else] inside the curly brackets { } ",
+    "( == )": "nbsp; cash == 0 . The double equal sign ( == ) is called an equality operator . U",
+    "(true)": "ir money followed by&nbsp; game.gameOver(true) .&nbsp; ❓ Did you replace the true ",
+    "( &gt; )": "p; cash &gt; 0 . The greater-than sign ( &gt; )&nbsp;is a relational operator . &nbsp",
+    "( + )": "sp; After the string, type a plus sign ( + ) then cash This will concate",
+    "(&lt;)": "&nbsp; cash &lt; 0 . The less-than sign (&lt;) is another relational operator . &nbs",
+    "( - )": "l be less than 0, use&nbsp;a minus sign ( - ) before the variable name to show the va",
+    "(false)": "h &nbsp; Then add&nbsp; game.gameOver(false) to end the game.&nbsp; ❓ Did you use",
+    "(ms)": "tinker with the Interval Between Frames (ms) value in the preview animation screen o",
+    "(0, 9)": "bsp;code looks like: randNum1 = randint(0, 9) Then, ask the user for a 1-digit n",
+    "[ask for number (msg)]": "ator = Open Game and drag out [ask for number (msg)] after the = . Replace null with a s",
+    "(userGuess == randNum1 || userGuess == randNum2)": "tor ( == ). The code might look like: (userGuess == randNum1 || userGuess == randNum2) Open Game and drag [show long text",
+    "(10, 99)": " code looks like: randNum1 = randint(10, 99) Then, ask the user for a 2-digit numb",
+    "(userGuess == randNum1 || userGuess == randNum2 || userGuess == randNum3)": "er value. The code might look like: (userGuess == randNum1 || userGuess == randNum2 || userGuess == randNum3) Open Game and drag [show long text",
+    "(100, 999)": "the code looks like: randNum1 = randint(100, 999) Then, ask the user for a 3-digit numb",
+    "(img`...`, SpriteKind.Player)": "ipt text: let mySprite = sprites.create(img`...`, SpriteKind.Player) Click the palette to the left of the",
+    "[set (mySprite) velocity to vx vy]": " its own! Open Sprites, drag out [set (mySprite) velocity to vx vy] onto a blank line under the existing c",
+    "(50, 50)": "Script text:&nbsp; mySprite.setVelocity(50, 50) Rename mySprite to the sprite name ",
+    "(vx, vy)": "d vy values in the mySprite.setVelocity(vx, vy) code? ",
+    "[set (mySprite) bounce on wall (true)]": "e screen. Open Sprites, drag out [set (mySprite) bounce on wall (true)] onto a blank line under the existing c",
+    "[bounce on walls]": "true is the default argument , the [bounce on walls] effect will be turned on when the pr",
+    "(on)": "rite’s name in mySprite.setBounceOnWall(on) ? ",
+    "(text  )": "g inside the parentheses of game.splash(text ) ? ",
+    "(let i = 0; i &lt; 5; i++)": " block turns into JavaScript text: for (let i = 0; i &lt; 5; i++) { } The for loop has 3 expressions,",
+    "(box.width + spacing)": "so the entire equation looks like: x * (box.width + spacing) Repeat this for the y position, addin",
+    "[is (button) button pressed]": " true , then open Controller , drag [is (button) button pressed] inside the parentheses that create the",
+    "[set (mySprite) image to (img)]": "perty A . Open Sprites and drag [set (mySprite) image to (img)] inside the curly brackets { } of the",
+    "[pause (100)ms]": "nction. Open Loops and drag [pause (100)ms] under the showLongText code and u",
+    "[play (toPlay) (playbackMode)]": " to the user. Open Music and drag [play (toPlay) (playbackMode)] under the pause code then update ",
+    "[set image for (layer) to (image)]": "e layers! Open Scroller and drag [set image for (layer) to (image)] underneath // scrolling background se",
+    "(scroller.    BackgroundLayer, img` `)": "avaScript text: scroller.setLayerImage(scroller. BackgroundLayer, img` `) The setLayerImage function takes",
+    "[scroll background with vx (-50) vy (-50)]": "e screen! Open Scroller and drag [scroll background with vx (-50) vy (-50)] underneath // scrolling background sp",
+    "(-50, -50)": "xt: scroller.scrollBackgroundWithSpeed(-50, -50) The scrollBackgroundWithSpeed fu",
+    "[place (mySprite) on top of random (tile)]": "n the tilemap! Open Scene and drag [place (mySprite) on top of random (tile)] underneath both the Enemy and Food spr",
+    "(mySprite, img` `)": "avaScript text: tiles.placeOnRandomTile(mySprite, img` `) The placeOnRandomTile function t",
+    "[camera shake by (4) pixels for (500) ms]": "erlap occurs. Open Scene and drag [camera shake by (4) pixels for (500) ms] inside the event. Notice how the code",
+    "(4, 500)": "to JavaScript text: scene.cameraShake(4, 500)&nbsp; The cameraShake function t",
+    "[set [name]": "ox, then click Ok.&nbsp; Drag a [set [name] to] block into the [on start] con",
+    "(name)": "iend”. Open Variables and drag a (name) variable to replace&nbsp;“World.”&nbsp",
+    "(snack)": "he parameter. Use the (name) and (snack) variables to write a message about the",
+    "[function makeBee]": "om the [on start] container into the [function makeBee] container. Then, set the Bee sprite’s ",
+    "[set velocity to]": " the Bee sprite’s velocity by adding a [set velocity to] block into the function container. D",
+    "(speed)": " into the function container. Drag a (speed) bubble from the function container i",
+    "[animate movement]": "am the dizzy bee movement by adding an [animate movement] block inside the conditional. Select",
+    "[call makeBee]": "tes appeared on the tilemap! Add a [call makeBee] block to the [on start] container an",
+    "(array of sprites of kind (Bees)": "ck and replace the (list) value with (array of sprites of kind (Bees)) . Then, move the [call makeBee] ",
+    "[makeBee]": "inside the [while] loop , so that the [makeBee] function is called while there are les",
+    "(Ctrl + V )": " Food sprite’s position code and paste (Ctrl + V ) it underneath the code that sets the En",
+    "( Ctrl + X)": "underneath the Enemy sprite’s code. Cut ( Ctrl + X) the Enemy sprite’s code and and paste ",
+    "[score]": " true by opening Info and dragging [score] inside the parentheses. Type an equali",
+    "[scroll background with vx(-50) vy (-50)]": "h. Open Scroller , then drag [scroll background with vx(-50) vy (-50)] into both button pressed events.&",
+    "[background offset x]": "operator, then open Scroller to drag [background offset x] inside the parentheses. Notice how the",
+    "[set background offset to x(0) y(0)]": "s changed. Open Scroller , drag a [set background offset to x(0) y(0)] into the bottom of both nested conditi",
+    "[set background offset to x(0) y (0)]": ".&nbsp; Open Scroller , drag [set background offset to x(0) y (0)] under the Player sprite code. Update ",
+    "[stop (type) animations on (sprite)]": "leased ! Open Animation and drag [stop (type) animations on (sprite)] into both right and left button r",
+    "(animation.    AnimationTypes.All, mySprite)": "cript text: animation.stopAnimation(animation. AnimationTypes.All, mySprite) The stopAnimation function has 2",
+    "[animate image]": "ation code block menu and drag out an [animate image] block under the shark sprite’s positio",
+    "[createBubbles]": "prites! Create a function called [createBubbles] . Open Loops, drag a [for index] loo",
+    "(index)": "ect the Bubble sprite’s name. Drag the (index) variable into the col parameter, to ",
+    "[call createBubbles]": "n in the [on start] container with a [call createBubbles] block. Call the function before the ",
+    "[set [column]": "a variable named column and drag the [set [column] to] block inside the [function create",
+    "[function createBubbles]": "e [set [column] to] block inside the [function createBubbles] container, at the top. In the [for in",
+    "[set column to]": "reate a variable named row under the [set column to] block inside the function container,",
+    "[for (column)]": ") variable.&nbsp; Drag the entire [for (column)] loop inside the [for (row)] loop. A ",
+    "[for (row)]": "ntire [for (column)] loop inside the [for (row)] loop. A loop within a loop is called a",
+    "[on (Marble) overlaps (Paddle)]": " sprite velocity to] block inside the [on (Marble) overlaps (Paddle)] container. Replace (mySprite) with t",
+    "[on (Marble) overlaps (Bubble)]": " [destroy sprite] block inside the [on (Marble) overlaps (Bubble)] container. Replace (mySprite) wit",
+    "(array of sprites of kind (Bubble)": "heck if the (length of array) of the (array of sprites of kind (Bubble)) equals 0.&nbsp; Add a [game over",
+    "[scroll background with camera [both directions]": "at direction should be selected in the [scroll background with camera [both directions]] block? ",
+    "[scroll background with]": "background scrolls horizontally in the [scroll background with] block? ",
+    "[set background camera scroll multipliers to]": "ackground scrolls left to right in the [set background camera scroll multipliers to] block?&nbsp; ",
+    "[change sprite [x]": "ol the right direction button. Drag a [change sprite [x]] block into the container, and update",
+    "[down]": "on pressed] container out, then select [down] from the drop down menu. Drag a [chang",
+    "[up]": "ery. Repeat these steps to code the [up] direction button. Use the number -16 as",
+    "[  change sprite [x]": "❓Did you select the “y” property in the [ change sprite [x]] block, and update the parameters to ",
+    "(playerSprite)": "verlaps tile] container.&nbsp;Replace (playerSprite) by dragging a (sprite) bubble into t",
+    "[on created]": "eated. Open Sprites , drag out an [on created] container, then change the sprite kind",
+    "(coinSprite)": "every time it is created.&nbsp;Replace (coinSprite) by dragging a (sprite) bubble into t",
+    "[on (Player) overlaps (Coin)]": " The [destroy sprite] block in the [on (Player) overlaps (Coin)] container, from the starter code, will",
+    "[say]": "g a [forever] loop container. Drag a [say] block inside the container and select ",
+    "(sprite x)": " name. Open Sprites and, drag a (sprite x) value block into the [say] block’s p",
+    "[ cash  value]": "s that tells the user to “Spend their $ [ cash value] wisely.” ❓What symbols need to be ad",
+    "(tilemap location of ((sprite)": "p;Which parameter should be set to the (tilemap location of ((sprite) row)) ? ",
+    "(text)": "n with 7 parameters: a string parameter (text), 5 number parameters (fgColor, bgColor,",
+    "(fgColor, bgColor, fontSize, xPos, yPos)": "g parameter (text), 5 number parameters (fgColor, bgColor, fontSize, xPos, yPos) and an image parameter (icon).&nbsp; ",
+    "(icon)": "ize, xPos, yPos) and an image parameter (icon).&nbsp; Inside the function defini",
+    "(nested inside the condition when   sceneNum   equals 1)": " difficulty. Create a&nbsp; conditional (nested inside the condition when sceneNum equals 1) with 3 checkLastAnswer functions fo",
+    "[ on game update every ms]": "e the asteroid sprite’s blocks in the [ on game update every ms] loop with sprite kind Enemy? ",
+    "[set position to]": "nbsp; parameter bubble of the Enemy’s [set position to] block and change the values? ",
+    "[otherSprite]": "arameter . &nbsp;Notice how using the [otherSprite] bubble allows only the Enemy sprite ov",
+    "(5)": "olor the blade of the sword. Use yellow (5) to color the hilt, or the handle of the",
+    "(4)": "e hilt, inside the outlines. Use orange (4) to add shadows to the right side of t",
+    "[on sprite hits wall]": "dd an [if then] conditional into the [on sprite hits wall] container and replace the &lt;true&gt",
+    "[top]": "of the &lt;and&gt; Boolean . Select [top] from the drop down, the Player sprite’",
+    "[set sprite [auto destroy]": "ay to the top of the screen by using a [set sprite [auto destroy]] block set to [destroy on wall] with",
+    "[destroy on wall]": "t sprite [auto destroy]] block set to [destroy on wall] with the toggle &lt;ON&gt;.&nbsp; ",
+    "(≥)": "rameter. Click the drop down to select (≥) . Drag a (score) variable into the le",
+    "(z)": "nd a dot operator to set the z-property (z) value to 3 . Click ▶ and",
+    "[animate (mySprite) frames (frames) interval (ms) (500) loop (loop)]": "omment, then open Animation and drag [animate (mySprite) frames (frames) interval (ms) (500) loop (loop)] underneath. Use the Player sprite’",
+    "[attach (statusbar) to (sprite)]": "hich sprite should be selected in the [attach (statusbar) to (sprite)] block? ",
+    "[change (statusbar) [value]": " status bar should be selected in the [change (statusbar) [value] by] block? ",
+    "(fully yellow)": "atus bar does not begin at fully hungry (fully yellow). Fix the bugs in the code so ",
+    "[set (statusbar) [value]": "a percentage value. ❓ Should the [set (statusbar) [value] to] block be set to [value] or [max]?",
+    "[value]": "e. ❓ Should the [set (statusbar) [value] to] block be set to [value] or [max]?",
+    "[max]": "value] to] block be set to [value] or [max]? ",
+    "[B]": "d] container and change the button to [B] . Place a [set tile at location] bloc",
+    "(tilemap location   [left] of (location)": "drop down. Open Scene and drag a (tilemap location [left] of (location)) block into the coordinate parameter o",
+    "(bottom)": "on] block and change the direction to (bottom) . Then, open Scene again and replace ",
+    "(tilemap location     [bottom] of (location)": "ation of (sprite)) block inside the (tilemap location [bottom] of (location)) block? ",
+    "[on B button pressed]": " a [set wall at] block inside the [on B button pressed] container and set the toggle to &lt",
+    "(tilemap location [bottom] of (tilemap location of (sprite)": " &lt;ON&gt; . Duplicate the entire (tilemap location [bottom] of (tilemap location of (sprite))) block from the [set tile at locat",
+    "(50)": "percentChance code: Math.percentChance(50) . Click the space inside the parenthese",
+    "(percentage)": "f condition. Then, open Math and drag [(percentage) % chance] inside the parentheses. Noti",
+    "[(mySprite) start (effect) effect]": " opened! Open Sprites , then drag [(mySprite) start (effect) effect] underneath the code that changes the s",
+    "(effects.spray)": " JavaScript text: mySprite.startEffect(effects.spray) The startEffect function takes two ",
+    "(in milliseconds)": "ffect name, then type a number argument (in milliseconds) to set how long the effect should last.",
+    "[starfish, octopus, fish, turtle]": "ode might look like: let oceanImages = [starfish, octopus, fish, turtle]&nbsp; Follow the same steps to create",
+    "(hidingSprite)": "the code looks like: oceanSprites.push(hidingSprite) Now, as the loop creates the hiding s",
+    "(SpriteFlag.AutoDestroy, false)": "into JavaScript text: mySprite.setFlag (SpriteFlag.AutoDestroy, false) The setFlag function takes 2 parame",
+    "[ask for string]": "ed userGuess . Open Game , then drag [ask for string] to the right of the assignment operato",
+    "(userGuess)": "e: let userIndex = oceanStrings.indexOf(userGuess)&nbsp; After each user guess, the code",
+    "[userIndex]": "l. Replace mySprite with oceanSprites[userIndex] , so that the setFlag function is app",
+    "[userindex]": "replace mySprite with oceanSprites[userindex] in both the setFlag and sayText",
+    "(userIndex)": "code looks like: oceanSprites.removeAt(userIndex)&nbsp; Copy (Ctrl + C) and paste (C",
+    "[ set background image to (img)]": "d directions! Open Scene and drag [ set background image to (img)] above the Player sprite’s code under ",
+    "[ start screen (effect) effect]": "lery. Open Scene again and drag [ start screen (effect) effect] under // game set up . Use the dot op",
+    "[on A button pressed]": " [if then] conditional into the [on A button pressed] container then drag the [set sprite",
+    "[place sprite on top of tile]": "e created. Open Scene , then drag [place sprite on top of tile] and [set tile at] blocks into the l",
+    "[if then else]": "l tile as the parameter, then drag an [if then else] conditional inside. Use a &lt;0=0&g",
+    "[ba ding]": "r blocks.&nbsp; Click the ⏷ on the [ba ding] value to open the drop down menu , ",
+    "[confetti]": "r blocks.&nbsp; Click the ⏷ on the [confetti] value to open the drop down menu , ",
+    "(x, y)": "e’s name in &nbsp; mySprite.setPosition(x, y) , and update the x and y parameters",
+    "(text, timeOnScreen, animated, textColor, textBoxColor)": "ide the parentheses in mySprite.sayText(text, timeOnScreen, animated, textColor, textBoxColor) ? ",
+    "(100)": " begins! Open Loops, drag [pause (100) ms] underneath the existing code. Noti",
+    "(  100  )": "theses, replace the default argument ( 100 ) with a number equal to or larger than ",
+    "(duration, particlesPerSecond)": "s in effects.blizzard.startScreenEffect(duration, particlesPerSecond) ? ",
+    "[play (to play) (playbackMode)]": "re celebratory! Open Music , drag [play (to play) (playbackMode)] underneath the existing code. Notice h",
+    "(music.melodyPlayable(music.baDing)": "turns into JavaScript text: music.play (music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone) Chang",
+    "(music.Melody)": "r greeting card in music.melodyPlayable(music.Melody) ? ",
+    "( vx )": " Set the sprite’s velocity x ( vx ) to move it to center stage! Instead",
+    "[start screen (effect) effect]": "n effect.&nbsp; Open Scene, drag [start screen (effect) effect] under the // ending comment. Not",
+    "(music.baDing)": " text: music.play(music.melodyPlayable (music.baDing), music.PlaybackMode.UntilDone) Change",
+    "[wizard, crystalBall, catStatue]": " the code looks like: let spriteList = [wizard, crystalBall, catStatue] Now, the 3 sprite images are stored i",
+    "[“I think yes”, “Ask again later”]": "might look like: let answerList = [“I think yes”, “Ask again later”]&nbsp; Inside the controller.A ev",
+    "[2, 4, 5, 6, 10]": "code might look like: let numberList = [2, 4, 5, 6, 10] Then, declare a new variable called ",
+    "[set (mySprite) scale to (1) anchor (ScaleAnchor.Middle)]": "ale by opening Sprites and dragging [set (mySprite) scale to (1) anchor (ScaleAnchor.Middle)] underneath the Player sprite’s positio",
+    "(1, ScaleAnchor.Middle)": "nto JavaScript text: mySprite.setScale(1, ScaleAnchor.Middle) The setScale function takes 2 param",
+    "[unload current tilemap]": "rites. From Tile Util , drag [unload current tilemap] underneath to remove the current tile",
+    "[set life]": "top left corner. ❓ Did you add the [set life] block into the [on start] contain",
+    "[set sprite position]": " the Player loses one life. Add a [set sprite position] block to the [on sprite overlaps spri",
+    "[use effect (effects.confetti) for (true)]": "th an effect! Open Game and drag [use effect (effects.confetti) for (true)] inside the curly brackets { } of the",
+    "(true, effects.confetti)": "avaScript text: game.setGameOverEffect(true, effects.confetti) The setGameOverEffect function has ",
+    "(img)": "tes and drag [set (mySprite) image to (img)] inside the curly brackets { } of bo",
+    "(ControllerButtonEvent.Pressed)": "s { } of the controller.A.onEvent (ControllerButtonEvent.Pressed) event. Notice how the code block turns",
+    "[ask for string (message)]": "function set up . Open Game and drag [ask for string (message)] to the right side of the assignment op",
+    "(toppingName:string, toppingImage: Image)": " look like:&nbsp; function makePizza(toppingName:string, toppingImage: Image) Cut (Ctrl + X) the question varia",
+    "(“pepperoni”, pepperoni)": "he code may look like:&nbsp; makePizza(“pepperoni”, pepperoni) Call the function 3 more times, ",
+    "(velocity y)": "o reach the platform. ❓Would the vy (velocity y) value need to be increased or decrease",
+    "[set [statusbar]": ". Open Status Bars and drag a [set [statusbar] to] into the [on game update every ms",
+    "(Health)": "e Customer sprite blocks. Click on the (Health) bubble and change the status bar kind ",
+    "(Hunger)": "bble and change the status bar kind to (Hunger) . Click ▶ to see a green status",
+    "[set [statusBar]": "tus bar kind to (Hunger) in&nbsp; [set [statusBar] to] block? ",
+    "(customerSprite)": "mySprite) variable and change it to (customerSprite) . Click ▶ to see status ba",
+    "[set (statusbar) fill background]": " Open Status Bars and place a [set (statusbar) fill background] block in the [on game update every ",
+    "[on (Food) overlaps (Customer)]": "atusbar) [value] by] block into the [on (Food) overlaps (Customer)] container, above the conditiona",
+    "(statusbar)": "en Status Bars and drag a [change (statusbar) [value] by] block into the [on (Foo",
+    "(status bar kind attached to sprite)": "in and replace (statusbar) with a (status bar kind attached to sprite) block in the [change (statusbar) [v",
+    "((statusbar)": " Open Status Bars and place a ((statusbar) [value]) block into the left paramete",
+    "[animate (mySprite) with (pathString) for (ms) (2000) loop (loop)]": "ap! Open Animation and drag [animate (mySprite) with (pathString) for (ms) (2000) loop (loop)] inside the for loop. Use the Food",
+    "[tile at (location) is (tile)]": "all event, then open Scene and drag [tile at (location) is (tile)] inside the parentheses. Notice how the",
+    "(tiles.getTile    Location(0, 0)": "t:&nbsp; tiles.tileAtLocationEquals(tiles.getTile Location(0, 0), img``) The tileAtLocationEquals ",
+    "[flip image horizontally]": " &lt;is sprite hitting wall&gt; and [flip image horizontally] blocks so that the code in the [if ",
+    "(from the  Gallery )": " a mix of the light purple brick tile (from the Gallery ) and the dark purple tile outside the ",
+    "[on (Player) overlaps (Key)]": " [set sprite follow] block into the [on (Player) overlaps (Key)] container. Set the Key sprite to foll",
+    "[on (Player) overlaps (Castle)]": " Drag a [game over] block into the [on (Player) overlaps (Castle)] container. Set the toggle to &lt;WIN&g",
+    "(or the base number of strokes it takes to complete a hole)": "rrent hole number, the par number value (or the base number of strokes it takes to complete a hole), and the user’s actual number of tries ",
+    "(and the various brush sizes)": "On this image asset, use the paint tool (and the various brush sizes) to draw the name of the project to be d",
+    "(8x8)": "dCarrot image asset to create smaller (8x8) and larger (32x32) versions of the same",
+    "(32x32)": "sset to create smaller (8x8) and larger (32x32) versions of the same image. Each ",
+    "[set projectile to projectile from sprite]": "e Sprites code block menu and drag a [set projectile to projectile from sprite] block into the [on A button pressed] ",
+    "(second)": "prite kind and “Enemy” as the other (second) sprite kind. Then, destroy the (ot",
+    "(\"\", \"\")": "vaScript text: story.showPlayerChoices(\"\", \"\") The showPlayerChoices function take",
+    "(\"\")": "JavaScript text: story.checkLastAnswer(\"\") The checkLastAnswer function takes ",
+    "[change (mySprite) scale to (1) anchor (ScaleAnchor.Middle)]": "tes.&nbsp; Open Sprites and drag [change (mySprite) scale to (1) anchor (ScaleAnchor.Middle)] under the existing code of the onOver",
+    "[(sprite) move to x (x) y (y) with speed (100)]": "the game!&nbsp; Open Story , drag [(sprite) move to x (x) y (y) with speed (100)] under the changeScale code. Notice h",
+    "(sprite, 0, 0, 100)": "Script text: story.spriteMoveToLocation(sprite, 0, 0, 100) The spriteMoveToLocation function t",
+    "[(sprite) say (:))]": "arameter 100 . Open Story , drag [(sprite) say (:))] under the spriteMoveToLocation code.",
+    "(sprite, \":)": "o JavaScript text: story.spriteSayText(sprite, \":)\") The spriteSayText function takes ",
+    "[stop countdown]": "e.&nbsp; Open Info and drag [stop countdown] into the Player/Ninja onOverlap e",
+    "(shark)": " Code the Enemy (shark) sprite to follow the Player (octopus)",
+    "(octopus)": " (shark) sprite to follow the Player (octopus) sprite.&nbsp; Open the Sprites co",
+    "(uppercase)": "pop-up window. Always use a capital (uppercase) letter for the first letter of a sprite",
+    "(starfish)": "ctopus) sprite overlaps with the Goal (starfish) sprites.&nbsp; Open the Sprites c",
+    "[sprite]": " [sprite start effect] block. The [sprite] and [otherSprite] bubbles can be use",
+    "[invincible]": "rlapped with the umbrella, should the [invincible] variable be set to &lt;true&gt; o",
+    "(16x16)": "ocado1 . Notice the size of the canvas (16x16). Use the paint or the circle tool",
+    "(14)": " the circle tool to draw a pit in brown (14) in the middle of the avocado image. ",
+    "[arrayNum]": "esArrays , like this: allImagesArrays[arrayNum][i] ? ",
+    "[i]": ", like this: allImagesArrays[arrayNum][i] ? ",
+    "[currentArray]": "sted array, like this: allImagesArrays[currentArray].length ? ",
+    "[ask for number (message)]": "rray set up . Open Game and drag [ask for number (message)] to the right of the assignment operat",
+    "(birthdayMonth.toString()": "eses so the code looks like: words.push(birthdayMonth.toString()) Repeat these steps to add the toStr",
+    "(i + 1)": "on ” + “:” Between the strings, type (i + 1) . Use another + to concatenate the co",
+    "[projectile]": " update every ms] loop and select the [projectile] sprite name. Set the coordinates so th",
+    "[set sprite [ay (acceleration y)]": "e jump higher! ❓ Did you place a [set sprite [ay (acceleration y)] block in the [on start] container",
+    "[on (Player) overlaps (Projectile)]": "e. Drag a [game over] block into the [on (Player) overlaps (Projectile)] container and set the parameter to &l",
+    "(Projectile)": " block into the [on (Player) overlaps (Projectile)] container and set the parameter to &",
+    "[speed]": "n start] container. Name the variable [speed] , and set the value to -75. Then, drag ",
+    "[change [variable]": "and set the value to -75. Then, drag a [change [variable] by] block into the top of the [on g",
+    "[set projectile to]": " Replace&nbsp;the vx parameter of the [set projectile to] block with a (speed) variable.&nbsp;",
+    "[change variable by]": "e Projectiles! ❓ Did you place the [change variable by] block into the top of the [on game ",
+    "(and how many times the Player sprite has jumped over it)": " Projectile has moved across the screen (and how many times the Player sprite has jumped over it). Click ▶ to see the complet",
+    "(hiddenFossils)": "t] loop and update the sprite name to (hiddenFossils) . Select the brown dirt tile from the",
+    "[invisible]": "e name to (hiddenFossils) and select [invisible] from the dropdown menu, so that the Fo",
+    "[set sprite invisible]": "roject begins! ❓ Did you place the [set sprite invisible] block at the end of the [repeat] ",
+    "(array of sprites of kind)": "itor. Then, open Sprites and drag an (array of sprites of kind) value block into the (list) bubble o",
+    "[on (Player) overlaps (Fossil)]": " an [if then] conditional into the [on (Player) overlaps (Fossil)] container already in the editor. Open ",
+    "[ghost]": "; and the second block’s parameter to [ghost] &lt; ON &gt; . These blocks will make",
+    "(by pressing the A button)": "Player sprite overlaps and “digs” it up (by pressing the A button), but not cause any new events to happen",
+    "( -)": "rray called “foundFossils”. Then, click ( -) two times, so that the list contains a",
+    "[foundFossils]": ". Change the (list) variable name to [foundFossils] and drag the (otherSprite) bubble in",
+    "( length of array)": " [if then] conditional . Drag two ( length of array) blocks into the parameters of the &lt",
+    "[length of array]": " 0&gt; comparison block. In the first [length of array] block, update the variable name to be ",
+    "(foundFossils)": " block, update the variable name to be (foundFossils) . Then, open Sprites and drag an (ar",
+    "(archaeologist)": " the editor. Update the sprite name to (archaeologist) then drag a (join) block into the te",
+    "( x ,  y , and  scale )": "s parentheses, type the parameter names ( x , y , and scale ) and a colon : , then set the type to",
+    "(randX, randY, 1)": "ma. The code may look like: spawnFlame(randX, randY, 1) Click ▶ to see flames appea",
+    "(otherSprite.x, otherSprite.y, newScale)": "s. The code may look like: spawnFlame(otherSprite.x, otherSprite.y, newScale) Copy (Ctrl + C) and paste (Ctr",
+    "[ start background image to (img)]": " the project! Open Scene and drag [ start background image to (img)] above the Player sprite’s code under ",
+    "[set background img to (img)]": " each scene! Open Scene and drag [set background img to (img)] underneath the splash screen code for ",
+    "(null, DialogLayout.Bottom)": "into JavaScript text: game.showLongText(null, DialogLayout.Bottom) The showLongText function takes t",
+    "[set (mySprite) position to x(x) y(y)]": "een.&nbsp; Open Sprites and drag [set (mySprite) position to x(x) y(y)] inside the curly brackets of the inner",
+    "[animate frames]": ". Then, drag the [set sprite to] and [animate frames] blocks from the [on start] container",
+    "[Make a Function...]": "ced , then open Functions and select [Make a Function...] . This will define the function . In",
+    "[function createCookie]": "on button pressed] container into the [function createCookie] container that has appeared in the edi",
+    "[call createCookie]": " Advanced to open Functions . Drag a [call createCookie] block into the empty [on button press",
+    "(not the path tiles)": "p; Use the background tile assets (not the path tiles) from My Tiles to fill in the empty ",
+    "(SpriteKind.Player, img` `, function(sprite: Sprite, location: tiles.Location)": "ript text:&nbsp; scene.onOverlapTile(SpriteKind.Player, img` `, function(sprite: Sprite, location: tiles.Location) {...}) The onOverlapTile function t",
+    "[set dialog cursor to (cursor)]": "pdate the asset. Open Game , drag [set dialog cursor to (cursor)] before showLongText . Replace img` `",
+    "[set (textSprite) text (text)]": "prite! Open Text Sprite and drag [set (textSprite) text (text)] into the choiceMenu function definit",
+    "[set (textsprite) outline) (1) (6)]": "prite. Open Text Sprite and drag [set (textsprite) outline) (1) (6)] underneath the code that sets the size",
+    "(1, 6)": " JavaScript text: textSprite.setOutline(1, 6) The setOutline function takes 2 par",
+    "[set (textSprite) border (1) (6)]": "&nbsp; Open Text Sprite and drag [set (textSprite) border (1) (6)] underneath the code that sets the text",
+    "[set (textSprite) icon (icon)]": "&nbsp; Open Text Sprite and drag [set (textSprite) icon (icon)] underneath the setBorder code. Notic",
+    "(img`...`, 50, 50)": "tile = sprites.createProjectileFromSide (img`...`, 50, 50) The createProjectileFromSide functi",
+    "( vy )": "image, x velocity ( vx ) and y velocity ( vy ). Click the palette to the left of the l",
+    "( 50, 50 )": "ery. Update the vx and vy arguments ( 50, 50 ) so that the sprite moves across the scr",
+    "(120)": "r between 0 and the screen height value (120) for the y coordinate of the projectil",
+    "(8 or 9)": "ctus is green, different shades of blue (8 or 9) or teal (6) might be used to add shadin",
+    "(such as spikes or bristles)": "eatures are typically found on a cactus (such as spikes or bristles) and what colors might be used to repres",
+    "(not cut off)": "s on screen, it should be fully visible (not cut off) and have a clear contrast against the b",
+    "[function makeSnowflake]": "et sprite lifespan] blocks into the [function makeSnowflake] container.&nbsp; Open Functio",
+    "[call makeSnowflake]": " Open Function and drag out a [call makeSnowflake] block into the [on start] contain",
+    "(level)": " the conditional . Click and drag the (level) parameter bubble into the left paramet",
+    "[call setLevel]": "fferent levels of the game! Drag a [call setLevel] block into the [on start] containe",
+    "(-)": "reate 3 if/else if conditions. Click (-) to remove the final else condition.&",
+    "[stay in screen]": "e is the default argument ,&nbsp;the [stay in screen] effect will be turned on when the pr",
+    "(target, speed)": "Enemy and mySprite in myEnemy.follow(target, speed) ? ",
+    "[set sprite to projectile from sprite]": "Did you change the sprite name in the [set sprite to projectile from sprite] block? ",
+    "(let chances = 3; chances &gt; 0; chances--)": "e loop. The code should look like: for (let chances = 3; chances &gt; 0; chances--) { }&nbsp; Now, the loop will begin co",
+    "(mySprite, [], 500, false)": "cript text: animation.runImageAnimation(mySprite, [], 500, false) The runImageAnimation function t",
+    "[change (mySprite) scale by (1) anchor (ScaleAnchor.Middle)]": "nbsp; Open Sprites and drag [change (mySprite) scale by (1) anchor (ScaleAnchor.Middle)] inside the curly brackets of the on",
+    "(mySprite, animation.animationPresets    (animation.flyToCenter)": "ext: animation.runMovementAnimation(mySprite, animation.animationPresets (animation.flyToCenter), 2000, false) The runImageAnimati",
+    "(a beat of silence)": "a dash - in the code to create a rest (a beat of silence). The code might look like: “C2 D2 F2 ",
+    "(fishSprite)": "inside the [repeat] loop . Select the (fishSprite) variable name and the light blue til",
+    "[then]": "one [set sprite to] block inside the [then] opening and the other [set sprite to]",
+    "(seaweedSprite)": "the [repeat] loop , name the variable (seaweedSprite) and select Seaweed as the sprite kind.",
+    "(get and remove first value from (list)": "ter code, so open Arrays then drag a (get and remove first value from (list)) value block into the sprite image bub",
+    "(seaweedList)": "nto the sprite image bubble and select (seaweedList) as the array.&nbsp; Drag a [place",
+    "[columnNumber]": " loop , to create a new variable named [columnNumber] .&nbsp;Set the variable to 1 . Drag a ",
+    "(columnNumber)": ".&nbsp;Set the variable to 1 . Drag a (columnNumber) variable into the col parameter in t",
+    "[question]": "block inside the container to create a [question] variable.&nbsp; Use a (pick rando",
+    "(question)": "between 0 to 2 as the value of the (question) variable. ❓ Did you go to the Var",
+    "[set variable to]": "able” called “question”, then use a [set variable to] block to set the “question” variable ",
+    "(  length of array (array of sprites of kind)": " sprite kind. Duplicate the entire ( length of array (array of sprites of kind)) value block, then place it into the ",
+    "(0 + 0)": "tal fish?” Open Math and drag a (0 + 0) operator into the right parameter of t",
+    "[create status bar sprite width (20) height (4) kind (kind)]": "sprite! Open Status Bar and drag [create status bar sprite width (20) height (4) kind (kind)] below the code that creates a player a",
+    "(20, 4, StatusBarKind.Health)": "t: let statusbar = statusbars.create(20, 4, StatusBarKind.Health) The statusbars.create function take",
+    "[set (statusbar) fill to (7) background (2)]": "er. Open Status Bar and drag out [set (statusbar) fill to (7) background (2)] to the bottom of the function definiti",
+    "(7, 2)": "nto JavaScript text: statusbar.setColor(7, 2) The setColor function can take 3 pa",
+    "[attach (statusbar) to (mySprite)]": "ts. Open Status Bar and drag out [attach (statusbar) to (mySprite)] to the bottom of the function definiti",
+    "[status bar kind (kind) attached to (mySprite)]": "ectile. Open Status Bar and drag [status bar kind (kind) attached to (mySprite)] into the conditionals in both onOve",
+    "(    StatusBarKind.Health, null)": ": statusbars.getStatusBarAttachedTo( StatusBarKind.Health, null) The getStatusBarAttachedTo funct",
+    "[run code for (action) at most once every (500) do]": "to the project. Open Timer then drag [run code for (action) at most once every (500) do] into the outer if conditional, insid",
+    "(“action”, 500, function()": "o JavaScript text:&nbsp; timer.throttle(“action”, 500, function() {})&nbsp; The throttle function tak",
+    "[run code after (500) do]": "time delay. Open Timer then drag [run code after (500) do] into the top of the createIntroText ",
+    "[createWatermelon]": "the code so that the A button uses the [createWatermelon] function to make watermelon sprites ap",
+    "[call createStrawberry]": "n is pressed. ❓Where should the&nbsp; [call createStrawberry] block be placed so that strawberries a",
+    "[set (mySprite) bounce on wall]": "its a wall. Open Sprites again, drag [set (mySprite) bounce on wall] inside. Update the sprite name and kee",
+    "(text, timeOnScreen)": "2 arguments in princessSprite.sayText(text, timeOnScreen) ? ",
+    "(“text, timeOnScreen, animated, textColor, textBoxColor)": "or argument in princessSprite.sayText(“text, timeOnScreen, animated, textColor, textBoxColor) ? ",
+    "(  Ctrl + X)": "the value on the right.&nbsp; Cut ( Ctrl + X) and paste ( Ctrl + V) the cookie s",
+    "(  Ctrl + V)": "bsp; Cut ( Ctrl + X) and paste ( Ctrl + V) the cookie sprite’s code inside t",
+    "(  Ctrl + C)": "ke: else if () {}&nbsp; Copy ( Ctrl + C) the code inside the parentheses of th",
+    "(  +  )": "roject! ❓ Did you use a plus sign ( + ) to concatenate , or join, the string",
+    "(0, screen.width)": "te the sprite’s name, then type randint(0, screen.width) for the x parameter and randint(0, ",
+    "(0, screen.height)": "dth) for the x parameter and randint(0, screen.height) for the y parameter to place the spr",
+    "(other)": "prites’ names in mySprite.overlapsWith(other) ? ",
+    "(info.score()": "entheses, so that the condition reads: (info.score() &gt; 4) . If the score is greater than ",
+    "[connect (tilemap 1) and (tilemap2) by (Door1)]": ". Open Tile Util , then drag a [connect (tilemap 1) and (tilemap2) by (Door1)] block into the [on start] container,",
+    "[set variable to (tilemap)]": "he [on start] container, under the 2 [set variable to (tilemap)] blocks. Add a [set tilemap to] b",
+    "( tilemap1)": "map) block in the left parameter and a ( tilemap1) block in the right parameter. Inside t",
+    "[place sprite on top of location]": "the conditional opening. Then, add a [place sprite on top of location] block and select the Player sprite’s n",
+    "[ay]": "[if then] conditional , but change the [ay] value to 500. In the [move sprite wit",
+    "(2, 6)": "tion] block, update the coordinates to (2, 6). ❓ Did you change the vy value in t",
+    "[on [A]": "hitting wall&gt; value block inside [on [A] button pressed] container in the righ",
+    "(spriteJump)": "place it in the left parameter. Use a (spriteJump) variable and a &lt;true&gt; Boole",
+    "[set sprite [velocity y]": "o create an [else] opening. Use a [set sprite [velocity y] to] block in the conditional to s",
+    "[load tilemap connected by (Door1)]": "bsp; Open Tile Util and drag a [load tilemap connected by (Door1)] block into the [on sprite overlaps ",
+    "[call switchTilemap]": "overlaps tile] container. Then, add a [call switchTilemap] block into the container. Set the ",
+    "[on tilemap loaded]": "! Open Tile Util and drag out an [on tilemap loaded] container. Drag an [on each tile crea",
+    "[on each tile create sprite with image and kind]": "on tilemap loaded] container. Drag an [on each tile create sprite with image and kind] block into the container. Select the ",
+    "[cover all tiles with tile]": "pty [set sprite to] block. Add a [cover all tiles with tile] block to cover all Item 1 tiles with",
+    "[on each tile create sprite of kind]": " tile] block, place it underneath the [on each tile create sprite of kind] block, and set it to cover all NPC 1 ",
+    "[on created sprite of kind]": " color selected.&nbsp; Drag out an [on created sprite of kind] container and select Enemy in the drop",
+    "[destroy all sprites of kind]": "p.&nbsp; Open Sprites and drag a [destroy all sprites of kind] block into the switchTilemap function’",
+    "[on [B]": "evel &gt;= 1&gt; value block inside [on [B] button pressed] container in the righ",
+    "[on (Projectile) overlaps (Enemy)]": "[set tile at location] block into the [on (Projectile) overlaps (Enemy)] container, above the [if then] condit",
+    "[puppyImage, catImage, snakeImage]": "ode might look like: let spriteList = [puppyImage, catImage, snakeImage] Now, the 3 sprite images are stored i",
+    "(mySprite.width + spacing)": "ay look like: mySprite.x = count * (mySprite.width + spacing) + xOffset Click ▶ to see 3 ",
+    "[   ]": "ackets [ ] . Inside the brackets [ ] , type the counter variable count .",
+    "[(player) score]": " then open Info and replace it with [(player) score] . Keep the PlayerInfo property set to ",
+    "(80, 90)": "appears on the screen positioned to the (80, 90) coordinates. ❓Did you update the spri",
+    "(img`...`)": "text:&nbsp; scene.setBackgroundImage(img`...`) In JavaScript, the names of things li",
+    "(“:)": " into JavaScript text: mySprite.sayText(“:)”) In the editor, highlight mySprite "
+  }
+}

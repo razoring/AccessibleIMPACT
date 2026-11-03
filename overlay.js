@@ -1,11 +1,12 @@
 // overlay.js — scans instruction steps and upgrades tokens to live MakeCode block SVGs
 // Option B: exact block SVGs extracted from the embedded MakeCode iframe.
-// No fallback SVGs — unresolved tokens remain untouched as plain text.
+// No fallback SVGs — unresolved tokens (<80% confidence) remain untouched as plain text.
 
 (function () {
   'use strict';
 
-  const TOKEN_REGEX = /\[[^\]\r\n]+(?:\s*\[[^\]\r\n]+\])*\]|\([^\)\r\n]+\)|<true>/g;
+  // Matches [nested [bracket]] blocks, parenthesized bubbles, and <true>
+  const TOKEN_REGEX = /\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\([^\)\r\n]+\)|<true>/g;
   const svgCache = new Map();
   let scanTimer = null;
 
@@ -14,23 +15,43 @@
     const style = document.createElement('style');
     style.id = 'aifx-styles';
     style.textContent = `
-      .aifx-rendered {
+      .aifx-rendered.aifx-inline {
         display: inline-block !important;
         vertical-align: middle !important;
         margin: 0 4px !important;
         line-height: 1 !important;
       }
-      .aifx-rendered svg {
+      .aifx-rendered.aifx-inline svg {
         display: inline-block !important;
         vertical-align: middle !important;
-        height: 2.2em !important;
+        height: auto !important;
+        max-height: 44px !important;
         width: auto !important;
         max-width: 100% !important;
         filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)) !important;
         transition: transform 0.15s ease !important;
       }
-      .aifx-rendered:hover svg {
-        transform: scale(1.15) !important;
+      .aifx-rendered.aifx-inline:hover svg {
+        transform: scale(1.1) !important;
+        position: relative !important;
+        z-index: 10 !important;
+      }
+      .aifx-rendered.aifx-multiline {
+        display: block !important;
+        margin: 12px 0 !important;
+        clear: both !important;
+        text-align: left !important;
+        line-height: normal !important;
+      }
+      .aifx-rendered.aifx-multiline svg {
+        display: block !important;
+        height: auto !important;
+        max-width: 100% !important;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)) !important;
+        transition: transform 0.15s ease !important;
+      }
+      .aifx-rendered.aifx-multiline:hover svg {
+        transform: scale(1.03) !important;
         position: relative !important;
         z-index: 10 !important;
       }
@@ -43,16 +64,26 @@
     return !!el.closest('app-step-information, [data-instruction], .primary-section, article, .lesson-content');
   }
 
-  function applySvg(span, svgMarkup) {
-    if (!span || !svgMarkup) return;
-    span.innerHTML = svgMarkup;
+  function applySvg(span, data) {
+    if (!span || !data || !data.svg) return;
+    const isMultiLine = data.isMultiLine || data.height > 58;
+    span.className = 'aifx-rendered ' + (isMultiLine ? 'aifx-multiline' : 'aifx-inline');
+    span.innerHTML = data.svg;
     span.setAttribute('data-rendered', 'true');
+
     const svgEl = span.querySelector('svg');
     if (svgEl) {
-      svgEl.style.height = '2.2em';
-      svgEl.style.width = 'auto';
-      svgEl.style.verticalAlign = 'middle';
-      svgEl.style.display = 'inline-block';
+      if (isMultiLine) {
+        svgEl.style.display = 'block';
+        if (data.width) svgEl.style.width = data.width + 'px';
+        if (data.height) svgEl.style.height = data.height + 'px';
+        svgEl.style.maxWidth = '100%';
+      } else {
+        svgEl.style.display = 'inline-block';
+        svgEl.style.verticalAlign = 'middle';
+        if (data.height) svgEl.style.height = Math.min(data.height, 44) + 'px';
+        svgEl.style.width = 'auto';
+      }
     }
   }
 
@@ -81,29 +112,34 @@
       if (i < matches.length) {
         const tokenText = matches[i];
         const span = document.createElement('span');
-        span.className = 'aifx-rendered';
         span.setAttribute('data-token', tokenText);
 
         if (svgCache.has(tokenText)) {
-          applySvg(span, svgCache.get(tokenText));
+          const cached = svgCache.get(tokenText);
+          if (cached && cached.svg) {
+            applySvg(span, cached);
+          } else {
+            span.textContent = tokenText;
+          }
         } else {
           span.textContent = tokenText;
           try {
             chrome.runtime.sendMessage({ action: 'renderToken', token: tokenText }, (res) => {
               if (chrome.runtime.lastError) {
-                console.warn('[AIFX overlay] relay error:', chrome.runtime.lastError.message);
                 return;
               }
               if (res && res.svg && span.isConnected) {
-                console.info('[AIFX overlay] applied live SVG for:', tokenText);
-                svgCache.set(tokenText, res.svg);
-                applySvg(span, res.svg);
-              } else if (res && res.err) {
-                console.warn('[AIFX overlay] render err:', res.err);
+                svgCache.set(tokenText, res);
+                applySvg(span, res);
+              } else {
+                svgCache.set(tokenText, { svg: null });
+                // Leave token as-is
+                span.textContent = tokenText;
               }
             });
           } catch (e) {
-            console.warn('[AIFX overlay] sendMessage exception:', e);
+            // Leave token as-is
+            span.textContent = tokenText;
           }
         }
 
