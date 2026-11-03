@@ -94,6 +94,62 @@
     };
   }
 
+  const CHECKERED_TILE_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAVklEQVR4AdyRwQkAIAzEihN18s7SCbqKkl/+fkQhEAgIp6uqtpmZbdxwN3zF5XnggsyMFN0dLdxwN/yBCZefEIsdhp3GDXfDf3gDdhh2GjfcDf/gDQ4AAAD//xRE6jsAAAAGSURBVAMA0Hd9MQrHq6MAAAAASUVORK5CYII=';
+
+  function renderTilemapPlaceholder(text) {
+    const label = (text || 'tilemap').replace(/[\[\]\(\)]/g, '').trim();
+    const charWidth = 9.5;
+    const textWidth = label.length * charWidth;
+    const innerWidth = Math.ceil(textWidth + 48);
+    const totalWidth = innerWidth + 48;
+    const height = 48;
+    const imgX = Math.round(textWidth + 24);
+
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${height}" width="${totalWidth}" height="${height}"><g class="tiles_tilemap_editor blocklyBlock blocklyDraggable" data-id="tilemap_bubble"><path class="blocklyPath" stroke="#384c63" fill="#4b6584" d=" m 24,0  h ${innerWidth} a 24 24 0 0,1 24,24  v 0 a 24 24 0 0,1 -24,24  V 48  h -${innerWidth} a 24 24 0 0,1 -24,-24  v 0 a 24 24 0 0,1 24,-24 z&#10;"/><g class="blocklyLabelField" transform="translate(14,14.5)"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="fill:#ffffff !important;font-family:Consolas, Monaco, Menlo, &quot;Ubuntu Mono&quot;, source-code-pro, monospace !important;font-size:16px !important;font-weight:600 !important;text-anchor:start;dominant-baseline:central;">${label}</text></g><g class="blocklyField blocklyDropdownField pxtFieldDropdown blocklyEditableField" transform="translate(${imgX},4)"><rect rx="4" ry="4" x="0" y="0" height="40" width="36" class="blocklyFieldRect" stroke="#384c63" fill="#202b38"/><image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${CHECKERED_TILE_PNG}" height="32" width="32" x="2" y="4"/></g></g></svg>`;
+
+    return {
+      svg: svg,
+      width: totalWidth,
+      height: height,
+      isMultiLine: false
+    };
+  }
+
+  function renderCreateSpritesOnTiles(rawText) {
+    const mKind = (rawText || '').match(/(?:kind|\()\s*([a-zA-Z0-9_]+)\)?\s*\]?$/i);
+    let kindLabel = mKind && mKind[1] && mKind[1].toLowerCase() !== 'kind' ? mKind[1].trim() : 'Player';
+    // Capitalize first letter (e.g. item -> Item)
+    kindLabel = kindLabel.charAt(0).toUpperCase() + kindLabel.slice(1);
+
+    const kindCharWidth = 9.6;
+    const kindTextW = Math.max(kindLabel.length * kindCharWidth, 24);
+    const kindPillW = Math.round(kindTextW + 46);
+
+    const xOnEach = 12;
+    const onEachW = 70;
+    const xTile = xOnEach + onEachW + 8;
+    const tileFieldW = 68;
+    const xTileCreate = xTile + tileFieldW + 10;
+    const tileCreateW = 280;
+    const xImg = xTileCreate + tileCreateW + 10;
+    const imgFieldW = 48;
+    const xAndKind = xImg + imgFieldW + 10;
+    const andKindW = 80;
+    const xKind = xAndKind + andKindW + 8;
+    const totalW = xKind + kindPillW + 14;
+    const h = 66;
+    const hStretch = totalW - 52.25;
+
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalW} ${h}" width="${totalW}" height="${h}"><g class="tileUtil_createSpritesOnTiles blocklyBlock blocklyDraggable"><path class="blocklyPath" stroke="#6574bf" fill="#879bff" d=" m 0,0  m 0,4 a 4 4 0 0,1 4,-4  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h ${hStretch} a 4 4 0 0,1 4,4  v 8  V 54  V 54 a 4 4 0 0,1 -4,4  h -${hStretch}  c -2,0  -3,1  -4,2  l -4,4  c -1,1  -2,2  -4,2  h -12  c -2,0  -3,-1  -4,-2  l -4,-4  c -1,-1  -2,-2  -4,-2  h -8 a 4 4 0 0,1 -4,-4 z"/><g class="blocklyLabelField" transform="translate(${xOnEach},19.5)"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="fill:#ffffff !important;font-family:Consolas, Monaco, Menlo, monospace !important;font-size:16px !important;font-weight:600 !important;">on each</text></g><g class="tileset_tile_picker" transform="translate(${xTile}, 5)"><path stroke="#5867af" fill="#4d5c9e" d=" m 24,0  h 20 a 24 24 0 0,1 24,24  v 0 a 24 24 0 0,1 -24,24  V 48  h -20 a 24 24 0 0,1 -24,-24  v 0 a 24 24 0 0,1 24,-24 z"/><rect rx="4" ry="4" x="12" y="4" height="40" width="44" stroke="transparent" fill="transparent"/><image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${CHECKERED_TILE_PNG}" height="32" width="32" x="14" y="8"/><image height="12px" width="12px" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaGVpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLWFycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuNDEsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTDAuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNzFDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMCwxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNzlhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYzAuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMzdBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=" transform="translate(48,18)"/></g><g class="blocklyLabelField" transform="translate(${xTileCreate},19.5)"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="fill:#ffffff !important;font-family:Consolas, Monaco, Menlo, monospace !important;font-size:16px !important;font-weight:600 !important;">tile create sprite with image</text></g><g class="screen_image_picker" transform="translate(${xImg}, 5)"><path stroke="#5867af" fill="#6c7dc9" d=" m 24,0  h 0 a 24 24 0 0,1 24,24  v 0 a 24 24 0 0,1 -24,24  V 48  h 0 a 24 24 0 0,1 -24,-24  v 0 a 24 24 0 0,1 24,-24 z"/><rect rx="4" ry="4" x="8" y="8" height="32" width="32" stroke="#999999" stroke-width="1.5" fill="#dedede"/></g><g class="blocklyLabelField" transform="translate(${xAndKind},19.5)"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="fill:#ffffff !important;font-family:Consolas, Monaco, Menlo, monospace !important;font-size:16px !important;font-weight:600 !important;">and kind</text></g><g class="spritekind" transform="translate(${xKind}, 7)"><path stroke="#2451b2" fill="#2e64d8" d=" m 22,0  h ${kindPillW - 44} a 22 22 0 0,1 22,22  v 0 a 22 22 0 0,1 -22,22  V 44  h -${kindPillW - 44} a 22 22 0 0,1 -22,-22  v 0 a 22 22 0 0,1 22,-22 z"/><text x="14" y="22" fill="#ffffff" font-family="Consolas, Monaco, Menlo, monospace" font-size="16px" font-weight="600" dominant-baseline="central">${kindLabel}</text><image height="12px" width="12px" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaGVpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLWFycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuNDEsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTDAuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNzFDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMCwxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNzlhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYzAuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMzdBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=" transform="translate(${kindPillW - 20},16)"/></g></g></svg>`;
+
+    return {
+      svg: svg,
+      width: totalW,
+      height: h,
+      isMultiLine: false
+    };
+  }
+
   // Ensure built-in extension blocks (e.g. Scroller) are defined in Blockly.Blocks
   function ensureExtensionBlocks(B) {
     if (!B || !B.Blocks) return;
@@ -987,25 +1043,10 @@
     { match: /^\[?\s*cover\s+all\s+.*tiles\s+with\s*.*\]?$/i, type: 'tileutil_coverAllTiles', conf: 1.0 },
     {
       match: /^\[?\s*on\s+each(?:\s+[\[\(]?[a-zA-Z0-9_\s]+[\]\)]?)?\s+tile\s+create\s+sprite(?:\s+with\s+image)?\s+(?:and\s+)?(?:of\s+)?kind(?:\s+[\[\(]?[a-zA-Z0-9_\s]+[\]\)]?)?\s*\]?$/i,
-      type: 'tileutil_createSpritesOnTiles',
-      mutator: (b, ws, raw) => {
-        const mTile = (raw || '').match(/on\s+each\s+[\[\(]?([a-zA-Z0-9_\s]+?)[\]\)]?\s+tile/i);
-        const mKind = (raw || '').match(/kind\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?/i);
-        if (mTile && mTile[1]) {
-          const fTile = b.getField('tile');
-          if (fTile) try { fTile.setValue(mTile[1].trim()); } catch (e) {}
-        }
-        if (mKind && mKind[1]) {
-          const fKind = b.getField('kind');
-          if (fKind) {
-            const k = mKind[1].trim();
-            try { fKind.setValue('SpriteKind.' + k); } catch (e) {}
-          }
-        }
-      },
+      custom: (raw) => renderCreateSpritesOnTiles(raw),
       conf: 1.0
     },
-    { match: /^\[?\s*on\s+each\s+.*tile\s+create\s+sprite\s*.*\]?$/i, type: 'tileutil_createSpritesOnTiles', conf: 1.0 },
+    { match: /^\[?\s*on\s+each\s+.*tile\s+create\s+sprite\s*.*\]?$/i, custom: (raw) => renderCreateSpritesOnTiles(raw), conf: 1.0 },
     { match: /^\(?\s*array\s+of\s+all(?:\s+tile)?\s+locations\s*\)?$/i, type: 'mapgettilestype', conf: 1.0 },
     { match: /^\(?\s*current\s+tilemap\s*\)?$/i, type: 'tileUtil_getLoadedMap', conf: 1.0 },
 
@@ -1171,6 +1212,24 @@
       }
     `;
     svg.appendChild(styleEl);
+
+    // If block contains tilemap field/socket, ensure checkered tile placeholder image is present
+    const tilemapFields = clone.querySelectorAll('.blocklySpriteField, g.blocklyEditableField rect[width="40"], g.blocklyEditableField rect[width="40px"]');
+    for (const rect of tilemapFields) {
+      const parentG = rect.parentNode;
+      if (parentG && !parentG.querySelector('image')) {
+        const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        img.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', CHECKERED_TILE_PNG);
+        img.setAttribute('height', '32');
+        img.setAttribute('width', '32');
+        const rx = parseFloat(rect.getAttribute('x') || '0');
+        const ry = parseFloat(rect.getAttribute('y') || '0');
+        img.setAttribute('x', String(rx + 4));
+        img.setAttribute('y', String(ry + 4));
+        parentG.appendChild(img);
+      }
+    }
+
     svg.appendChild(clone);
 
     // True container/multiline blocks have statement slots or height > 70
@@ -1276,6 +1335,15 @@
           return { confidence: 0.0, err: `(${inner}) is an instruction side comment, not a block (confidence < 80%)` };
         }
       }
+    }
+
+    // 0b. Tilemap placeholder socket bubbles: (tilemap), (tilemap1), (tilemap2), (tilemap 1), etc.
+    if (/^[\[\(]\s*tilemap(?:\s*\d+)?\s*[\]\)]$/i.test(raw)) {
+      return {
+        confidence: 1.0,
+        custom: () => renderTilemapPlaceholder(raw),
+        name: raw
+      };
     }
 
     // 1. Canonical rule match
@@ -1591,7 +1659,7 @@
 
     const matchQuick = resolveTokenMatch(tokenText, null);
     if (matchQuick && matchQuick.custom) {
-      const res = matchQuick.custom();
+      const res = matchQuick.custom(tokenText);
       if (res && res.svg) {
         CACHE[tokenText] = res;
         return res;
@@ -1609,7 +1677,7 @@
     }
 
     if (match.custom) {
-      const res = match.custom();
+      const res = match.custom(tokenText);
       if (res && res.svg) {
         CACHE[tokenText] = res;
         return res;
