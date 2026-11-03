@@ -238,6 +238,56 @@
     { match: /^\[?\s*run code on\s+.*overlaps.*otherkind.*\]?$/i, type: 'spritesoverlap', conf: 1.0 },
     { match: /^\[?\s*(?:on\s+)?sprite\s+overlaps\s+tile\s*\]?$/i, type: 'spriteshittile', conf: 1.0 },
     { match: /^\[?\s*(?:on\s+)?sprite\s+hits\s+wall\s*\]?$/i, type: 'spriteshitwall', conf: 1.0 },
+    {
+      match: /^\[?\s*(?:on\s+)?created(?:\s+container)?\s*\]?$/i,
+      type: 'spritesoncreated',
+      mutator: (b, ws) => {
+        const spriteParamInput = b.getInput('HANDLER_DRAG_PARAM_sprite');
+        if (spriteParamInput && ws) {
+          const rep = ws.newBlock('argument_reporter_custom');
+          const f = rep.getField('VALUE');
+          if (f) f.setValue('sprite');
+          rep.initSvg();
+          rep.render();
+          try { spriteParamInput.connection.connect(rep.outputConnection); } catch (e) {}
+        }
+        const kindInput = b.getInput('kind');
+        if (kindInput && ws) {
+          const kindBlock = ws.newBlock('spritekind');
+          const kf = kindBlock.getField('MEMBER');
+          if (kf) kf.setValue('Player');
+          kindBlock.initSvg();
+          kindBlock.render();
+          try { kindInput.connection.connect(kindBlock.outputConnection); } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*(?:on\s+)?destroyed(?:\s+container)?\s*\]?$/i,
+      type: 'spritesondestroyed',
+      mutator: (b, ws) => {
+        const spriteParamInput = b.getInput('HANDLER_DRAG_PARAM_sprite');
+        if (spriteParamInput && ws) {
+          const rep = ws.newBlock('argument_reporter_custom');
+          const f = rep.getField('VALUE');
+          if (f) f.setValue('sprite');
+          rep.initSvg();
+          rep.render();
+          try { spriteParamInput.connection.connect(rep.outputConnection); } catch (e) {}
+        }
+        const kindInput = b.getInput('kind');
+        if (kindInput && ws) {
+          const kindBlock = ws.newBlock('spritekind');
+          const kf = kindBlock.getField('MEMBER');
+          if (kf) kf.setValue('Player');
+          kindBlock.initSvg();
+          kindBlock.render();
+          try { kindInput.connection.connect(kindBlock.outputConnection); } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
 
     // Projectiles
     { match: /^\[?\s*set\s+projectile\s+to\s+projectile\s+from\s+side\s*\]?$/i, type: 'spritescreateprojectilefromside', conf: 1.0 },
@@ -713,6 +763,21 @@
           const v = ensureVariable(ws, varName);
           const f = b.getField('VAR');
           if (f && v) f.setValue(v.getId());
+        },
+        name: raw
+      };
+    }
+
+    // 5b. Sprite Property Getter: (sprite x), (mySprite x), (sprite y), [sprite x], [mySprite x], etc.
+    const spritePropGetMatch = raw.match(/^[\[\(](?:(?:mySprite|sprite|[a-zA-Z0-9_]+)\s+)?([xy]|vx|vy|ax|ay|lifespan|width|height|left|right|top|bottom)(?:\s+value(?:\s+block)?)?[\]\)]$/i);
+    if (spritePropGetMatch) {
+      const prop = spritePropGetMatch[1].trim().toLowerCase();
+      return {
+        confidence: 1.0,
+        type: 'Sprite_blockCombine_get',
+        mutator: (b) => {
+          const f = b.getField('property');
+          if (f) f.setValue(`Sprite.${prop}`);
         },
         name: raw
       };
