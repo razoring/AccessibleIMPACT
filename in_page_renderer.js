@@ -31,6 +31,382 @@
     return v;
   }
 
+  function connectInput(parentBlock, inputName, childBlock) {
+    if (!parentBlock || !childBlock) return;
+    const inp = parentBlock.getInput(inputName);
+    if (inp && inp.connection && childBlock.outputConnection) {
+      try {
+        inp.connection.connect(childBlock.outputConnection);
+      } catch (e) {
+        console.warn('[AIFX] connectInput failed:', inputName, e);
+      }
+    }
+  }
+
+  function parseCompare(raw) {
+    if (!raw) return null;
+    const str = raw.trim();
+    if (!((str.startsWith('<') && str.endsWith('>')) || (str.startsWith('[') && str.endsWith(']')))) {
+      return null;
+    }
+    const inner = str.slice(1, -1).trim();
+    if (/^not\b/i.test(inner)) return null;
+
+    let bDepth = 0;
+    let pDepth = 0;
+    let aDepth = 0;
+    let opIdx = -1;
+    let opLen = 0;
+    let opStr = '';
+
+    for (let i = 0; i < inner.length; i++) {
+      const c = inner[i];
+      if (c === '[') {
+        bDepth++;
+        continue;
+      }
+      if (c === ']') {
+        bDepth = Math.max(0, bDepth - 1);
+        continue;
+      }
+      if (c === '(') {
+        pDepth++;
+        continue;
+      }
+      if (c === ')') {
+        pDepth = Math.max(0, pDepth - 1);
+        continue;
+      }
+
+      if (bDepth === 0 && pDepth === 0) {
+        const rest = inner.slice(i);
+        const m2 = rest.match(/^(<=|>=|==|!=|=<|=>)/);
+        if (m2 && aDepth === 0) {
+          opIdx = i;
+          opLen = m2[1].length;
+          opStr = m2[1];
+          break;
+        }
+
+        if (c === '=' && aDepth === 0) {
+          opIdx = i;
+          opLen = 1;
+          opStr = '=';
+          break;
+        }
+
+        if (c === '<') {
+          const before = inner.slice(0, i).trim();
+          if (before === '' || /\b(and|or|not)\s*$/i.test(before)) {
+            aDepth++;
+            continue;
+          } else if (aDepth === 0) {
+            opIdx = i;
+            opLen = 1;
+            opStr = '<';
+            break;
+          }
+        }
+
+        if (c === '>') {
+          if (aDepth > 0) {
+            aDepth--;
+            continue;
+          } else {
+            opIdx = i;
+            opLen = 1;
+            opStr = '>';
+            break;
+          }
+        }
+      }
+    }
+
+    if (opIdx === -1) return null;
+    const left = inner.slice(0, opIdx).trim();
+    const right = inner.slice(opIdx + opLen).trim();
+    if (!left || !right) return null;
+
+    let opVal = 'EQ';
+    if (opStr === '<=' || opStr === '=<') opVal = 'LTE';
+    else if (opStr === '<') opVal = 'LT';
+    else if (opStr === '>=' || opStr === '=>') opVal = 'GTE';
+    else if (opStr === '>') opVal = 'GT';
+    else if (opStr === '!=') opVal = 'NEQ';
+    else opVal = 'EQ';
+
+    return { left, op: opStr, opVal, right };
+  }
+
+  function parseMath(raw) {
+    if (!raw) return null;
+    const str = raw.trim();
+    if (!((str.startsWith('(') && str.endsWith(')')) || (str.startsWith('[') && str.endsWith(']')))) {
+      return null;
+    }
+    const inner = str.slice(1, -1).trim();
+
+    // Find operator + or - or * or / or ** outside inner brackets
+    let bDepth = 0;
+    let pDepth = 0;
+    let aDepth = 0;
+    let opIdx = -1;
+    let opLen = 0;
+    let opStr = '';
+
+    for (let i = 0; i < inner.length; i++) {
+      const c = inner[i];
+      if (c === '[') bDepth++;
+      else if (c === ']') bDepth = Math.max(0, bDepth - 1);
+      else if (c === '(') pDepth++;
+      else if (c === ')') pDepth = Math.max(0, pDepth - 1);
+      else if (c === '<') aDepth++;
+      else if (c === '>') aDepth = Math.max(0, aDepth - 1);
+      else if (bDepth === 0 && pDepth === 0 && aDepth === 0) {
+        if (c === '-' && (i === 0 || /[\+\-\*\/]\s*$/.test(inner.slice(0, i)))) continue; // negative number
+        const rest = inner.slice(i);
+        const mPow = rest.match(/^\*\*/);
+        if (mPow) { opIdx = i; opLen = 2; opStr = '**'; break; }
+        if (c === '+' || c === '-' || c === '*' || c === '/') {
+          opIdx = i; opLen = 1; opStr = c; break;
+        }
+      }
+    }
+
+    if (opIdx === -1) return null;
+    const left = inner.slice(0, opIdx).trim();
+    const right = inner.slice(opIdx + opLen).trim();
+    if (!left || !right) return null;
+
+    let opVal = 'ADD';
+    if (opStr === '-') opVal = 'MINUS';
+    else if (opStr === '*') opVal = 'MULTIPLY';
+    else if (opStr === '/') opVal = 'DIVIDE';
+    else if (opStr === '**') opVal = 'POWER';
+
+    return { left, op: opStr, opVal, right };
+  }
+
+  function parseLogicOp(raw) {
+    if (!raw) return null;
+    const str = raw.trim();
+    if (!((str.startsWith('<') && str.endsWith('>')) || (str.startsWith('[') && str.endsWith(']')))) {
+      return null;
+    }
+    const inner = str.slice(1, -1).trim();
+    if (/^and$/i.test(inner)) return { left: null, op: 'and', opVal: 'AND', right: null };
+    if (/^or$/i.test(inner)) return { left: null, op: 'or', opVal: 'OR', right: null };
+
+    // Find top-level "and" or "or" keyword outside inner brackets
+    let bDepth = 0;
+    let pDepth = 0;
+    let aDepth = 0;
+    let opIdx = -1;
+    let opLen = 0;
+    let opStr = '';
+
+    for (let i = 0; i < inner.length; i++) {
+      const c = inner[i];
+      if (c === '[') bDepth++;
+      else if (c === ']') bDepth = Math.max(0, bDepth - 1);
+      else if (c === '(') pDepth++;
+      else if (c === ')') pDepth = Math.max(0, pDepth - 1);
+      else if (c === '<') aDepth++;
+      else if (c === '>') aDepth = Math.max(0, aDepth - 1);
+      else if (bDepth === 0 && pDepth === 0 && aDepth === 0) {
+        const rest = inner.slice(i);
+        const mAnd = rest.match(/^\b(and)\b/i);
+        if (mAnd) { opIdx = i; opLen = mAnd[1].length; opStr = 'and'; break; }
+        const mOr = rest.match(/^\b(or)\b/i);
+        if (mOr) { opIdx = i; opLen = mOr[1].length; opStr = 'or'; break; }
+      }
+    }
+
+    if (opIdx === -1) return null;
+    const left = inner.slice(0, opIdx).trim();
+    const right = inner.slice(opIdx + opLen).trim();
+    if (!left || !right) return null;
+
+    return { left, op: opStr, opVal: opStr.toUpperCase(), right };
+  }
+
+  function parseLogicNegate(raw) {
+    if (!raw) return null;
+    const str = raw.trim();
+    if (!((str.startsWith('<') && str.endsWith('>')) || (str.startsWith('[') && str.endsWith(']')))) {
+      return null;
+    }
+    const inner = str.slice(1, -1).trim();
+    if (/^not$/i.test(inner)) return { expr: null };
+    const m = inner.match(/^not\s+(.+)$/i);
+    if (!m) return null;
+    return { expr: m[1].trim() };
+  }
+
+  function createSubBlock(expr, ws, tc) {
+    if (!ws || !expr) return null;
+    const raw = expr.trim();
+    if (!raw) return null;
+
+    // 1. Numeric literal (e.g. 0, 1, -5, 3.14, (0), (1))
+    const cleanNum = raw.replace(/[\[\]\(\)<>]/g, '').trim();
+    if (/^-?\d+(?:\.\d+)?$/.test(cleanNum)) {
+      try {
+        const nb = ws.newBlock('math_number');
+        const fn = nb.getField('NUM');
+        if (fn) fn.setValue(cleanNum);
+        nb.initSvg();
+        nb.render();
+        return nb;
+      } catch (e) {}
+    }
+
+    // 2. Boolean literal (e.g. <true>, <false>, true, false)
+    if (/^<?\s*(true|false)\s*>?$/i.test(raw)) {
+      try {
+        const val = /true/i.test(raw) ? 'TRUE' : 'FALSE';
+        const tb = ws.newBlock('logic_boolean');
+        const f = tb.getField('BOOL');
+        if (f) f.setValue(val);
+        tb.initSvg();
+        tb.render();
+        return tb;
+      } catch (e) {}
+    }
+
+    // 3. Logic Negate: <not ...>
+    const neg = parseLogicNegate(raw);
+    if (neg) {
+      try {
+        const nb = ws.newBlock('logic_negate');
+        if (neg.expr) {
+          const child = createSubBlock(neg.expr, ws, tc);
+          if (child) connectInput(nb, 'BOOL', child);
+        }
+        nb.initSvg();
+        nb.render();
+        return nb;
+      } catch (e) {}
+    }
+
+    // 4. Logic Operation: <left and right> or <left or right>
+    const logOp = parseLogicOp(raw);
+    if (logOp && (logOp.left || logOp.right)) {
+      try {
+        const lb = ws.newBlock('logic_operation');
+        const f = lb.getField('OP');
+        if (f) f.setValue(logOp.opVal);
+        if (logOp.left) {
+          const leftB = createSubBlock(logOp.left, ws, tc);
+          if (leftB) connectInput(lb, 'A', leftB);
+        }
+        if (logOp.right) {
+          const rightB = createSubBlock(logOp.right, ws, tc);
+          if (rightB) connectInput(lb, 'B', rightB);
+        }
+        lb.initSvg();
+        lb.render();
+        return lb;
+      } catch (e) {}
+    }
+
+    // 5. Logic Compare: <left OP right> (e.g. <0=0>, <0>0>, <1<0>, <magicLevel >= 1>)
+    const comp = parseCompare(raw);
+    if (comp) {
+      try {
+        const cb = ws.newBlock('logic_compare');
+        const f = cb.getField('OP');
+        if (f) f.setValue(comp.opVal);
+        const leftB = createSubBlock(comp.left, ws, tc);
+        const rightB = createSubBlock(comp.right, ws, tc);
+        if (leftB) connectInput(cb, 'A', leftB);
+        if (rightB) connectInput(cb, 'B', rightB);
+        cb.initSvg();
+        cb.render();
+        return cb;
+      } catch (e) {}
+    }
+
+    // 6. Math Arithmetic: (left OP right) (e.g. (1+1), (2-0), (1/1), (x + 10))
+    const math = parseMath(raw);
+    if (math) {
+      try {
+        const mb = ws.newBlock('math_arithmetic');
+        const f = mb.getField('OP');
+        if (f) f.setValue(math.opVal);
+        const leftB = createSubBlock(math.left, ws, tc);
+        const rightB = createSubBlock(math.right, ws, tc);
+        if (leftB) connectInput(mb, 'A', leftB);
+        if (rightB) connectInput(mb, 'B', rightB);
+        mb.initSvg();
+        mb.render();
+        return mb;
+      } catch (e) {}
+    }
+
+    // 7. Controller: is button pressed: [is (A) button pressed], [is [B] button pressed]
+    if (/is\s+.*button\s+pressed/i.test(raw)) {
+      try {
+        const m = raw.match(/is\s+[\[\(]?\s*([a-zA-Z0-9_]+)\s*[\]\)]?\s+button\s+pressed/i);
+        const btn = m && m[1] ? m[1].toLowerCase() : 'a';
+        const kb = ws.newBlock('keyispressed');
+        const f = kb.getField('button');
+        if (f) {
+          if (btn === 'b') f.setValue('controller.B');
+          else if (btn === 'left') f.setValue('controller.left');
+          else if (btn === 'right') f.setValue('controller.right');
+          else if (btn === 'up') f.setValue('controller.up');
+          else if (btn === 'down') f.setValue('controller.down');
+          else if (btn === 'menu') f.setValue('controller.menu');
+          else if (btn === 'any') f.setValue('controller.anyButton');
+          else f.setValue('controller.A');
+        }
+        kb.initSvg();
+        kb.render();
+        return kb;
+      } catch (e) {}
+    }
+
+    // 8. Sprite property getter: (sprite x), (mySprite y), (sprite vx)
+    const cleanProp = raw.replace(/[\[\]\(\)]/g, '').trim();
+    const propMatch = cleanProp.match(/^(?:(?:mySprite|sprite|[a-zA-Z0-9_]+)\s+)?([xy]|vx|vy|ax|ay|lifespan|width|height|left|right|top|bottom)(?:\s+value(?:\s+block)?)?$/i);
+    if (propMatch) {
+      try {
+        const gb = ws.newBlock('Sprite_blockCombine_get');
+        const f = gb.getField('property');
+        if (f) f.setValue(`Sprite.${propMatch[1].toLowerCase()}`);
+        gb.initSvg();
+        gb.render();
+        return gb;
+      } catch (e) {}
+    }
+
+    // 9. Argument reporter: (sprite), (otherSprite), (location)
+    if (/^(?:othersprite|sprite|location|picture)$/i.test(cleanNum)) {
+      try {
+        const rb = ws.newBlock('argument_reporter_custom');
+        const f = rb.getField('VALUE');
+        if (f) f.setValue(cleanNum);
+        rb.initSvg();
+        rb.render();
+        return rb;
+      } catch (e) {}
+    }
+
+    // 10. Default: Variable getter
+    try {
+      const vb = ws.newBlock('variables_get');
+      const v = ensureVariable(ws, cleanNum);
+      const fv = vb.getField('VAR');
+      if (fv && v) fv.setValue(v.getId());
+      vb.initSvg();
+      vb.render();
+      return vb;
+    } catch (e) {}
+
+    return null;
+  }
+
   // Ensure built-in extension blocks (e.g. Scroller) are defined in Blockly.Blocks
   function renderToggleToken(rawText) {
     const isWin = /win/i.test(rawText);
@@ -647,52 +1023,33 @@
     { match: /^\[?\s*on\s+game\s+update\s*\]?$/i, type: 'gameupdate', conf: 1.0 },
     { match: /^\[?\s*forever\s*\]?$/i, type: 'forever', conf: 1.0 },
     {
-      match: /^\[?\s*if(?:\s+true)?\s+then\s*[\/\\]\s*else\s*\]?$/i,
+      match: /^\[?\s*if(?:\s+(.+?))?\s+then\s*[\/\\]\s*else\s*\]?$/i,
       type: 'controls_if',
       mutator: (b, ws, raw) => {
         b.elseCount_ = 1;
         if (b.updateShape_) b.updateShape_();
-        if (ws && /true/i.test(raw)) {
-          const inIf = b.getInput('IF0');
-          if (inIf && inIf.connection && !inIf.connection.targetConnection) {
-            const tb = ws.newBlock('logic_boolean');
-            const f = tb.getField('BOOL');
-            if (f) f.setValue('TRUE');
-            tb.initSvg();
-            tb.render();
-            try { inIf.connection.connect(tb.outputConnection); } catch (e) {}
-          }
+        const m = (raw || '').match(/^\[?\s*if(?:\s+(.+?))?\s+then\s*[\/\\]\s*else\s*\]?$/i);
+        const cond = m && m[1] ? m[1].trim() : '';
+        if (ws && cond) {
+          const sub = createSubBlock(cond, ws);
+          if (sub) connectInput(b, 'IF0', sub);
         }
       },
       conf: 1.0
     },
     {
-      match: /^\[?\s*if(?:\s+then)?\s*[\/\s]+else\s*\]?$/i,
+      match: /^\[?\s*if(?:\s+(.+?))?\s+then\s*\]?$/i,
       type: 'controls_if',
-      mutator: (b) => {
-        b.elseCount_ = 1;
-        if (b.updateShape_) b.updateShape_();
-      },
-      conf: 1.0
-    },
-    {
-      match: /^\[?\s*if\s+true\s+then\s*\]?$/i,
-      type: 'controls_if',
-      mutator: (b, ws) => {
-        if (!ws) return;
-        const inIf = b.getInput('IF0');
-        if (inIf && inIf.connection && !inIf.connection.targetConnection) {
-          const tb = ws.newBlock('logic_boolean');
-          const f = tb.getField('BOOL');
-          if (f) f.setValue('TRUE');
-          tb.initSvg();
-          tb.render();
-          try { inIf.connection.connect(tb.outputConnection); } catch (e) {}
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/^\[?\s*if(?:\s+(.+?))?\s+then\s*\]?$/i);
+        const cond = m && m[1] ? m[1].trim() : '';
+        if (ws && cond) {
+          const sub = createSubBlock(cond, ws);
+          if (sub) connectInput(b, 'IF0', sub);
         }
       },
       conf: 1.0
     },
-    { match: /^\[?\s*if\s+then\s*\]?$/i, type: 'controls_if', conf: 1.0 },
     { match: /^\[?\s*if\s*\]?$/i, type: 'controls_if', conf: 1.0 },
     { match: /^\[?\s*else\s*if\s*\]?$/i, type: 'controls_if', conf: 1.0 },
     { match: /^\[?\s*else\s*\]?$/i, type: 'controls_if', conf: 0.9 },
@@ -705,78 +1062,89 @@
     { match: /^\(?\s*pick\s+random\s*\)?$/i, type: 'device_random', conf: 1.0 },
     { match: /^[<\[\(]?\s*%?\s*chance\s*[>\]\)]?$/i, type: 'percentchance', conf: 1.0 },
     { match: /^[<\[\(]?\s*is\s+sprite\s+hitting\s+wall\s*[>\]\)]?$/i, type: 'spritehasobstacle', mutator: (b) => { const f = b.getField('direction'); if (f) f.setValue('CollisionDirection.Bottom'); }, conf: 1.0 },
+
+    // Logic negation: <not ...>
     {
-      match: /^[<\[]\s*([^<>=]+?)\s*(<=|>=|=>|=<|<|>|=|==)\s*([^<>=]+?)\s*[>\]]$/i,
-      type: 'logic_compare',
+      match: { test: (raw) => !!parseLogicNegate(raw) },
+      type: 'logic_negate',
       mutator: (b, ws, raw) => {
-        const m = raw.match(/^[<\[]\s*([^<>=]+?)\s*(<=|>=|=>|=<|<|>|=|==)\s*([^<>=]+?)\s*[>\]]$/i);
-        if (!m) return;
-        const leftExpr = m[1].trim();
-        const op = m[2];
-        const rightExpr = m[3].trim();
-        const f = b.getField('OP');
-        if (f) {
-          if (op === '<=' || op === '=<') f.setValue('LTE');
-          else if (op === '<') f.setValue('LT');
-          else if (op === '>=' || op === '=>') f.setValue('GTE');
-          else if (op === '>') f.setValue('GT');
-          else f.setValue('EQ');
+        const neg = parseLogicNegate(raw);
+        if (!neg) return;
+        if (ws && neg.expr) {
+          const child = createSubBlock(neg.expr, ws);
+          if (child) connectInput(b, 'BOOL', child);
         }
-
-        function attachOperand(inputName, expr) {
-          if (!ws) return;
-          const inp = b.getInput(inputName);
-          if (!inp || !inp.connection || inp.connection.targetConnection) return;
-          const clean = expr.replace(/[\[\]\(\)<>]/g, '').trim();
-          if (/^-?\d+(?:\.\d+)?$/.test(clean)) {
-            try {
-              const nb = ws.newBlock('math_number');
-              const fn = nb.getField('NUM');
-              if (fn) fn.setValue(clean);
-              nb.initSvg();
-              nb.render();
-              inp.connection.connect(nb.outputConnection);
-            } catch (e) {}
-          } else if (clean) {
-            try {
-              const vb = ws.newBlock('variables_get');
-              function ensureVar(name) {
-                let v = ws.getVariable ? ws.getVariable(name) : null;
-                if (!v && ws.createVariable) v = ws.createVariable(name);
-                return v ? v.getId() : name;
-              }
-              const fv = vb.getField('VAR');
-              if (fv) fv.setValue(ensureVar(clean));
-              vb.initSvg();
-              vb.render();
-              inp.connection.connect(vb.outputConnection);
-            } catch (e) {}
-          }
-        }
-
-        attachOperand('A', leftExpr);
-        attachOperand('B', rightExpr);
       },
       conf: 1.0
     },
-    { match: /^\(?\s*0\s*[\+\-\*\/]\s*0\s*\)?$/i, type: 'math_arithmetic', mutator: (b, ws, raw) => {
+
+    // Logic operation: <... and ...>, <... or ...>, <and>, <or>
+    {
+      match: { test: (raw) => !!parseLogicOp(raw) },
+      type: 'logic_operation',
+      mutator: (b, ws, raw) => {
+        const op = parseLogicOp(raw);
+        if (!op) return;
         const f = b.getField('OP');
-        if (f) {
-          if (raw.includes('-')) f.setValue('MINUS');
-          else if (raw.includes('*')) f.setValue('MULTIPLY');
-          else if (raw.includes('/')) f.setValue('DIVIDE');
-          else f.setValue('ADD');
+        if (f) f.setValue(op.opVal);
+        if (ws) {
+          if (op.left) {
+            const leftB = createSubBlock(op.left, ws);
+            if (leftB) connectInput(b, 'A', leftB);
+          }
+          if (op.right) {
+            const rightB = createSubBlock(op.right, ws);
+            if (rightB) connectInput(b, 'B', rightB);
+          }
         }
-      }, conf: 1.0 },
+      },
+      conf: 1.0
+    },
+
+    // Logic compare: <0=0>, <0>0>, <1<0>, <magicLevel >= 1>, <score > 5>, etc.
+    {
+      match: { test: (raw) => !!parseCompare(raw) },
+      type: 'logic_compare',
+      mutator: (b, ws, raw) => {
+        const comp = parseCompare(raw);
+        if (!comp) return;
+        const f = b.getField('OP');
+        if (f) f.setValue(comp.opVal);
+        if (ws) {
+          const leftB = createSubBlock(comp.left, ws);
+          const rightB = createSubBlock(comp.right, ws);
+          if (leftB) connectInput(b, 'A', leftB);
+          if (rightB) connectInput(b, 'B', rightB);
+        }
+      },
+      conf: 1.0
+    },
+
+    // Math arithmetic: (1+1), (2-0), (1/1), (0+0), (x + 10), (score - 1), etc.
+    {
+      match: { test: (raw) => !!parseMath(raw) },
+      type: 'math_arithmetic',
+      mutator: (b, ws, raw) => {
+        const math = parseMath(raw);
+        if (!math) return;
+        const f = b.getField('OP');
+        if (f) f.setValue(math.opVal);
+        if (ws) {
+          const leftB = createSubBlock(math.left, ws);
+          const rightB = createSubBlock(math.right, ws);
+          if (leftB) connectInput(b, 'A', leftB);
+          if (rightB) connectInput(b, 'B', rightB);
+        }
+      },
+      conf: 1.0
+    },
+
     { match: /^[<\[]\s*on\s*[>\]]$/i, type: 'toggleOnOff', custom: () => renderToggleToken('<ON>'), conf: 1.0 },
     { match: /^[<\[]\s*off\s*[>\]]$/i, type: 'toggleOnOff', custom: () => renderToggleToken('<OFF>'), conf: 1.0 },
     { match: /^[<\[]\s*win\s*[>\]]$/i, type: 'toggleWinLose', custom: () => renderToggleToken('<WIN>'), conf: 1.0 },
     { match: /^[<\[]\s*lose\s*[>\]]$/i, type: 'toggleWinLose', custom: () => renderToggleToken('<LOSE>'), conf: 1.0 },
     { match: /^<\s*true\s*>$/i, type: 'logic_boolean', mutator: (b) => { const f = b.getField('BOOL'); if (f) f.setValue('TRUE'); }, conf: 1.0 },
     { match: /^<\s*false\s*>$/i, type: 'logic_boolean', mutator: (b) => { const f = b.getField('BOOL'); if (f) f.setValue('FALSE'); }, conf: 1.0 },
-    { match: /^<\s*and\s*>$/i, type: 'logic_operation', mutator: (b) => { const f = b.getField('OP'); if (f) f.setValue('AND'); }, conf: 1.0 },
-    { match: /^<\s*or\s*>$/i, type: 'logic_operation', mutator: (b) => { const f = b.getField('OP'); if (f) f.setValue('OR'); }, conf: 1.0 },
-    { match: /^<\s*not\s*>$/i, type: 'logic_negate', conf: 1.0 },
     { match: /^<true>$/i, type: 'logic_boolean', conf: 1.0 },
 
     // Functions
@@ -1324,15 +1692,17 @@
 
     // 0. Filter out parenthetical English prose side comments (confidence < 80%)
     if (raw.startsWith('(') && raw.endsWith(')')) {
-      const inner = raw.slice(1, -1).trim();
-      const proseRegex = /\b(using|such as|for example|or|and|with|from|in|by|not|to|how|whatever|of|that|the|a|an|both|when|before|after|if|where|due|such|except|keeping|navigating|moving|including|instead|out|all|apply|vice versa)\b/i;
-      if (proseRegex.test(inner)) {
-        return { confidence: 0.0, err: `(${inner}) is an instruction side comment, not a block (confidence < 80%)` };
-      }
-      if (inner.includes(' ') && !['text list'].includes(inner.toLowerCase())) {
-        const isCanonical = CANONICAL_MAP.some(e => e.match.test(raw));
-        if (!isCanonical) {
+      if (!parseMath(raw)) {
+        const inner = raw.slice(1, -1).trim();
+        const proseRegex = /\b(using|such as|for example|or|and|with|from|in|by|not|to|how|whatever|of|that|the|a|an|both|when|before|after|if|where|due|such|except|keeping|navigating|moving|including|instead|out|all|apply|vice versa)\b/i;
+        if (proseRegex.test(inner)) {
           return { confidence: 0.0, err: `(${inner}) is an instruction side comment, not a block (confidence < 80%)` };
+        }
+        if (inner.includes(' ') && !['text list'].includes(inner.toLowerCase())) {
+          const isCanonical = CANONICAL_MAP.some(e => e.match.test(raw));
+          if (!isCanonical) {
+            return { confidence: 0.0, err: `(${inner}) is an instruction side comment, not a block (confidence < 80%)` };
+          }
         }
       }
     }
@@ -1482,10 +1852,11 @@
       }
     }
 
-    // 5. Variable Setters & Changers: [set <name> to], [set [name] to], [change [name] by]
-    const varSetMatch = raw.match(/^\[set\s+\[?([a-zA-Z0-9_ ]+?)\]?\s+to\]$/i);
+    // 5. Variable Setters & Changers: [set <name> to], [set [name] to], [set name to (val)]
+    const varSetMatch = raw.match(/^\[\s*set\s+\[?([a-zA-Z0-9_ ]+?)\]?\s+to(?:\s+(.+?))?\s*\]$/i);
     if (varSetMatch) {
       const varName = varSetMatch[1].trim();
+      const valExpr = varSetMatch[2] ? varSetMatch[2].trim() : '';
       return {
         confidence: 1.0,
         type: 'variables_set',
@@ -1493,13 +1864,18 @@
           const v = ensureVariable(ws, varName);
           const f = b.getField('VAR');
           if (f && v) f.setValue(v.getId());
+          if (ws && valExpr) {
+            const sub = createSubBlock(valExpr, ws);
+            if (sub) connectInput(b, 'VALUE', sub);
+          }
         },
         name: raw
       };
     }
-    const varChangeMatch = raw.match(/^\[change\s+\[?([a-zA-Z0-9_ ]+?)\]?\s+by\]$/i);
+    const varChangeMatch = raw.match(/^\[\s*change\s+\[?([a-zA-Z0-9_ ]+?)\]?\s+by(?:\s+(.+?))?\s*\]$/i);
     if (varChangeMatch) {
       const varName = varChangeMatch[1].trim();
+      const valExpr = varChangeMatch[2] ? varChangeMatch[2].trim() : '';
       return {
         confidence: 1.0,
         type: 'variables_change',
@@ -1507,6 +1883,10 @@
           const v = ensureVariable(ws, varName);
           const f = b.getField('VAR');
           if (f && v) f.setValue(v.getId());
+          if (ws && valExpr) {
+            const sub = createSubBlock(valExpr, ws);
+            if (sub) connectInput(b, 'VALUE', sub);
+          }
         },
         name: raw
       };

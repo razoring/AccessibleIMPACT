@@ -309,6 +309,142 @@
     doSend(0);
   }
 
+  function matchAngleBlock(text, start) {
+    let j = start + 1;
+    let bracketDepth = 0;
+    let parenDepth = 0;
+    let angleDepth = 1;
+
+    while (j < text.length) {
+      const c = text[j];
+      if (c === '\n' || c === '\r') return null;
+
+      if (c === '[') bracketDepth++;
+      else if (c === ']') bracketDepth = Math.max(0, bracketDepth - 1);
+      else if (c === '(') parenDepth++;
+      else if (c === ')') parenDepth = Math.max(0, parenDepth - 1);
+      else if (bracketDepth === 0 && parenDepth === 0) {
+        if (c === '<') {
+          const before = text.slice(start + 1, j).trim();
+          if (/\b(and|or|not)\s*$/i.test(before) || before === '') {
+            angleDepth++;
+          }
+        } else if (c === '>') {
+          if (text[j + 1] === '=') { j += 2; continue; }
+          if (text[j - 1] === '=') { j++; continue; }
+
+          if (angleDepth > 1) {
+            angleDepth--;
+          } else {
+            const remaining = text.slice(j + 1);
+            const before = text.slice(start + 1, j);
+            const hasPriorOp = /[=!<>]/.test(before) || /\b(and|or)\b/i.test(before);
+            const hasClosingAfter = /^[a-zA-Z0-9_\s.()\[\]]+>/.test(remaining);
+
+            if (!hasPriorOp && hasClosingAfter) {
+              j++;
+              continue;
+            }
+
+            return j + 1;
+          }
+        }
+      }
+      j++;
+    }
+    return null;
+  }
+
+  function tokenizeText(text) {
+    const segments = [];
+    let lastIdx = 0;
+    let i = 0;
+
+    function pushPlain(end) {
+      if (end > lastIdx) {
+        segments.push({ isToken: false, text: text.slice(lastIdx, end) });
+      }
+    }
+
+    function pushToken(start, end) {
+      pushPlain(start);
+      segments.push({ isToken: true, text: text.slice(start, end) });
+      lastIdx = end;
+    }
+
+    while (i < text.length) {
+      const ch = text[i];
+
+      if (ch === '▶') {
+        pushToken(i, i + 1);
+        i++;
+        continue;
+      }
+
+      if (text.startsWith('[set sprite position to}', i)) {
+        pushToken(i, i + 24);
+        i += 24;
+        continue;
+      }
+
+      if (ch === '[') {
+        const start = i;
+        let depth = 0;
+        let j = i;
+        while (j < text.length) {
+          if (text[j] === '\n' || text[j] === '\r') break;
+          if (text[j] === '[') depth++;
+          else if (text[j] === ']') {
+            depth--;
+            if (depth === 0) {
+              j++;
+              pushToken(start, j);
+              i = j;
+              break;
+            }
+          }
+          j++;
+        }
+        if (depth === 0) continue;
+      }
+
+      if (ch === '(') {
+        const start = i;
+        let depth = 0;
+        let j = i;
+        while (j < text.length) {
+          if (text[j] === '\n' || text[j] === '\r') break;
+          if (text[j] === '(') depth++;
+          else if (text[j] === ')') {
+            depth--;
+            if (depth === 0) {
+              j++;
+              pushToken(start, j);
+              i = j;
+              break;
+            }
+          }
+          j++;
+        }
+        if (depth === 0) continue;
+      }
+
+      if (ch === '<') {
+        const end = matchAngleBlock(text, i);
+        if (end !== null) {
+          pushToken(i, end);
+          i = end;
+          continue;
+        }
+      }
+
+      i++;
+    }
+
+    pushPlain(text.length);
+    return segments;
+  }
+
   function replaceInNode(node) {
     if (!node || node.nodeType !== 3) return;
     if (node.parentElement && (node.parentElement.closest('.aifx-rendered') || node.parentElement.closest('[data-token]'))) return;
@@ -316,54 +452,52 @@
     const text = node.nodeValue || '';
     if (!text.includes('[') && !text.includes('(') && !text.includes('<') && !text.includes('▶')) return;
 
-    const matches = text.match(TOKEN_REGEX);
-    if (!matches || !matches.length) return;
+    const segments = tokenizeText(text);
+    if (!segments.some(s => s.isToken)) return;
 
     const parent = node.parentElement;
     if (!parent || !isInstructionArea(parent)) return;
 
     const fragment = document.createDocumentFragment();
-    const parts = text.split(TOKEN_REGEX);
     let replaced = false;
 
-    for (let i = 0; i < parts.length; i++) {
-      if (parts[i]) {
-        fragment.appendChild(document.createTextNode(parts[i]));
+    for (const seg of segments) {
+      if (!seg.isToken) {
+        if (seg.text) fragment.appendChild(document.createTextNode(seg.text));
+        continue;
       }
 
-      if (i < matches.length) {
-        const tokenText = matches[i];
-        let lookupToken = tokenText;
+      const tokenText = seg.text;
+      let lookupToken = tokenText;
 
-        // Contextual override: dialog [bottom] / [top] dropdown should be Game purple (#8854d0)
-        if (/^\[?\(?(?:bottom|top)\)?\]?$/i.test(tokenText)) {
-          const blockContext = parent.closest('p, div, li')?.textContent || parent.textContent || '';
-          if (/dialog|text bubble|long text|message/i.test(blockContext)) {
-            const val = tokenText.replace(/[\[\]\(\)]/g, '').trim().toLowerCase();
-            lookupToken = `[${val}] (game)`;
-          }
+      // Contextual override: dialog [bottom] / [top] dropdown should be Game purple (#8854d0)
+      if (/^\[?\(?(?:bottom|top)\)?\]?$/i.test(tokenText)) {
+        const blockContext = parent.closest('p, div, li')?.textContent || parent.textContent || '';
+        if (/dialog|text bubble|long text|message/i.test(blockContext)) {
+          const val = tokenText.replace(/[\[\]\(\)]/g, '').trim().toLowerCase();
+          lookupToken = `[${val}] (game)`;
         }
+      }
 
-        const span = document.createElement('span');
-        span.className = 'aifx-rendered'; // Set immediately to prevent re-wrapping
-        span.setAttribute('data-token', tokenText);
-        span.setAttribute('data-lookup-token', lookupToken);
+      const span = document.createElement('span');
+      span.className = 'aifx-rendered'; // Set immediately to prevent re-wrapping
+      span.setAttribute('data-token', tokenText);
+      span.setAttribute('data-lookup-token', lookupToken);
 
-        const cached = getStaticOrCached(lookupToken) || getStaticOrCached(tokenText);
-        if (cached) {
-          if (cached.svg) {
-            applySvg(span, cached);
-          } else {
-            span.textContent = tokenText;
-          }
+      const cached = getStaticOrCached(lookupToken) || getStaticOrCached(tokenText);
+      if (cached) {
+        if (cached.svg) {
+          applySvg(span, cached);
         } else {
           span.textContent = tokenText;
-          requestTokenRender(lookupToken, tokenText, span);
         }
-
-        fragment.appendChild(span);
-        replaced = true;
+      } else {
+        span.textContent = tokenText;
+        requestTokenRender(lookupToken, tokenText, span);
       }
+
+      fragment.appendChild(span);
+      replaced = true;
     }
 
     if (replaced && parent.contains(node)) {
