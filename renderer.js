@@ -7,7 +7,14 @@
   const pending = new Map();
 
   window.addEventListener('message', (event) => {
-    if (!event.data || event.data.action !== 'AIFX_BLOCK_RENDERED') return;
+    if (!event.data) return;
+    if (event.data.action === 'AIFX_RENDERER_READY') {
+      try {
+        chrome.runtime.sendMessage({ action: 'rendererReady' });
+      } catch (e) {}
+      return;
+    }
+    if (event.data.action !== 'AIFX_BLOCK_RENDERED') return;
     const { id, svg, width, height, isMultiLine, err } = event.data;
     if (pending.has(id)) {
       const resolver = pending.get(id);
@@ -24,7 +31,7 @@
           pending.delete(id);
           resolve({ svg: null, err: 'timeout' });
         }
-      }, 5000);
+      }, 15000);
 
       pending.set(id, (res) => {
         clearTimeout(timer);

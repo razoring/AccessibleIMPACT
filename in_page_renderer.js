@@ -210,6 +210,77 @@
       conf: 1.0
     },
 
+    // Text
+    {
+      match: /^\[?\s*\(?\s*join\s*\)?\s*\]?$/i,
+      type: 'text_join',
+      mutator: (b, ws) => {
+        if (ws) {
+          const in0 = b.getInput('ADD0');
+          if (in0 && in0.connection && !in0.connection.targetConnection) {
+            const s0 = ws.newBlock('text');
+            s0.setShadow(true);
+            const f0 = s0.getField('TEXT');
+            if (f0) f0.setValue('');
+            s0.initSvg();
+            s0.render();
+            try { in0.connection.connect(s0.outputConnection); } catch (e) {}
+          }
+          const in1 = b.getInput('ADD1');
+          if (in1 && in1.connection && !in1.connection.targetConnection) {
+            const s1 = ws.newBlock('text');
+            s1.setShadow(true);
+            const f1 = s1.getField('TEXT');
+            if (f1) f1.setValue('');
+            s1.initSvg();
+            s1.render();
+            try { in1.connection.connect(s1.outputConnection); } catch (e) {}
+          }
+        }
+      },
+      conf: 1.0
+    },
+
+    // Game dialog / prompt
+    {
+      match: /^\[?\s*\(?\s*ask\s+for\s+string\s*\)?\s*\]?$/i,
+      type: 'gameaskforstring',
+      mutator: (b, ws) => {
+        if (ws) {
+          const inMsg = b.getInput('message');
+          if (inMsg && inMsg.connection && !inMsg.connection.targetConnection) {
+            const s = ws.newBlock('text');
+            s.setShadow(true);
+            const f = s.getField('TEXT');
+            if (f) f.setValue('');
+            s.initSvg();
+            s.render();
+            try { inMsg.connection.connect(s.outputConnection); } catch (e) {}
+          }
+        }
+      },
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*\(?\s*ask\s+for\s+number\s*\)?\s*\]?$/i,
+      type: 'gameaskfornumber',
+      mutator: (b, ws) => {
+        if (ws) {
+          const inMsg = b.getInput('message');
+          if (inMsg && inMsg.connection && !inMsg.connection.targetConnection) {
+            const s = ws.newBlock('text');
+            s.setShadow(true);
+            const f = s.getField('TEXT');
+            if (f) f.setValue('');
+            s.initSvg();
+            s.render();
+            try { inMsg.connection.connect(s.outputConnection); } catch (e) {}
+          }
+        }
+      },
+      conf: 1.0
+    },
+
     // Sprites
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+to\s+sprite(?:\s+of\s+kind)?\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
     { match: /^\[?\s*sprite\s*(?:\(img\))?\s*of\s*kind\s*(?:\(kind\))?\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
@@ -234,7 +305,60 @@
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+follow\s*\]?$/i, type: 'spriteFollowOtherSprite', conf: 1.0 },
     { match: /^\[?\s*start\s+effect\s+on\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s*\]?$/i, type: 'startEffectOnSprite', conf: 1.0 },
     { match: /^\[?\s*sprite\s+start\s+effect\s*\]?$/i, type: 'startEffectOnSprite', conf: 1.0 },
-    { match: /^\[?\s*(?:on\s+)?sprite\s+overlaps\s+sprite\s*\]?$/i, type: 'spritesoverlap', conf: 1.0 },
+    {
+      match: /^\[?\s*(?:on\s+)?(?:[\(\[]?\s*([a-zA-Z0-9_]+)\s*[\)\]]?|sprite|sprie)\s+overlaps\s+(?:[\(\[]?\s*([a-zA-Z0-9_]+)\s*[\)\]]?|sprite)(?:\s+container)?\s*\]?$/i,
+      type: 'spritesoverlap',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const regex = /^\[?\s*(?:on\s+)?(?:[\(\[]?\s*([a-zA-Z0-9_]+)\s*[\)\]]?|sprite|sprie)\s+overlaps\s+(?:[\(\[]?\s*([a-zA-Z0-9_]+)\s*[\)\]]?|sprite)(?:\s+container)?\s*\]?$/i;
+        const m = (raw || '').match(regex);
+        let k1 = m && m[1] ? m[1] : 'Player';
+        let k2 = m && m[2] ? m[2] : 'Player';
+        if (/sprite|sprie/i.test(k1)) k1 = 'Player';
+        if (/sprite|sprie/i.test(k2)) k2 = 'Player';
+
+        const inSprite = b.getInput('HANDLER_DRAG_PARAM_sprite');
+        if (inSprite && inSprite.connection && !inSprite.connection.targetConnection) {
+          const rep = ws.newBlock('argument_reporter_custom');
+          const f = rep.getField('VALUE');
+          if (f) f.setValue('sprite');
+          rep.initSvg();
+          rep.render();
+          try { inSprite.connection.connect(rep.outputConnection); } catch (e) {}
+        }
+
+        const inKind = b.getInput('kind');
+        if (inKind && inKind.connection && !inKind.connection.targetConnection) {
+          const kb = ws.newBlock('spritekind');
+          const f = kb.getField('MEMBER');
+          if (f) f.setValue(k1);
+          kb.initSvg();
+          kb.render();
+          try { inKind.connection.connect(kb.outputConnection); } catch (e) {}
+        }
+
+        const inOther = b.getInput('HANDLER_DRAG_PARAM_otherSprite');
+        if (inOther && inOther.connection && !inOther.connection.targetConnection) {
+          const rep = ws.newBlock('argument_reporter_custom');
+          const f = rep.getField('VALUE');
+          if (f) f.setValue('otherSprite');
+          rep.initSvg();
+          rep.render();
+          try { inOther.connection.connect(rep.outputConnection); } catch (e) {}
+        }
+
+        const inOtherKind = b.getInput('otherKind');
+        if (inOtherKind && inOtherKind.connection && !inOtherKind.connection.targetConnection) {
+          const kb = ws.newBlock('spritekind');
+          const f = kb.getField('MEMBER');
+          if (f) f.setValue(k2);
+          kb.initSvg();
+          kb.render();
+          try { inOtherKind.connection.connect(kb.outputConnection); } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*run code on\s+.*overlaps.*otherkind.*\]?$/i, type: 'spritesoverlap', conf: 1.0 },
     { match: /^\[?\s*(?:on\s+)?sprite\s+overlaps\s+tile\s*\]?$/i, type: 'spriteshittile', conf: 1.0 },
     { match: /^\[?\s*(?:on\s+)?sprite\s+hits\s+wall\s*\]?$/i, type: 'spriteshitwall', conf: 1.0 },
@@ -368,9 +492,41 @@
     { match: /^<\s*not\s*>$/i, type: 'logic_negate', conf: 1.0 },
     { match: /^<true>$/i, type: 'logic_boolean', conf: 1.0 },
 
+    // Functions
+    {
+      match: /^\[?\s*\(?\s*Make\s+a\s+Function(?:\.{2,3})?\s*\)?\s*\]?$/i,
+      custom: () => ({
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 44" width="156" height="44"><style>.fn-btn-bg { fill: #5f6665; stroke: #f76820; stroke-width: 2.5; rx: 4px; ry: 4px; } .fn-btn-txt { fill: #ffffff !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important; font-size: 14px !important; font-weight: 700 !important; letter-spacing: 0.2px; }</style><rect x="2" y="2" width="152" height="40" class="fn-btn-bg"/><text x="78" y="22" class="fn-btn-txt" text-anchor="middle" dominant-baseline="central">Make a Function...</text></svg>`,
+        width: 156,
+        height: 44,
+        isMultiLine: false
+      }),
+      conf: 1.0
+    },
+
     // Controller
     { match: /^\[?\s*(?:on\s+)?(?:a\s+)?button\s+pressed\s*\]?$/i, type: 'keyonevent', conf: 1.0 },
     { match: /^\[?\s*run\s+code\s+on\s+\(?[a-zA-Z0-9_]+\)?\s+button\s+\(?[a-zA-Z0-9_]+\)?\s*\]?$/i, type: 'keyonevent', conf: 0.95 },
+    {
+      match: /^[\[\(<]\s*is\s+(?:\[?\s*([a-zA-Z0-9_]+)\s*\]?\s+)?button\s+pressed\s*[\]\)>]$/i,
+      type: 'keyispressed',
+      mutator: (b, ws, raw) => {
+        const m = raw.match(/is\s+(?:\[?\s*([a-zA-Z0-9_]+)\s*\]?\s+)?button\s+pressed/i);
+        const btn = m && m[1] ? m[1].toLowerCase() : 'a';
+        const f = b.getField('button');
+        if (f) {
+          if (btn === 'b') f.setValue('controller.B');
+          else if (btn === 'left') f.setValue('controller.left');
+          else if (btn === 'right') f.setValue('controller.right');
+          else if (btn === 'up') f.setValue('controller.up');
+          else if (btn === 'down') f.setValue('controller.down');
+          else if (btn === 'menu') f.setValue('controller.menu');
+          else if (btn === 'any') f.setValue('controller.anyButton');
+          else f.setValue('controller.A');
+        }
+      },
+      conf: 1.0
+    },
 
     // Info
     { match: /^\[?\s*set\s+score\s+to\s*\]?$/i, type: 'hudsetScore', conf: 1.0 },
@@ -396,9 +552,27 @@
     { match: /^\[?\s*camera\s+shake\s*\]?$/i, type: 'camerashake', conf: 1.0 },
 
     // Music
-    { match: /^\[?\s*play\s+sound\s*\]?$/i, type: 'music_play_sound', conf: 1.0 },
+    {
+      match: /^\[?\s*(?:play\s+sound|ba\s+ding)\s*\]?$/i,
+      type: 'music_playable_play',
+      mutator: (b, ws) => {
+        const toPlay = b.getInput('toPlay');
+        if (toPlay && ws) {
+          const soundBlock = ws.newBlock('music_melody_playable');
+          const f = soundBlock.getField('name') || soundBlock.getField('sound');
+          if (f) f.setValue('ba ding');
+          soundBlock.initSvg();
+          soundBlock.render();
+          try { toPlay.connection.connect(soundBlock.outputConnection); } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*play\s+melody\s*\]?$/i, type: 'music_melody_playable', conf: 1.0 },
     { match: /^\[?\s*stop\s+all\s+sounds\s*\]?$/i, type: 'music_stop_all_sounds', conf: 1.0 },
+    { match: /^\[?\s*set\s+volume(?:\s+to)?\s*\]?$/i, type: 'synth_set_volume', conf: 1.0 },
+    { match: /^\[?\s*change\s+volume(?:\s+by)?\s*\]?$/i, type: 'synth_set_volume', conf: 1.0 },
+    { match: /^\[?\s*volume(?:\s+value)?\s*\]?$/i, type: 'synth_get_volume', conf: 1.0 },
 
     // Tilemap & Tilemap Extension
     { match: /^\[?\s*set\s+tilemap\s+to(?:\s*\(tilemap\))?\s*\]?$/i, type: 'set_current_tilemap', conf: 1.0 },
@@ -515,6 +689,9 @@
         font-size: 16px !important;
         font-weight: 600 !important;
       }
+      .field-text-quote {
+        fill: #a31515 !important;
+      }
       .blocklyTextInputField .blocklyFieldRect,
       .blocklyNumberField .blocklyFieldRect {
         fill: #ffffff !important;
@@ -630,6 +807,21 @@
       return { confidence: 0, type: null, reason: 'keyboard shortcut' };
     }
 
+    // 0. Filter out parenthetical English prose side comments (confidence < 80%)
+    if (raw.startsWith('(') && raw.endsWith(')')) {
+      const inner = raw.slice(1, -1).trim();
+      const proseRegex = /\b(using|such as|for example|or|and|with|from|in|by|not|to|how|whatever|of|that|the|a|an|both|when|before|after|if|where|due|such|except|keeping|navigating|moving|including|instead|out|all|apply|vice versa)\b/i;
+      if (proseRegex.test(inner)) {
+        return { confidence: 0.0, err: `(${inner}) is an instruction side comment, not a block (confidence < 80%)` };
+      }
+      if (inner.includes(' ') && !['text list'].includes(inner.toLowerCase())) {
+        const isCanonical = CANONICAL_MAP.some(e => e.match.test(raw));
+        if (!isCanonical) {
+          return { confidence: 0.0, err: `(${inner}) is an instruction side comment, not a block (confidence < 80%)` };
+        }
+      }
+    }
+
     // 1. Canonical rule match
     for (const entry of CANONICAL_MAP) {
       if (entry.match.test(raw)) {
@@ -674,8 +866,27 @@
           name: raw
         };
       }
-      // Scene directions
-      const sceneOptions = ['bottom', 'top', 'only horizontally', 'only vertically', 'both directions'];
+      // Music playback modes and sounds
+      const musicOptions = [
+        'until done', 'looping in background', 'in background',
+        'jump up', 'jump down', 'power up', 'power down',
+        'magic wand', 'knock', 'small crash', 'big crash', 'beam up',
+        'zapped', 'wawawawaa', 'thump'
+      ];
+      if (musicOptions.includes(inner)) {
+        return {
+          confidence: 1.0,
+          custom: () => renderDropdownBadge(dropdownMatch[1].trim(), '#e30fc0'),
+          name: raw
+        };
+      }
+      // Scene directions and screen effects
+      const sceneOptions = [
+        'bottom', 'top', 'only horizontally', 'only vertically', 'both directions',
+        'confetti', 'bubbles', 'hearts', 'star field', 'clouds', 'halo',
+        'fountain', 'rings', 'warm radial', 'cool radial', 'fire', 'blizzard',
+        'ashes', 'disintegrate', 'spray'
+      ];
       if (sceneOptions.includes(inner)) {
         return {
           confidence: 1.0,
@@ -792,7 +1003,38 @@
       };
     }
 
-    // 6. Standalone identifier bubbles / variable blocks: (mySprite), [question], (fishSprite)
+    // 6. Check if token matches a real code block in MakeCode catalog BEFORE checking variables
+    if (tc && tc.B && tc.ws) {
+      const catalog = getCatalogEntries(tc.B, tc.ws);
+      const norm = normalize(raw);
+      const wTok = wordTokens(norm);
+      const bgTok = charBigrams(norm);
+      let best = null;
+      let highestScore = 0;
+
+      for (const b of catalog) {
+        let score = (jaccardSimilarity(wTok, b.words) * 0.5) + (diceSimilarity(bgTok, b.bigrams) * 0.5);
+        if (b.normText.length >= 4) {
+          if (norm === b.normText) {
+            score = Math.max(score, 0.95);
+          } else if (norm.includes(b.normText) && (b.normText.length / norm.length) >= 0.7) {
+            score = Math.max(score, 0.85);
+          } else if (b.normText.includes(norm) && (norm.length / b.normText.length) >= 0.7) {
+            score = Math.max(score, 0.85);
+          }
+        }
+        if (score > highestScore) {
+          highestScore = score;
+          best = b;
+        }
+      }
+
+      if (highestScore >= 0.80 && best) {
+        return { confidence: highestScore, type: best.type, name: raw };
+      }
+    }
+
+    // 7. Standalone identifier bubbles / variable blocks: (mySprite), [question], (fishSprite)
     const bubbleMatch = raw.match(/^[\[\(]([a-zA-Z_][a-zA-Z0-9_ ]*)[\]\)]$/);
     if (bubbleMatch) {
       const name = bubbleMatch[1].trim();
@@ -816,6 +1058,38 @@
           name: raw
         };
       }
+      const knownVars = [
+        'question', 'speed', 'columnnumber', 'startingcolumn', 'bridgelength',
+        'snakesstomped', 'invincible', 'foundfossils', 'userresponselist',
+        'text list', 'powerup', 'column', 'row', 'levelnum', 'backgroundindex',
+        'scenenum', 'userindex', 'currentindex', 'count', 'i', 'arraynum',
+        'newindex', 'currentarray', 'age', 'place', 'name', 'time', 'score',
+        'life', 'choice', 'statusbarsprite', 'statusbar', 'item', 'index',
+        'mysprite', 'othersprite', 'sprite', 'playersprite', 'fishsprite', 'projectile',
+        'x', 'y', 'vx', 'vy', 'ax', 'ay', 'dx', 'dy', 'value', 'list', 'text'
+      ];
+
+      // Guard against non-variables: if it's bracketed [...] and looks like an action/verb or unknown token rather than a variable, do not assume variable
+      const isBracket = raw.startsWith('[');
+      if (isBracket) {
+        if (!knownVars.includes(name.toLowerCase())) {
+          return { confidence: 0.0, err: `[${name}] is not a recognized variable or block property (confidence < 80%)` };
+        }
+      }
+
+      const isParen = raw.startsWith('(');
+      if (isParen) {
+        // If it contains English stop words, conjunctions, prepositions, or articles, it's a prose side comment
+        const proseRegex = /\b(using|such as|for example|or|and|with|from|in|by|not|to|how|whatever|of|that|the|a|an|both|when|before|after|if|where|due|such|except|keeping|navigating|moving|including|instead|out|all|apply|vice versa)\b/i;
+        if (proseRegex.test(name)) {
+          return { confidence: 0.0, err: `(${name}) is an instruction side comment, not a block (confidence < 80%)` };
+        }
+        // If it contains spaces and is not an explicitly known variable (like 'text list'), do not assume variable
+        if (name.includes(' ') && !knownVars.includes(name.toLowerCase())) {
+          return { confidence: 0.0, err: `(${name}) is not a recognized variable name (confidence < 80%)` };
+        }
+      }
+
       return {
         confidence: 0.95,
         type: 'variables_get',
@@ -828,7 +1102,7 @@
       };
     }
 
-    // 7. Angled Boolean variable/reporter: <isBeeDizzy>
+    // 8. Angled Boolean variable/reporter: <isBeeDizzy>
     const angleIdentMatch = raw.match(/^<([a-zA-Z_][a-zA-Z0-9_]*)>$/);
     if (angleIdentMatch) {
       const name = angleIdentMatch[1];
@@ -843,38 +1117,32 @@
       };
     }
 
-    // 8. General Heuristic Matcher against MakeCode Catalog (Minimum 80% threshold)
-    if (tc && tc.B && tc.ws) {
-      const catalog = getCatalogEntries(tc.B, tc.ws);
-      const norm = normalize(raw);
-      const wTok = wordTokens(norm);
-      const bgTok = charBigrams(norm);
-      let best = null;
-      let highestScore = 0;
-
-      for (const b of catalog) {
-        let score = (jaccardSimilarity(wTok, b.words) * 0.5) + (diceSimilarity(bgTok, b.bigrams) * 0.5);
-        if (b.normText.length >= 4 && (norm.includes(b.normText) || b.normText.includes(norm))) {
-          score = Math.max(score, 0.85);
-        }
-        if (score > highestScore) {
-          highestScore = score;
-          best = b;
-        }
-      }
-
-      if (highestScore >= 0.80 && best) {
-        return { confidence: highestScore, type: best.type, name: raw };
-      }
-    }
-
     return { confidence: 0, type: null, reason: 'below 80% threshold' };
+  }
+
+  async function waitForToolchain(timeoutMs = 15000) {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      const tc = toolchain();
+      if (tc) return tc;
+      await new Promise(r => setTimeout(r, 100));
+    }
+    return null;
   }
 
   async function renderToken(tokenText) {
     if (CACHE[tokenText]) return CACHE[tokenText];
 
-    const tc = toolchain();
+    const matchQuick = resolveTokenMatch(tokenText, null);
+    if (matchQuick && matchQuick.custom) {
+      const res = matchQuick.custom();
+      if (res && res.svg) {
+        CACHE[tokenText] = res;
+        return res;
+      }
+    }
+
+    const tc = await waitForToolchain(15000);
     if (!tc) {
       return { svg: null, err: 'Blockly toolchain not ready' };
     }
@@ -900,6 +1168,15 @@
 
     return { svg: null, err: 'Failed to render block: ' + tokenText };
   }
+
+  // Announce when toolchain is ready
+  (async function announceWhenReady() {
+    const tc = await waitForToolchain(30000);
+    if (tc) {
+      console.info('[AIFX in-page] Toolchain ready, announcing');
+      window.postMessage({ action: 'AIFX_RENDERER_READY' }, '*');
+    }
+  })();
 
   // Listen for render requests dispatched from renderer.js
   window.addEventListener('message', (event) => {

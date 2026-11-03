@@ -8,6 +8,7 @@
   // Matches [nested [bracket]] blocks, parenthesized (nested (bubbles)), and <angled> blocks (including <0 < 0>, <% chance>, <(question) = 0>)
   const TOKEN_REGEX = /\[set\s+sprite\s+position\s+to\}|\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\((?:[^\(\)\r\n]|\([^\)\r\n]*\))+\)|<[a-zA-Z0-9_=\s%+\-]+>|<[a-zA-Z0-9_\s\(\)]+\s*<=?\s*[a-zA-Z0-9_\s\(\)]+>/g;
   const svgCache = new Map();
+  const pendingRequests = new Map(); // lookupToken -> Array<span elements>
   let scanTimer = null;
 
   function healSplitTokens(area) {
@@ -43,6 +44,7 @@
   }
 
   function getStaticOrCached(token) {
+    if (!token) return null;
     if (svgCache.has(token)) return svgCache.get(token);
     const norm = token.replace(/\s+/g, ' ').trim();
     if (svgCache.has(norm)) return svgCache.get(norm);
@@ -50,6 +52,50 @@
     if (svgCache.has(normNoParenSpace)) return svgCache.get(normNoParenSpace);
     return null;
   }
+
+  // Load persistent storage cache asynchronously and apply instantly to instructions UI
+  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+    chrome.storage.local.get(null, (items) => {
+      if (chrome.runtime.lastError || !items) return;
+      let count = 0;
+      for (const [k, v] of Object.entries(items)) {
+        if (v && v.svg && !svgCache.has(k)) {
+          svgCache.set(k, v);
+          count++;
+        }
+      }
+      if (count > 0) {
+        applyCacheToPage();
+      }
+    });
+
+    try {
+      if (chrome.storage.onChanged) {
+        chrome.storage.onChanged.addListener((changes, area) => {
+          if (area !== 'local') return;
+          for (const [key, change] of Object.entries(changes)) {
+            if (change.newValue && change.newValue.svg) {
+              svgCache.set(key, change.newValue);
+              applyTokenToPage(key, change.newValue);
+            }
+          }
+        });
+      }
+    } catch (e) {}
+  }
+
+  // Listen for background announcement that renderer/iframe is ready
+  try {
+    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
+      chrome.runtime.onMessage.addListener((msg) => {
+        if (msg && msg.action === 'rendererReady') {
+          applyCacheToPage();
+          retryPendingTokens();
+          scan();
+        }
+      });
+    }
+  } catch (e) {}
 
   function injectStyles() {
     if (document.getElementById('aifx-styles')) return;
@@ -135,6 +181,106 @@
     }
   }
 
+  // Instantly apply extracted or newly cached SVG to matching spans in UI
+  function applyTokenToPage(token, data) {
+    if (!token || !data || !data.svg) return;
+    svgCache.set(token, data);
+    try {
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.set({ [token]: data });
+      }
+    } catch (e) {}
+
+    const spans = document.querySelectorAll('span.aifx-rendered');
+    for (const span of spans) {
+      const dt = span.getAttribute('data-token');
+      const dlt = span.getAttribute('data-lookup-token');
+      if (dt === token || dlt === token) {
+        applySvg(span, data);
+      }
+    }
+  }
+
+  // Scans all unrendered spans and applies cached SVGs immediately
+  function applyCacheToPage() {
+    const spans = document.querySelectorAll('span.aifx-rendered:not([data-rendered="true"])');
+    for (const span of spans) {
+      const lookupToken = span.getAttribute('data-lookup-token') || span.getAttribute('data-token');
+      const tokenText = span.getAttribute('data-token') || lookupToken;
+      const cached = getStaticOrCached(lookupToken) || getStaticOrCached(tokenText);
+      if (cached && cached.svg) {
+        applySvg(span, cached);
+      }
+    }
+  }
+
+  // Retries requests for unrendered spans currently in the DOM
+  function retryPendingTokens() {
+    const spans = document.querySelectorAll('span.aifx-rendered:not([data-rendered="true"])');
+    for (const span of spans) {
+      const lookupToken = span.getAttribute('data-lookup-token') || span.getAttribute('data-token');
+      const tokenText = span.getAttribute('data-token') || lookupToken;
+      const cached = getStaticOrCached(lookupToken) || getStaticOrCached(tokenText);
+      if (cached && cached.svg) {
+        applySvg(span, cached);
+      } else if (!cached || cached.svg !== null) {
+        requestTokenRender(lookupToken, tokenText, span);
+      }
+    }
+  }
+
+  function requestTokenRender(lookupToken, tokenText, span) {
+    if (!pendingRequests.has(lookupToken)) {
+      pendingRequests.set(lookupToken, []);
+    }
+    if (span && !pendingRequests.get(lookupToken).includes(span)) {
+      pendingRequests.get(lookupToken).push(span);
+    }
+
+    if (pendingRequests.get(lookupToken).length > 1) {
+      return; // Already in-flight
+    }
+
+    function doSend(retryCount) {
+      try {
+        chrome.runtime.sendMessage({ action: 'renderToken', token: lookupToken }, (res) => {
+          if (chrome.runtime.lastError || !res || (!res.svg && res.err && (res.err.includes('unreachable') || res.err.includes('not found') || res.err.includes('Receiving end does not exist') || res.err.includes('toolchain not ready')))) {
+            if (retryCount < 8) {
+              setTimeout(() => doSend(retryCount + 1), Math.min(400 * Math.pow(1.3, retryCount), 2000));
+              return;
+            }
+          }
+
+          const waiters = pendingRequests.get(lookupToken) || [];
+          pendingRequests.delete(lookupToken);
+
+          if (res && res.svg) {
+            applyTokenToPage(lookupToken, res);
+            if (tokenText !== lookupToken) {
+              applyTokenToPage(tokenText, res);
+            }
+          } else {
+            if (res && res.err && res.err.includes('confidence < 80%')) {
+              svgCache.set(lookupToken, { svg: null });
+              svgCache.set(tokenText, { svg: null });
+            }
+            for (const s of waiters) {
+              if (s && s.isConnected && !s.getAttribute('data-rendered')) {
+                s.textContent = s.getAttribute('data-token') || tokenText;
+              }
+            }
+          }
+        });
+      } catch (e) {
+        if (retryCount < 5) {
+          setTimeout(() => doSend(retryCount + 1), 1000);
+        }
+      }
+    }
+
+    doSend(0);
+  }
+
   function replaceInNode(node) {
     if (!node || node.nodeType !== 3) return;
     if (node.parentElement && (node.parentElement.closest('.aifx-rendered') || node.parentElement.closest('[data-token]'))) return;
@@ -173,6 +319,7 @@
         const span = document.createElement('span');
         span.className = 'aifx-rendered'; // Set immediately to prevent re-wrapping
         span.setAttribute('data-token', tokenText);
+        span.setAttribute('data-lookup-token', lookupToken);
 
         const cached = getStaticOrCached(lookupToken) || getStaticOrCached(tokenText);
         if (cached) {
@@ -183,24 +330,7 @@
           }
         } else {
           span.textContent = tokenText;
-          try {
-            chrome.runtime.sendMessage({ action: 'renderToken', token: lookupToken }, (res) => {
-              if (chrome.runtime.lastError) {
-                return;
-              }
-              if (res && res.svg && span.isConnected) {
-                svgCache.set(lookupToken, res);
-                applySvg(span, res);
-              } else {
-                if (res && res.err && res.err.includes('confidence < 80%')) {
-                  svgCache.set(lookupToken, { svg: null });
-                }
-                span.textContent = tokenText;
-              }
-            });
-          } catch (e) {
-            span.textContent = tokenText;
-          }
+          requestTokenRender(lookupToken, tokenText, span);
         }
 
         fragment.appendChild(span);
@@ -240,6 +370,7 @@
         replaceInNode(node);
       }
     }
+    applyCacheToPage();
   }
 
   const observer = new MutationObserver(() => {
@@ -255,8 +386,8 @@
 
   injectStyles();
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(scan, 150));
+    document.addEventListener('DOMContentLoaded', () => setTimeout(scan, 100));
   } else {
-    setTimeout(scan, 150);
+    setTimeout(scan, 100);
   }
 })();

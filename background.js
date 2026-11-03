@@ -2,7 +2,19 @@
 // (embedded arcade.makecode.com IFRAME). Locates arcade iframe in sender tab.
 
 chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
-  if (!req || req.action !== 'renderToken') return;
+  if (!req) return;
+
+  if (req.action === 'rendererReady') {
+    const tabId = sender.tab && sender.tab.id;
+    if (tabId != null) {
+      chrome.tabs.sendMessage(tabId, { action: 'rendererReady' }, () => {
+        if (chrome.runtime.lastError) {}
+      });
+    }
+    return;
+  }
+
+  if (req.action !== 'renderToken') return;
 
   const tabId = sender.tab && sender.tab.id;
   if (tabId == null) {
@@ -11,46 +23,52 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     return;
   }
 
-  chrome.webNavigation.getAllFrames({ tabId }, (frames) => {
-    if (chrome.runtime.lastError) {
-      console.error('[AIFX bg] getAllFrames error:', chrome.runtime.lastError.message);
-      sendResponse({ svg: null, err: 'getAllFrames: ' + chrome.runtime.lastError.message });
-      return;
-    }
-    if (!frames || !frames.length) {
-      console.error('[AIFX bg] No frames in tab', tabId);
-      sendResponse({ svg: null, err: 'no frames in tab' });
-      return;
-    }
-
-    console.info('[AIFX bg] Found', frames.length, 'frames in tab', tabId);
-    let target = null;
-    for (const f of frames) {
-      if (f.frameId === 0) continue;
-      if (/^https:\/\/[^/]*arcade\.makecode\.com\//.test(f.url)) {
-        target = f;
-        break;
-      }
-    }
-    if (!target) {
-      target = frames.find(f => f.frameId !== 0 && (f.url.includes('makecode.com') || f.url.includes('pxt-')));
-    }
-    if (!target) {
-      console.error('[AIFX bg] Arcade iframe not found in frames:', frames.map(f => f.url));
-      sendResponse({ svg: null, err: 'arcade iframe not found in tab' });
-      return;
-    }
-
-    console.info('[AIFX bg] Relaying', req.token, 'to frame', target.frameId, target.url);
-    chrome.tabs.sendMessage(tabId, req, { frameId: target.frameId }, (res) => {
-      if (chrome.runtime.lastError) {
-        console.error('[AIFX bg] Relay error:', chrome.runtime.lastError.message);
-        sendResponse({ svg: null, err: 'renderer unreachable: ' + (chrome.runtime.lastError.message || 'unknown') });
+  function tryRelay(attemptsLeft) {
+    chrome.webNavigation.getAllFrames({ tabId }, (frames) => {
+      if (chrome.runtime.lastError || !frames || !frames.length) {
+        if (attemptsLeft > 0) {
+          setTimeout(() => tryRelay(attemptsLeft - 1), 400);
+          return;
+        }
+        sendResponse({ svg: null, err: 'getAllFrames failed' });
         return;
       }
-      sendResponse(res || { svg: null, err: 'no renderer response' });
-    });
-  });
 
+      let target = null;
+      for (const f of frames) {
+        if (f.frameId === 0) continue;
+        if (/^https:\/\/[^/]*arcade\.makecode\.com\//.test(f.url)) {
+          target = f;
+          break;
+        }
+      }
+      if (!target) {
+        target = frames.find(f => f.frameId !== 0 && (f.url.includes('makecode.com') || f.url.includes('pxt-')));
+      }
+
+      if (!target) {
+        if (attemptsLeft > 0) {
+          setTimeout(() => tryRelay(attemptsLeft - 1), 400);
+          return;
+        }
+        sendResponse({ svg: null, err: 'arcade iframe not found in tab' });
+        return;
+      }
+
+      chrome.tabs.sendMessage(tabId, req, { frameId: target.frameId }, (res) => {
+        if (chrome.runtime.lastError) {
+          if (attemptsLeft > 0) {
+            setTimeout(() => tryRelay(attemptsLeft - 1), 400);
+            return;
+          }
+          sendResponse({ svg: null, err: 'renderer unreachable: ' + chrome.runtime.lastError.message });
+          return;
+        }
+        sendResponse(res || { svg: null, err: 'no renderer response' });
+      });
+    });
+  }
+
+  tryRelay(6);
   return true; // async response
 });
