@@ -5,8 +5,8 @@
 (function () {
   'use strict';
 
-  // Matches [nested [bracket]] blocks, parenthesized (nested (bubbles)), and <true>
-  const TOKEN_REGEX = /\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\((?:[^\(\)\r\n]|\([^\)\r\n]*\))+\)|<true>/g;
+  // Matches [nested [bracket]] blocks, parenthesized (nested (bubbles)), and <angled> blocks
+  const TOKEN_REGEX = /\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\((?:[^\(\)\r\n]|\([^\)\r\n]*\))+\)|<[a-zA-Z0-9_=\s]+>/g;
   const svgCache = new Map();
   let scanTimer = null;
 
@@ -93,7 +93,7 @@
     if (node.parentElement && (node.parentElement.closest('.aifx-rendered') || node.parentElement.closest('[data-token]'))) return;
 
     const text = node.nodeValue || '';
-    if (!text.includes('[') && !text.includes('(') && !text.includes('<true>')) return;
+    if (!text.includes('[') && !text.includes('(') && !text.includes('<')) return;
 
     const matches = text.match(TOKEN_REGEX);
     if (!matches || !matches.length) return;
@@ -164,7 +164,7 @@
           if (n.parentElement && (n.parentElement.closest('.aifx-rendered') || n.parentElement.closest('[data-token]'))) {
             return NodeFilter.FILTER_REJECT;
           }
-          if (n.nodeValue.includes('[') || n.nodeValue.includes('(') || n.nodeValue.includes('<true>')) {
+          if (n.nodeValue.includes('[') || n.nodeValue.includes('(') || n.nodeValue.includes('<')) {
             return NodeFilter.FILTER_ACCEPT;
           }
           return NodeFilter.FILTER_REJECT;

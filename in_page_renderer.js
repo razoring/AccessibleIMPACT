@@ -190,6 +190,16 @@
     { match: /^\(?\s*pick\s+random\s*\)?$/i, type: 'device_random', conf: 1.0 },
     { match: /^\[?\s*%?\s*chance\s*\]?$/i, type: 'percentchance', conf: 1.0 },
     { match: /^\[?\s*0\s*=\s*0\s*\]?$/i, type: 'logic_compare', conf: 1.0 },
+    { match: /^<\s*0\s*=\s*0\s*>$/i, type: 'logic_compare', mutator: (b) => { const f = b.getField('OP'); if (f) f.setValue('EQ'); }, conf: 1.0 },
+    { match: /^<\s*on\s*>$/i, type: 'toggleOnOff', mutator: (b) => { const f = b.getField('on'); if (f) f.setValue('true'); }, conf: 1.0 },
+    { match: /^<\s*off\s*>$/i, type: 'toggleOnOff', mutator: (b) => { const f = b.getField('on'); if (f) f.setValue('false'); }, conf: 1.0 },
+    { match: /^<\s*win\s*>$/i, type: 'toggleWinLose', mutator: (b) => { const f = b.getField('win'); if (f) f.setValue('true'); }, conf: 1.0 },
+    { match: /^<\s*lose\s*>$/i, type: 'toggleWinLose', mutator: (b) => { const f = b.getField('win'); if (f) f.setValue('false'); }, conf: 1.0 },
+    { match: /^<\s*true\s*>$/i, type: 'logic_boolean', mutator: (b) => { const f = b.getField('BOOL'); if (f) f.setValue('TRUE'); }, conf: 1.0 },
+    { match: /^<\s*false\s*>$/i, type: 'logic_boolean', mutator: (b) => { const f = b.getField('BOOL'); if (f) f.setValue('FALSE'); }, conf: 1.0 },
+    { match: /^<\s*and\s*>$/i, type: 'logic_operation', mutator: (b) => { const f = b.getField('OP'); if (f) f.setValue('AND'); }, conf: 1.0 },
+    { match: /^<\s*or\s*>$/i, type: 'logic_operation', mutator: (b) => { const f = b.getField('OP'); if (f) f.setValue('OR'); }, conf: 1.0 },
+    { match: /^<\s*not\s*>$/i, type: 'logic_negate', conf: 1.0 },
     { match: /^<true>$/i, type: 'logic_boolean', conf: 1.0 },
 
     // Controller
@@ -488,7 +498,22 @@
       };
     }
 
-    // 7. General Heuristic Matcher against MakeCode Catalog (Minimum 80% threshold)
+    // 7. Angled Boolean variable/reporter: <isBeeDizzy>
+    const angleIdentMatch = raw.match(/^<([a-zA-Z_][a-zA-Z0-9_]*)>$/);
+    if (angleIdentMatch) {
+      const name = angleIdentMatch[1];
+      return {
+        confidence: 0.95,
+        type: 'argument_reporter_boolean',
+        mutator: (b) => {
+          const f = b.getField('VALUE');
+          if (f) f.setValue(name);
+        },
+        name: raw
+      };
+    }
+
+    // 8. General Heuristic Matcher against MakeCode Catalog (Minimum 80% threshold)
     if (tc && tc.B && tc.ws) {
       const catalog = getCatalogEntries(tc.B, tc.ws);
       const norm = normalize(raw);
