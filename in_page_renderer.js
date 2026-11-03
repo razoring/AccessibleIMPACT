@@ -58,7 +58,7 @@
       : 'M 20,3 H 38 L 55,20 L 38,37 H 20 L 3,20 Z';
     const textX = isRight ? 80 : 29;
 
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 109 40" width="109" height="40" style="display: inline-block; vertical-align: middle; height: 2.25em !important; width: auto !important; margin: 0 3px !important;"><path d="M 20,0 H 89 L 109,20 L 89,40 H 20 L 0,20 Z" fill="#52447c" stroke="#413663" stroke-width="1" /><path d="${thumbPath}" fill="${thumbFill}" /><text x="${textX}" y="20" fill="#ffffff" font-family="'Segoe UI', 'Lucida Grande', Ubuntu, sans-serif" font-weight="700" font-size="13px" text-anchor="middle" dominant-baseline="central">${label}</text></svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 109 40" width="109" height="40" style="display: inline-block; vertical-align: middle; width: auto !important; margin: 0 3px !important;"><path d="M 20,0 H 89 L 109,20 L 89,40 H 20 L 0,20 Z" fill="#52447c" stroke="#413663" stroke-width="1" /><path d="${thumbPath}" fill="${thumbFill}" /><text x="${textX}" y="20" fill="#ffffff" font-family="'Segoe UI', 'Lucida Grande', Ubuntu, sans-serif" font-weight="700" font-size="15px" text-anchor="middle" dominant-baseline="central">${label}</text></svg>`;
 
     return {
       svg: svg,

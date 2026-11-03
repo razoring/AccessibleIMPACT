@@ -24,7 +24,6 @@
       .aifx-rendered.aifx-inline svg {
         display: inline-block !important;
         vertical-align: middle !important;
-        height: 2.25em !important;
         width: auto !important;
         max-width: 100% !important;
         filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)) !important;
@@ -81,8 +80,12 @@
       } else {
         svgEl.style.display = 'inline-block';
         svgEl.style.verticalAlign = 'middle';
-        svgEl.style.height = '2.25em';
-        svgEl.style.width = 'auto';
+        // Benchmark: 44px bubble/reporter viewBox height scales to 2.25em
+        // Scale proportionally by viewBox height so text font size is identical across all blocks
+        const h = data.height || 44;
+        const emHeight = ((h / 44) * 2.25).toFixed(3);
+        svgEl.style.setProperty('height', `${emHeight}em`, 'important');
+        svgEl.style.setProperty('width', 'auto', 'important');
       }
     }
   }
