@@ -214,7 +214,7 @@
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+to\s+sprite(?:\s+of\s+kind)?\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
     { match: /^\[?\s*sprite\s*(?:\(img\))?\s*of\s*kind\s*(?:\(kind\))?\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
     { match: /^\[?\s*set\s+sprite\s+to\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
-    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+position\s+to\s*(?:x\s*y)?\s*\]?$/i, type: 'spritesetpos', conf: 1.0 },
+    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+position\s+to\s*(?:x\s*y)?\s*[\]\}]?$/i, type: 'spritesetpos', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+velocity\s+to\s*(?:vx\s*vy)?\s*\]?$/i, type: 'spritesetvel', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+image\s+to\s*\]?$/i, type: 'spritesetimage', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+kind\s+to\s*\]?$/i, type: 'spritesetkind', conf: 1.0 },
@@ -665,6 +665,15 @@
           name: raw
         };
       }
+      // Game dropdowns: [bottom] (game), [top] (game)
+      if (raw.includes('(game)') || inner.includes('(game)')) {
+        const cleanName = inner.replace(/\(game\)/i, '').trim();
+        return {
+          confidence: 1.0,
+          custom: () => renderDropdownBadge(cleanName, '#8854d0'),
+          name: raw
+        };
+      }
       // Scene directions
       const sceneOptions = ['bottom', 'top', 'only horizontally', 'only vertically', 'both directions'];
       if (sceneOptions.includes(inner)) {
@@ -679,7 +688,7 @@
       if (logicOptions.includes(inner)) {
         return {
           confidence: 1.0,
-          custom: () => renderDropdownBadge(dropdownMatch[1].trim(), '#4b7bec'),
+          custom: () => renderDropdownBadge(dropdownMatch[1].trim(), '#45aaf2'),
           name: raw
         };
       }

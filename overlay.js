@@ -6,7 +6,7 @@
   'use strict';
 
   // Matches [nested [bracket]] blocks, parenthesized (nested (bubbles)), and <angled> blocks (including <0 < 0>, <% chance>, <(question) = 0>)
-  const TOKEN_REGEX = /\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\((?:[^\(\)\r\n]|\([^\)\r\n]*\))+\)|<[a-zA-Z0-9_=\s%+\-]+>|<[a-zA-Z0-9_\s\(\)]+\s*<=?\s*[a-zA-Z0-9_\s\(\)]+>/g;
+  const TOKEN_REGEX = /\[set\s+sprite\s+position\s+to\}|\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\((?:[^\(\)\r\n]|\([^\)\r\n]*\))+\)|<[a-zA-Z0-9_=\s%+\-]+>|<[a-zA-Z0-9_\s\(\)]+\s*<=?\s*[a-zA-Z0-9_\s\(\)]+>/g;
   const svgCache = new Map();
   let scanTimer = null;
 
@@ -159,11 +159,22 @@
 
       if (i < matches.length) {
         const tokenText = matches[i];
+        let lookupToken = tokenText;
+
+        // Contextual override: dialog [bottom] / [top] dropdown should be Game purple (#8854d0)
+        if (/^\[?\(?(?:bottom|top)\)?\]?$/i.test(tokenText)) {
+          const blockContext = parent.closest('p, div, li')?.textContent || parent.textContent || '';
+          if (/dialog|text bubble|long text|message/i.test(blockContext)) {
+            const val = tokenText.replace(/[\[\]\(\)]/g, '').trim().toLowerCase();
+            lookupToken = `[${val}] (game)`;
+          }
+        }
+
         const span = document.createElement('span');
         span.className = 'aifx-rendered'; // Set immediately to prevent re-wrapping
         span.setAttribute('data-token', tokenText);
 
-        const cached = getStaticOrCached(tokenText);
+        const cached = getStaticOrCached(lookupToken) || getStaticOrCached(tokenText);
         if (cached) {
           if (cached.svg) {
             applySvg(span, cached);
@@ -173,16 +184,16 @@
         } else {
           span.textContent = tokenText;
           try {
-            chrome.runtime.sendMessage({ action: 'renderToken', token: tokenText }, (res) => {
+            chrome.runtime.sendMessage({ action: 'renderToken', token: lookupToken }, (res) => {
               if (chrome.runtime.lastError) {
                 return;
               }
               if (res && res.svg && span.isConnected) {
-                svgCache.set(tokenText, res);
+                svgCache.set(lookupToken, res);
                 applySvg(span, res);
               } else {
                 if (res && res.err && res.err.includes('confidence < 80%')) {
-                  svgCache.set(tokenText, { svg: null });
+                  svgCache.set(lookupToken, { svg: null });
                 }
                 span.textContent = tokenText;
               }
