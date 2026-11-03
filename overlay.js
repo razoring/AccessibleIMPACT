@@ -10,6 +10,22 @@
   const svgCache = new Map();
   let scanTimer = null;
 
+  // Initialize static cache from static_block_cache.js
+  if (typeof window !== 'undefined' && window.__STATIC_BLOCK_CACHE) {
+    for (const [k, v] of Object.entries(window.__STATIC_BLOCK_CACHE)) {
+      svgCache.set(k, v);
+    }
+  }
+
+  function getStaticOrCached(token) {
+    if (svgCache.has(token)) return svgCache.get(token);
+    const norm = token.replace(/\s+/g, ' ').trim();
+    if (svgCache.has(norm)) return svgCache.get(norm);
+    const normNoParenSpace = norm.replace(/\(\s*([^\)]+?)\s*\)/g, '($1)');
+    if (svgCache.has(normNoParenSpace)) return svgCache.get(normNoParenSpace);
+    return null;
+  }
+
   function injectStyles() {
     if (document.getElementById('aifx-styles')) return;
     const style = document.createElement('style');
@@ -122,9 +138,9 @@
         span.className = 'aifx-rendered'; // Set immediately to prevent re-wrapping
         span.setAttribute('data-token', tokenText);
 
-        if (svgCache.has(tokenText)) {
-          const cached = svgCache.get(tokenText);
-          if (cached && cached.svg) {
+        const cached = getStaticOrCached(tokenText);
+        if (cached) {
+          if (cached.svg) {
             applySvg(span, cached);
           } else {
             span.textContent = tokenText;

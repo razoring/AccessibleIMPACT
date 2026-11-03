@@ -22,16 +22,9 @@
   "content_scripts": [
     {
       "matches": ["https://impact.codeninjas.com/*"],
-      "js": ["overlay.js"],
+      "js": ["static_block_cache.js", "overlay.js"],
       "run_at": "document_idle",
       "all_frames": false
-    },
-    {
-      "matches": ["https://arcade.makecode.com/*"],
-      "all_frames": true,
-      "js": ["in_page_renderer.js"],
-      "run_at": "document_idle",
-      "world": "MAIN"
     },
     {
       "matches": ["https://arcade.makecode.com/*"],
