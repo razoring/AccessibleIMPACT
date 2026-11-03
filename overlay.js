@@ -5,8 +5,8 @@
 (function () {
   'use strict';
 
-  // Matches [nested [bracket]] blocks, parenthesized (nested (bubbles)), and <angled> blocks (including <0 < 0>, <% chance>, <(question) = 0>)
-  const TOKEN_REGEX = /\[set\s+sprite\s+position\s+to\}|\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\((?:[^\(\)\r\n]|\([^\)\r\n]*\))+\)|<[a-zA-Z0-9_=\s%+\-]+>|<[a-zA-Z0-9_\s\(\)]+\s*<=?\s*[a-zA-Z0-9_\s\(\)]+>/g;
+  // Matches [nested [bracket]] blocks, parenthesized (nested (bubbles)), <angled> blocks, and ▶ play icon
+  const TOKEN_REGEX = /\[set\s+sprite\s+position\s+to\}|\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\((?:[^\(\)\r\n]|\([^\)\r\n]*\))+\)|<[a-zA-Z0-9_=\s%+\-]+>|<[a-zA-Z0-9_\s\(\)]+\s*<=?\s*[a-zA-Z0-9_\s\(\)]+>|▶/g;
   const svgCache = new Map();
   const pendingRequests = new Map(); // lookupToken -> Array<span elements>
   let scanTimer = null;
@@ -121,6 +121,26 @@
         position: relative !important;
         z-index: 10 !important;
       }
+      .aifx-rendered.aifx-play-icon {
+        display: inline-block !important;
+        vertical-align: -0.25em !important;
+        margin: 0 4px !important;
+        line-height: 1 !important;
+      }
+      .aifx-rendered.aifx-play-icon svg {
+        display: inline-block !important;
+        vertical-align: middle !important;
+        width: 1.35em !important;
+        height: 1.35em !important;
+        max-width: none !important;
+        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2)) !important;
+        transition: transform 0.15s ease !important;
+      }
+      .aifx-rendered.aifx-play-icon:hover svg {
+        transform: scale(1.12) !important;
+        position: relative !important;
+        z-index: 10 !important;
+      }
       .aifx-rendered.aifx-multiline {
         display: block !important;
         margin: 12px 0 !important;
@@ -152,14 +172,21 @@
 
   function applySvg(span, data) {
     if (!span || !data || !data.svg) return;
-    const isMultiLine = data.isMultiLine || data.height > 70;
-    span.className = 'aifx-rendered ' + (isMultiLine ? 'aifx-multiline' : 'aifx-inline');
+    const tokenText = span.getAttribute('data-token') || '';
+    const isPlayIcon = (tokenText === '▶' || tokenText === '[▶]');
+    const isMultiLine = !isPlayIcon && (data.isMultiLine || data.height > 70);
+    span.className = 'aifx-rendered ' + (isPlayIcon ? 'aifx-play-icon' : (isMultiLine ? 'aifx-multiline' : 'aifx-inline'));
     span.innerHTML = data.svg;
     span.setAttribute('data-rendered', 'true');
 
     const svgEl = span.querySelector('svg');
     if (svgEl) {
-      if (isMultiLine) {
+      if (isPlayIcon) {
+        svgEl.style.display = 'inline-block';
+        svgEl.style.verticalAlign = 'middle';
+        svgEl.style.setProperty('width', '1.35em', 'important');
+        svgEl.style.setProperty('height', '1.35em', 'important');
+      } else if (isMultiLine) {
         svgEl.style.display = 'block';
         // Benchmark: scale factor 2.25 / 44 keeps font size consistent at ~13-14px visual (17px text bounding box)
         const emScale = 2.25 / 44;
@@ -286,7 +313,7 @@
     if (node.parentElement && (node.parentElement.closest('.aifx-rendered') || node.parentElement.closest('[data-token]'))) return;
 
     const text = node.nodeValue || '';
-    if (!text.includes('[') && !text.includes('(') && !text.includes('<')) return;
+    if (!text.includes('[') && !text.includes('(') && !text.includes('<') && !text.includes('▶')) return;
 
     const matches = text.match(TOKEN_REGEX);
     if (!matches || !matches.length) return;
@@ -355,7 +382,7 @@
           if (n.parentElement && (n.parentElement.closest('.aifx-rendered') || n.parentElement.closest('[data-token]'))) {
             return NodeFilter.FILTER_REJECT;
           }
-          if (n.nodeValue.includes('[') || n.nodeValue.includes('(') || n.nodeValue.includes('<')) {
+          if (n.nodeValue.includes('[') || n.nodeValue.includes('(') || n.nodeValue.includes('<') || n.nodeValue.includes('▶')) {
             return NodeFilter.FILTER_ACCEPT;
           }
           return NodeFilter.FILTER_REJECT;
