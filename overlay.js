@@ -1,91 +1,161 @@
-// overlay.js — tries live iframe SVG first; falls back to exact saved catalog template
+// overlay.js — scans instruction steps and upgrades tokens to live MakeCode block SVGs
+// Option B: exact block SVGs extracted from the embedded MakeCode iframe.
+// No fallback SVGs — unresolved tokens remain untouched as plain text.
+
 (function () {
   'use strict';
-  const FAST = {
-    'set sprite velocity to':'spritesetvel','set sprite position to':'spritesetpos','on start':'event_start',
-    'sprite say':'spritesaytext','set background color to':'scene_set_background_color',
-    'set sprite image to':'spritesetimage','if true then':'logic_if','destroy sprite':'spritedestroy2',
-    'set life to':'game_set_life','game over':'gameOver2','show long text':'game_show_long_text',
-    'set tilemap to':'tilemap_set','on button pressed':'keyonevent','set score to':'game_set_score',
-    'animate image':'animation_animate_sprite','play sound':'music_playable_play',
-    'stop all sounds':'music_stop_all_sounds','looping in background':'loops_forever',
-    'set volume':'synth_set_volume','say':'spritesaytext','on destroyed':'spritesondestroyed',
-    'on created':'spritesoncreated','sprite start effect':'startEffectOnSprite',
-    'set name to':'variables_set','ask for string':'gameaskforstring',
-    'place sprite on top of random tile':'tilemap_place_random',
-    'on sprite overlaps tile':'spritesoverlap','change sprite x':'spritesetpos',
-    'set sprite follow':'spriteFollowOtherSprite','camera shake':'scene_camera_shake',
-    'use effect':'startEffectOnSprite','camera follow sprite':'scene_camera_follow_sprite',
-    'set wall at':'tilemap_set_wall','set sprite stay in screen':'spritesetsetstayinscreen',
-    'start screen effect':'startEffectOnSprite','confetti':'startEffectOnSprite',
-    'ba ding':'music_ring','until done':'control_until',
-    'on game update every ms':'gameupdate','move sprite with buttons':'game_control_sprite',
-    'on life zero':'game_on_life_zero','set projectile to projectile from sprite':'sprite_projectile_from_sprite'
-  };
-  const TOKEN_REGEX = /\[[^\n\r\[\]]*(?:\[[^\n\r\[\]]*\][^\n\r\[\]]*)*\]/g;
-  const lookup = { ...FAST };
-  function isInstructionArea(el) { if (!el) return false; return !!el.closest('[data-instruction], .primary-section, article, .lesson-content'); }
-  function normalizeToken(s) { return s.toLowerCase().replace(/[\[\]\(\)]/g,' ').replace(/\s+/g,' ').trim(); }
+
+  const TOKEN_REGEX = /\[[^\]\r\n]+(?:\s*\[[^\]\r\n]+\])*\]|\([^\)\r\n]+\)|<true>/g;
+  const svgCache = new Map();
+  let scanTimer = null;
+
+  function injectStyles() {
+    if (document.getElementById('aifx-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'aifx-styles';
+    style.textContent = `
+      .aifx-rendered {
+        display: inline-block !important;
+        vertical-align: middle !important;
+        margin: 0 4px !important;
+        line-height: 1 !important;
+      }
+      .aifx-rendered svg {
+        display: inline-block !important;
+        vertical-align: middle !important;
+        height: 2.2em !important;
+        width: auto !important;
+        max-width: 100% !important;
+        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)) !important;
+        transition: transform 0.15s ease !important;
+      }
+      .aifx-rendered:hover svg {
+        transform: scale(1.15) !important;
+        position: relative !important;
+        z-index: 10 !important;
+      }
+    `;
+    (document.head || document.documentElement).appendChild(style);
+  }
+
+  function isInstructionArea(el) {
+    if (!el) return false;
+    return !!el.closest('app-step-information, [data-instruction], .primary-section, article, .lesson-content');
+  }
+
+  function applySvg(span, svgMarkup) {
+    if (!span || !svgMarkup) return;
+    span.innerHTML = svgMarkup;
+    span.setAttribute('data-rendered', 'true');
+    const svgEl = span.querySelector('svg');
+    if (svgEl) {
+      svgEl.style.height = '2.2em';
+      svgEl.style.width = 'auto';
+      svgEl.style.verticalAlign = 'middle';
+      svgEl.style.display = 'inline-block';
+    }
+  }
+
   function replaceInNode(node) {
-    if (!node || node.nodeType !== 3 || (node.parentElement && node.parentElement.closest('.aifx-rendered'))) return;
+    if (!node || node.nodeType !== 3) return;
+    if (node.parentElement && node.parentElement.closest('.aifx-rendered')) return;
+
     const text = node.nodeValue || '';
+    if (!text.includes('[') && !text.includes('(') && !text.includes('<true>')) return;
+
     const matches = text.match(TOKEN_REGEX);
-    if (!matches) return;
+    if (!matches || !matches.length) return;
+
     const parent = node.parentElement;
     if (!parent || !isInstructionArea(parent)) return;
+
     const fragment = document.createDocumentFragment();
-    let replaced = false;
     const parts = text.split(TOKEN_REGEX);
+    let replaced = false;
+
     for (let i = 0; i < parts.length; i++) {
-      if (i > 0 && matches[i - 1]) {
-        const tokenText = matches[i - 1];
-        const key = normalizeToken(tokenText.replace(/\[|\]/g, ''));
-        const blockType = (lookup[key] || FAST[key] || null);
+      if (parts[i]) {
+        fragment.appendChild(document.createTextNode(parts[i]));
+      }
+
+      if (i < matches.length) {
+        const tokenText = matches[i];
         const span = document.createElement('span');
         span.className = 'aifx-rendered';
         span.setAttribute('data-token', tokenText);
-        span.style.display = 'inline-block';
-        span.style.verticalAlign = 'middle';
 
-        // LIVE FIRST: ask embedded iframe renderer for exact SVG
-        try {
-          chrome.runtime.sendMessage({ action: 'renderToken', token: tokenText }, (res) => {
-            if (res && res.svg && span && span.parentElement) {
-              span.innerHTML = res.svg;
-              span.setAttribute('data-rendered', 'true');
-            } else {
-              loadExactFile(span, blockType, tokenText);
-            }
-          });
-        } catch (e) {
-          loadExactFile(span, blockType, tokenText);
+        if (svgCache.has(tokenText)) {
+          applySvg(span, svgCache.get(tokenText));
+        } else {
+          span.textContent = tokenText;
+          try {
+            chrome.runtime.sendMessage({ action: 'renderToken', token: tokenText }, (res) => {
+              if (chrome.runtime.lastError) {
+                console.warn('[AIFX overlay] relay error:', chrome.runtime.lastError.message);
+                return;
+              }
+              if (res && res.svg && span.isConnected) {
+                console.info('[AIFX overlay] applied live SVG for:', tokenText);
+                svgCache.set(tokenText, res.svg);
+                applySvg(span, res.svg);
+              } else if (res && res.err) {
+                console.warn('[AIFX overlay] render err:', res.err);
+              }
+            });
+          } catch (e) {
+            console.warn('[AIFX overlay] sendMessage exception:', e);
+          }
         }
+
+        fragment.appendChild(span);
         replaced = true;
       }
-      if (parts[i]) fragment.appendChild(document.createTextNode(parts[i]));
     }
-    if (replaced) parent.replaceChild(fragment, node);
-  }
 
-  function loadExactFile(span, blockType, tokenText) {
-    if (!blockType) { span.textContent = tokenText; span.style.color = '#b12c43'; span.style.fontWeight = '600'; return; }
-    // Direct embedded exact toolbox template (no fetch needed — saved from live flyout)
-    span.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 429 58" width="429" height="58"><g role="none"><path stroke="#385cb1" fill="#4b7bec" d="m 0,0 m 0,4 a 4 4 0 0,1 4,-4 h 8 c 2,0 3,1 4,2 l 4,4 c 1,1 2,2 4,2 h 12 c 2,0 3,-1 4,-2 l 4,-4 c 1,-1 2,-2 4,-2 h 374.3125 a 4 4 0 0,1 4,4 v 8 V 44 V 44 a 4 4 0 0,1 -4,4 h -374.3125 c -2,0 -3,1 -4,2 l -4,4 c -1,1 -2,2 -4,2 h -12 c -2,0 -3,-1 -4,-2 l -4,-4 c -1,-1 -2,-2 -4,-2 h -8 a 4 4 0 0,1 -4,-4 z" style="fill:#4b7bec;stroke:#385cb1;stroke-width:1;"/><g transform="translate(48, 4)"><path stroke="#b12c43" fill="#ec3b59" d="m 20,0 h 74.375 a 20 20 0 0,1 20,20 v 0 a 20 20 0 0,1 -20,20 h -74.375 a 20 20 0 0,1 -20,-20 v 0 a 20 20 0 0,1 20,-20 z" style="fill:#ec3b59;stroke:#b12c43;stroke-width:1.5;"/></g></g><text x="60" y="18" fill="#fff" font-family="Consolas,Monaco,Menlo,monospace" font-size="11" font-weight="600">${(tokenText.replace(/\[|\]/g,'').trim()).slice(0,22)}</text></svg>`;
-    span.setAttribute('data-rendered', 'true');
+    if (replaced && parent.contains(node)) {
+      parent.replaceChild(fragment, node);
+    }
   }
 
   function scan() {
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-    const nodes = [];
-    while (walker.nextNode()) nodes.push(walker.currentNode);
-    nodes.forEach(replaceInNode);
+    injectStyles();
+    const areas = document.querySelectorAll('app-step-information, [data-instruction], .primary-section, article, .lesson-content');
+    for (const area of areas) {
+      const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT, {
+        acceptNode(n) {
+          if (!n || !n.nodeValue) return NodeFilter.FILTER_REJECT;
+          if (n.parentElement && n.parentElement.closest('.aifx-rendered')) return NodeFilter.FILTER_REJECT;
+          if (n.nodeValue.includes('[') || n.nodeValue.includes('(') || n.nodeValue.includes('<true>')) {
+            return NodeFilter.FILTER_ACCEPT;
+          }
+          return NodeFilter.FILTER_REJECT;
+        }
+      });
+      const textNodes = [];
+      while (walker.nextNode()) {
+        textNodes.push(walker.currentNode);
+      }
+      for (const node of textNodes) {
+        replaceInNode(node);
+      }
+    }
   }
 
-  const observer = new MutationObserver((mutations) => {
-    clearTimeout(window.__aifxScanTimer);
-    window.__aifxScanTimer = setTimeout(scan, 150);
+  const observer = new MutationObserver(() => {
+    clearTimeout(scanTimer);
+    scanTimer = setTimeout(scan, 60);
   });
-  observer.observe(document.body, { subtree: true, childList: true, characterData: true });
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(scan, 300));
-  else setTimeout(scan, 300);
+
+  observer.observe(document.body || document.documentElement, {
+    subtree: true,
+    childList: true,
+    characterData: true
+  });
+
+  injectStyles();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(scan, 150));
+  } else {
+    setTimeout(scan, 150);
+  }
 })();

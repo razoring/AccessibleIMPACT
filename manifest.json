@@ -16,7 +16,8 @@
   },
   "permissions": [
     "storage",
-    "tabs"
+    "tabs",
+    "webNavigation"
   ],
   "content_scripts": [
     {
@@ -24,6 +25,20 @@
       "js": ["overlay.js"],
       "run_at": "document_idle",
       "all_frames": false
+    },
+    {
+      "matches": ["https://arcade.makecode.com/*"],
+      "all_frames": true,
+      "js": ["in_page_renderer.js"],
+      "run_at": "document_idle",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://arcade.makecode.com/*"],
+      "all_frames": true,
+      "js": ["in_page_renderer.js"],
+      "run_at": "document_idle",
+      "world": "MAIN"
     },
     {
       "matches": ["https://arcade.makecode.com/*"],
