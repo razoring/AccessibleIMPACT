@@ -5,14 +5,39 @@
 (function () {
   'use strict';
 
-  // Matches [nested [bracket]] blocks, parenthesized (nested (bubbles)), and <angled> blocks
-  const TOKEN_REGEX = /\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\((?:[^\(\)\r\n]|\([^\)\r\n]*\))+\)|<[a-zA-Z0-9_=\s]+>/g;
+  // Matches [nested [bracket]] blocks, parenthesized (nested (bubbles)), and <angled> blocks (including <0 < 0>, <% chance>, <(question) = 0>)
+  const TOKEN_REGEX = /\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\((?:[^\(\)\r\n]|\([^\)\r\n]*\))+\)|<[a-zA-Z0-9_=\s%+\-]+>|<[a-zA-Z0-9_\s\(\)]+\s*<=?\s*[a-zA-Z0-9_\s\(\)]+>/g;
   const svgCache = new Map();
   let scanTimer = null;
 
+  function healSplitTokens(area) {
+    if (!area) return;
+    const targets = area.querySelectorAll('p, div, li');
+    const list = targets.length ? Array.from(targets) : [area];
+    for (const el of list) {
+      const old = el.innerHTML;
+      if (!old || (!old.includes('<strong') && !old.includes('&lt;') && !old.includes('<'))) continue;
+      const fixed = old
+        .replace(/<strong[^>]*>(?:&lt;|<)<\/strong>([a-zA-Z0-9_\s%]+)<strong[^>]*>(?:&gt;|>)<\/strong>/gi, (m, g1) => '&lt;' + g1.trim() + '&gt;')
+        .replace(/<strong[^>]*>\(<\/strong>([a-zA-Z0-9_\s%]+)<strong[^>]*>\)<\/strong>/gi, (m, g1) => '(' + g1.trim() + ')')
+        .replace(/<strong[^>]*>\[<\/strong>([a-zA-Z0-9_\s%]+)<strong[^>]*>\]<\/strong>/gi, (m, g1) => '[' + g1.trim() + ']')
+        .replace(/\(([ \t\r\n]*<strong[^>]*>)([^<]+)\)([ \t\r\n]*<\/strong>)/gi, (m, g1, g2, g3) => g1 + '(' + g2 + ')' + g3)
+        .replace(/\[([ \t\r\n]*<strong[^>]*>)([^<]+)\]([ \t\r\n]*<\/strong>)/gi, (m, g1, g2, g3) => g1 + '[' + g2 + ']' + g3)
+        .replace(/(<strong[^>]*>)\(([ \t\r\n]*[^<]+)<\/strong>\)/gi, (m, g1, g2) => g1 + '(' + g2 + ')</strong>')
+        .replace(/(<strong[^>]*>)\[([ \t\r\n]*[^<]+)<\/strong>\]/gi, (m, g1, g2) => g1 + '[' + g2 + ']</strong>')
+        .replace(/(?:&lt;|<)([ \t\r\n]*<strong[^>]*>)([^<]+)<\/strong>(?:&gt;|>)/gi, (m, g1, g2) => g1 + '&lt;' + g2 + '&gt;</strong>')
+        .replace(/(<strong[^>]*>)(?:&lt;|<)([ \t\r\n]*[^<]+)<\/strong>(?:&gt;|>)/gi, (m, g1, g2) => g1 + '&lt;' + g2 + '&gt;</strong>')
+        .replace(/(?:&lt;|<)([ \t\r\n]*<strong[^>]*>)([^<]+)(?:&gt;|>)([ \t\r\n]*<\/strong>)/gi, (m, g1, g2, g3) => g1 + '&lt;' + g2 + '&gt;' + g3);
+      if (fixed !== old) {
+        el.innerHTML = fixed;
+      }
+    }
+  }
+
   // Initialize static cache from static_block_cache.js
-  if (typeof window !== 'undefined' && window.__STATIC_BLOCK_CACHE) {
-    for (const [k, v] of Object.entries(window.__STATIC_BLOCK_CACHE)) {
+  const staticSource = (typeof window !== 'undefined' && (window.STATIC_BLOCK_CACHE || window.__STATIC_BLOCK_CACHE));
+  if (staticSource) {
+    for (const [k, v] of Object.entries(staticSource)) {
       svgCache.set(k, v);
     }
   }
@@ -156,7 +181,9 @@
                 svgCache.set(tokenText, res);
                 applySvg(span, res);
               } else {
-                svgCache.set(tokenText, { svg: null });
+                if (res && res.err && res.err.includes('confidence < 80%')) {
+                  svgCache.set(tokenText, { svg: null });
+                }
                 span.textContent = tokenText;
               }
             });
@@ -180,6 +207,7 @@
     // Strictly query content containers only
     const areas = document.querySelectorAll('app-step-information content, [data-instruction], article, .lesson-content');
     for (const area of areas) {
+      healSplitTokens(area);
       const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT, {
         acceptNode(n) {
           if (!n || !n.nodeValue) return NodeFilter.FILTER_REJECT;

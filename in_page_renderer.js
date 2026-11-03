@@ -68,6 +68,25 @@
     };
   }
 
+  function renderDropdownBadge(label, color) {
+    const cleanLabel = (label || '').replace(/[\[\]\(\)]/g, '').trim();
+    const displayLabel = cleanLabel === '<' ? '&lt;' : (cleanLabel === '>' ? '&gt;' : (cleanLabel === '<=' ? '&lt;=' : (cleanLabel === '>=' ? '&gt;=' : cleanLabel)));
+    const charWidth = 9.6;
+    const textW = Math.max(cleanLabel.length * charWidth, 16);
+    const width = Math.ceil(textW + 36);
+    const height = 44;
+    const arrowX = width - 18;
+
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="display:inline-block;vertical-align:middle;width:auto !important;margin:0 3px !important;"><rect x="1" y="2" width="${width - 2}" height="${height - 4}" rx="8" ry="8" fill="${color}" stroke="rgba(0,0,0,0.2)" stroke-width="1.5"/><text x="10" y="23" fill="#ffffff" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-size="16px" font-weight="600" dominant-baseline="central">${displayLabel}</text><polygon points="${arrowX},19 ${arrowX + 8},19 ${arrowX + 4},25" fill="#ffffff"/></svg>`;
+
+    return {
+      svg: svg,
+      width: width,
+      height: height,
+      isMultiLine: false
+    };
+  }
+
   // Ensure built-in extension blocks (e.g. Scroller) are defined in Blockly.Blocks
   function ensureExtensionBlocks(B) {
     if (!B || !B.Blocks) return;
@@ -201,6 +220,14 @@
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+kind\s+to\s*\]?$/i, type: 'spritesetkind', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+stay\s+in\s+screen\s*\]?$/i, type: 'spritesetsetstayinscreen', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+bounce\s+on\s+wall\s*\]?$/i, type: 'spritesetsetbounceonwall', conf: 1.0 },
+    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+(auto\s+destroy|invisible|ghost)\s*\]?$/i, type: 'spritesetsetflag', mutator: (b, ws, raw) => {
+        const f = b.getField('flag');
+        if (f) {
+          if (/invisible/i.test(raw)) f.setValue('SpriteFlag.Invisible');
+          else if (/ghost/i.test(raw)) f.setValue('SpriteFlag.Ghost');
+          else f.setValue('SpriteFlag.AutoDestroy');
+        }
+      }, conf: 1.0 },
     { match: /^\[?\s*move\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+with\s+buttons\s*\]?$/i, type: 'game_control_sprite', conf: 1.0 },
     { match: /^\[?\s*destroy\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s*\]?$/i, type: 'spritedestroy2', conf: 1.0 },
     { match: /^\[?\s*(?:sprite\s+say|say)\s*\]?$/i, type: 'spritesaytext', conf: 1.0 },
@@ -226,15 +253,60 @@
     { match: /^\[?\s*(?:if\s+then|if\s+true\s+then|if)\s*\]?$/i, type: 'controls_if', conf: 1.0 },
     { match: /^\[?\s*else\s*if\s*\]?$/i, type: 'controls_if', conf: 1.0 },
     { match: /^\[?\s*else\s*\]?$/i, type: 'controls_if', conf: 0.9 },
-    { match: /^\[?\s*repeat\s*(?:times)?\s*\]?$/i, type: 'controls_repeat_ext', conf: 1.0 },
+    { match: /^\[?\s*(?:repeat\s+)?while(?:\s+loop)?\s*\]?$/i, type: 'device_while', conf: 1.0 },
+    { match: /^\[?\s*repeat(?:\s+times|\s+loop)?\s*\]?$/i, type: 'controls_repeat_ext', conf: 1.0 },
     { match: /^\[?\s*(?:for\s+index|for)\s*\]?$/i, type: 'controls_simple_for', conf: 0.9 },
     { match: /^\[?\s*for\s+element\s*\]?$/i, type: 'pxt_controls_for_of', conf: 0.95 },
     { match: /^\[?\s*pause\s*(?:\(\d+\))?\s*ms\s*\]?$/i, type: 'device_pause', conf: 1.0 },
     { match: /^\[?\s*pick\s+random\s*\]?$/i, type: 'device_random', conf: 1.0 },
     { match: /^\(?\s*pick\s+random\s*\)?$/i, type: 'device_random', conf: 1.0 },
-    { match: /^\[?\s*%?\s*chance\s*\]?$/i, type: 'percentchance', conf: 1.0 },
-    { match: /^\[?\s*0\s*=\s*0\s*\]?$/i, type: 'logic_compare', conf: 1.0 },
-    { match: /^<\s*0\s*=\s*0\s*>$/i, type: 'logic_compare', mutator: (b) => { const f = b.getField('OP'); if (f) f.setValue('EQ'); }, conf: 1.0 },
+    { match: /^[<\[\(]?\s*%?\s*chance\s*[>\]\)]?$/i, type: 'percentchance', conf: 1.0 },
+    { match: /^[<\[\(]?\s*is\s+sprite\s+hitting\s+wall\s*[>\]\)]?$/i, type: 'spritehasobstacle', mutator: (b) => { const f = b.getField('direction'); if (f) f.setValue('CollisionDirection.Bottom'); }, conf: 1.0 },
+    { match: /^[<\[]\s*0\s*(<|<=|>|>=|=)\s*0\s*[>\]]$/i, type: 'logic_compare', mutator: (b, ws, raw) => {
+        const f = b.getField('OP');
+        if (f) {
+          if (raw.includes('<=')) f.setValue('LTE');
+          else if (raw.includes('<')) f.setValue('LT');
+          else if (raw.includes('>=')) f.setValue('GTE');
+          else if (raw.includes('>')) f.setValue('GT');
+          else f.setValue('EQ');
+        }
+      }, conf: 1.0 },
+    { match: /^[<\[]\s*\(?([a-zA-Z_][a-zA-Z0-9_]*)\)?\s*(<|<=|>|>=|=)\s*([0-9]+)\s*[>\]]$/i, type: 'logic_compare', mutator: (b, ws, raw) => {
+        const m = raw.match(/^[<\[]\s*\(?([a-zA-Z_][a-zA-Z0-9_]*)\)?\s*(<|<=|>|>=|=)\s*([0-9]+)\s*[>\]]$/i);
+        if (!m) return;
+        const varName = m[1];
+        const op = m[2];
+        const numVal = m[3];
+        const f = b.getField('OP');
+        if (f) {
+          if (op === '<=') f.setValue('LTE');
+          else if (op === '<') f.setValue('LT');
+          else if (op === '>=') f.setValue('GTE');
+          else if (op === '>') f.setValue('GT');
+          else f.setValue('EQ');
+        }
+        if (ws && b.getInput('A')) {
+          try {
+            const vBlock = ws.newBlock('variables_get');
+            const v = ensureVariable(ws, varName);
+            if (v && vBlock.getField('VAR')) vBlock.getField('VAR').setValue(v.getId());
+            vBlock.initSvg();
+            vBlock.render();
+            b.getInput('A').connection.connect(vBlock.outputConnection);
+          } catch (e) {}
+        }
+        if (b.getField('B')) b.getField('B').setValue(numVal);
+      }, conf: 1.0 },
+    { match: /^\(?\s*0\s*[\+\-\*\/]\s*0\s*\)?$/i, type: 'math_arithmetic', mutator: (b, ws, raw) => {
+        const f = b.getField('OP');
+        if (f) {
+          if (raw.includes('-')) f.setValue('MINUS');
+          else if (raw.includes('*')) f.setValue('MULTIPLY');
+          else if (raw.includes('/')) f.setValue('DIVIDE');
+          else f.setValue('ADD');
+        }
+      }, conf: 1.0 },
     { match: /^[<\[]\s*on\s*[>\]]$/i, type: 'toggleOnOff', custom: () => renderToggleToken('<ON>'), conf: 1.0 },
     { match: /^[<\[]\s*off\s*[>\]]$/i, type: 'toggleOnOff', custom: () => renderToggleToken('<OFF>'), conf: 1.0 },
     { match: /^[<\[]\s*win\s*[>\]]$/i, type: 'toggleWinLose', custom: () => renderToggleToken('<WIN>'), conf: 1.0 },
@@ -301,10 +373,10 @@
     { match: /^\[?\s*animate\s+movement\s*\]?$/i, type: 'run_movement_animation', conf: 1.0 },
     { match: /^\[?\s*stop\s+.*animations\s+on\s*.*\]?$/i, type: 'stop_animations', conf: 1.0 },
 
-    // Arrays / Lists
+    // Arrays / Lists (MakeCode Arcade Orange #ff8f08)
     { match: /^\(?\s*length\s+of\s+array\s*\)?$/i, type: 'lists_length', conf: 1.0 },
-    { match: /^\[?\s*list\s+add\s+value\s+to\s+end\s*\]?$/i, type: 'lists_setIndex', conf: 1.0 },
-    { match: /^\(?\s*empty\s+array\s*\)?$/i, type: 'lists_create_empty', conf: 1.0 },
+    { match: /^\[?\s*(?:list\s+)?add\s+value\s+to\s+end\s*\]?$/i, type: 'array_push', conf: 1.0 },
+    { match: /^\(?\s*empty\s+array\s*\)?$/i, type: 'lists_create_with', mutator: (b) => { b.itemCount_ = 0; if (b.updateShape_) b.updateShape_(); }, conf: 1.0 },
     { match: /^\(?\s*get\s+random\s+value\s+from\s*\(?[a-zA-Z0-9_ ]+\)?\s*\)?$/i, type: 'array_pickRandom', conf: 1.0 }
   ];
 
@@ -515,8 +587,56 @@
       }
     }
 
-    // 2. Sprite Property: [set sprite x to], [change sprite y by], [set sprite [x]
-    const spritePropMatch = raw.match(/(?:set|change)\s+sprite\s+\[?([xy]|vx|vy|ax|ay)\]?(?:\s+(?:to|by))?/i);
+    // 1b. Dropdown Badges (Controller #d44627, Sprites #4b7bec, Scene #4b6584, Logic #4b7bec)
+    const dropdownMatch = raw.match(/^[\[\(]([a-zA-Z0-9_\(\)\s<>=!]+)[\]\)]$/i);
+    if (dropdownMatch) {
+      const inner = dropdownMatch[1].trim().toLowerCase();
+      // Controller buttons
+      const controllerOptions = ['up', 'down', 'left', 'right', 'a', 'b', 'a button', 'b button'];
+      if (controllerOptions.includes(inner)) {
+        return {
+          confidence: 1.0,
+          custom: () => renderDropdownBadge(dropdownMatch[1].trim(), '#d44627'),
+          name: raw
+        };
+      }
+      // Sprite properties and flags
+      const spriteOptions = [
+        'x', 'y', 'vx', 'vy', 'ax', 'ay',
+        'lifespan', 'invisible', 'ghost', 'auto destroy',
+        'stay in screen', 'bounce on wall',
+        'ay (acceleration y)', 'vy (velocity y)',
+        'ax (acceleration x)', 'vx (velocity x)'
+      ];
+      if (spriteOptions.includes(inner)) {
+        return {
+          confidence: 1.0,
+          custom: () => renderDropdownBadge(dropdownMatch[1].trim(), '#4b7bec'),
+          name: raw
+        };
+      }
+      // Scene directions
+      const sceneOptions = ['bottom', 'top', 'only horizontally', 'only vertically', 'both directions'];
+      if (sceneOptions.includes(inner)) {
+        return {
+          confidence: 1.0,
+          custom: () => renderDropdownBadge(dropdownMatch[1].trim(), '#4b6584'),
+          name: raw
+        };
+      }
+      // Logic dropdowns: (<), (=), (>), (<=), (>=), (!=), [<], [=]
+      const logicOptions = ['<', '=', '>', '<=', '>=', '!='];
+      if (logicOptions.includes(inner)) {
+        return {
+          confidence: 1.0,
+          custom: () => renderDropdownBadge(dropdownMatch[1].trim(), '#4b7bec'),
+          name: raw
+        };
+      }
+    }
+
+    // 2. Sprite Property: [set sprite x to], [change sprite y by], [set sprite [x], [set sprite lifespan]
+    const spritePropMatch = raw.match(/(?:set|change)\s+sprite\s+\[?([xy]|vx|vy|ax|ay|lifespan)\]?(?:\s+(?:to|by))?/i);
     if (spritePropMatch) {
       const prop = spritePropMatch[1].toLowerCase();
       const isChange = /change/i.test(raw);
@@ -526,14 +646,17 @@
         type,
         mutator: (b) => {
           const f = b.getField('property');
-          if (f) f.setValue(`Sprite.${prop}@${isChange ? 'change' : 'set'}`);
+          if (f) {
+            if (prop === 'lifespan') f.setValue('Sprite.lifespan');
+            else f.setValue(`Sprite.${prop}@${isChange ? 'change' : 'set'}`);
+          }
         },
         name: raw
       };
     }
 
     // 3. Function Definitions: [function <name>]
-    const funcDefMatch = raw.match(/^\[?(?:function)\s*([a-zA-Z0-9_]+)\]?$/i);
+    const funcDefMatch = raw.match(/^\[?(?:function)\s+([a-zA-Z0-9_]+)\]?$/i);
     if (funcDefMatch) {
       return {
         confidence: 1.0,
@@ -546,22 +669,27 @@
       };
     }
 
-    // 4. Function Calls: [call <name>]
-    const funcCallMatch = raw.match(/^\[?(?:call)\s*([a-zA-Z0-9_]+)\]?$/i);
+    // 4. Function Calls & Invocations: [call makeBee], [makeBee], [makeBee] function, [call function]
+    const funcCallMatch = raw.match(/^\[?(?:call\s+)?([a-zA-Z0-9_]+)(?:\s+function)?\]?$/i);
     if (funcCallMatch) {
-      return {
-        confidence: 1.0,
-        type: 'function_call',
-        mutator: (b) => {
-          const f = b.getField('function_name');
-          if (f) f.setValue(funcCallMatch[1]);
-        },
-        name: raw
-      };
+      const funcName = funcCallMatch[1];
+      if (['makebee', 'function'].includes(funcName.toLowerCase()) || raw.toLowerCase().includes('call') || raw.toLowerCase().includes('function')) {
+        return {
+          confidence: 1.0,
+          type: 'procedures_callnoreturn',
+          mutator: (b) => {
+            const actualName = funcName.toLowerCase() === 'function' ? 'doSomething' : funcName;
+            if (b.renameProcedure) b.renameProcedure('Temp', actualName);
+            const f = b.getField('NAME');
+            if (f) f.setValue(actualName);
+          },
+          name: raw
+        };
+      }
     }
 
-    // 5. Variable Setters: [set <name> to]
-    const varSetMatch = raw.match(/^\[set\s+([a-zA-Z0-9_ ]+?)\s+to\]$/i);
+    // 5. Variable Setters & Changers: [set <name> to], [set [name] to], [change [name] by]
+    const varSetMatch = raw.match(/^\[set\s+\[?([a-zA-Z0-9_ ]+?)\]?\s+to\]$/i);
     if (varSetMatch) {
       const varName = varSetMatch[1].trim();
       return {
@@ -575,9 +703,23 @@
         name: raw
       };
     }
+    const varChangeMatch = raw.match(/^\[change\s+\[?([a-zA-Z0-9_ ]+?)\]?\s+by\]$/i);
+    if (varChangeMatch) {
+      const varName = varChangeMatch[1].trim();
+      return {
+        confidence: 1.0,
+        type: 'variables_change',
+        mutator: (b, ws) => {
+          const v = ensureVariable(ws, varName);
+          const f = b.getField('VAR');
+          if (f && v) f.setValue(v.getId());
+        },
+        name: raw
+      };
+    }
 
-    // 6. Standalone identifier bubbles: (mySprite), (otherSprite), (sprite), (location), (score)
-    const bubbleMatch = raw.match(/^\(([a-zA-Z_][a-zA-Z0-9_ ]*)\)$/);
+    // 6. Standalone identifier bubbles / variable blocks: (mySprite), [question], (fishSprite)
+    const bubbleMatch = raw.match(/^[\[\(]([a-zA-Z_][a-zA-Z0-9_ ]*)[\]\)]$/);
     if (bubbleMatch) {
       const name = bubbleMatch[1].trim();
       if (['score', 'hudscore'].includes(name.toLowerCase())) {
@@ -664,7 +806,7 @@
     }
 
     const match = resolveTokenMatch(tokenText, tc);
-    if (!match || match.confidence < 0.80 || !match.type) {
+    if (!match || match.confidence < 0.80 || (!match.type && !match.custom)) {
       return { svg: null, err: 'Block not found or confidence < 80%: ' + tokenText };
     }
 
