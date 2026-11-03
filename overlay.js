@@ -74,8 +74,12 @@
     if (svgEl) {
       if (isMultiLine) {
         svgEl.style.display = 'block';
-        if (data.width) svgEl.style.width = data.width + 'px';
-        if (data.height) svgEl.style.height = data.height + 'px';
+        // Benchmark: scale factor 2.25 / 44 keeps font size consistent at ~13-14px visual (17px text bounding box)
+        const emScale = 2.25 / 44;
+        const emWidth = ((data.width || 100) * emScale).toFixed(3);
+        const emHeight = ((data.height || 70) * emScale).toFixed(3);
+        svgEl.style.setProperty('width', `${emWidth}em`, 'important');
+        svgEl.style.setProperty('height', `${emHeight}em`, 'important');
         svgEl.style.maxWidth = '100%';
       } else {
         svgEl.style.display = 'inline-block';

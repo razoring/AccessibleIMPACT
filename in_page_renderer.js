@@ -342,12 +342,20 @@
           const display = cs.getPropertyValue('display');
           if (display && display === 'none') s += 'display:none;';
         } else if (tag === 'text') {
-          // MakeCode block text is crisp white 600 weight
-          s += 'fill:#ffffff !important;font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;font-size:16px !important;font-weight:600 !important;text-anchor:start;dominant-baseline:central;';
+          // MakeCode block text is crisp white, editable inputs are dark slate
+          const isWhite = !el.closest('.blocklyTextInputField, .blocklyNumberField');
+          const fill = isWhite ? '#ffffff' : '#575e75';
+          s += `fill:${fill} !important;font-family:Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace !important;font-size:16px !important;font-weight:600 !important;text-anchor:start;dominant-baseline:central;`;
         } else if (tag === 'rect') {
-          // Toggles and dropdowns
+          // Check if this is a text input field, dropdown, or toggle
+          const isTextInput = el.classList.contains('blocklyFieldRect') && el.closest('.blocklyTextInputField, .blocklyNumberField');
+          const isDropdown = el.classList.contains('blocklyDropdownRect') || el.closest('.blocklyDropdownField');
           const isToggle = el.getAttribute('cursor') === 'pointer' || el.classList.contains('blocklyToggleRect');
-          if (isToggle) {
+          if (isTextInput) {
+            s += 'fill:#ffffff !important;stroke:#0f3578 !important;rx:4px !important;ry:4px !important;display:block !important;';
+          } else if (isDropdown) {
+            s += 'fill:transparent !important;stroke:rgba(0,0,0,0.15) !important;';
+          } else if (isToggle) {
             // Authentic MakeCode switch styling
             s += 'fill:#808e9b !important;stroke:#485460 !important;stroke-width:1.5px !important;rx:4px !important;ry:4px !important;';
           } else {
@@ -381,9 +389,24 @@
     styleEl.textContent = `
       text, .blocklyText {
         fill: #ffffff !important;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+        font-family: Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace !important;
         font-size: 16px !important;
         font-weight: 600 !important;
+      }
+      .blocklyTextInputField .blocklyFieldRect,
+      .blocklyNumberField .blocklyFieldRect {
+        fill: #ffffff !important;
+      }
+      .blocklyDropdownRect,
+      .blocklyDropdownField .blocklyFieldRect {
+        fill: transparent !important;
+      }
+      .blocklyTextInputField text,
+      .blocklyNumberField text {
+        fill: #575e75 !important;
+      }
+      .blocklyDropdownField text {
+        fill: #ffffff !important;
       }
       rect[cursor="pointer"] {
         fill: #808e9b !important;
