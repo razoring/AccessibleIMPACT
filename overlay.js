@@ -10,6 +10,14 @@
   const svgCache = new Map();
   const pendingRequests = new Map(); // lookupToken -> Array<span elements>
   let scanTimer = null;
+  let isAifxEnabled = true;
+
+  try {
+    const saved = localStorage.getItem('aifx_enabled');
+    if (saved !== null) {
+      isAifxEnabled = (saved === 'true');
+    }
+  } catch (e) {}
 
   function healSplitTokens(area) {
     if (!area) return;
@@ -529,6 +537,25 @@
         line-height: normal !important;
         box-sizing: border-box !important;
       }
+      .aifx-disabled .aifx-rendered,
+      .aifx-disabled .aifx-rendered.aifx-multiline,
+      .aifx-disabled .aifx-rendered.aifx-inline,
+      .aifx-disabled .aifx-rendered.aifx-play-icon {
+        display: none !important;
+      }
+      .aifx-disabled strong:has(> .aifx-rendered.aifx-multiline),
+      .aifx-disabled em:has(> .aifx-rendered.aifx-multiline),
+      .aifx-disabled p:has(> strong > .aifx-rendered.aifx-multiline),
+      .aifx-disabled p:has(> .aifx-rendered.aifx-multiline) {
+        display: inline !important;
+        max-width: none !important;
+      }
+      .aifx-raw-fallback {
+        display: none !important;
+      }
+      .aifx-disabled .aifx-raw-fallback {
+        display: inline !important;
+      }
       .aifx-rendered.aifx-multiline svg {
         display: block !important;
         width: auto !important;
@@ -541,6 +568,37 @@
         transform: scale(1.02) !important;
         position: relative !important;
         z-index: 10 !important;
+      }
+      .mode-aifx-toggle {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-right: 3px !important;
+        cursor: pointer !important;
+      }
+      .mode-aifx-toggle span {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 34px !important;
+        height: 34px !important;
+        background-color: #4b7bec !important;
+        border-radius: 4px !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.15) !important;
+        transition: opacity 0.2s ease, filter 0.2s ease !important;
+      }
+      .mode-aifx-toggle.aifx-off span {
+        background-color: #8892b0 !important;
+        opacity: 0.6 !important;
+      }
+      .mode-aifx-toggle:hover span {
+        filter: brightness(1.1) !important;
+      }
+      .header {
+        margin-bottom: 16px !important;
+      }
+      .step {
+        font-size: 21px !important;
       }
     `;
     (document.head || document.documentElement).appendChild(style);
@@ -851,7 +909,7 @@
 
   function replaceInNode(node) {
     if (!node || node.nodeType !== 3) return;
-    if (node.parentElement && (node.parentElement.closest('.aifx-rendered') || node.parentElement.closest('[data-token]'))) return;
+    if (node.parentElement && (node.parentElement.closest('.aifx-rendered') || node.parentElement.closest('.aifx-raw-fallback') || node.parentElement.closest('[data-token]'))) return;
 
     const text = node.nodeValue || '';
     if (!text.includes('[') && !text.includes('(') && !text.includes('<') && !text.includes('▶')) return;
@@ -877,8 +935,12 @@
       const overallText = (document.body ? document.body.textContent : '').toLowerCase();
 
       const span = document.createElement('span');
-      span.className = 'aifx-rendered'; // Set immediately to prevent re-wrapping
+      span.className = 'aifx-rendered';
       span.setAttribute('data-token', tokenText);
+
+      const fallback = document.createElement('span');
+      fallback.className = 'aifx-raw-fallback';
+      fallback.textContent = tokenText;
 
       const cached = getStaticOrCached(tokenText);
       if (cached && cached.svg) {
@@ -902,6 +964,7 @@
       }
 
       fragment.appendChild(span);
+      fragment.appendChild(fallback);
       replaced = true;
     }
 
@@ -919,8 +982,58 @@
     });
   });
 
+  function updateAifxStateClass() {
+    if (isAifxEnabled) {
+      document.documentElement.classList.remove('aifx-disabled');
+    } else {
+      document.documentElement.classList.add('aifx-disabled');
+    }
+  }
+
+  function ensureToggleButton() {
+    updateAifxStateClass();
+    const cta = document.querySelector('.header-cta');
+    if (!cta) return;
+    if (document.getElementById('aifx-toggle-container')) return;
+
+    const btn = document.createElement('div');
+    btn.id = 'aifx-toggle-container';
+    btn.className = 'mode-aifx-toggle' + (isAifxEnabled ? '' : ' aifx-off');
+    btn.setAttribute('title', isAifxEnabled ? 'Disable block graphics' : 'Enable block graphics');
+    btn.innerHTML = `
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+      </span>
+    `;
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      isAifxEnabled = !isAifxEnabled;
+      try {
+        localStorage.setItem('aifx_enabled', String(isAifxEnabled));
+      } catch (err) {}
+
+      updateAifxStateClass();
+
+      if (isAifxEnabled) {
+        btn.classList.remove('aifx-off');
+        btn.setAttribute('title', 'Disable block graphics');
+      } else {
+        btn.classList.add('aifx-off');
+        btn.setAttribute('title', 'Enable block graphics');
+      }
+    });
+
+    cta.insertBefore(btn, cta.firstChild);
+  }
+
   function scan() {
     injectStyles();
+    ensureToggleButton();
     // Strictly query content containers only
     const areas = document.querySelectorAll('app-step-information content, [data-instruction], article, .lesson-content');
     for (const area of areas) {
@@ -928,7 +1041,7 @@
       const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT, {
         acceptNode(n) {
           if (!n || !n.nodeValue) return NodeFilter.FILTER_REJECT;
-          if (n.parentElement && (n.parentElement.closest('.aifx-rendered') || n.parentElement.closest('[data-token]'))) {
+          if (n.parentElement && (n.parentElement.closest('.aifx-rendered') || n.parentElement.closest('.aifx-raw-fallback') || n.parentElement.closest('[data-token]'))) {
             return NodeFilter.FILTER_REJECT;
           }
           if (n.nodeValue.includes('[') || n.nodeValue.includes('(') || n.nodeValue.includes('<') || n.nodeValue.includes('▶')) {
