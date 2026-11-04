@@ -46,7 +46,9 @@
   function parseCompare(raw) {
     if (!raw) return null;
     const str = raw.trim();
-    if (!((str.startsWith('<') && str.endsWith('>')) || (str.startsWith('[') && str.endsWith(']')))) {
+    // Accept <...>, [...] and (...)-bounded compare expressions (paren bounds needed
+    // for nested children like (0=0) used as if-conditions).
+    if (!((str.startsWith('<') && str.endsWith('>')) || (str.startsWith('[') && str.endsWith(']')) || (str.startsWith('(') && str.endsWith(')')))) {
       return null;
     }
     const inner = str.slice(1, -1).trim();
@@ -190,7 +192,10 @@
   function parseLogicOp(raw) {
     if (!raw) return null;
     const str = raw.trim();
-    if (!((str.startsWith('<') && str.endsWith('>')) || (str.startsWith('[') && str.endsWith(']')))) {
+    // Strict: only <...>-bounded boolean expressions may resolve to an and/or block.
+    // Paren bounds are also accepted for nested boolean children like (a and b).
+    // Bracketed instruction tokens (e.g. [on each tile ... and kind ...]) are NOT.
+    if (!((str.startsWith('<') && str.endsWith('>')) || (str.startsWith('(') && str.endsWith(')')))) {
       return null;
     }
     const inner = str.slice(1, -1).trim();
@@ -233,7 +238,8 @@
   function parseLogicNegate(raw) {
     if (!raw) return null;
     const str = raw.trim();
-    if (!((str.startsWith('<') && str.endsWith('>')) || (str.startsWith('[') && str.endsWith(']')))) {
+    // Strict: only <...>-bounded negation (e.g. <not (isBeeDizzy)>); never bracket tokens
+    if (!(str.startsWith('<') && str.endsWith('>'))) {
       return null;
     }
     const inner = str.slice(1, -1).trim();
@@ -2227,6 +2233,346 @@
     return catalogCache;
   }
 
+  /* __AIFX_SLOT_ENGINE_START__
+   * Generic nested-parameter (slot-template) engine.
+   *
+   * Outer tokens like [set (list) to] or [change (score) by (1)] contain nested child
+   * tokens. Matching them safely requires structure-awareness: we FIRST freeze every
+   * top-level child into a \u0001{n}\u0001 placeholder (the same depth-walk idea as the
+   * overlay tokenizer), so template regexes can never span into nested structure, and
+   * only then match skeletons like "set _0_ to". Slot values resolve recursively into
+   * real sub-blocks (variables_get, math_number, logic_boolean, logic_compare,
+   * logic_operation, logic_negate, math_arithmetic, ...), which are connected through
+   * the SLOT_SPEC socket names below.
+   *
+   * Strictness guarantees for the parser:
+   *   - value/operand slots match exactly ONE child placeholder OR a tightly-bounded
+   *     literal (number / true|false / KNOWN_VARS identifier) — never free prose;
+   *     therefore compound statements like [set (mySprite) to sprite (img) of kind
+   *     (Player)] can NOT be hijacked into a variables_set;
+   *   - statement-children (multiple children around literals like "sprite ... of kind")
+   *     never match a template, so the token falls through to CANONICAL_MAP untouched;
+   *   - and/or/not-only templates require an outer <...> or (...) bound, never [...]
+   *     (instruction statements), mirroring parseLogicOp/parseLogicNegate.
+   */
+  const PH = '\u0001';
+
+  const KNOWN_VARS = [
+    'question', 'speed', 'columnnumber', 'startingcolumn', 'bridgelength',
+    'snakesstomped', 'invincible', 'foundfossils', 'userresponselist',
+    'text list', 'powerup', 'column', 'row', 'levelnum', 'backgroundindex',
+    'scenenum', 'userindex', 'currentindex', 'count', 'i', 'arraynum',
+    'newindex', 'currentarray', 'age', 'place', 'name', 'time', 'score',
+    'life', 'choice', 'statusbarsprite', 'statusbar', 'item', 'index',
+    'mysprite', 'othersprite', 'sprite', 'playersprite', 'fishsprite', 'projectile',
+    'x', 'y', 'vx', 'vy', 'ax', 'ay', 'dx', 'dy', 'value', 'list', 'text',
+    'variable', 'answer', 'input', 'response', 'velocity', 'volume'
+  ];
+
+  // Socket names used to connect resolved slot values into their parent block.
+  const SLOT_SPEC = {
+    'variables_set':    { varField: 'VAR',   value: 'VALUE' },
+    'variables_change': { varField: 'VAR',   value: 'VALUE' },
+    'logic_compare':    { opField: 'OP',     sides: ['A', 'B'] },
+    'logic_operation':  { opField: 'OP',     sides: ['A', 'B'] },
+    'logic_negate':     { value: 'BOOL' },
+    'controls_if':      { cond: 'IF0' }
+  };
+
+  const SLOT_OPS = { '=': 'EQ', '==': 'EQ', '!=': 'NEQ', '<': 'LT', '<=': 'LTE', '=<': 'LTE', '>': 'GT', '>=': 'GTE', '=>': 'GTE' };
+
+  // Prose stop-words that must never appear inside a variable/slot identifier.
+  const SLOT_PROSE_RE = /\b(using|such as|for example|or|and|with|from|in|by|not|to|how|whatever|of|that|the|a|an|both|when|before|after|if|where|due|such|except|keeping|navigating|moving|including|instead|out|all|apply|vice versa)\b/i;
+
+  // Frozen-placeholder / operand / value regex fragments.
+  // PH_RE never captures (avoids group-number shifting when composed);
+  // R_PH_CAP captures the placeholder index when matched standalone.
+  const PH_RE    = '\\u0001\\d+\\u0001';
+  const R_PH_CAP = '^\\u0001(\\d+)\\u0001$';
+  const LIT_OPER = 'true|false|[-+]?\\d+(?:\\.\\d+)?|[A-Za-z_]\\w{0,18}';
+  const R_OPER      = '(' + PH_RE + '|' + LIT_OPER + ')';                 // operand side  (1 capture)
+  const R_PH_GROUP  = '(' + PH_RE + ')';                                  // frozen child  (1 capture)
+  const R_VAL_GROUP = '(' + PH_RE + '|' + LIT_OPER + ')';                 // value side    (1 capture)
+
+  // Mirror of the bubble-path prose/identifier gate.
+  function isVarIdent(name) {
+    if (!name) return false;
+    const s = name.trim();
+    if (!s) return false;
+    if (SLOT_PROSE_RE.test(s)) return false;
+    if (s.includes(' ') && !KNOWN_VARS.includes(s.toLowerCase())) return false;
+    return /^[\w ]{1,20}$/.test(s);
+  }
+
+  // Structure-aware split: freezes top-level (...) / [...] / <...> children into
+  // placeholders, keeps every other character (including < > used as compare
+  // operators, e.g. 0>0) as literal skeleton text. Angle groups open only at
+  // top level (next char must be a letter/'('), so compare operators inside a
+  // child like (a<5) stay frozen child text. Nested children are never re-scanned.
+  function splitTopChildren(str) {
+    const parts = [];
+    const children = [];
+    const stack = []; // kinds of open groups: 'P', 'B', 'A'
+    let start = -1;
+    for (let i = 0; i < str.length; i++) {
+      const c = str[i];
+      if (c === '(' || c === '[') {
+        stack.push(c === '(' ? 'P' : 'B');
+        if (stack.length === 1 && start < 0) {
+          start = i;
+          parts.push(PH + children.length + PH);
+        }
+        continue;
+      }
+      if (c === '<' && stack.length === 0 && /[A-Za-z_(]/.test(str[i + 1] || '')) {
+        stack.push('A');
+        if (start < 0) { start = i; parts.push(PH + children.length + PH); }
+        continue;
+      }
+      const top = stack[stack.length - 1];
+      if (c === ')' && top === 'P') { stack.pop(); }
+      else if (c === ']' && top === 'B') { stack.pop(); }
+      else if (c === '>' && top === 'A') { stack.pop(); }
+      if (stack.length === 0 && start >= 0) {
+        children.push(str.slice(start, i + 1).trim());
+        start = -1;
+        continue;
+      }
+      if (stack.length === 0) parts.push(c);
+    }
+    return { skeleton: parts.join('').trim().replace(/\s+/g, ' '), children };
+  }
+
+  // Classify a template slot capture: placeholder → underlying child text;
+  // literal sides only pass for number / boolean / KNOWN_VARS identifiers.
+  function valOperand(g, children) {
+    if (!g) return null;
+    const ph = g.match(/^\u0001(\d+)\u0001$/);
+    if (ph) {
+      const child = children[parseInt(ph[1], 10)];
+      if (!child) return null;
+      const inner = child.trim().replace(/^[\(\[]/, '').replace(/[\)\]]$/, '').trim();
+      if (/^(?:true|false|-?\d+(?:\.\d+)?)$/i.test(inner)) return child;
+      // Prose guard: multi-word children that read like English must not become operands
+      // (single short identifiers like (a), (b), (list) are fine).
+      if (inner.includes(' ') && SLOT_PROSE_RE.test(inner)) return null;
+      return child; // placeholders are expressions; resolution happens via createSubBlock
+    }
+    if (/^(?:true|false)$/i.test(g) || /^[-+]?\d+(?:\.\d+)?$/.test(g)) return g;
+    if (isVarIdent(g) && KNOWN_VARS.includes(g.toLowerCase())) return g;
+    return null;
+  }
+
+  // Extract a variable NAME from a slot capture (child text like "(list)" → "list").
+  function varNameFromOperand(g, children) {
+    if (!g) return null;
+    const ph = g.match(/^\u0001(\d+)\u0001$/);
+    if (!ph) return isVarIdent(g) ? g.trim() : null;
+    const child = children[parseInt(ph[1], 10)];
+    if (!child) return null;
+    const inner = child.trim().replace(/^[\(\[]/, '').replace(/[\)\]]$/, '').trim();
+    return isVarIdent(inner) ? inner : null;
+  }
+
+  // Resolve one slot value into a real sub-block (called from mutators when the
+  // parent block exists; guarded by slotDepth so nesting stays bounded).
+  function resolveSlotValue(text, ws, tc, depth) {
+    if (text == null || depth > 2) return null;
+    const s = String(text).trim();
+    if (!s) return null;
+    return createSubBlock(s, ws, tc);
+  }
+
+  // Template definitions. Order matters: logic first, then variable statements,
+  // then controls_if; each template is entirely self-contained.
+  const SLOT_TEMPLATES = [
+    {
+      id: 'logic_compare',
+      when: (outer) => outer === '<' || outer === null,
+      re: new RegExp('^' + R_OPER + '\\s*(<=|>=|==|!=|=<|=>|<|>|=)\\s*' + R_OPER + '$', 'i'),
+      build(m, children, ctx) {
+        if (SLOT_OPS[m[2]] == null) return null;
+        const left = valOperand(m[1], children);
+        const right = valOperand(m[3], children);
+        if (!left || !right) return null;
+        const op = SLOT_OPS[m[2]];
+        return {
+          type: 'logic_compare',
+          mutator: (b, ws) => {
+            const f = b.getField('OP'); if (f) f.setValue(op);
+            const lb = resolveSlotValue(left, ws, ctx.tc, ctx.depth + 1);
+            if (lb) connectInput(b, SLOT_SPEC.logic_compare.sides[0], lb);
+            const rb = resolveSlotValue(right, ws, ctx.tc, ctx.depth + 1);
+            if (rb) connectInput(b, SLOT_SPEC.logic_compare.sides[1], rb);
+          }
+        };
+      }
+    },
+    {
+      id: 'logic_operation',
+      when: (outer) => outer === '<' || outer === '(' || outer === null,
+      re: new RegExp('^' + R_OPER + '\\s+(and|or)\\s+' + R_OPER + '$', 'i'),
+      build(m, children, ctx) {
+        const left = valOperand(m[1], children);
+        const right = valOperand(m[3], children);
+        if (!left || !right) return null;
+        return {
+          type: 'logic_operation',
+          mutator: (b, ws) => {
+            const f = b.getField('OP'); if (f) f.setValue(m[2].toUpperCase());
+            const lb = resolveSlotValue(left, ws, ctx.tc, ctx.depth + 1);
+            if (lb) connectInput(b, SLOT_SPEC.logic_operation.sides[0], lb);
+            const rb = resolveSlotValue(right, ws, ctx.tc, ctx.depth + 1);
+            if (rb) connectInput(b, SLOT_SPEC.logic_operation.sides[1], rb);
+          }
+        };
+      }
+    },
+    {
+      id: 'logic_negate',
+      when: (outer) => outer === '<' || outer === '(' || outer === null,
+      re: new RegExp('^not\\s+' + R_OPER + '$', 'i'),
+      build(m, children, ctx) {
+        const operand = valOperand(m[1], children);
+        if (!operand) return null;
+        return {
+          type: 'logic_negate',
+          mutator: (b, ws) => {
+            const sub = resolveSlotValue(operand, ws, ctx.tc, ctx.depth + 1);
+            if (sub) connectInput(b, SLOT_SPEC.logic_negate.value, sub);
+          }
+        };
+      }
+    },
+    {
+      id: 'variables_set',
+      when: () => true,
+      re: new RegExp('^(?:set|let)\\s+' + R_PH_GROUP + '\\s+to(?:\\s+' + R_VAL_GROUP + ')?\\s*$', 'i'),
+      build(m, children, ctx) {
+        const name = varNameFromOperand(m[1], children);
+        if (!name) return null;
+        const valText = m[2] ? valOperand(m[2], children) : null;
+        if (m[2] && !valText) return null;
+        return {
+          type: 'variables_set',
+          mutator: (b, ws) => {
+            const v = ensureVariable(ws, name);
+            const f = b.getField('VAR'); if (f && v) f.setValue(v.getId());
+            if (valText) {
+              const sub = resolveSlotValue(valText, ws, ctx.tc, ctx.depth + 1);
+              if (sub) connectInput(b, SLOT_SPEC.variables_set.value, sub);
+            }
+          }
+        };
+      }
+    },
+    {
+      id: 'variables_change',
+      when: () => true,
+      re: new RegExp('^change\\s+' + R_PH_GROUP + '\\s+by(?:\\s+' + R_VAL_GROUP + ')?\\s*$', 'i'),
+      build(m, children, ctx) {
+        const name = varNameFromOperand(m[1], children);
+        if (!name) return null;
+        const valText = m[2] ? valOperand(m[2], children) : null;
+        if (m[2] && !valText) return null;
+        return {
+          type: 'variables_change',
+          mutator: (b, ws) => {
+            const v = ensureVariable(ws, name);
+            const f = b.getField('VAR'); if (f && v) f.setValue(v.getId());
+            if (valText) {
+              const sub = resolveSlotValue(valText, ws, ctx.tc, ctx.depth + 1);
+              if (sub) connectInput(b, SLOT_SPEC.variables_change.value, sub);
+            }
+          }
+        };
+      }
+    },
+    {
+      id: 'controls_if',
+      when: () => true,
+      re: new RegExp('^if\\s+(' + PH_RE + '|true|false)\\s+then(\\s*/\\s*else)?\\s*$', 'i'),
+      build(m, children, ctx) {
+        const cond = m[1];
+        let condText = 'true';
+        const ph = cond.match(/^\u0001(\d+)\u0001$/);
+        if (ph) {
+          const child = children[parseInt(ph[1], 10)];
+          if (!child) return null;
+          const inner = child.trim().replace(/^[\(\[]/, '').replace(/[\)\]]$/, '').trim();
+          if (/^(?:true|false)$/i.test(inner)) condText = inner.toLowerCase();
+          else if (SLOT_PROSE_RE.test(inner)) return null;
+          else condText = child;
+        }
+        const hasElse = !!m[2];
+        return {
+          type: 'controls_if',
+          mutator: (b, ws) => {
+            if (hasElse) {
+              b.elseCount_ = 1;
+              if (b.updateShape_) b.updateShape_();
+            }
+            const sub = resolveSlotValue(condText, ws, ctx.tc, ctx.depth + 1);
+            if (sub) connectInput(b, SLOT_SPEC.controls_if.cond, sub);
+          }
+        };
+      }
+    }
+  ];
+
+  // Main entry: try to resolve a raw nested-parameter token through the templates.
+  // Returns { type, mutator } or null (null always leaves the token to the canonic/fuzzy paths).
+  function resolveTemplateMatch(raw, tc, depth) {
+    depth = depth || 0;
+    if (depth > 2 || !raw) return null;
+    const str = raw.trim();
+    if (str.length < 3 || !/[\[\(<]/.test(str)) return null;
+
+    // Detect a TRUE full-token bound pair (<...>, [...], (...)): the opener at
+    // char 0 must close exactly at the last char. Rejects (a) and (b), <0>0>, etc.
+    let outer = null;
+    let inner = str;
+    const CLOSERS = { ')': '(', ']': '[', '>': '<' };
+    {
+      const c0 = str[0];
+      const stack = [];
+      const angleOpener = (s, i) => s[i] === '<' && /[A-Za-z_(]/.test(s[i + 1] || '');
+      let balanced = false;
+      for (let i = 0; i < str.length; i++) {
+        const c = str[i];
+        if (c === '(' || c === '[' || angleOpener(str, i)) stack.push(c);
+        else if (c === ')' || c === ']' || c === '>') {
+          const top = stack.pop();
+          if (!top || CLOSERS[c] !== top) { break; }
+          if (stack.length === 0) {
+            balanced = (i === str.length - 1 && top === c0);
+            break;
+          }
+        }
+      }
+      if (balanced && c0 === '[') { outer = '['; inner = str.slice(1, -1); }
+      else if (balanced && c0 === '<') { outer = '<'; inner = str.slice(1, -1); }
+      else if (balanced && c0 === '(') { outer = '('; inner = str.slice(1, -1); }
+    }
+
+    const { skeleton, children } = splitTopChildren(inner);
+    const skeL = skeleton.toLowerCase();
+
+    // Tokens with no structural children can only route through controls_if (literal conds).
+    if (!children.length && !/^if\b/.test(skeL)) return null;
+
+    const ctx = { tc, depth, children };
+    for (const tmpl of SLOT_TEMPLATES) {
+      if (tmpl.when && !tmpl.when(outer)) continue;
+      const m = skeL.match(tmpl.re);
+      if (!m) continue;
+      const built = tmpl.build(m, children, ctx);
+      if (built && built.type) return built;
+    }
+    return null;
+  }
+  /* __AIFX_SLOT_ENGINE_END__ */
+
   function resolveTokenMatch(tokenText, tc) {
     const raw = tokenText.trim();
     if (raw === '[]' || raw === '()' || raw === '[ ]' || raw === '( )') {
@@ -2260,6 +2606,14 @@
         custom: () => renderTilemapPlaceholder(raw),
         name: raw
       };
+    }
+
+    // 0.9. Nested-parameter slot-template engine: [set (list) to], [change (score) by
+    // (1)], <(a and b)>, [if (0=0) then] ... A null result always leaves the token to
+    // the canonical / fuzzy paths untouched.
+    {
+      const tmpl = resolveTemplateMatch(raw, tc, 0);
+      if (tmpl) return { confidence: 1.0, type: tmpl.type, mutator: tmpl.mutator, name: raw };
     }
 
     // 1. Canonical rule match
@@ -2510,16 +2864,7 @@
           name: raw
         };
       }
-      const knownVars = [
-        'question', 'speed', 'columnnumber', 'startingcolumn', 'bridgelength',
-        'snakesstomped', 'invincible', 'foundfossils', 'userresponselist',
-        'text list', 'powerup', 'column', 'row', 'levelnum', 'backgroundindex',
-        'scenenum', 'userindex', 'currentindex', 'count', 'i', 'arraynum',
-        'newindex', 'currentarray', 'age', 'place', 'name', 'time', 'score',
-        'life', 'choice', 'statusbarsprite', 'statusbar', 'item', 'index',
-        'mysprite', 'othersprite', 'sprite', 'playersprite', 'fishsprite', 'projectile',
-        'x', 'y', 'vx', 'vy', 'ax', 'ay', 'dx', 'dy', 'value', 'list', 'text'
-      ];
+      const knownVars = KNOWN_VARS;
 
       // Guard against non-variables: if it's bracketed [...] and looks like an action/verb or unknown token rather than a variable, do not assume variable
       const isBracket = raw.startsWith('[');

@@ -292,15 +292,27 @@
     if (/sprites?|projectile/i.test(combined)) active.add('sprites');
     if (/controller|button/i.test(combined)) active.add('controller');
     if (/music|sound|melody|tune/i.test(combined)) active.add('music');
-    if (/tile\s*util/i.test(combined)) active.add('tileUtil');
-    if (/tile\s*scanner/i.test(combined)) active.add('tileScanner');
-    if (/scroller/i.test(combined)) active.add('scroller');
+    if (/tilemap|\btile\b|\btiles\b|tile\s*util/i.test(combined)) active.add('tileUtil');
+    if (/tile\s*scanner|\bscan(ning)?\b|\bdirection\b/i.test(combined)) active.add('tileScanner');
+    if (/scroll/i.test(combined)) active.add('scroller');
     if (/multiplayer|mp\.|player\s*[234]/i.test(combined)) active.add('mp');
     if (/animation|animat/i.test(combined)) active.add('animation');
     if (/game|dialog|splash/i.test(combined)) active.add('game');
     if (/info|score|life/i.test(combined)) active.add('info');
 
     return active;
+  }
+
+  // Boolean bubbles (<a and b>, <x = y>, <not z>) are SHORT and verb-free.
+  // Instruction statements containing and/or/not must never resolve to logic blocks.
+  const LOGIC_VERB_BLACKLIST = /\b(create|destroy|remove|clear|draw|drap|splash|show|play|press|move|place|follow|overlap|on\s+each|on\s+game|on\s+life|on\s+countdown|stay\s+in\s+screen|bounce|of\s+kind|tile|tilemap|camera|screen|volume|sound|melody|effect|image|animat|set\b|change\b|game\s+over|score\b|life\b|countdown)\b/i;
+
+  function isBooleanBubble(cleanFlat) {
+    const words = cleanFlat.split(/\s+/).filter(Boolean);
+    if (words.length > 3) return false;                 // "a and b" = 3 words max
+    if (cleanFlat.length > 45) return false;            // statements are longer
+    if (LOGIC_VERB_BLACKLIST.test(cleanFlat)) return false;
+    return true;
   }
 
   function resolveTokenWithNLP(tokenText, stepText, overallText) {
@@ -341,6 +353,12 @@
 
     for (const rule of tokenRules) {
       if (rule.category && !activeCategories.has(rule.category)) continue;
+
+      // Strictness gate: and/or/not/compare rules only fire on short, verb-free
+      // boolean bubbles — never on multi-item instruction statements.
+      if (rule.id === 'logic_operation' || rule.id === 'logic_compare' || rule.id === 'logic_negate') {
+        if (!isBooleanBubble(cleanFlat)) continue;
+      }
 
       const m = cleanFlat.match(rule.regex) || clean.match(rule.regex);
       if (m) {
