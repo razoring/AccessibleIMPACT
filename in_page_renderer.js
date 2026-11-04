@@ -1646,7 +1646,7 @@
     { match: /^\(?\s*pick\s+random\s*\)?$/i, type: 'device_random', conf: 1.0 },
     { match: /^[<\[\(]?\s*%?\s*chance\s*[>\]\)]?$/i, type: 'percentchance', conf: 1.0 },
     {
-      match: /^[<\[\(]?\s*is\s+sprite\s+hitting\s+wall(?:\s*\[?(bottom|top|left|right)?\]?)?\s*[>\]\)]?$/i,
+      match: /^[<\[\(]?\s*is\s+(?:(?:[\[\(]?([a-zA-Z0-9_]+)[\]\)]?|sprite)\s+)?hitting\s+wall(?:\s*[\[\(]?(bottom|top|left|right)?[\]\)]?)?\s*[>\]\)]?$/i,
       type: 'spritehasobstacle',
       mutator: (b, ws, raw) => {
         const m = (raw || '').match(/(bottom|top|left|right)/i);
@@ -1656,9 +1656,11 @@
         try {
           const inp = b.getInput('sprite');
           if (inp && inp.connection && !inp.connection.targetConnection) {
+            const sm = (raw || '').match(/is\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?\s+hitting/i);
+            const varName = (sm && sm[1] && sm[1].toLowerCase() !== 'sprite') ? sm[1] : 'mySprite';
             const vb = ws.newBlock('variables_get');
             vb.setShadow(true);
-            const v = ensureVariable(ws, 'mySprite');
+            const v = ensureVariable(ws, varName);
             const fv = vb.getField('VAR');
             if (fv && v) fv.setValue(v.getId());
             vb.initSvg();
@@ -2085,17 +2087,39 @@
     },
     { match: /^\[?\s*connect\s+.*and\s+.*by\s+.*\]?$/i, type: 'tileUtil_connectMapById', conf: 1.0 },
     {
+      match: /^\[?\s*function\s+([a-zA-Z0-9_]+)(?:\s+container)?\s*\]?$/i,
+      type: 'function_definition',
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/^\[?\s*function\s+([a-zA-Z0-9_]+)/i);
+        const name = m && m[1] ? m[1] : 'doSomething';
+        const f = b.getField('function_name') || b.getField('NAME');
+        if (f) f.setValue(name);
+      },
+      conf: 1.0
+    },
+    {
       match: /^\[?\s*load\s+tilemap\s+connected\s+by(?:\s*\(?([a-zA-Z0-9_]+)\)?)?\s*\]?$/i,
       type: 'tileUtil_loadConnectedMap',
       mutator: (b, ws, raw) => {
         const m = (raw || '').match(/load\s+tilemap\s+connected\s+by\s*[\(\[]?\s*([a-zA-Z0-9_]+)\s*[\)\]]?/i);
-        const val = m && m[1] ? m[1].trim() : '0';
+        const val = m && m[1] ? m[1].trim() : 'Door1';
         const inp = b.inputList && b.inputList.find(i => i.connection && i.type === 1);
         if (inp && inp.connection && !inp.connection.targetConnection) {
           try {
-            const sub = createSubBlock(val, ws, { B: blockly(), ws });
-            if (sub && sub.outputConnection) {
-              inp.connection.connect(sub.outputConnection);
+            const B = blockly();
+            if (B && B.Blocks && B.Blocks['tileUtil_connectionKind']) {
+              const ck = ws.newBlock('tileUtil_connectionKind');
+              ck.setShadow(true);
+              const f = ck.getField('kind') || ck.getField('NAME');
+              if (f) f.setValue(val);
+              ck.initSvg();
+              ck.render();
+              inp.connection.connect(ck.outputConnection);
+            } else {
+              const sub = createSubBlock(val, ws, { B: blockly(), ws });
+              if (sub && sub.outputConnection) {
+                inp.connection.connect(sub.outputConnection);
+              }
             }
           } catch (e) {}
         }
@@ -2253,6 +2277,12 @@
               if (v && v !== 'initial') s += p + ':' + v + ';';
             }
           }
+        } else if (tag === 'polygon' && (el.classList.contains('blocklyToggleRect') || el.closest('.blocklyToggle'))) {
+          // Authentic MakeCode switch thumb styling - never default to black!
+          const isParentOn = !!el.closest('.blocklyToggleOn');
+          const thumbFill = isParentOn ? '#2ecc71' : '#808e9b';
+          const thumbStroke = isParentOn ? '#27ae60' : '#485460';
+          s += `fill:${thumbFill} !important;stroke:${thumbStroke} !important;stroke-width:1.5px !important;`;
         } else {
           // path, circle, polygon, etc.
           for (const p of INPROPS) {
@@ -2309,14 +2339,47 @@
         rx: 4px !important;
         ry: 4px !important;
       }
+      .blocklyToggleRect {
+        fill: #808e9b !important;
+        stroke: #485460 !important;
+        stroke-width: 1.5px !important;
+      }
+      .blocklyToggleOn .blocklyToggleRect {
+        fill: #2ecc71 !important;
+        stroke: #27ae60 !important;
+      }
+      .blocklyToggleOff .blocklyToggleRect {
+        fill: #808e9b !important;
+        stroke: #485460 !important;
+      }
     `;
     svg.appendChild(styleEl);
 
-    // If block contains tilemap field/socket, ensure checkered tile placeholder image is present
-    const tilemapFields = clone.querySelectorAll('.blocklySpriteField, g.blocklyEditableField rect[width="40"], g.blocklyEditableField rect[width="40px"]');
-    for (const rect of tilemapFields) {
+    // Clean up any empty broken <image> tags without href that Chromium might render as broken icons
+    // and replace blank transparent 32x32 PNG with authentic checkered pattern
+    clone.querySelectorAll('image').forEach(img => {
+      const href = img.getAttribute('href') || img.getAttribute('xlink:href') || img.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
+      if (!href) {
+        img.remove();
+      } else if (href.includes('iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0')) {
+        img.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', CHECKERED_TILE_PNG);
+        img.setAttribute('href', CHECKERED_TILE_PNG);
+      }
+    });
+
+    // Remove any unrendered semanticIcon or private-use Unicode font glyphs (e.g. film glyph in animation)
+    clone.querySelectorAll('text').forEach(t => {
+      if (t.classList.contains('semanticIcon') || /[\uE000-\uF8FF]/.test(t.textContent || '')) {
+        t.remove();
+      }
+    });
+
+    // If block contains tilemap field/socket or image socket, ensure checkered tile placeholder image is present
+    const imageAndTileFields = clone.querySelectorAll('.blocklySpriteField, .blocklyAnimationField, g.blocklyEditableField rect[width="40"], g.blocklyEditableField rect[width="40px"]');
+    for (const rect of imageAndTileFields) {
       const parentG = rect.parentNode;
-      if (parentG && !parentG.querySelector('image')) {
+      const existingImg = parentG ? parentG.querySelector('image') : null;
+      if (parentG && !existingImg) {
         const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
         img.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', CHECKERED_TILE_PNG);
         img.setAttribute('height', '32');
@@ -2457,6 +2520,13 @@
 
   function populateDefaultShadows(b, ws, B, rawText) {
     if (!b || !b.inputList || !ws || !B) return;
+
+    // Exception for boolean logic blocks: keep open hexagonal sockets
+    if (b.type === 'logic_operation' || b.type === 'logic_compare' || b.type === 'logic_negate' ||
+        b.type === 'tileScanner_and' || b.type === 'tileScanner_or' || b.type === 'tileScanner_not') {
+      return;
+    }
+
     const inputValType = (typeof B.INPUT_VALUE !== 'undefined') ? B.INPUT_VALUE : 1;
 
     for (const input of b.inputList) {

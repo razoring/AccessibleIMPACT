@@ -3,6 +3,61 @@
   "description": "Dynamic pattern regex lookup table for AccessibleIMPACT NLP engine",
   "rules": [
     {
+      "id": "tileUtil_connect_map_by_id",
+      "category": "tileUtil",
+      "pattern": "^connect(?:\\s+.*)?\\s+and(?:\\s+.*)?\\s+by",
+      "template": "tileUtil_connectMapById",
+      "blockType": "tileUtil_connectMapById"
+    },
+    {
+      "id": "tileUtil_load_connected_map",
+      "category": "tileUtil",
+      "pattern": "^load\\s+tilemap\\s+connected\\s+by",
+      "template": "tileUtil_loadConnectedMap",
+      "blockType": "tileUtil_loadConnectedMap"
+    },
+    {
+      "id": "tile_is_standalone",
+      "category": "tileUtil",
+      "pattern": "^tile\\s+is",
+      "template": "tileScanner_tileIs",
+      "blockType": "tileScanner_tileIs"
+    },
+    {
+      "id": "sprite_has_obstacle",
+      "category": "sprites",
+      "pattern": "^is(?:\\s+.*)?\\s+hitting\\s+wall",
+      "template": "spritehasobstacle",
+      "blockType": "spritehasobstacle"
+    },
+    {
+      "id": "image_replace",
+      "category": "scene",
+      "pattern": "^change\\s+color\\s+in",
+      "template": "Image_replace",
+      "blockType": "Image_replace"
+    },
+    {
+      "id": "function_definition",
+      "category": "functions",
+      "pattern": "^function\\s+([a-zA-Z0-9_]+)",
+      "template": "function_definition",
+      "blockType": "function_definition",
+      "params": {
+        "NAME": "$1"
+      }
+    },
+    {
+      "id": "function_call",
+      "category": "functions",
+      "pattern": "^call\\s+([a-zA-Z0-9_]+)",
+      "template": "procedures_callnoreturn",
+      "blockType": "procedures_callnoreturn",
+      "params": {
+        "NAME": "$1"
+      }
+    },
+    {
       "id": "property_dialog_layout",
       "category": "game",
       "pattern": "^(?:bottom|top|center|full\\s*screen)$",

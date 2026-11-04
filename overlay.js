@@ -351,13 +351,14 @@
     if (/animation|animat/i.test(combined)) active.add('animation');
     if (/game|dialog|splash/i.test(combined)) active.add('game');
     if (/info|score|life/i.test(combined)) active.add('info');
+    if (/functions?|procedure|call\b/i.test(combined)) active.add('functions');
 
     return active;
   }
 
   // Boolean bubbles (<a and b>, <x = y>, <not z>) are SHORT and verb-free.
   // Instruction statements containing and/or/not must never resolve to logic blocks.
-  const LOGIC_VERB_BLACKLIST = /\b(create|destroy|remove|clear|draw|drap|splash|show|play|press|move|place|follow|overlap|on\s+each|on\s+game|on\s+life|on\s+countdown|stay\s+in\s+screen|bounce|of\s+kind|tile|tilemap|camera|screen|volume|sound|melody|effect|image|animat|set\b|change\b|game\s+over|score\b|life\b|countdown)\b/i;
+  const LOGIC_VERB_BLACKLIST = /\b(connect|create|destroy|remove|clear|draw|drap|splash|show|play|press|move|place|follow|overlap|on\s+each|on\s+game|on\s+life|on\s+countdown|stay\s+in\s+screen|bounce|of\s+kind|tile|tilemap|camera|screen|volume|sound|melody|effect|image|animat|set\b|change\b|game\s+over|score\b|life\b|countdown)\b/i;
 
   function isBooleanBubble(cleanFlat) {
     const words = cleanFlat.split(/\s+/).filter(Boolean);
@@ -545,6 +546,21 @@
       .aifx-rendered g[class*="blocklyNumberField"] text,
       .aifx-rendered g[class*="blocklyTextInputField"] text {
         fill: #575e75 !important;
+      }
+
+      /* Fix boolean toggles and switches so they never appear as black polygons */
+      .aifx-rendered .blocklyToggleRect {
+        fill: #808e9b !important;
+        stroke: #485460 !important;
+        stroke-width: 1.5px !important;
+      }
+      .aifx-rendered .blocklyToggleOn .blocklyToggleRect {
+        fill: #2ecc71 !important;
+        stroke: #27ae60 !important;
+      }
+      .aifx-rendered .blocklyToggleOff .blocklyToggleRect {
+        fill: #808e9b !important;
+        stroke: #485460 !important;
       }
 
       .aifx-rendered.aifx-inline {
@@ -1031,9 +1047,28 @@
       if (cached && cached.svg) {
         applySvg(span, cached);
       } else {
-        // Live renderer first; NLP is only a fallback inside requestTokenRender
-        // when the renderer definitively fails (e.g. block type unavailable).
-        requestTokenRender(tokenText, tokenText, span);
+        // Optimization: if token has no nested arguments/parameters (e.g. [animate frames], [game over], [on start]),
+        // and matches a catalog rule without custom parameter overrides, load the exact default catalog SVG immediately!
+        let fastApplied = false;
+        if (catalogMap && tokenRules.length > 0 && !tokenText.includes('(') && !tokenText.includes('<')) {
+          const resolution = resolveTokenWithNLP(tokenText, stepText, overallText);
+          const hasCustomParams = resolution && resolution.params && Object.keys(resolution.params).some(k => resolution.params[k] !== undefined && resolution.params[k] !== '');
+          if (resolution && resolution.template && resolution.template !== 'isolated_pill' && !hasCustomParams) {
+            fastApplied = true;
+            fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
+              if (data && data.svg) {
+                applyTokenToPage(tokenText, data);
+              } else {
+                requestTokenRender(tokenText, tokenText, span);
+              }
+            }).catch(() => {
+              requestTokenRender(tokenText, tokenText, span);
+            });
+          }
+        }
+        if (!fastApplied) {
+          requestTokenRender(tokenText, tokenText, span);
+        }
       }
 
       fragment.appendChild(span);
