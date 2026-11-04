@@ -1,82 +1,1003 @@
 {
-  "[on start]": "pxt-on-start",
-  "[sprite say]": "spritesaytext",
-  "[say]": "spritesaytext",
-  "[set background color to]": "gamesetbackgroundcolor",
-  "[start screen effect]": "particlesStartScreenAnimation",
-  "[set sprite image to]": "spritesetimage",
-  "[splash]": "gameSplash",
-  "[on game update every ms]": "gameinterval",
-  "[set sprite bounce on wall]": "spritesetsetbounceonwall",
-  "[move sprite with buttons]": "game_control_sprite",
-  "[on sprite overlaps sprite]": "spritesoverlap",
-  "[destroy sprite]": "spritedestroy2",
-  "[set life to]": "hudSetLife",
-  "[change life by]": "hudChangeLifeBy",
-  "[start countdown]": "gamecountdown",
-  "[on countdown end]": "gamecountdownevent",
-  "[game over]": "gameOver2",
-  "[pick random]": "device_random",
-  "[set sprite velocity to]": "spritesetvel",
-  "[on A button pressed]": "keyonevent",
-  "[on button pressed]": "keyonevent",
-  "[set sprite x to]": "Sprite_blockCombine_set",
-  "[change sprite [x]]": "Sprite_blockCombine_change",
-  "[set sprite kind to]": "spritesetkind",
-  "[if true then]": "controls_if",
-  "[if true then / else]": "controls_if_else",
-  "[set sprite stay in screen]": "spritesetsetstayinscreen",
-  "[set score to]": "hudsetScore",
-  "[change score by]": "hudChangeScoreBy",
-  "[0=0]": "logic_compare_eq",
-  "<0=0>": "logic_compare_eq",
-  "<0 = 0>": "logic_compare_eq",
-  "<true>": "logic_boolean_true",
-  "<false>": "logic_boolean_false",
-  "<and>": "logic_operation_and",
-  "<or>": "logic_operation_or",
-  "score value block": "hudScore",
-  "[animate image]": "run_image_animation",
-  "[animate movement]": "run_movement_animation",
-  "[play melody]": "music_playable_play",
-  "[play sound]": "music_playable_play",
-  "[set volume]": "synth_set_volume",
-  "[stop all sounds]": "music_stop_all_sounds",
-  "[on life zero]": "gamelifeevent",
-  "[set tilemap to]": "set_current_tilemap",
-  "[place sprite on top of]": "mapplaceontile",
-  "[camera follow sprite]": "camerafollow",
-  "[place sprite on top of random tile]": "mapplaceonrandomtile",
-  "[on sprite hits wall]": "spriteshitwall",
-  "[camera shake]": "camerashake",
-  "[set sprite follow]": "spriteFollowOtherSprite",
-  "[set wall at]": "mapsetwallat",
-  "[set tile at location]": "tileUtil_setTileAt",
-  "[on sprite overlaps tile]": "spriteshittile",
-  "[use effect]": "game_setgameovereffect",
-  "[on destroyed]": "spritesondestroyed",
-  "[on created]": "spritesoncreated",
-  "[sprite start effect]": "startEffectOnSprite",
-  "(ask for string)": "gameaskforstring",
-  "[show long text]": "game_show_long_text",
-  "[set background image to (img)]": "gamesetbackgroundimage",
-  "[sprite of kind]": "variables_set_mySprite_spritescreate",
-  "[sprite (img) of kind (kind)]": "variables_set_mySprite_spritescreate",
-  "[set sprite to]": "variables_set_mySprite_spritescreate",
-  "(otherSprite)": "variables_get",
-  "(sprite)": "variables_get",
-  "((statusbar) [value])": "StatusBarSprite_blockCombine_get",
-  "[change (statusbar) [value] by]": "StatusBarSprite_blockCombine_change",
-  "[set (statusbar) [value] to]": "StatusBarSprite_blockCombine_set",
-  "(status bar kind attached to sprite)": "statusbars_spriteStatusBarIsAttachedTo",
-  "(sprite that statusbar is attached to)": "statusbars_attachSpriteGetter",
-  "[attach statusbar to sprite]": "statusbars_attachToSprite",
-  "[on each tile create sprite with image and kind]": "tileUtil_createSpritesOnTiles",
-  "[scroll background with camera]": "scroller_scrollBackgroundWithCamera",
-  "[set player 1 sprite to]": "mp_setPlayerSprite",
-  "[set projectile to projectile from sprite]": "variables_set_projectile_createfromsprite",
-  "[set projectile to projectile from side]": "variables_set_projectile_createfromside",
-  "▶": "play_icon",
-  "[▶]": "play_icon",
-  "Click ▶": "play_icon"
+  "version": "2.1.0",
+  "description": "Dynamic pattern regex lookup table for AccessibleIMPACT NLP engine",
+  "rules": [
+    {
+      "id": "property_dialog_layout",
+      "category": "game",
+      "pattern": "^(?:bottom|top|center|full\\s*screen)$",
+      "template": "isolated_pill",
+      "blockType": "property_pill",
+      "params": {
+        "prop": 0,
+        "pillCategory": "game"
+      }
+    },
+    {
+      "id": "property_direction",
+      "category": "scene",
+      "pattern": "^(?:left|right|up|down)$",
+      "template": "isolated_pill",
+      "blockType": "property_pill",
+      "params": {
+        "prop": 0,
+        "pillCategory": "scene"
+      }
+    },
+    {
+      "id": "property_statusbar",
+      "category": "statusbars",
+      "pattern": "^(?:value|max|zero)$",
+      "template": "isolated_pill",
+      "blockType": "property_pill",
+      "params": {
+        "prop": 0,
+        "pillCategory": "statusbars"
+      }
+    },
+    {
+      "id": "sprites_create_char",
+      "category": "sprites",
+      "pattern": "^(?:set\\s+(?:\\[?([a-zA-Z0-9_]+)\\]?|sprite)\\s+to\\s+)?sprite(?:\\s*\\(img\\))?\\s*of\\s*kind(?:\\s*[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "template": "variables_set_mySprite_spritescreate",
+      "blockType": "variables_set",
+      "params": {
+        "varName": 1,
+        "kind": 2
+      }
+    },
+    {
+      "id": "sprites_create_reporter",
+      "category": "sprites",
+      "pattern": "^sprite(?:\\s*\\(img\\))?\\s*of\\s*kind(?:\\s*[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?$",
+      "template": "spritescreatenoset",
+      "blockType": "spritescreatenoset",
+      "params": {
+        "kind": 1
+      }
+    },
+    {
+      "id": "sprites_all_of_kind",
+      "category": "sprites",
+      "pattern": "^(?:array\\s+of\\s+sprites|all\\s+sprites|sprites|all)\\s+of\\s+kind(?:\\s*[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "template": "allOfKind",
+      "blockType": "allOfKind",
+      "params": {
+        "kind": 1
+      }
+    },
+    {
+      "id": "sprites_set_position",
+      "category": "sprites",
+      "pattern": "^set\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+position\\s+to(?:\\s*x\\s*([\\d-]+)\\s*y\\s*([\\d-]+))?",
+      "template": "spritesetpos",
+      "blockType": "spritesetpos",
+      "params": {
+        "varName": 1,
+        "x": 2,
+        "y": 3
+      }
+    },
+    {
+      "id": "sprites_set_velocity",
+      "category": "sprites",
+      "pattern": "^set\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+velocity\\s+to(?:\\s*vx\\s*([\\d-]+)\\s*vy\\s*([\\d-]+))?",
+      "template": "spritesetvel",
+      "blockType": "spritesetvel",
+      "params": {
+        "varName": 1,
+        "vx": 2,
+        "vy": 3
+      }
+    },
+    {
+      "id": "sprites_prop_set",
+      "category": "sprites",
+      "pattern": "^set\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s*[\\[\\(]?(velocity\\s*[xy]|vx|vy|ax|ay|x|y|scale|lifespan)[\\]\\)]?\\s+to(?:\\s+[\\[\\(]?([\\d-]+)[\\]\\)]?)?",
+      "template": "Sprite_blockCombine_set",
+      "blockType": "Sprite_blockCombine_set",
+      "params": {
+        "varName": 1,
+        "prop": 2,
+        "val": 3
+      }
+    },
+    {
+      "id": "sprites_prop_change",
+      "category": "sprites",
+      "pattern": "^change\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s*[\\[\\(]?(velocity\\s*[xy]|vx|vy|ax|ay|x|y|scale|lifespan)[\\]\\)]?(?:\\s+by(?:\\s+[\\[\\(]?([\\d-]+)[\\]\\)]?)?)?",
+      "template": "Sprite_blockCombine_change",
+      "blockType": "Sprite_blockCombine_change",
+      "params": {
+        "varName": 1,
+        "prop": 2,
+        "val": 3
+      }
+    },
+    {
+      "id": "sprites_prop_get",
+      "category": "sprites",
+      "pattern": "^(?:(?:mySprite|sprite|[\\[\\(]?[a-zA-Z0-9_]+[\\]\\)]?)\\s+)?(velocity\\s*[xy]|vx|vy|ax|ay|x|y|scale|lifespan)$",
+      "template": "Sprite_blockCombine_get",
+      "blockType": "Sprite_blockCombine_get",
+      "params": {
+        "prop": 1
+      }
+    },
+    {
+      "id": "sprites_set_image",
+      "category": "sprites",
+      "pattern": "^set\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+image\\s+to",
+      "template": "spritesetimage",
+      "blockType": "spritesetimage",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "sprites_set_kind",
+      "category": "sprites",
+      "pattern": "^set\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+kind\\s+to(?:\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "template": "spritesetkind",
+      "blockType": "spritesetkind",
+      "params": {
+        "varName": 1,
+        "kind": 2
+      }
+    },
+    {
+      "id": "sprites_set_stay_in_screen",
+      "category": "sprites",
+      "pattern": "^set\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+stay\\s+in\\s+screen(?:\\s+[\\[\\(]?(ON|OFF)[\\]\\)]?)?",
+      "template": "spritesetsetstayinscreen",
+      "blockType": "spritesetsetstayinscreen",
+      "params": {
+        "varName": 1,
+        "val": 2
+      }
+    },
+    {
+      "id": "sprites_set_bounce_on_wall",
+      "category": "sprites",
+      "pattern": "^set\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+bounce\\s+on\\s+wall(?:\\s+[\\[\\(]?(ON|OFF)[\\]\\)]?)?",
+      "template": "spritesetsetbounceonwall",
+      "blockType": "spritesetsetbounceonwall",
+      "params": {
+        "varName": 1,
+        "val": 2
+      }
+    },
+    {
+      "id": "sprites_follow",
+      "category": "sprites",
+      "pattern": "^set\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+follow(?:\\s+(?:otherSprite|sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?))?",
+      "template": "spriteFollowOtherSprite",
+      "blockType": "spriteFollowOtherSprite",
+      "params": {
+        "follower": 1,
+        "target": 2
+      }
+    },
+    {
+      "id": "sprites_destroy",
+      "category": "sprites",
+      "pattern": "^destroy\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)",
+      "template": "spritedestroy2",
+      "blockType": "spritedestroy2",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "sprites_destroy_all_of_kind",
+      "category": "sprites",
+      "pattern": "^destroy\\s+all\\s+sprites\\s+of\\s+kind(?:\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "template": "sprites_destroy_all_sprites_of_kind",
+      "blockType": "sprites_destroy_all_sprites_of_kind",
+      "params": {
+        "kind": 1
+      }
+    },
+    {
+      "id": "sprites_say",
+      "category": "sprites",
+      "pattern": "^(?:(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+)?say(?:\\s+[\\[\\(]?\"?([^\"\\]\\)]*)\"?[\\]\\)]?)?",
+      "template": "spritesaytext",
+      "blockType": "spritesaytext",
+      "params": {
+        "varName": 1,
+        "text": 2
+      }
+    },
+    {
+      "id": "sprites_start_effect",
+      "category": "sprites",
+      "pattern": "^(?:(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+)?start(?:\\s+([a-zA-Z0-9_]+))?\\s+effect",
+      "template": "startEffectOnSprite",
+      "blockType": "startEffectOnSprite",
+      "params": {
+        "varName": 1,
+        "effect": 2
+      }
+    },
+    {
+      "id": "sprites_overlap_event",
+      "category": "sprites",
+      "pattern": "^(?:run\\s+code\\s+on\\s+)?on\\s+(?:sprite\\s+)?(?:of\\s+kind\\s+)?[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+overlaps\\s+(?:otherSprite\\s+)?(?:of\\s+kind\\s+)?[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?",
+      "template": "spritesoverlap",
+      "blockType": "spritesoverlap",
+      "params": {
+        "kind1": 1,
+        "kind2": 2
+      }
+    },
+    {
+      "id": "sprites_hit_wall_event",
+      "category": "sprites",
+      "pattern": "^on\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+hits\\s+wall(?:\\s+at\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "template": "spriteshitwall",
+      "blockType": "spriteshitwall",
+      "params": {
+        "varName": 1,
+        "direction": 2
+      }
+    },
+    {
+      "id": "sprites_overlap_condition",
+      "category": "sprites",
+      "pattern": "^(?:mySprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+overlaps\\s+with\\s+(?:otherSprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)",
+      "template": "spriteoverlapswith",
+      "blockType": "spriteoverlapswith",
+      "params": {
+        "var1": 1,
+        "var2": 2
+      }
+    },
+    {
+      "id": "sprites_projectile_from_sprite",
+      "category": "sprites",
+      "pattern": "^(?:set\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+to\\s+)?projectile\\s+from\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)",
+      "template": "variables_set_projectile_createfromsprite",
+      "blockType": "variables_set",
+      "params": {
+        "varName": 1,
+        "parentSprite": 2
+      }
+    },
+    {
+      "id": "sprites_projectile_from_side",
+      "category": "sprites",
+      "pattern": "^(?:set\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+to\\s+)?projectile\\s+from\\s+side",
+      "template": "variables_set_projectile_createfromside",
+      "blockType": "variables_set",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "sprites_on_created",
+      "category": "sprites",
+      "pattern": "^on\\s+created(?:\\s+(?:sprite\\s+)?(?:of\\s+kind\\s+)?[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "template": "spritesoncreated",
+      "blockType": "spritesoncreated",
+      "params": {
+        "kind": 1
+      }
+    },
+    {
+      "id": "sprites_on_destroyed",
+      "category": "sprites",
+      "pattern": "^on\\s+destroyed(?:\\s+(?:sprite\\s+)?(?:of\\s+kind\\s+)?[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "template": "spritesondestroyed",
+      "blockType": "spritesondestroyed",
+      "params": {
+        "kind": 1
+      }
+    },
+    {
+      "id": "controller_on_button_pressed",
+      "category": "controller",
+      "pattern": "^on\\s+(?:\\[?([a-zA-Z0-9_ ]+?)\\]?\\s+)?button\\s+pressed",
+      "template": "keyonevent",
+      "blockType": "keyonevent",
+      "params": {
+        "button": 1
+      }
+    },
+    {
+      "id": "controller_is_button_pressed",
+      "category": "controller",
+      "pattern": "^is\\s+(?:\\[?([a-zA-Z0-9_ ]+?)\\]?\\s+)?button\\s+pressed",
+      "template": "keyispressed",
+      "blockType": "keyispressed",
+      "params": {
+        "button": 1
+      }
+    },
+    {
+      "id": "controller_move_with_buttons",
+      "category": "controller",
+      "pattern": "^move\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+with\\s+buttons",
+      "template": "game_control_sprite",
+      "blockType": "game_control_sprite",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "tileUtil_create_sprites_on_tiles",
+      "category": "tileUtil",
+      "pattern": "^on\\s+each(?:\\s+.*)?\\s+tile\\s+create\\s+sprite(?:\\s+with\\s+image)?(?:\\s+and\\s+kind)?(?:\\s*[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "template": "tileUtil_createSpritesOnTiles",
+      "blockType": "tileUtil_createSpritesOnTiles",
+      "params": {
+        "kind": 1
+      }
+    },
+    {
+      "id": "tileUtil_set_tile_at",
+      "category": "tileUtil",
+      "pattern": "^set\\s+(?:.*\\s+)?tile\\s+at(?:\\s+location|\\s+tilemap\\s+col)?",
+      "template": "tileUtil_setTileAt",
+      "blockType": "tileUtil_setTileAt"
+    },
+    {
+      "id": "tileUtil_set_wall_at",
+      "category": "tileUtil",
+      "pattern": "^set\\s+wall\\s+at(?:\\s+tilemap\\s+col)?",
+      "template": "tileUtil_setWallAt",
+      "blockType": "tileUtil_setWallAt"
+    },
+    {
+      "id": "tileUtil_cover_all_tiles",
+      "category": "tileUtil",
+      "pattern": "^cover\\s+all\\s+.*tiles\\s+with",
+      "template": "tileUtil_coverAllTiles",
+      "blockType": "tileUtil_coverAllTiles"
+    },
+    {
+      "id": "tileUtil_replace_all_tiles",
+      "category": "tileUtil",
+      "pattern": "^replace\\s+all\\s+.*tiles\\s+with",
+      "template": "tileUtil_replaceAllTiles",
+      "blockType": "tileUtil_replaceAllTiles"
+    },
+    {
+      "id": "tileUtil_set_walls",
+      "category": "tileUtil",
+      "pattern": "^set\\s+walls\\s+on\\s+all\\s+.*tiles",
+      "template": "tileUtil_setWalls",
+      "blockType": "tileUtil_setWalls"
+    },
+    {
+      "id": "tileUtil_tile_is",
+      "category": "tileUtil",
+      "pattern": "^tile\\s+at\\s+.*is\\s+tile",
+      "template": "tileUtil_tileIs",
+      "blockType": "tileUtil_tileIs"
+    },
+    {
+      "id": "tileUtil_get_loaded_map",
+      "category": "tileUtil",
+      "pattern": "^current\\s+tilemap$",
+      "template": "tileUtil_getLoadedMap",
+      "blockType": "tileUtil_getLoadedMap"
+    },
+    {
+      "id": "tileScanner_scan_in_direction",
+      "category": "tileScanner",
+      "pattern": "^scan\\s+(?:from\\s+)?tilemap(?:\\s+col.*)?\\s+in\\s+direction(?:\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "template": "tileScanner_scanInDirection",
+      "blockType": "tileScanner_scanInDirection",
+      "params": {
+        "direction": 1
+      }
+    },
+    {
+      "id": "tileScanner_all_matching",
+      "category": "tileScanner",
+      "pattern": "^(?:all\\s+)?tilemap\\s+locations\\s+matching",
+      "template": "tileScanner_getAllMatchingLocations",
+      "blockType": "tileScanner_getAllMatchingLocations"
+    },
+    {
+      "id": "tileScanner_adjacent",
+      "category": "tileScanner",
+      "pattern": "^adjacent\\s+locations\\s+to",
+      "template": "tileScanner_getAdjacentLocations",
+      "blockType": "tileScanner_getAdjacentLocations"
+    },
+    {
+      "id": "tileScanner_scan_lines",
+      "category": "tileScanner",
+      "pattern": "^scan\\s+for\\s+lines\\s+in\\s+direction",
+      "template": "tileScanner_scanForLines",
+      "blockType": "tileScanner_scanForLines"
+    },
+    {
+      "id": "tileScanner_scan_groups",
+      "category": "tileScanner",
+      "pattern": "^scan\\s+for\\s+groups",
+      "template": "tileScanner_scanForGroups",
+      "blockType": "tileScanner_scanForGroups"
+    },
+    {
+      "id": "scroller_camera",
+      "category": "scroller",
+      "pattern": "^scroll\\s+background\\s+with\\s+camera(?:\\s+[\\[\\(]?(only\\s*horizontally|only\\s*vertically|both\\s*directions)[\\]\\)]?)?",
+      "template": "scroller_scrollBackgroundWithCamera",
+      "blockType": "scroller_scrollBackgroundWithCamera",
+      "params": {
+        "mode": 1
+      }
+    },
+    {
+      "id": "scroller_speed",
+      "category": "scroller",
+      "pattern": "^scroll\\s+background\\s+with(?:\\s+speed|\\s+vx)?",
+      "template": "scroller_scrollBackgroundWithSpeed",
+      "blockType": "scroller_scrollBackgroundWithSpeed"
+    },
+    {
+      "id": "scroller_multipliers",
+      "category": "scroller",
+      "pattern": "^set\\s+(?:background\\s+)?camera\\s+scroll(?:ing)?\\s+multipliers",
+      "template": "scroller_setCameraScrollingMultipliers",
+      "blockType": "scroller_setCameraScrollingMultipliers"
+    },
+    {
+      "id": "scroller_offset",
+      "category": "scroller",
+      "pattern": "^set\\s+background\\s+scroll\\s+offset",
+      "template": "scroller_setBackgroundScrollOffset",
+      "blockType": "scroller_setBackgroundScrollOffset"
+    },
+    {
+      "id": "scroller_layer_image",
+      "category": "scroller",
+      "pattern": "^set\\s+(?:scroller\\s+)?layer\\s+image",
+      "template": "scroller_setLayerImage",
+      "blockType": "scroller_setLayerImage"
+    },
+    {
+      "id": "statusbars_get_prop",
+      "category": "statusbars",
+      "pattern": "^[\\(\\[]?(?:\\(statusbar\\)|statusbar)\\s*[\\[\\(]?(value|max)[\\]\\)]?[\\)\\]]?$",
+      "template": "StatusBarSprite_blockCombine_get",
+      "blockType": "StatusBarSprite_blockCombine_get",
+      "params": {
+        "prop": 1
+      }
+    },
+    {
+      "id": "statusbars_change_prop",
+      "category": "statusbars",
+      "pattern": "^change\\s+(?:\\(statusbar\\)|statusbar)\\s*[\\[\\(]?(value|max)[\\]\\)]?\\s+by(?:\\s+[\\(\\[]?(-?\\d+)[\\)\\]]?)?",
+      "template": "StatusBarSprite_blockCombine_change",
+      "blockType": "StatusBarSprite_blockCombine_change",
+      "params": {
+        "prop": 1,
+        "val": 2
+      }
+    },
+    {
+      "id": "statusbars_set_prop",
+      "category": "statusbars",
+      "pattern": "^set\\s+(?:\\(statusbar\\)|statusbar)\\s*[\\[\\(]?(value|max)[\\]\\)]?\\s+to(?:\\s+[\\(\\[]?(-?\\d+)[\\)\\]]?)?",
+      "template": "StatusBarSprite_blockCombine_set",
+      "blockType": "StatusBarSprite_blockCombine_set",
+      "params": {
+        "prop": 1,
+        "val": 2
+      }
+    },
+    {
+      "id": "statusbars_kind_attached",
+      "category": "statusbars",
+      "pattern": "^status\\s*bar\\s*(?:of\\s*)?(?:kind)?\\s*attached\\s+to",
+      "template": "statusbars_spriteStatusBarIsAttachedTo",
+      "blockType": "statusbars_spriteStatusBarIsAttachedTo"
+    },
+    {
+      "id": "statusbars_sprite_attached",
+      "category": "statusbars",
+      "pattern": "^sprite\\s+that\\s*(?:\\(statusbar\\)|statusbar)?\\s*is\\s+attached\\s+to",
+      "template": "statusbars_attachSpriteGetter",
+      "blockType": "statusbars_attachSpriteGetter"
+    },
+    {
+      "id": "statusbars_attach_to",
+      "category": "statusbars",
+      "pattern": "^attach\\s+(?:\\(?([a-zA-Z0-9_]+)\\)?|statusbar)\\s+to\\s+(?:\\(?([a-zA-Z0-9_]+)\\)?|sprite|mySprite)",
+      "template": "statusbars_attachToSprite",
+      "blockType": "statusbars_attachToSprite",
+      "params": {
+        "statusbar": 1,
+        "sprite": 2
+      }
+    },
+    {
+      "id": "mp_set_player_sprite",
+      "category": "mp",
+      "pattern": "^set\\s+player\\s+([1-4])\\s+sprite\\s+to",
+      "template": "mp_setPlayerSprite",
+      "blockType": "mp_setPlayerSprite",
+      "params": {
+        "player": 1
+      }
+    },
+    {
+      "id": "mp_player_selector",
+      "category": "mp",
+      "pattern": "^player\\s+([1-4])$",
+      "template": "mp_playerSelector",
+      "blockType": "mp_playerSelector",
+      "params": {
+        "player": 1
+      }
+    },
+    {
+      "id": "mp_get_player_sprite",
+      "category": "mp",
+      "pattern": "^player\\s+([1-4])\\s+sprite$",
+      "template": "mp_getPlayerSprite",
+      "blockType": "mp_getPlayerSprite",
+      "params": {
+        "player": 1
+      }
+    },
+    {
+      "id": "mp_move_with_buttons",
+      "category": "mp",
+      "pattern": "^move\\s+player\\s+([1-4])\\s*(?:sprite)?\\s*with\\s+buttons",
+      "template": "mp_moveWithButtons",
+      "blockType": "mp_moveWithButtons",
+      "params": {
+        "player": 1
+      }
+    },
+    {
+      "id": "animation_image",
+      "category": "animation",
+      "pattern": "^animate\\s+(?:[\\(\\[]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+)?(?:image|frames)",
+      "template": "run_image_animation",
+      "blockType": "run_image_animation",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "animation_movement",
+      "category": "animation",
+      "pattern": "^animate\\s+(?:[\\(\\[]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+)?movement",
+      "template": "run_movement_animation",
+      "blockType": "run_movement_animation",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "animation_stop",
+      "category": "animation",
+      "pattern": "^stop\\s+.*animations\\s+on\\s+(?:[\\(\\[]?([a-zA-Z0-9_]+)[\\]\\)]?|sprite)",
+      "template": "stop_animations",
+      "blockType": "stop_animations",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "arrays_create_with",
+      "category": "arrays",
+      "pattern": "^(?:set\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+to\\s+)?(?:array\\s+of|list\\s+of)",
+      "template": "lists_create_with",
+      "blockType": "lists_create_with",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "arrays_push",
+      "category": "arrays",
+      "pattern": "^(?:list|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+add\\s+value\\s+to\\s+end",
+      "template": "array_push",
+      "blockType": "array_push",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "arrays_length",
+      "category": "arrays",
+      "pattern": "^length\\s+of\\s+array(?:\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "template": "lists_length",
+      "blockType": "lists_length",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "arrays_get_index",
+      "category": "arrays",
+      "pattern": "^(?:(?:list|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+)?get\\s+value\\s+at(?:\\s+index)?",
+      "template": "lists_index_get",
+      "blockType": "lists_index_get",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "arrays_pick_random",
+      "category": "arrays",
+      "pattern": "^pick\\s+random\\s+from\\s+(?:list|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)",
+      "template": "array_pickRandom",
+      "blockType": "array_pickRandom",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "variables_set",
+      "category": "variables",
+      "pattern": "^set\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+to(?:\\s+(.+))?",
+      "template": "variables_set_number",
+      "blockType": "variables_set",
+      "params": {
+        "varName": 1,
+        "val": 2
+      }
+    },
+    {
+      "id": "variables_change",
+      "category": "variables",
+      "pattern": "^change\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+by(?:\\s+(.+))?",
+      "template": "variables_change_number",
+      "blockType": "variables_change",
+      "params": {
+        "varName": 1,
+        "val": 2
+      }
+    },
+    {
+      "id": "logic_if_else",
+      "category": "logic",
+      "pattern": "^if(?:\\s+true)?\\s+then\\s*(?:\\/|\\s+else)",
+      "template": "controls_if_else",
+      "blockType": "controls_if_else"
+    },
+    {
+      "id": "logic_if",
+      "category": "logic",
+      "pattern": "^if(?:\\s+true)?(?:\\s+then)?$",
+      "template": "controls_if",
+      "blockType": "controls_if"
+    },
+    {
+      "id": "logic_compare",
+      "category": "logic",
+      "pattern": "^(?:<|\\[)?\\s*(.+?)\\s*(<=|>=|==|!=|=<|=>|<|>|=)\\s*(.+?)\\s*(?:>|\\])?$",
+      "template": "logic_compare_lt",
+      "blockType": "logic_compare",
+      "params": {
+        "left": 1,
+        "op": 2,
+        "right": 3
+      }
+    },
+    {
+      "id": "logic_operation",
+      "category": "logic",
+      "pattern": "^(?:<|\\[)?\\s*(.+?)\\s+(and|or)\\s+(.+?)\\s*(?:>|\\])?$",
+      "template": "logic_operation_and",
+      "blockType": "logic_operation",
+      "params": {
+        "left": 1,
+        "op": 2,
+        "right": 3
+      }
+    },
+    {
+      "id": "logic_negate",
+      "category": "logic",
+      "pattern": "^(?:<|\\[)?\\s*not\\s+(.+?)\\s*(?:>|\\])?$",
+      "template": "logic_negate",
+      "blockType": "logic_negate",
+      "params": {
+        "val": 1
+      }
+    },
+    {
+      "id": "logic_boolean",
+      "category": "logic",
+      "pattern": "^(?:<|\\[)?\\s*(true|false)\\s*(?:>|\\])?$",
+      "template": "logic_boolean_true",
+      "blockType": "logic_boolean",
+      "params": {
+        "bool": 1
+      }
+    },
+    {
+      "id": "math_arithmetic",
+      "category": "math",
+      "pattern": "^\\(?\\s*([\\w\\d.]+)\\s*([\\+\\-\\*/]|\\*\\*)\\s*([\\w\\d.]+)\\s*\\)?$",
+      "template": "math_arithmetic_add",
+      "blockType": "math_arithmetic",
+      "params": {
+        "left": 1,
+        "op": 2,
+        "right": 3
+      }
+    },
+    {
+      "id": "math_random",
+      "category": "math",
+      "pattern": "^pick\\s+random(?:\\s+([\\d-]+)\\s+to\\s+([\\d-]+))?",
+      "template": "device_random",
+      "blockType": "device_random",
+      "params": {
+        "min": 1,
+        "max": 2
+      }
+    },
+    {
+      "id": "math_percent_chance",
+      "category": "math",
+      "pattern": "^(?:%\\s*chance|([\\d.]+)\\s*%\\s*chance)",
+      "template": "percentchance",
+      "blockType": "percentchance",
+      "params": {
+        "percent": 1
+      }
+    },
+    {
+      "id": "loops_repeat",
+      "category": "loops",
+      "pattern": "^repeat(?:\\s+([\\d]+)\\s+times)?",
+      "template": "controls_repeat_ext",
+      "blockType": "controls_repeat_ext",
+      "params": {
+        "count": 1
+      }
+    },
+    {
+      "id": "loops_while",
+      "category": "loops",
+      "pattern": "^while",
+      "template": "device_while",
+      "blockType": "device_while"
+    },
+    {
+      "id": "loops_for_index",
+      "category": "loops",
+      "pattern": "^for\\s+index",
+      "template": "pxt_controls_for",
+      "blockType": "pxt_controls_for"
+    },
+    {
+      "id": "loops_for_element",
+      "category": "loops",
+      "pattern": "^for\\s+element",
+      "template": "pxt_controls_for_of",
+      "blockType": "pxt_controls_for_of"
+    },
+    {
+      "id": "loops_forever",
+      "category": "loops",
+      "pattern": "^forever$",
+      "template": "forever",
+      "blockType": "forever"
+    },
+    {
+      "id": "game_on_start",
+      "category": "game",
+      "pattern": "^on\\s+start$",
+      "template": "pxt-on-start",
+      "blockType": "pxt-on-start"
+    },
+    {
+      "id": "game_on_update_interval",
+      "category": "game",
+      "pattern": "^on\\s+game\\s+update(?:\\s+every\\s+([\\d]+)\\s*ms)?",
+      "template": "gameinterval",
+      "blockType": "gameinterval",
+      "params": {
+        "interval": 1
+      }
+    },
+    {
+      "id": "game_game_over",
+      "category": "game",
+      "pattern": "^game\\s+over(?:\\s+[\\[\\(]?(WIN|LOSE)[\\]\\)]?)?",
+      "template": "gameOver2",
+      "blockType": "gameOver2",
+      "params": {
+        "outcome": 1
+      }
+    },
+    {
+      "id": "game_splash",
+      "category": "game",
+      "pattern": "^splash",
+      "template": "gameSplash",
+      "blockType": "gameSplash"
+    },
+    {
+      "id": "game_show_long_text",
+      "category": "game",
+      "pattern": "^show\\s+long\\s+text",
+      "template": "game_show_long_text",
+      "blockType": "game_show_long_text"
+    },
+    {
+      "id": "game_ask_for_string",
+      "category": "game",
+      "pattern": "^ask\\s+for\\s+string",
+      "template": "gameaskforstring",
+      "blockType": "gameaskforstring"
+    },
+    {
+      "id": "game_use_effect",
+      "category": "game",
+      "pattern": "^use\\s+effect",
+      "template": "game_setgameovereffect",
+      "blockType": "game_setgameovereffect"
+    },
+    {
+      "id": "scene_set_tilemap",
+      "category": "scene",
+      "pattern": "^set\\s+tilemap\\s+to",
+      "template": "set_current_tilemap",
+      "blockType": "set_current_tilemap"
+    },
+    {
+      "id": "scene_place_on_tile",
+      "category": "scene",
+      "pattern": "^place\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+on\\s+top\\s+of\\s+random\\s+tile",
+      "template": "mapplaceonrandomtile",
+      "blockType": "mapplaceonrandomtile",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "scene_place_on_top_of",
+      "category": "scene",
+      "pattern": "^place\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+on\\s+top\\s+of",
+      "template": "mapplaceontile",
+      "blockType": "mapplaceontile",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "scene_camera_follow",
+      "category": "scene",
+      "pattern": "^camera\\s+follow(?:\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?))?",
+      "template": "camerafollow",
+      "blockType": "camerafollow",
+      "params": {
+        "varName": 1
+      }
+    },
+    {
+      "id": "scene_camera_shake",
+      "category": "scene",
+      "pattern": "^camera\\s+shake",
+      "template": "camerashake",
+      "blockType": "camerashake"
+    },
+    {
+      "id": "scene_set_bg_color",
+      "category": "scene",
+      "pattern": "^set\\s+background\\s+color\\s+to",
+      "template": "gamesetbackgroundcolor",
+      "blockType": "gamesetbackgroundcolor"
+    },
+    {
+      "id": "scene_set_bg_image",
+      "category": "scene",
+      "pattern": "^set\\s+background\\s+image\\s+to",
+      "template": "gamesetbackgroundimage",
+      "blockType": "gamesetbackgroundimage"
+    },
+    {
+      "id": "info_set_score",
+      "category": "info",
+      "pattern": "^set\\s+score\\s+to(?:\\s+([\\d-]+))?",
+      "template": "hudsetScore",
+      "blockType": "hudsetScore",
+      "params": {
+        "val": 1
+      }
+    },
+    {
+      "id": "info_change_score",
+      "category": "info",
+      "pattern": "^change\\s+score\\s+by(?:\\s+([\\d-]+))?",
+      "template": "hudChangeScoreBy",
+      "blockType": "hudChangeScoreBy",
+      "params": {
+        "val": 1
+      }
+    },
+    {
+      "id": "info_score_val",
+      "category": "info",
+      "pattern": "^score(?:\\s+value(?:\\s+block)?)?$",
+      "template": "hudScore",
+      "blockType": "hudScore"
+    },
+    {
+      "id": "info_set_life",
+      "category": "info",
+      "pattern": "^set\\s+life\\s+to(?:\\s+([\\d-]+))?",
+      "template": "hudSetLife",
+      "blockType": "hudSetLife",
+      "params": {
+        "val": 1
+      }
+    },
+    {
+      "id": "info_change_life",
+      "category": "info",
+      "pattern": "^change\\s+life\\s+by(?:\\s+([\\d-]+))?",
+      "template": "hudChangeLifeBy",
+      "blockType": "hudChangeLifeBy",
+      "params": {
+        "val": 1
+      }
+    },
+    {
+      "id": "info_start_countdown",
+      "category": "info",
+      "pattern": "^start\\s+countdown(?:\\s+([\\d]+))?",
+      "template": "gamecountdown",
+      "blockType": "gamecountdown",
+      "params": {
+        "val": 1
+      }
+    },
+    {
+      "id": "info_on_countdown_end",
+      "category": "info",
+      "pattern": "^on\\s+countdown\\s+end$",
+      "template": "gamecountdownevent",
+      "blockType": "gamecountdownevent"
+    },
+    {
+      "id": "info_on_life_zero",
+      "category": "info",
+      "pattern": "^on\\s+life\\s+zero$",
+      "template": "gamelifeevent",
+      "blockType": "gamelifeevent"
+    },
+    {
+      "id": "music_play",
+      "category": "music",
+      "pattern": "^play\\s+(?:sound|melody)",
+      "template": "music_playable_play",
+      "blockType": "music_playable_play"
+    },
+    {
+      "id": "music_set_volume",
+      "category": "music",
+      "pattern": "^set\\s+volume",
+      "template": "synth_set_volume",
+      "blockType": "synth_set_volume"
+    },
+    {
+      "id": "music_stop_all",
+      "category": "music",
+      "pattern": "^stop\\s+all\\s+sounds$",
+      "template": "music_stop_all_sounds",
+      "blockType": "music_stop_all_sounds"
+    },
+    {
+      "id": "ui_play_icon",
+      "category": "ui",
+      "pattern": "^(?:Click\\s+)?▶$",
+      "template": "play_icon",
+      "blockType": "icon"
+    }
+  ]
 }

@@ -37,7 +37,124 @@
 
   // Initialize directly from catalog/
   let catalogMap = null;
-  let tokenToFileMap = null;
+  let tokenRules = [];
+
+  function escapeXml(str) {
+    if (typeof str !== 'string') str = String(str);
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function generateIsolatedPropertyPill(propText, category) {
+    const text = (propText || '').replace(/[\[\]\(\)]/g, '').trim();
+    const charWidth = 9;
+    const textWidth = Math.max(30, text.length * charWidth);
+    const totalWidth = textWidth + 34; // text + arrow + padding
+    const height = 30;
+
+    let bg = '#4b7bec'; // default scene blue
+    let stroke = '#385cb1';
+    if (category === 'game') {
+      bg = '#8b449b'; stroke = '#6c3483';
+    } else if (category === 'controller') {
+      bg = '#d63031'; stroke = '#c0392b';
+    } else if (category === 'statusbars') {
+      bg = '#20bf6b'; stroke = '#0fb9b1';
+    } else if (category === 'music') {
+      bg = '#e67e22'; stroke = '#d35400';
+    }
+
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${height}" width="${totalWidth}" height="${height}">
+<style>
+.blocklyText { font-family: Consolas, Monaco, Menlo, monospace; font-size: 15px; font-weight: 600; fill: #fff; }
+</style>
+<g>
+  <rect x="1" y="1" width="${totalWidth - 2}" height="${height - 2}" rx="6" ry="6" fill="${bg}" stroke="${stroke}" stroke-width="1.5" />
+  <text class="blocklyText" x="10" y="${height / 2 + 1}" dominant-baseline="central">${text}</text>
+  <text class="blocklyText" x="${totalWidth - 16}" y="${height / 2 + 1}" dominant-baseline="central" font-size="12">▾</text>
+</g>
+</svg>`;
+
+    return {
+      svg,
+      width: totalWidth,
+      height: height,
+      category: category || 'property'
+    };
+  }
+
+  function mutateSvgWithParams(svgStr, params) {
+    if (!svgStr || !params) return svgStr;
+    let s = svgStr;
+
+    // 1. Variable name replacement
+    if (params.varName) {
+      const v = escapeXml(params.varName);
+      s = s.replace(/>mySprite</g, `>${v}<`);
+      s = s.replace(/>projectile</g, `>${v}<`);
+      s = s.replace(/>sprite</g, `>${v}<`);
+    }
+
+    // 2. Kind replacement
+    if (params.kind) {
+      const k = escapeXml(params.kind);
+      s = s.replace(/>Player</g, `>${k}<`);
+    }
+
+    // 3. Button replacement
+    if (params.button) {
+      const b = escapeXml(params.button);
+      s = s.replace(/>A</g, `>${b}<`);
+    }
+
+    // 4. Property replacement
+    if (params.prop) {
+      const p = escapeXml(params.prop);
+      s = s.replace(/>x</g, `>${p}<`);
+      s = s.replace(/>value</g, `>${p}<`);
+    }
+
+    // 5. Operator replacement (math & logic)
+    if (params.op) {
+      const safeOp = escapeXml(params.op);
+      s = s.replace(/>=<\/text>/g, `>${safeOp}</text>`);
+      s = s.replace(/>&lt;<\/text>/g, `>${safeOp}</text>`);
+      s = s.replace(/>‏&lt;<\/text>/g, `>${safeOp}</text>`);
+      s = s.replace(/>&gt;<\/text>/g, `>${safeOp}</text>`);
+      s = s.replace(/>\+<\/text>/g, `>${safeOp}</text>`);
+    }
+
+    // 6. Values & Operands
+    if (params.left !== undefined) {
+      const l = escapeXml(params.left);
+      s = s.replace(/>0<\/text>/, `>${l}</text>`);
+    }
+    if (params.right !== undefined) {
+      const r = escapeXml(params.right);
+      s = s.replace(/>0<\/text>/, `>${r}</text>`);
+    }
+    if (params.val !== undefined) {
+      const val = escapeXml(params.val);
+      s = s.replace(/>0<\/text>/, `>${val}</text>`);
+    }
+    if (params.x !== undefined) {
+      const x = escapeXml(params.x);
+      s = s.replace(/>0<\/text>/, `>${x}</text>`);
+    }
+    if (params.y !== undefined) {
+      const y = escapeXml(params.y);
+      s = s.replace(/>0<\/text>/, `>${y}</text>`);
+    }
+    if (params.vx !== undefined) {
+      const vx = escapeXml(params.vx);
+      s = s.replace(/>0<\/text>/, `>${vx}</text>`);
+    }
+    if (params.vy !== undefined) {
+      const vy = escapeXml(params.vy);
+      s = s.replace(/>0<\/text>/, `>${vy}</text>`);
+    }
+
+    return s;
+  }
 
   async function loadCatalog() {
     try {
@@ -47,7 +164,13 @@
           fetch(chrome.runtime.getURL('catalog/token_map.json'))
         ]);
         catalogMap = await catRes.json();
-        tokenToFileMap = await mapRes.json();
+        const mapData = await mapRes.json();
+        if (mapData && Array.isArray(mapData.rules)) {
+          tokenRules = mapData.rules.map(r => ({
+            ...r,
+            regex: new RegExp(r.pattern, 'i')
+          }));
+        }
         scan();
       }
     } catch (e) {
@@ -56,21 +179,94 @@
   }
   loadCatalog();
 
-  async function fetchCatalogSvg(fileKey) {
-    if (!catalogMap || !fileKey) return null;
-    const entry = catalogMap[fileKey];
+  function resolveTokenWithNLP(tokenText, stepText) {
+    if (!tokenText) return null;
+    let clean = tokenText.trim();
+    if ((clean.startsWith('[') && clean.endsWith(']')) ||
+        (clean.startsWith('(') && clean.endsWith(')')) ||
+        (clean.startsWith('<') && clean.endsWith('>'))) {
+      clean = clean.slice(1, -1).trim();
+    }
+    const cleanFlat = clean.replace(/[\[\]\(\)]/g, ' ').replace(/\s+/g, ' ').trim();
+
+    // Context disambiguation for multiplayer
+    const isMultiplayer = /multiplayer|player\s*[234]|mp\./i.test(stepText || '');
+
+    for (const rule of tokenRules) {
+      if (rule.category === 'mp' && !isMultiplayer) continue;
+
+      const m = cleanFlat.match(rule.regex) || clean.match(rule.regex);
+      if (m) {
+        const params = {};
+        if (rule.params) {
+          for (const [pName, grpIdx] of Object.entries(rule.params)) {
+            if (typeof grpIdx === 'number' && m[grpIdx] !== undefined) {
+              params[pName] = m[grpIdx];
+            } else if (typeof grpIdx === 'string') {
+              params[pName] = grpIdx;
+            }
+          }
+        }
+
+        // Contextual NLP assistance for missing parameters
+        if (rule.category === 'sprites' && rule.blockType === 'variables_set') {
+          if (!params.varName) {
+            const varM = (stepText || '').match(/(?:variable|add a|create a|sprite named|named|called)\s+['"\[]?([a-zA-Z0-9_]+)['"\]]?/i);
+            if (varM && !['sprite', 'the', 'a', 'an', 'new', 'block'].includes(varM[1].toLowerCase())) {
+              params.varName = varM[1];
+            } else {
+              params.varName = 'mySprite';
+            }
+          }
+          if (!params.kind) {
+            const kindM = (stepText || '').match(/kind\s+['"\[]?([a-zA-Z0-9_]+)['"\]]?/i);
+            params.kind = kindM ? kindM[1] : 'Player';
+          }
+        }
+
+        if (rule.id === 'controller_on_button_pressed' || rule.id === 'controller_is_button_pressed') {
+          if (!params.button) {
+            const btnM = (stepText || '').match(/(?:button|press)\s+['"\[]?([AB]|up|down|left|right)['"\]]?/i);
+            params.button = btnM ? btnM[1].toUpperCase() : 'A';
+          }
+        }
+
+        return {
+          rule,
+          template: rule.template,
+          params
+        };
+      }
+    }
+
+    return null;
+  }
+
+  async function fetchAndRenderResolvedToken(resolution, tokenText) {
+    if (!resolution) return null;
+    if (resolution.template === 'isolated_pill') {
+      const prop = (resolution.params && resolution.params.prop !== undefined) ? resolution.params.prop : tokenText;
+      const cat = (resolution.params && resolution.params.pillCategory) || resolution.rule.category;
+      return generateIsolatedPropertyPill(prop, cat);
+    }
+
+    if (!catalogMap || !resolution.template) return null;
+    const entry = catalogMap[resolution.template];
     if (!entry) return null;
+
     try {
       const url = chrome.runtime.getURL('catalog/' + entry.file);
       const res = await fetch(url);
-      const svg = await res.text();
+      const rawSvg = await res.text();
+      const mutatedSvg = mutateSvgWithParams(rawSvg, resolution.params);
+
       return {
-        svg: svg,
+        svg: mutatedSvg,
         width: entry.width,
         height: entry.height,
         category: entry.type
       };
-    } catch(e) {
+    } catch (e) {
       return null;
     }
   }
@@ -85,37 +281,13 @@
     return null;
   }
 
-  // Load persistent storage cache asynchronously and apply instantly to instructions UI
-  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-    chrome.storage.local.get(null, (items) => {
-      if (chrome.runtime.lastError || !items) return;
-      let count = 0;
-      for (const [k, v] of Object.entries(items)) {
-        // Do not let stale chrome.storage entries overwrite fresh static definitions
-        if (v && v.svg && !svgCache.has(k)) {
-          svgCache.set(k, v);
-          count++;
-        }
-      }
-      if (count > 0) {
-        applyCacheToPage();
-      }
-    });
-
-    try {
-      if (chrome.storage.onChanged) {
-        chrome.storage.onChanged.addListener((changes, area) => {
-          if (area !== 'local') return;
-          for (const [key, change] of Object.entries(changes)) {
-            if (change.newValue && change.newValue.svg) {
-              svgCache.set(key, change.newValue);
-              applyTokenToPage(key, change.newValue);
-            }
-          }
-        });
-      }
-    } catch (e) {}
-  }
+  // svgCache holds in-memory rendered SVGs for instant reuse across steps
+  try {
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+      // Clear legacy storage cache so stale extractions never override dynamic NLP engine
+      chrome.storage.local.clear();
+    }
+  } catch (e) {}
 
   // Listen for background announcement that renderer/iframe is ready
   try {
@@ -265,17 +437,17 @@
   function applyCacheToPage() {
     const spans = document.querySelectorAll('span.aifx-rendered:not([data-rendered="true"])');
     for (const span of spans) {
-      const lookupToken = span.getAttribute('data-lookup-token') || span.getAttribute('data-token');
-      const tokenText = span.getAttribute('data-token') || lookupToken;
-      const cached = getStaticOrCached(lookupToken) || getStaticOrCached(tokenText);
+      const tokenText = span.getAttribute('data-token') || span.textContent || '';
+      const cached = getStaticOrCached(tokenText);
       if (cached && cached.svg) {
         applySvg(span, cached);
-      } else if (tokenToFileMap) {
-        const fileKey = tokenToFileMap[lookupToken] || tokenToFileMap[tokenText];
-        if (fileKey) {
-          fetchCatalogSvg(fileKey).then(data => {
+      } else if (catalogMap && tokenRules.length > 0) {
+        const stepArea = span.closest('app-step-information, [data-instruction], article, .lesson-content') || document.body;
+        const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
+        const resolution = resolveTokenWithNLP(tokenText, stepText);
+        if (resolution) {
+          fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
             if (data && data.svg) {
-              svgCache.set(lookupToken, data);
               svgCache.set(tokenText, data);
               applySvg(span, data);
             }
@@ -511,57 +683,32 @@
       }
 
       const tokenText = seg.text;
-      let lookupToken = tokenText;
-
-      // Context Engine (Chromebook-fast, < 1ms): Disambiguate isolated tokens & parameters
       const stepArea = parent.closest('app-step-information, [data-instruction], article, .lesson-content') || document.body;
       const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
-
-      // 1. Isolated property/dropdown ([bottom], [top], [center], [full screen])
-      if (/^\[?\(?(?:bottom|top|center|full\s*screen)\)?\]?$/i.test(tokenText)) {
-        const isDialog = /dialog|text\s*bubble|long\s*text|message|story|talk|say/i.test(stepText);
-        const val = tokenText.replace(/[\[\]\(\)]/g, '').trim().toLowerCase();
-        lookupToken = isDialog ? `[${val}] (game)` : `[${val}]`;
-      }
-      // 2. Multiplayer vs Sprite Kind: [Player 1] / [Player 2]
-      else if (/^\[?player\s*[1-4]\]?$/i.test(tokenText)) {
-        const isMultiplayer = /multiplayer|player\s*[234]|mp\./i.test(stepText);
-        if (isMultiplayer) {
-          lookupToken = tokenText.toLowerCase();
-        } else {
-          lookupToken = '[Player]';
-        }
-      }
-      // 3. Isolated character creation token: [sprite of kind] -> [set sprite to]
-      else if (/^\[?\s*(?:sprite\s*(?:\(img\))?\s*of\s*kind|set\s+sprite\s+to)\s*\]?$/i.test(tokenText)) {
-        lookupToken = '[set sprite to]';
-      }
 
       const span = document.createElement('span');
       span.className = 'aifx-rendered'; // Set immediately to prevent re-wrapping
       span.setAttribute('data-token', tokenText);
-      span.setAttribute('data-lookup-token', lookupToken);
 
-      const cached = getStaticOrCached(lookupToken) || getStaticOrCached(tokenText);
+      const cached = getStaticOrCached(tokenText);
       if (cached && cached.svg) {
         applySvg(span, cached);
-      } else if (tokenToFileMap) {
-        const fileKey = tokenToFileMap[lookupToken] || tokenToFileMap[tokenText];
-        if (fileKey) {
-          fetchCatalogSvg(fileKey).then(data => {
+      } else if (catalogMap && tokenRules.length > 0) {
+        const resolution = resolveTokenWithNLP(tokenText, stepText);
+        if (resolution) {
+          fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
             if (data && data.svg) {
-              svgCache.set(lookupToken, data);
               svgCache.set(tokenText, data);
               applySvg(span, data);
             } else {
-              requestTokenRender(lookupToken, tokenText, span);
+              requestTokenRender(tokenText, tokenText, span);
             }
           });
         } else {
-          requestTokenRender(lookupToken, tokenText, span);
+          requestTokenRender(tokenText, tokenText, span);
         }
       } else {
-        requestTokenRender(lookupToken, tokenText, span);
+        requestTokenRender(tokenText, tokenText, span);
       }
 
       fragment.appendChild(span);
