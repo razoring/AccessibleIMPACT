@@ -531,7 +531,7 @@
       }
       .aifx-rendered.aifx-multiline svg {
         display: block !important;
-        width: 100% !important;
+        width: auto !important;
         max-width: 100% !important;
         height: auto !important;
         filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)) !important;
@@ -571,7 +571,13 @@
         svgEl.style.setProperty('height', '1.25em', 'important');
       } else if (isMultiLine) {
         svgEl.style.display = 'block';
-        svgEl.style.setProperty('width', '100%', 'important');
+        // Benchmark: scale factor 2.25 / 44 matches regular text size (~13-14px visual font)
+        let emScale = 2.25 / 44;
+        if ((data.height || 0) <= 60 && (data.width || 0) > 300) {
+          emScale = 2.25 / data.height;
+        }
+        const naturalEmWidth = ((data.width || 100) * emScale).toFixed(3);
+        svgEl.style.setProperty('width', `${naturalEmWidth}em`, 'important');
         svgEl.style.setProperty('max-width', '100%', 'important');
         svgEl.style.setProperty('height', 'auto', 'important');
       } else {
