@@ -3,6 +3,7 @@
 .blocklyText { font-family: Consolas, Monaco, Menlo, "Ubuntu Mono", monospace; font-size: 16px; font-weight: 600; fill: #fff; }
 .blocklyNonEditableText > text { pointer-events: none; }
 .blocklyDropdownText { fill: #fff; }
+.field-text-quote { fill: #a31515 !important; }
 </style>
 <g class="logic_compare blocklyBlock logic_blocks blocklyDraggable" data-id="|X)@.Di8T?idHGmd8bsN" style="opacity: 1;"><path class="blocklyPath" id="blockly-470" stroke="#3480b6" fill="#45aaf2" d=" m 20,0  h 140.796875  l 20,20  l -20,20  V 40  h -140.796875  l -20,-20  l 20,-20 z
 " style="opacity: 1;"></path><g class="text blocklyBlock field_blocks blocklyShadow blocklyDraggable" data-id="Ix3r}a;E`2+6w5NC9j^J" style="display: block; opacity: 1;" transform="translate(20, 4)"><path class="blocklyPath" id="blockly-475" stroke="#bfbfbf" fill="#fff" d=" m 16,0  h 8 a 16 16 0 0,1 16,16  v 0 a 16 16 0 0,1 -16,16  V 32  h -8 a 16 16 0 0,1 -16,-16  v 0 a 16 16 0 0,1 16,-16 z

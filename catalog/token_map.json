@@ -102,6 +102,16 @@
       }
     },
     {
+      "id": "sprites_set_sprite_to",
+      "category": "sprites",
+      "pattern": "^set\\s+sprite\\s+to$",
+      "template": "variables_set_mySprite_spritescreate",
+      "blockType": "variables_set",
+      "params": {
+        "varName": "mySprite"
+      }
+    },
+    {
       "id": "sprites_create_char",
       "category": "sprites",
       "pattern": "^(?:set\\s+(?:\\[?([a-zA-Z0-9_]+)\\]?|sprite)\\s+to\\s+)?sprite(?:\\s*\\(img\\))?\\s*of\\s*kind(?:\\s*[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
@@ -193,7 +203,7 @@
     {
       "id": "sprites_set_image",
       "category": "sprites",
-      "pattern": "^set\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+image\\s+to",
+      "pattern": "^set\\s+(?:sprite|[\\[\\(]?(?!background\\b)([a-zA-Z0-9_]+)[\\]\\)]?)\\s+image\\s+to",
       "template": "spritesetimage",
       "blockType": "spritesetimage",
       "params": {
@@ -231,6 +241,18 @@
       "params": {
         "varName": 1,
         "val": 2
+      }
+    },
+    {
+      "id": "sprites_set_flag",
+      "category": "sprites",
+      "pattern": "^set\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+)?(auto\\s+destroy|invisible|ghost)(?:\\s+[\\[\\(]?(ON|OFF)[\\]\\)]?)?",
+      "template": "spritesetsetflag",
+      "blockType": "spritesetsetflag",
+      "params": {
+        "varName": 1,
+        "flag": 2,
+        "val": 3
       }
     },
     {
@@ -646,7 +668,7 @@
     {
       "id": "animation_image",
       "category": "animation",
-      "pattern": "^animate\\s+(?:[\\(\\[]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+)?(?:image|frames)",
+      "pattern": "^animate(?:\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?\\s+(?:image|frames)",
       "template": "run_image_animation",
       "blockType": "run_image_animation",
       "params": {
@@ -656,7 +678,7 @@
     {
       "id": "animation_movement",
       "category": "animation",
-      "pattern": "^animate\\s+(?:[\\(\\[]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+)?movement",
+      "pattern": "^animate(?:\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?\\s+(?:movement|with\\b)",
       "template": "run_movement_animation",
       "blockType": "run_movement_animation",
       "params": {
@@ -796,7 +818,7 @@
     {
       "id": "math_random",
       "category": "math",
-      "pattern": "^pick\\s+random(?:\\s+([\\d-]+)\\s+to\\s+([\\d-]+))?",
+      "pattern": "^pick\\s+random(?:\\s+([\\d-]+))?(?:\\s+to\\s+([\\d-]+))?",
       "template": "device_random",
       "blockType": "device_random",
       "params": {
@@ -834,16 +856,25 @@
     {
       "id": "loops_for_index",
       "category": "loops",
-      "pattern": "^for\\s+index",
+      "pattern": "^(?:for\\s+index$|for(?:\\s+(?:index|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?))?\\s+(?:from\\s+([\\d]+)\\s+)?to(?:\\s+([\\d]+))?)",
       "template": "pxt_controls_for",
-      "blockType": "pxt_controls_for"
+      "blockType": "pxt_controls_for",
+      "params": {
+        "varName": 1,
+        "from": 2,
+        "to": 3
+      }
     },
     {
       "id": "loops_for_element",
       "category": "loops",
-      "pattern": "^for\\s+element",
+      "pattern": "^(?:for\\s+element$|for(?:\\s+(?:element|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?))?\\s+of(?:\\s+(?:list|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?))?)",
       "template": "pxt_controls_for_of",
-      "blockType": "pxt_controls_for_of"
+      "blockType": "pxt_controls_for_of",
+      "params": {
+        "varName": 1,
+        "list": 2
+      }
     },
     {
       "id": "loops_forever",
@@ -903,7 +934,7 @@
     {
       "id": "game_use_effect",
       "category": "game",
-      "pattern": "^use\\s+effect",
+      "pattern": "^use\\s+effect(?:\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?(?:\\s+for(?:\\s+[\\[\\(]?(WIN|LOSE)[\\]\\)]?)?)?",
       "template": "game_setgameovereffect",
       "blockType": "game_setgameovereffect"
     },
@@ -917,7 +948,7 @@
     {
       "id": "scene_place_on_tile",
       "category": "scene",
-      "pattern": "^place\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+on\\s+top\\s+of\\s+random\\s+tile",
+      "pattern": "^place(?:\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?))?\\s+on\\s+top\\s+of\\s+random(?:\\s+tile)?",
       "template": "mapplaceonrandomtile",
       "blockType": "mapplaceonrandomtile",
       "params": {
@@ -961,7 +992,7 @@
     {
       "id": "scene_set_bg_image",
       "category": "scene",
-      "pattern": "^set\\s+background\\s+image\\s+to",
+      "pattern": "^set\\s+background\\s+image(?:\\s+to)?",
       "template": "gamesetbackgroundimage",
       "blockType": "gamesetbackgroundimage"
     },
@@ -995,7 +1026,7 @@
     {
       "id": "info_set_life",
       "category": "info",
-      "pattern": "^set\\s+life\\s+to(?:\\s+([\\d-]+))?",
+      "pattern": "^set\\s+life\\s+to(?:\\s+[\\(\\[]?([\\d-]+)[\\)\\]]?)?",
       "template": "hudSetLife",
       "blockType": "hudSetLife",
       "params": {
@@ -1005,7 +1036,7 @@
     {
       "id": "info_change_life",
       "category": "info",
-      "pattern": "^change\\s+life\\s+by(?:\\s+([\\d-]+))?",
+      "pattern": "^change\\s+life\\s+by(?:\\s+[\\(\\[]?([\\d-]+)[\\)\\]]?)?",
       "template": "hudChangeLifeBy",
       "blockType": "hudChangeLifeBy",
       "params": {
@@ -1015,7 +1046,7 @@
     {
       "id": "info_start_countdown",
       "category": "info",
-      "pattern": "^start\\s+countdown(?:\\s+([\\d]+))?",
+      "pattern": "^start\\s+countdown(?:\\s+[\\(\\[]?([\\d]+)[\\)\\]]?)?(?:\\s*\\(?s\\)?)?",
       "template": "gamecountdown",
       "blockType": "gamecountdown",
       "params": {

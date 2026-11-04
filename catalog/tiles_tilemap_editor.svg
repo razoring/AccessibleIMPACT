@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 50" width="144" height="50">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 50" width="144" height="50">
 <style>
 .blocklyText { font-family: Consolas, Monaco, Menlo, "Ubuntu Mono", monospace; font-size: 16px; font-weight: 600; fill: #fff; }
 .blocklyNonEditableText > text { pointer-events: none; }
 .blocklyDropdownText { fill: #fff; }
 </style>
 <g class="tiles_tilemap_editor blocklyBlock blocklyDraggable" data-id="HV;/SIIxr!la/3)}QZKi" style="opacity: 1;"><path class="blocklyPath" id="blockly-3n1" stroke="#384c63" fill="#4b6584" d=" m 25,0  h 93.578125 a 25 25 0 0,1 25,25  v 0 a 25 25 0 0,1 -25,25  V 50  h -93.578125 a 25 25 0 0,1 -25,-25  v 0 a 25 25 0 0,1 25,-25 z
-" style="opacity: 1;"></path><g id="HV;/SIIxr!la/3)}QZKi_field_blockly-3n2" class="blocklyLabelField" transform="translate(12,15.5)" style="opacity: 1;"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="opacity: 1;">tilemap</text></g><g id="HV;/SIIxr!la/3)}QZKi_field_blockly-3n3" class="blocklyField blocklyEditableField" transform="translate(81.578125,4)" style="opacity: 1;"><rect x="5" y="1" width="40px" height="40px" class="blocklyFieldRect blocklySpriteField" stroke="#898989" stroke-width="1" rx="4" ry="4" style="opacity: 1;"></rect></g></g>
+" style="opacity: 1;"></path><g id="HV;/SIIxr!la/3)}QZKi_field_blockly-3n2" class="blocklyLabelField" transform="translate(12,15.5)" style="opacity: 1;"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="opacity: 1;">tilemap</text></g><g id="HV;/SIIxr!la/3)}QZKi_field_blockly-3n3" class="blocklyField blocklyEditableField" transform="translate(81.578125,4)" style="opacity: 1;"><rect x="5" y="1" width="40px" height="40px" class="blocklyFieldRect blocklySpriteField" stroke="#898989" stroke-width="1" rx="4" ry="4" style="opacity: 1;"></rect><image xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAVklEQVR4AdyRwQkAIAzEihN18s7SCbqKkl/+fkQhEAgIp6uqtpmZbdxwN3zF5XnggsyMFN0dLdxwN/yBCZefEIsdhp3GDXfDf3gDdhh2GjfcDf/gDQ4AAAD//xRE6jsAAAAGSURBVAMA0Hd9MQrHq6MAAAAASUVORK5CYII=" x="9" y="5" width="32px" height="32px" style="opacity: 1;"></image></g></g>
 </svg>

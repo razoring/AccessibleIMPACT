@@ -9,3 +9,4 @@ debug-mutate-svg.mjs
 debug-sibling-shift.mjs
 nlp-routing-verify.mjs
 slot-engine-corpus-verify.mjs
+scratch_verify_block_rendering.js

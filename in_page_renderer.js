@@ -1087,6 +1087,60 @@
         }
       };
     }
+
+    if (!B.Blocks['toggleWinLose']) {
+      B.Blocks['toggleWinLose'] = {
+        init: function () {
+          this.setColour('#52447c');
+          this.appendDummyInput()
+            .appendField(new B.FieldToggle ? new B.FieldToggle('WIN') : new B.FieldCheckbox('TRUE'), 'BOOL');
+          this.setOutput(true, 'Boolean');
+          this.setOutputShape(1); // HEXAGONAL
+        }
+      };
+    }
+
+    if (!B.Blocks['animation_path']) {
+      B.Blocks['animation_path'] = {
+        init: function () {
+          this.setColour('#03aa74');
+          this.appendDummyInput()
+            .appendField(new B.FieldDropdown([
+              ['fly to center', 'fly to center'],
+              ['shake', 'shake'],
+              ['bounce', 'bounce'],
+              ['wave', 'wave'],
+              ['bobbing', 'bobbing']
+            ]), 'anim');
+          this.setOutput(true);
+          this.setOutputShape(2); // ROUND
+        }
+      };
+    }
+
+    if (!B.Blocks['toggleOnOff']) {
+      B.Blocks['toggleOnOff'] = {
+        init: function () {
+          this.setColour('#52447c');
+          this.appendDummyInput()
+            .appendField(new B.FieldToggle ? new B.FieldToggle('OFF') : new B.FieldCheckbox('FALSE'), 'BOOL');
+          this.setOutput(true, 'Boolean');
+          this.setOutputShape(1); // HEXAGONAL
+        }
+      };
+    }
+
+    if (!B.Blocks['variables_get_reporter']) {
+      B.Blocks['variables_get_reporter'] = {
+        init: function () {
+          this.setColour('#ec3b59');
+          this.appendDummyInput()
+            .appendField(new B.FieldVariable('index'), 'VAR');
+          this.setOutput(true);
+          this.setOutputShape(2); // ROUND
+        }
+      };
+    }
   }
 
   function normalize(s) {
@@ -1361,12 +1415,40 @@
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+kind\s+to\s*\]?$/i, type: 'spritesetkind', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+stay\s+in\s+screen\s*\]?$/i, type: 'spritesetsetstayinscreen', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+bounce\s+on\s+wall\s*\]?$/i, type: 'spritesetsetbounceonwall', conf: 1.0 },
-    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+(auto\s+destroy|invisible|ghost)\s*\]?$/i, type: 'spritesetsetflag', mutator: (b, ws, raw) => {
+    { match: /^\[?\s*set\s+(?:sprite|[\(\[]?([a-zA-Z0-9_]+)[\]\)]?\s+)?(auto\s+destroy|invisible|ghost)(?:\s+[\(\[]?(ON|OFF)[\)\]]?)?\s*\]?$/i, type: 'spritesetsetflag', mutator: (b, ws, raw) => {
         const f = b.getField('flag');
         if (f) {
           if (/invisible/i.test(raw)) f.setValue('SpriteFlag.Invisible');
           else if (/ghost/i.test(raw)) f.setValue('SpriteFlag.Ghost');
           else f.setValue('SpriteFlag.AutoDestroy');
+        }
+        if (ws) {
+          const m = (raw || '').match(/set\s+(?:sprite|[\(\[]?([a-zA-Z0-9_]+)[\]\)]?\s+)?(?:auto\s+destroy|invisible|ghost)/i);
+          const sName = m && m[1] ? m[1] : 'mySprite';
+          const inSprite = b.getInput('sprite');
+          if (inSprite && inSprite.connection && !inSprite.connection.targetConnection) {
+            try {
+              const vb = ws.newBlock('variables_get');
+              const v = ensureVariable(ws, sName);
+              if (v && vb.getField('VAR')) vb.getField('VAR').setValue(v.getId());
+              vb.initSvg();
+              vb.render();
+              inSprite.connection.connect(vb.outputConnection);
+            } catch (e) {}
+          }
+          const inVal = b.getInput('on') || b.getInput('BOOL') || b.getInput('val');
+          if (inVal && inVal.connection && !inVal.connection.targetConnection) {
+            try {
+              const tb = ws.newBlock('toggleOnOff');
+              tb.setShadow(true);
+              const isOn = /\bON\b/i.test(raw || '');
+              const tf = tb.getField('BOOL');
+              if (tf) tf.setValue(isOn ? 'ON' : 'OFF');
+              tb.initSvg();
+              tb.render();
+              inVal.connection.connect(tb.outputConnection);
+            } catch (e) {}
+          }
         }
       }, conf: 1.0 },
     { match: /^\[?\s*move\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+with\s+buttons\s*\]?$/i, type: 'game_control_sprite', conf: 1.0 },
@@ -1391,7 +1473,26 @@
       },
       conf: 1.0
     },
-    { match: /^\[?\s*(?:sprite\s+say|say)\s*\]?$/i, type: 'spritesaytext', conf: 1.0 },
+    {
+      match: /^\[?\s*(?:sprite\s+say|say)\s*\]?$/i,
+      type: 'spritesaytext',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const inSprite = b.getInput('sprite');
+        if (inSprite && inSprite.connection && !inSprite.connection.targetConnection) {
+          try {
+            const vb = ws.newBlock('variables_get');
+            vb.setShadow(true);
+            const v = ensureVariable(ws, 'mySprite');
+            if (v && vb.getField('VAR')) vb.getField('VAR').setValue(v.getId());
+            vb.initSvg();
+            vb.render();
+            inSprite.connection.connect(vb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     {
       match: /^\[?\s*set\s+(?:[\(\[]?([a-zA-Z0-9_]+)[\)\]]?|sprite)\s+follow(?:\s+[\(\[]?([a-zA-Z0-9_]+)[\)\]]?)?\s*\]?$/i,
       type: 'spriteFollowOtherSprite',
@@ -1639,11 +1740,118 @@
       conf: 1.0 },
     { match: /^\[?\s*(?:repeat\s+)?while(?:\s+loop)?\s*\]?$/i, type: 'device_while', conf: 1.0 },
     { match: /^\[?\s*repeat(?:\s+times|\s+loop)?\s*\]?$/i, type: 'controls_repeat_ext', conf: 1.0 },
-    { match: /^\[?\s*(?:for\s+index|for)\s*\]?$/i, type: 'controls_simple_for', conf: 0.9 },
-    { match: /^\[?\s*for\s+element\s*\]?$/i, type: 'pxt_controls_for_of', conf: 0.95 },
+    {
+      match: /^\[?\s*for(?:\s+(?:index|[\(\[]?([a-zA-Z0-9_]+)[\]\)]?))?(?:\s+from\s+([\d]+))?(?:\s+to(?:\s+([\d]+))?)?\s*\]?$/i,
+      type: 'pxt_controls_for',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/for(?:\s+(?:index|[\(\[]?([a-zA-Z0-9_]+)[\]\)]?))?(?:\s+from\s+([\d]+))?(?:\s+to(?:\s+([\d]+))?)?/i);
+        const varName = (m && m[1]) ? m[1] : 'index';
+        const toVal = (m && m[3]) ? m[3] : '4';
+
+        const inVar = b.getInput('VAR') || (b.inputList && b.inputList.find(i => (i.name || '').toLowerCase().includes('var')));
+        if (inVar && inVar.connection && !inVar.connection.targetConnection) {
+          try {
+            const reporter = (B.Blocks && B.Blocks['variables_get_reporter']) ? ws.newBlock('variables_get_reporter') : ws.newBlock('variables_get');
+            const v = ensureVariable(ws, varName);
+            const vf = reporter.getField('VAR');
+            if (vf && v) vf.setValue(v.getId());
+            reporter.initSvg();
+            reporter.render();
+            inVar.connection.connect(reporter.outputConnection);
+          } catch (e) {}
+        }
+
+        const inTo = b.getInput('TO') || (b.inputList && b.inputList.find(i => (i.name || '').toLowerCase() === 'to'));
+        if (inTo && inTo.connection && !inTo.connection.targetConnection) {
+          try {
+            const nb = ws.newBlock('math_number');
+            nb.setShadow(true);
+            const nf = nb.getField('NUM');
+            if (nf) nf.setValue(toVal);
+            nb.initSvg();
+            nb.render();
+            inTo.connection.connect(nb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*for(?:\s+(?:element|[\(\[]?([a-zA-Z0-9_]+)[\]\)]?))?(?:\s+of(?:\s+(?:list|[\(\[]?([a-zA-Z0-9_]+)[\]\)]?))?)?\s*\]?$/i,
+      type: 'pxt_controls_for_of',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/for(?:\s+(?:element|[\(\[]?([a-zA-Z0-9_]+)[\]\)]?))?(?:\s+of(?:\s+(?:list|[\(\[]?([a-zA-Z0-9_]+)[\]\)]?))?)?/i);
+        const varName = (m && m[1]) ? m[1] : 'value';
+        const listName = (m && m[2]) ? m[2] : 'list';
+
+        const inVar = b.getInput('VAR') || (b.inputList && b.inputList.find(i => (i.name || '').toLowerCase().includes('var')));
+        if (inVar && inVar.connection && !inVar.connection.targetConnection) {
+          try {
+            const reporter = (B.Blocks && B.Blocks['variables_get_reporter']) ? ws.newBlock('variables_get_reporter') : ws.newBlock('variables_get');
+            const v = ensureVariable(ws, varName);
+            const vf = reporter.getField('VAR');
+            if (vf && v) vf.setValue(v.getId());
+            reporter.initSvg();
+            reporter.render();
+            inVar.connection.connect(reporter.outputConnection);
+          } catch (e) {}
+        }
+
+        const inList = b.getInput('LIST') || (b.inputList && b.inputList.find(i => (i.name || '').toLowerCase().includes('list')));
+        if (inList && inList.connection && !inList.connection.targetConnection) {
+          try {
+            const vb = ws.newBlock('variables_get');
+            const v = ensureVariable(ws, listName);
+            const vf = vb.getField('VAR');
+            if (vf && v) vf.setValue(v.getId());
+            vb.initSvg();
+            vb.render();
+            inList.connection.connect(vb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*pause\s*(?:\(\d+\))?\s*ms\s*\]?$/i, type: 'device_pause', conf: 1.0 },
-    { match: /^\[?\s*pick\s+random\s*\]?$/i, type: 'device_random', conf: 1.0 },
-    { match: /^\(?\s*pick\s+random\s*\)?$/i, type: 'device_random', conf: 1.0 },
+    {
+      match: /^[\[\(]?\s*pick\s+random(?:\s+.*)?\s*[\]\)]?$/i,
+      type: 'device_random',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/pick\s+random(?:\s+([-\d]+))?(?:\s+to\s+([-\d]+))?/i);
+        const minVal = (m && m[1]) ? m[1] : '0';
+        const maxVal = (m && m[2]) ? m[2] : '10';
+
+        const inMin = b.getInput('min') || (b.inputList && b.inputList[0]);
+        if (inMin && inMin.connection && !inMin.connection.targetConnection) {
+          try {
+            const nb0 = ws.newBlock('math_number');
+            nb0.setShadow(true);
+            const f = nb0.getField('NUM');
+            if (f) f.setValue(minVal);
+            nb0.initSvg();
+            nb0.render();
+            inMin.connection.connect(nb0.outputConnection);
+          } catch (e) {}
+        }
+
+        const inMax = b.getInput('max') || (b.inputList && b.inputList[1]);
+        if (inMax && inMax.connection && !inMax.connection.targetConnection) {
+          try {
+            const nb1 = ws.newBlock('math_number');
+            nb1.setShadow(true);
+            const f = nb1.getField('NUM');
+            if (f) f.setValue(maxVal);
+            nb1.initSvg();
+            nb1.render();
+            inMax.connection.connect(nb1.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^[<\[\(]?\s*%?\s*chance\s*[>\]\)]?$/i, type: 'percentchance', conf: 1.0 },
     {
       match: /^[<\[\(]?\s*is\s+(?:(?:[\[\(]?([a-zA-Z0-9_]+)[\]\)]?|sprite)\s+)?hitting\s+wall(?:\s*[\[\(]?(bottom|top|left|right)?[\]\)]?)?\s*[>\]\)]?$/i,
@@ -1868,16 +2076,121 @@
     { match: /^\[?\s*set\s+score\s+to\s*\]?$/i, type: 'hudsetScore', conf: 1.0 },
     { match: /^\[?\s*change\s+score\s+by\s*\]?$/i, type: 'hudChangeScoreBy', conf: 1.0 },
     { match: /^\(?\s*score\s*\)?$/i, type: 'hudScore', conf: 1.0 },
-    { match: /^\[?\s*set\s+life\s+to\s*\]?$/i, type: 'hudSetLife', conf: 1.0 },
-    { match: /^\[?\s*change\s+life\s+by\s*\]?$/i, type: 'hudChangeLifeBy', conf: 1.0 },
+    {
+      match: /^\[?\s*set\s+life\s+to(?:\s+.*)?\s*\]?$/i,
+      type: 'hudSetLife',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/set\s+life\s+to(?:\s+[\(\[]?([-\d]+)[\)\]]?)?/i);
+        const val = (m && m[1]) ? m[1] : '3';
+        const inVal = b.getInput('life') || (b.inputList && b.inputList[0]);
+        if (inVal && inVal.connection && !inVal.connection.targetConnection) {
+          try {
+            const nb = ws.newBlock('math_number');
+            nb.setShadow(true);
+            const f = nb.getField('NUM');
+            if (f) f.setValue(val);
+            nb.initSvg();
+            nb.render();
+            inVal.connection.connect(nb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*change\s+life\s+by(?:\s+.*)?\s*\]?$/i,
+      type: 'hudChangeLifeBy',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/change\s+life\s+by(?:\s+[\(\[]?([-\d]+)[\)\]]?)?/i);
+        const val = (m && m[1]) ? m[1] : '-1';
+        const inVal = b.getInput('life') || (b.inputList && b.inputList[0]);
+        if (inVal && inVal.connection && !inVal.connection.targetConnection) {
+          try {
+            const nb = ws.newBlock('math_number');
+            nb.setShadow(true);
+            const f = nb.getField('NUM');
+            if (f) f.setValue(val);
+            nb.initSvg();
+            nb.render();
+            inVal.connection.connect(nb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\(?\s*life\s*\)?$/i, type: 'hudLife', conf: 1.0 },
     { match: /^\[?\s*on\s+life\s+zero\s*\]?$/i, type: 'gamelifeevent', conf: 1.0 },
-    { match: /^\[?\s*start\s+countdown\s*\]?$/i, type: 'gamecountdown', conf: 1.0 },
+    {
+      match: /^\[?\s*start\s+countdown(?:\s+.*)?\s*\]?$/i,
+      type: 'gamecountdown',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/start\s+countdown(?:\s+[\(\[]?([-\d]+)[\)\]]?)?/i);
+        const val = (m && m[1]) ? m[1] : '10';
+        const inDuration = b.getInput('duration') || (b.inputList && b.inputList[0]);
+        if (inDuration && inDuration.connection && !inDuration.connection.targetConnection) {
+          try {
+            const nb = ws.newBlock('math_number');
+            nb.setShadow(true);
+            const f = nb.getField('NUM');
+            if (f) f.setValue(val);
+            nb.initSvg();
+            nb.render();
+            inDuration.connection.connect(nb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*on\s+countdown\s+end\s*\]?$/i, type: 'gamecountdownevent', conf: 1.0 },
 
     // Game & Scene & Images
-    { match: /^\[?\s*game\s+over(?:\s*\(true\)|\s*\(false\))?\s*\]?$/i, type: 'gameOver2', conf: 1.0 },
-    { match: /^\[?\s*splash(?:\s*\(title\))?\s*\]?$/i, type: 'gameSplash', conf: 1.0 },
+    {
+      match: /^\[?\s*game\s+over(?:\s*\(?(true|false|win|lose)\)?)?\s*\]?$/i,
+      type: 'gameOver2',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const isLose = /lose|false/i.test(raw);
+        const toggleType = (toolchain() && toolchain().B && toolchain().B.Blocks && toolchain().B.Blocks['toggleWinLose'])
+          ? 'toggleWinLose'
+          : 'logic_boolean';
+        const inWin = b.getInput('win') || (b.inputList && b.inputList[0]);
+        if (inWin && inWin.connection && !inWin.connection.targetConnection) {
+          try {
+            const tb = ws.newBlock(toggleType);
+            tb.setShadow(true);
+            const f = tb.getField('BOOL');
+            if (f) f.setValue(isLose ? (toggleType === 'toggleWinLose' ? 'LOSE' : 'FALSE') : (toggleType === 'toggleWinLose' ? 'WIN' : 'TRUE'));
+            tb.initSvg();
+            tb.render();
+            inWin.connection.connect(tb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*splash(?:\s*\(title\))?\s*\]?$/i,
+      type: 'gameSplash',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const inTitle = b.getInput('title') || (b.inputList && b.inputList[0]);
+        if (inTitle && inTitle.connection && !inTitle.connection.targetConnection) {
+          try {
+            const tb = ws.newBlock('text');
+            tb.setShadow(true);
+            const f = tb.getField('TEXT');
+            if (f) f.setValue('');
+            tb.initSvg();
+            tb.render();
+            inTitle.connection.connect(tb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*show\s+long\s+text(?:\s*\(str\)\s*\(layout\))?\s*\]?$/i, type: 'game_show_long_text', conf: 1.0 },
     { match: /^\[?\s*set\s+background\s+color\s+to(?:\s*\(color\))?\s*\]?$/i, type: 'gamesetbackgroundcolor', conf: 1.0 },
     { match: /^\[?\s*set\s+background\s+image(?:\s+to)?\s*\]?$/i, type: 'gamesetbackgroundimage', conf: 1.0 },
@@ -1983,7 +2296,28 @@
 
     // Tilemap & Tilemap Extension
     { match: /^\[?\s*set\s+tilemap\s+to(?:\s*\(tilemap\))?\s*\]?$/i, type: 'set_current_tilemap', conf: 1.0 },
-    { match: /^\[?\s*place\s+.*on\s+top\s+of\s+random(?:\s+tile)?\s*\]?$/i, type: 'mapplaceonrandomtile', conf: 1.0 },
+    {
+      match: /^\[?\s*place(?:\s+.*)?\s+on\s+top\s+of\s+random(?:\s+tile)?\s*\]?$/i,
+      type: 'mapplaceonrandomtile',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/place\s+(?:sprite|\(?([a-zA-Z0-9_]+)\)?)\s+on\s+top\s+of\s+random/i);
+        const sName = (m && m[1] && m[1].toLowerCase() !== 'sprite') ? m[1] : 'mySprite';
+        const inSprite = b.getInput('sprite');
+        if (inSprite && inSprite.connection && !inSprite.connection.targetConnection) {
+          try {
+            const vb = ws.newBlock('variables_get');
+            vb.setShadow(true);
+            const v = ensureVariable(ws, sName);
+            if (v && vb.getField('VAR')) vb.getField('VAR').setValue(v.getId());
+            vb.initSvg();
+            vb.render();
+            inSprite.connection.connect(vb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*place\s+.*on\s+random\s+tile\s*\]?$/i, type: 'mapplaceonrandomtile', conf: 1.0 },
     {
       match: /^\[?\s*place\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+on\s+top\s+of\s+(?:location|\(?[a-zA-Z0-9_\s]+\)?)\s*\]?$/i,
@@ -2149,18 +2483,84 @@
           const val = 'effects.' + effectName;
           try { f.setValue(val); } catch (e) { f.setValue('effects.confetti'); }
         }
+        if (ws) {
+          const isLose = /lose|false/i.test(raw);
+          const toggleType = (toolchain() && toolchain().B && toolchain().B.Blocks && toolchain().B.Blocks['toggleWinLose'])
+            ? 'toggleWinLose'
+            : 'logic_boolean';
+          const inWin = b.getInput('win') || (b.inputList && b.inputList[b.inputList.length - 1]);
+          if (inWin && inWin.connection && !inWin.connection.targetConnection) {
+            try {
+              const tb = ws.newBlock(toggleType);
+              tb.setShadow(true);
+              const fb = tb.getField('BOOL');
+              if (fb) fb.setValue(isLose ? (toggleType === 'toggleWinLose' ? 'LOSE' : 'FALSE') : (toggleType === 'toggleWinLose' ? 'WIN' : 'TRUE'));
+              tb.initSvg();
+              tb.render();
+              inWin.connection.connect(tb.outputConnection);
+            } catch (e) {}
+          }
+        }
+      },
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*use\s+(?:sound\s+.*|playable\s+.*)\s+for\s+.*\]?$/i,
+      type: 'game_setgameoverplayable',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const isLose = /lose|false/i.test(raw);
+        const toggleType = (toolchain() && toolchain().B && toolchain().B.Blocks && toolchain().B.Blocks['toggleWinLose'])
+          ? 'toggleWinLose'
+          : 'logic_boolean';
+        const inWin = b.getInput('win') || (b.inputList && b.inputList[b.inputList.length - 1]);
+        if (inWin && inWin.connection && !inWin.connection.targetConnection) {
+          try {
+            const tb = ws.newBlock(toggleType);
+            tb.setShadow(true);
+            const fb = tb.getField('BOOL');
+            if (fb) fb.setValue(isLose ? (toggleType === 'toggleWinLose' ? 'LOSE' : 'FALSE') : (toggleType === 'toggleWinLose' ? 'WIN' : 'TRUE'));
+            tb.initSvg();
+            tb.render();
+            inWin.connection.connect(tb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*use\s+message(?:\s+.*)?\s+for\s+.*\]?$/i,
+      type: 'game_setgameovermessage',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const isLose = /lose|false/i.test(raw);
+        const toggleType = (toolchain() && toolchain().B && toolchain().B.Blocks && toolchain().B.Blocks['toggleWinLose'])
+          ? 'toggleWinLose'
+          : 'logic_boolean';
+        const inWin = b.getInput('win') || (b.inputList && b.inputList[b.inputList.length - 1]);
+        if (inWin && inWin.connection && !inWin.connection.targetConnection) {
+          try {
+            const tb = ws.newBlock(toggleType);
+            tb.setShadow(true);
+            const fb = tb.getField('BOOL');
+            if (fb) fb.setValue(isLose ? (toggleType === 'toggleWinLose' ? 'LOSE' : 'FALSE') : (toggleType === 'toggleWinLose' ? 'WIN' : 'TRUE'));
+            tb.initSvg();
+            tb.render();
+            inWin.connection.connect(tb.outputConnection);
+          } catch (e) {}
+        }
       },
       conf: 1.0
     },
 
     // Animation Extension
     {
-      match: /^\[?\s*animate(?:\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?))?\s+frames(?:\s+interval.*)?\s*\]?$/i,
+      match: /^\[?\s*animate(?:\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?))?\s+(?:frames|image)(?:\s+.*)?\s*\]?$/i,
       type: 'run_image_animation',
       mutator: (b, ws, raw) => {
         if (!ws) return;
-        const m = (raw || '').match(/animate(?:\s+\(?([a-zA-Z0-9_]+)\)?)?\s+frames/i);
-        const sName = m && m[1] ? m[1] : 'sprite';
+        const m = (raw || '').match(/animate(?:\s+[\(\[]?([a-zA-Z0-9_]+)[\]\)]?)?\s+(?:frames|image)/i);
+        const sName = m && m[1] ? m[1] : 'mySprite';
         const inSprite = b.getInput('sprite');
         if (inSprite && inSprite.connection && !inSprite.connection.targetConnection) {
           try {
@@ -2175,10 +2575,27 @@
       },
       conf: 1.0
     },
-    { match: /^\[?\s*animate\s+.*frames\s+.*interval.*loop.*\]?$/i, type: 'run_image_animation', conf: 1.0 },
-    { match: /^\[?\s*animate\s+.*with\s+.*for\s+.*loop.*\]?$/i, type: 'run_movement_animation', conf: 1.0 },
-    { match: /^\[?\s*animate\s+image\s*\]?$/i, type: 'run_image_animation', conf: 1.0 },
-    { match: /^\[?\s*animate\s+movement\s*\]?$/i, type: 'run_movement_animation', conf: 1.0 },
+    {
+      match: /^\[?\s*animate(?:\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?))?\s+(?:movement|with\b)(?:\s+.*)?\s*\]?$/i,
+      type: 'run_movement_animation',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/animate(?:\s+[\(\[]?([a-zA-Z0-9_]+)[\]\)]?)?\s+(?:movement|with\b)/i);
+        const sName = m && m[1] ? m[1] : 'mySprite';
+        const inSprite = b.getInput('sprite');
+        if (inSprite && inSprite.connection && !inSprite.connection.targetConnection) {
+          try {
+            const vb = ws.newBlock('variables_get');
+            const v = ensureVariable(ws, sName);
+            if (v && vb.getField('VAR')) vb.getField('VAR').setValue(v.getId());
+            vb.initSvg();
+            vb.render();
+            inSprite.connection.connect(vb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*stop\s+.*animations\s+on\s*.*\]?$/i, type: 'stop_animations', conf: 1.0 },
 
     // Arrays / Lists (MakeCode Arcade Orange #ff8f08)
@@ -2253,10 +2670,14 @@
           const display = cs.getPropertyValue('display');
           if (display && display === 'none') s += 'display:none;';
         } else if (tag === 'text') {
-          // MakeCode block text is crisp white, editable inputs are dark slate
-          const isWhite = !el.closest('.blocklyTextInputField, .blocklyNumberField');
-          const fill = isWhite ? '#ffffff' : '#575e75';
-          s += `fill:${fill} !important;stroke:none !important;stroke-width:0 !important;font-family:Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace !important;font-size:16px !important;font-weight:600 !important;text-anchor:start;dominant-baseline:central;paint-order:fill !important;`;
+          if (el.classList.contains('field-text-quote')) {
+            s += `fill:#a31515 !important;stroke:none !important;stroke-width:0 !important;font-size:16px !important;opacity:1 !important;`;
+          } else {
+            // MakeCode block text is crisp white, editable inputs are dark slate
+            const isWhite = !el.closest('.blocklyTextInputField, .blocklyNumberField');
+            const fill = isWhite ? '#ffffff' : '#575e75';
+            s += `fill:${fill} !important;stroke:none !important;stroke-width:0 !important;font-family:Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace !important;font-size:16px !important;font-weight:600 !important;text-anchor:start;dominant-baseline:central;paint-order:fill !important;`;
+          }
         } else if (tag === 'rect') {
           // Check if this is a text input field, dropdown, or toggle
           const isTextInput = el.classList.contains('blocklyFieldRect') && el.closest('.blocklyTextInputField, .blocklyNumberField');
@@ -2271,6 +2692,9 @@
           } else if (isToggle) {
             // Authentic MakeCode switch styling
             s += 'fill:#808e9b !important;stroke:#485460 !important;stroke-width:1.5px !important;rx:4px !important;ry:4px !important;';
+          } else if (el.classList.contains('blocklyAnimationField')) {
+            // Authentic MakeCode animation frames editor socket: crisp white square
+            s += 'fill:#ffffff !important;stroke:none !important;stroke-width:0 !important;opacity:1 !important;';
           } else {
             for (const p of INPROPS) {
               const v = cs.getPropertyValue(p);
@@ -2374,9 +2798,24 @@
       }
     });
 
-    // If block contains tilemap field/socket or image socket, ensure checkered tile placeholder image is present
-    const imageAndTileFields = clone.querySelectorAll('.blocklySpriteField, .blocklyAnimationField, g.blocklyEditableField rect[width="40"], g.blocklyEditableField rect[width="40px"]');
+    // Ensure filmstrip icon and white square on animation fields (.blocklyAnimationField)
+    clone.querySelectorAll('.blocklyAnimationField').forEach(rect => {
+      rect.setAttribute('style', 'fill:#ffffff !important;stroke:none !important;stroke-width:0 !important;opacity:1 !important;');
+      rect.setAttribute('fill', '#ffffff');
+      const parentG = rect.parentNode;
+      if (parentG && !parentG.querySelector('.filmstrip-icon')) {
+        const iconG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        iconG.setAttribute('class', 'filmstrip-icon');
+        iconG.setAttribute('transform', 'translate(6, 12)');
+        iconG.innerHTML = '<rect x="0" y="0" width="18" height="18" rx="2" fill="none" stroke="#ffffff" stroke-width="2"/><line x1="0" y1="6" x2="18" y2="6" stroke="#ffffff" stroke-width="1.5"/><line x1="0" y1="12" x2="18" y2="12" stroke="#ffffff" stroke-width="1.5"/><line x1="5" y1="0" x2="5" y2="18" stroke="#ffffff" stroke-width="1.5"/><line x1="13" y1="0" x2="13" y2="18" stroke="#ffffff" stroke-width="1.5"/>';
+        parentG.insertBefore(iconG, rect);
+      }
+    });
+
+    // If block contains tilemap field/socket or image socket (excluding animation fields), ensure checkered tile placeholder image is present
+    const imageAndTileFields = clone.querySelectorAll('.blocklySpriteField, g.blocklyEditableField rect[width="40"], g.blocklyEditableField rect[width="40px"]');
     for (const rect of imageAndTileFields) {
+      if (rect.classList.contains('blocklyAnimationField')) continue;
       const parentG = rect.parentNode;
       const existingImg = parentG ? parentG.querySelector('image') : null;
       if (parentG && !existingImg) {
@@ -2541,6 +2980,9 @@
         let isSprite = false;
         let isNumber = false;
         let isString = false;
+        let isImage = false;
+        let isTile = false;
+        let isTilemap = false;
 
         // Check connection allowed types
         if (check && Array.isArray(check) && check.length > 0) {
@@ -2550,41 +2992,78 @@
             else if (lc === 'number') isNumber = true;
             else if (lc === 'string') isString = true;
             else if (lc === 'sprite') isSprite = true;
+            else if (lc.includes('image') || lc.includes('bitmap')) isImage = true;
+            else if (lc.includes('tilemap')) isTilemap = true;
+            else if (lc.includes('tile')) isTile = true;
           }
         }
 
         // Check input name patterns
-        if (!isBoolean && !isNumber && !isString && !isSprite) {
+        if (!isBoolean && !isNumber && !isString && !isSprite && !isImage && !isTile && !isTilemap) {
           if (/^(?:bool|cond|if|condition)/i.test(name)) {
             isBoolean = true;
           } else if (/^(?:num|width|height|x|y|vx|vy|ax|ay|dx|dy|speed|step|val|value|index|count|time|ms|delay|by|to|score|life|health|connection)/i.test(name)) {
             isNumber = true;
-          } else if (/^(?:text|str|msg|message|label|format|string)/i.test(name)) {
+          } else if (/^(?:text|str|msg|message|label|format|string|title|subtitle)/i.test(name)) {
             isString = true;
           } else if (b.type !== 'Image_replace' && /^(?:sprite|mysprite|target|source|agent|from|other)/i.test(name)) {
             isSprite = true;
+          } else if (/^(?:img|image|picture|bitmap|frame)/i.test(name)) {
+            isImage = true;
+          } else if (/^(?:tilemap)/i.test(name)) {
+            isTilemap = true;
+          } else if (/^(?:tile)/i.test(name)) {
+            isTile = true;
           }
         }
 
         if (isBoolean) {
-          shadowType = 'logic_boolean';
-          shadowValue = 'TRUE';
+          if (b.type && (b.type.startsWith('game_setgameover') || b.type === 'gameOver2')) {
+            shadowType = (B.Blocks && B.Blocks['toggleWinLose']) ? 'toggleWinLose' : 'logic_boolean';
+            shadowValue = 'WIN';
+          } else if (b.type && (b.type.startsWith('spritesetset') || b.type === 'spritesetflag' || b.type.includes('animation') || name === 'on' || name === 'loop')) {
+            shadowType = (B.Blocks && B.Blocks['toggleOnOff']) ? 'toggleOnOff' : 'logic_boolean';
+            shadowValue = 'OFF';
+          } else {
+            shadowType = 'logic_boolean';
+            shadowValue = 'TRUE';
+          }
         } else if (isNumber) {
           shadowType = 'math_number';
-          shadowValue = '0';
+          shadowValue = (b.type === 'pxt_controls_for' && name === 'to') ? '4' : '0';
+        } else if (b.type === 'pxt_controls_for' && name.includes('var')) {
+          shadowType = (B.Blocks && B.Blocks['variables_get_reporter']) ? 'variables_get_reporter' : 'variables_get';
+          shadowValue = 'index';
+        } else if (b.type === 'pxt_controls_for_of' && name.includes('var')) {
+          shadowType = (B.Blocks && B.Blocks['variables_get_reporter']) ? 'variables_get_reporter' : 'variables_get';
+          shadowValue = 'value';
+        } else if (b.type === 'pxt_controls_for_of' && name.includes('list')) {
+          shadowType = 'variables_get';
+          shadowValue = 'list';
         } else if (isSprite) {
           shadowType = 'variables_get';
           shadowValue = 'mySprite';
         } else if (isString) {
           shadowType = 'text';
           shadowValue = '';
+        } else if (isImage) {
+          shadowType = (b.type === 'gamesetbackgroundimage' && B.Blocks && B.Blocks['background_image_picker'])
+            ? 'background_image_picker'
+            : 'screen_image_picker';
+        } else if (isTilemap) {
+          shadowType = 'tiles_tilemap_editor';
+        } else if (isTile) {
+          shadowType = 'tileset_tile_picker';
+        } else if (b.type === 'run_movement_animation' && (name.includes('anim') || name.includes('with') || name.includes('path'))) {
+          shadowType = 'animation_path';
+          shadowValue = 'fly to center';
         }
 
         if (shadowType && B.Blocks && B.Blocks[shadowType]) {
           try {
             const sb = ws.newBlock(shadowType);
             sb.setShadow(true);
-            if (shadowType === 'logic_boolean') {
+            if (shadowType === 'logic_boolean' || shadowType === 'toggleWinLose' || shadowType === 'toggleOnOff') {
               const f = sb.getField('BOOL');
               if (f) f.setValue(shadowValue);
             } else if (shadowType === 'math_number') {
