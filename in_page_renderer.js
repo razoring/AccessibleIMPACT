@@ -444,6 +444,42 @@
     return cached || null;
   }
 
+  function renderStatusBarCreation(rawText, ws) {
+    const raw = rawText || "";
+    const mSet = raw.match(/set\s+\[?([a-zA-Z0-9_]+)\]?\s+to/i);
+    const varName = (mSet && mSet[1] && mSet[1].toLowerCase() !== "variable") ? mSet[1] : "statusbar";
+    const mKind = raw.match(/(?:kind|bubble|to)\s+[\(\[]?([a-zA-Z0-9_]+)[\)\]]?/i);
+    const kindName = (mKind && !["kind", "statusbar"].includes(mKind[1].toLowerCase())) ? mKind[1] : "Health";
+
+    const B = blockly();
+    if (B && ws) {
+      try {
+        const xml = `<xml xmlns="http://www.w3.org/1999/xhtml">
+          <block type="variables_set">
+            <field name="VAR">${varName}</field>
+            <value name="VALUE">
+              <block type="statusbars_create">
+                <value name="width"><shadow type="math_number"><field name="NUM">20</field></shadow></value>
+                <value name="height"><shadow type="math_number"><field name="NUM">4</field></shadow></value>
+                <value name="kind"><shadow type="statusbars_kind"><field name="MEMBER">${kindName}</field></shadow></value>
+              </block>
+            </value>
+          </block>
+        </xml>`;
+        const doc = new DOMParser().parseFromString(xml, "text/xml");
+        const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        b.initSvg();
+        b.render();
+        const res = renderSvg(b);
+        b.dispose(false);
+        return res;
+      } catch (e) {
+        console.warn("[AIFX] renderStatusBarCreation error:", e);
+      }
+    }
+    return null;
+  }
+
   // Ensure built-in extension blocks (e.g. Scroller) are defined in Blockly.Blocks
   function renderToggleToken(rawText) {
     const isWin = /win/i.test(rawText);
@@ -1001,6 +1037,12 @@
       conf: 1.0
     },
 
+    // Status Bars - creation statement
+    {
+      match: /^\[?\s*(?:set\s+\[?(statusbar)\]?\s+to.*|create\s+status\s*bar.*)\s*\]?$/i,
+      custom: (raw, ws) => renderStatusBarCreation(raw, ws),
+      conf: 1.0
+    },
     // Sprites - character creation statement (Option B)
     {
       match: /^\[?\s*(?:set\s+(?:sprite|\[?[a-zA-Z0-9_]+\]?)\s+to\s+)?sprite(?:\s*\(img\))?\s*of\s*kind(?:\s*\(?[a-zA-Z0-9_]+\)?)?\s*\]?$/i,
@@ -2327,7 +2369,7 @@
 
     const matchQuick = resolveTokenMatch(tokenText, null);
     if (matchQuick && matchQuick.custom) {
-      const res = matchQuick.custom(tokenText, tc ? tc.ws : null);
+      const res = matchQuick.custom(tokenText, null);
       if (res && res.svg) {
         CACHE[tokenText] = res;
         return res;

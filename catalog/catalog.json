@@ -3018,5 +3018,20 @@
     "file": "play_icon.svg",
     "width": 100,
     "height": 96
+  },
+  "variables_set_statusbar_statusbars_create": {
+    "type": "statusbars",
+    "file": "variables_set_statusbar_statusbars_create.svg",
+    "width": 832,
+    "height": 56,
+    "fields": [
+      "statusbar",
+      "Health"
+    ],
+    "inputs": [
+      "width",
+      "height",
+      "kind"
+    ]
   }
 }

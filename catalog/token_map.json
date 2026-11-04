@@ -36,6 +36,17 @@
       }
     },
     {
+      "id": "property_statusbar_kind",
+      "category": "statusbars",
+      "pattern": "^(?:Health|Hunger|Energy|Magic|Life|Heat|Cold)$",
+      "template": "isolated_pill",
+      "blockType": "property_pill",
+      "params": {
+        "prop": 0,
+        "pillCategory": "statusbars_kind"
+      }
+    },
+    {
       "id": "sprites_create_char",
       "category": "sprites",
       "pattern": "^(?:set\\s+(?:\\[?([a-zA-Z0-9_]+)\\]?|sprite)\\s+to\\s+)?sprite(?:\\s*\\(img\\))?\\s*of\\s*kind(?:\\s*[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
@@ -460,9 +471,20 @@
       "blockType": "scroller_setLayerImage"
     },
     {
+      "id": "statusbars_create",
+      "category": "statusbars",
+      "pattern": "^(?:set\\s+\\[?(statusbar)\\]?\\s+to.*|create\\s+status\\s*bar.*)",
+      "template": "variables_set_statusbar_statusbars_create",
+      "blockType": "variables_set",
+      "params": {
+        "varName": 1,
+        "kind": 2
+      }
+    },
+    {
       "id": "statusbars_get_prop",
       "category": "statusbars",
-      "pattern": "^[\\(\\[]?(?:\\(statusbar\\)|statusbar)\\s*[\\[\\(]?(value|max)[\\]\\)]?[\\)\\]]?$",
+      "pattern": "^[\\(\\[]*\\(?\\s*(?:statusbar|sprite|[a-zA-Z0-9_]+)\\s*\\)?\\s*[\\[\\(]?(value|max|zero)[\\]\\)]*[\\)\\]]*$",
       "template": "StatusBarSprite_blockCombine_get",
       "blockType": "StatusBarSprite_blockCombine_get",
       "params": {

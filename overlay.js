@@ -59,6 +59,8 @@
       bg = '#d63031'; stroke = '#c0392b';
     } else if (category === 'statusbars') {
       bg = '#20bf6b'; stroke = '#0fb9b1';
+    } else if (category === 'statusbars_kind') {
+      bg = '#5d4d8c'; stroke = '#52447c';
     } else if (category === 'music') {
       bg = '#e67e22'; stroke = '#d35400';
     }
@@ -92,12 +94,15 @@
       s = s.replace(/>mySprite</g, `>${v}<`);
       s = s.replace(/>projectile</g, `>${v}<`);
       s = s.replace(/>sprite</g, `>${v}<`);
+      s = s.replace(/>statusbar</g, `>${v}<`);
+      s = s.replace(/>item</g, `>${v}<`);
     }
 
     // 2. Kind replacement
     if (params.kind) {
       const k = escapeXml(params.kind);
       s = s.replace(/>Player</g, `>${k}<`);
+      s = s.replace(/>Health</g, `>${k}<`);
     }
 
     // 3. Button replacement
@@ -188,6 +193,16 @@
       clean = clean.slice(1, -1).trim();
     }
     const cleanFlat = clean.replace(/[\[\]\(\)]/g, ' ').replace(/\s+/g, ' ').trim();
+
+    // Context check: If step mentions "status bar" or "status bar kind" and token is (Health), (Hunger), etc.
+    const isStatusBarContext = /status\s*bar/i.test(stepText || '');
+    if (isStatusBarContext && /^(?:Health|Hunger|Energy|Magic|Life|Heat|Cold)$/i.test(cleanFlat)) {
+      return {
+        rule: { id: 'property_statusbar_kind', category: 'statusbars_kind' },
+        template: 'isolated_pill',
+        params: { prop: cleanFlat, pillCategory: 'statusbars_kind' }
+      };
+    }
 
     // Context disambiguation for multiplayer
     const isMultiplayer = /multiplayer|player\s*[234]|mp\./i.test(stepText || '');
@@ -624,6 +639,14 @@
       }
 
       if (ch === '(') {
+        const sub = text.slice(i);
+        const compMatch = sub.match(/^\(?\s*\(\s*([a-zA-Z0-9_]+)\s*\)\s*\[\s*([a-zA-Z0-9_]+)\s*\]\s*\)?/);
+        if (compMatch) {
+          pushToken(i, i + compMatch[0].length);
+          i += compMatch[0].length;
+          continue;
+        }
+
         const start = i;
         let depth = 0;
         let j = i;
@@ -719,6 +742,15 @@
       parent.replaceChild(fragment, node);
     }
   }
+
+  // Window event bridge for programmatic block extraction & diagnostics
+  window.addEventListener('AIFX_EXTRACT_BLOCK', (e) => {
+    const token = e.detail && e.detail.token;
+    if (!token) return;
+    chrome.runtime.sendMessage({ action: 'renderToken', token: token }, (res) => {
+      window.postMessage({ action: 'AIFX_EXTRACT_RESULT', result: res }, '*');
+    });
+  });
 
   function scan() {
     injectStyles();
