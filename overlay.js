@@ -214,6 +214,48 @@
       s = s.replace(/>0<\/text>/, `>${vy}</text>`);
     }
 
+    // 7. Re-measure variable dropdown pills after text replacement: a longer var
+    //    name must stretch the pill rect, shift the dropdown arrow, the following
+    //    label + value child, the parent path runs, and the viewBox together.
+    if (params.varName) {
+      const charW = 9.5;
+      const fieldRe = /<g [^>]*?class="[^"]*blocklyDropdownField[^"]*"[^>]*?transform="translate\(([\d.]+),([\d.]+)\)"[^>]*>((?:.(?!<\/g>))*.)<\/g>/;
+      const fm = s.match(fieldRe);
+      if (fm) {
+        const group = fm[3];
+        const rectM = group.match(/<rect[^>]*width="([\d.]+)"/);
+        const textM = group.match(/<text[^>]*>([^<]*)<\/text>/);
+        if (rectM && textM) {
+          const textW = textM[1].length * charW;
+          // original proportions: 8 left pad + text + 5 gap + 12 arrow + 8 right pad
+          const needed = Math.ceil((8 + textW + 5 + 12 + 8) * 2) / 2;
+          const cur = parseFloat(rectM[1]);
+          const delta = needed - cur;
+          if (delta > 0) {
+            // a+b. widen the pill rect and shift the dropdown arrow inside the group
+            const newGroup = group
+              .replace(/(<rect[^>]*width=")([\d.]+)"/, (m0, a, w) => a + (parseFloat(w) + delta) + '"')
+              .replace(/(<image[^>]*transform="translate\()([\d.]+)(,)/, (m0, a, x, c) => a + (parseFloat(x) + delta) + c);
+            // c. shift the following label AND the value child (shadow, which
+            //    appears earlier in document order) right by delta
+            let shifts = 0;
+            let after = s.slice(fm.index + fm[0].length).replace(/(<g [^>]*?transform="translate\()([\d.]+)(,)/g, (m0, a, x, c) => {
+              if (shifts++ < 1) return a + (parseFloat(x) + delta) + c;
+              return m0;
+            });
+            let head = s.slice(0, fm.index).replace(/(<g [^>]*?blocklyShadow[^>]*?transform="translate\()([\d.]+)(,)/, (m0, a, x, c) => a + (parseFloat(x) + delta) + c);
+            s = head + fm[0].replace(group, newGroup) + after;
+            // d. widen the main block path's straight runs (first h N / h -N)
+            s = s.replace(/h (\d+(?:\.\d+)?) a 4 4/, (m0, num) => 'h ' + (parseFloat(num) + delta) + ' a 4 4');
+            s = s.replace(/h -(\d+(?:\.\d+)?)/, (m0, num) => 'h -' + (parseFloat(num) + delta));
+            // e. widen viewBox + width
+            s = s.replace(/viewBox="0 0 (\d+(?:\.\d+)?) (\d+(?:\.\d+)?)"/, (m0, w, h) => `viewBox="0 0 ${parseFloat(w) + delta} ${h}"`);
+            s = s.replace(/width="(\d+(?:\.\d+)?)"/, (m0, w) => `width="${parseFloat(w) + delta}"`);
+          }
+        }
+      }
+    }
+
     return s;
   }
 
@@ -326,7 +368,8 @@
     const cleanFlat = clean.replace(/[\[\]\(\)]/g, ' ').replace(/\s+/g, ' ').trim();
 
     // Context check 1: Variable references in instructions (e.g. "Click on the (mySprite) variable")
-    const varRegex = new RegExp('(?:variable\\s+[\\[\\(]?' + cleanFlat + '[\\]\\)]?|[\\[\\(]?' + cleanFlat + '[\\]\\)]?\\s+variable)', 'i');
+    const esc = cleanFlat.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const varRegex = new RegExp('(?:variable\\s+[\\[\\(]?' + esc + '[\\]\\)]?|[\\[\\(]?' + esc + '[\\]\\)]?\\s+variable)', 'i');
     const isExplicitVariable = varRegex.test(stepText || '');
     const isKnownVarPattern = /^(?:mySprite|customerSprite|burgerMaker|burgerProjectile|customerList|statusbar|item|[a-zA-Z_][a-zA-Z0-9_]*Sprite|[a-zA-Z_][a-zA-Z0-9_]*List)$/i.test(cleanFlat);
 
@@ -697,19 +740,9 @@
       const cached = getStaticOrCached(tokenText);
       if (cached && cached.svg) {
         applySvg(span, cached);
-      } else if (catalogMap && tokenRules.length > 0) {
-        const stepArea = span.closest('app-step-information, [data-instruction], article, .lesson-content') || document.body;
-        const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
-        const overallText = (document.body ? document.body.textContent : '').toLowerCase();
-        const resolution = resolveTokenWithNLP(tokenText, stepText, overallText);
-        if (resolution) {
-          fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
-            if (data && data.svg) {
-              svgCache.set(tokenText, data);
-              applySvg(span, data);
-            }
-          });
-        }
+      } else {
+        // Live renderer first; NLP is only a fallback inside requestTokenRender
+        requestTokenRender(tokenText, tokenText, span);
       }
     }
   }
@@ -764,8 +797,32 @@
               svgCache.set(lookupToken, { svg: null });
               svgCache.set(tokenText, { svg: null });
             }
+            // Renderer definitively failed — try the NLP fallback (token_map rules
+            // + static catalog templates) before leaving the token as plain text.
+            let nlpApplied = false;
             for (const s of waiters) {
               if (s && s.isConnected && !s.getAttribute('data-rendered')) {
+                if (!nlpApplied && catalogMap && tokenRules.length > 0) {
+                  nlpApplied = true;
+                  const stepArea = s.closest('app-step-information, [data-instruction], article, .lesson-content') || document.body;
+                  const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
+                  const overallText = (document.body ? document.body.textContent : '').toLowerCase();
+                  const resolution = resolveTokenWithNLP(tokenText, stepText, overallText);
+                  if (resolution) {
+                    fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
+                      if (data && data.svg) {
+                        svgCache.set(tokenText, data);
+                        applyTokenToPage(tokenText, data);
+                        if (tokenText !== lookupToken) applyTokenToPage(lookupToken, data);
+                      } else {
+                        s.textContent = s.getAttribute('data-token') || tokenText;
+                      }
+                    }).catch(() => {
+                      s.textContent = s.getAttribute('data-token') || tokenText;
+                    });
+                    continue;
+                  }
+                }
                 s.textContent = s.getAttribute('data-token') || tokenText;
               }
             }
@@ -963,21 +1020,9 @@
       const cached = getStaticOrCached(tokenText);
       if (cached && cached.svg) {
         applySvg(span, cached);
-      } else if (catalogMap && tokenRules.length > 0) {
-        const resolution = resolveTokenWithNLP(tokenText, stepText, overallText);
-        if (resolution) {
-          fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
-            if (data && data.svg) {
-              svgCache.set(tokenText, data);
-              applySvg(span, data);
-            } else {
-              requestTokenRender(tokenText, tokenText, span);
-            }
-          });
-        } else {
-          requestTokenRender(tokenText, tokenText, span);
-        }
       } else {
+        // Live renderer first; NLP is only a fallback inside requestTokenRender
+        // when the renderer definitively fails (e.g. block type unavailable).
         requestTokenRender(tokenText, tokenText, span);
       }
 

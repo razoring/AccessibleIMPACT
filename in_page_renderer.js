@@ -399,6 +399,24 @@
       } catch (e) {}
     }
 
+    // 9b. Tilemap placeholder: (tilemap), (tilemap1), [tilemap 2] — render the real
+    // tilemap picker block so it matches the standalone placeholder visual, instead
+    // of falling through to a red variables_get.
+    if (/^[\[\(]\s*tilemap(?:\s*\d+)?\s*[\]\)]$/i.test(raw)) {
+      try {
+        const tb = ws.newBlock('tiles_tilemap_editor');
+        tb.initSvg();
+        tb.render();
+        return tb;
+      } catch (e) {}
+      try {
+        const tp = ws.newBlock('tileset_tile_picker');
+        tp.initSvg();
+        tp.render();
+        return tp;
+      } catch (e) {}
+    }
+
     // 10. Default: Variable getter
     try {
       const vb = ws.newBlock('variables_get');
@@ -1236,7 +1254,7 @@
       conf: 1.0
     },
     {
-      match: /^\[?\s*set\s+(?:sprite|\[?[a-zA-Z0-9_]+\]?)\s+to\s*\]?$/i,
+      match: /^\[?\s*set\s+(?:sprite|\(\s*[a-zA-Z0-9_]+\s*\))\s+to\s*\]?$/i,
       custom: (raw, ws) => renderCharacterCreation(raw, ws),
       conf: 1.0
     },
@@ -1529,9 +1547,61 @@
       },
       conf: 1.0
     },
-    { match: /^\[?\s*if\s*\]?$/i, type: 'controls_if', conf: 1.0 },
-    { match: /^\[?\s*else\s*if\s*\]?$/i, type: 'controls_if', conf: 1.0 },
-    { match: /^\[?\s*else\s*\]?$/i, type: 'controls_if', conf: 0.9 },
+    {
+      match: /^\[?\s*if\s*\]?$/i,
+      type: 'controls_if',
+      mutator: (b, ws) => {
+        try {
+          const inp = b.getInput('IF0');
+          if (inp && inp.connection && !inp.connection.targetConnection) {
+            const tb = ws.newBlock('logic_boolean');
+            tb.setShadow(true);
+            const f = tb.getField('BOOL');
+            if (f) f.setValue('TRUE');
+            tb.initSvg();
+            tb.render();
+            inp.connection.connect(tb.outputConnection);
+          }
+        } catch (e) {}
+      },
+      conf: 1.0
+    },
+    { match: /^\[?\s*else\s*if\s*\]?$/i,
+      type: 'controls_if',
+      mutator: (b, ws) => {
+        b.elseifCount_ = 1;
+        if (b.updateShape_) b.updateShape_();
+        // Fill BOTH condition sockets (IF0 = main if, IF1 = the else-if row) so
+        // the hexagon input field is visible on every row of the C-block.
+        for (const inputName of ['IF0', 'IF1']) {
+          try {
+            const tb = ws.newBlock('logic_boolean');
+            const f = tb.getField('BOOL');
+            if (f) f.setValue('TRUE');
+            tb.initSvg();
+            tb.render();
+            const inp = b.getInput(inputName);
+            if (inp && inp.connection && tb.outputConnection) inp.connection.connect(tb.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0 },
+    { match: /^\[?\s*else\s*\]?$/i,
+      type: 'controls_if',
+      mutator: (b, ws) => {
+        b.elseCount_ = 1;
+        if (b.updateShape_) b.updateShape_();
+        try {
+          const tb = ws.newBlock('logic_boolean');
+          const f = tb.getField('BOOL');
+          if (f) f.setValue('TRUE');
+          tb.initSvg();
+          tb.render();
+          const inp = b.getInput('IF0');
+          if (inp && inp.connection && tb.outputConnection) inp.connection.connect(tb.outputConnection);
+        } catch (e) {}
+      },
+      conf: 1.0 },
     { match: /^\[?\s*(?:repeat\s+)?while(?:\s+loop)?\s*\]?$/i, type: 'device_while', conf: 1.0 },
     { match: /^\[?\s*repeat(?:\s+times|\s+loop)?\s*\]?$/i, type: 'controls_repeat_ext', conf: 1.0 },
     { match: /^\[?\s*(?:for\s+index|for)\s*\]?$/i, type: 'controls_simple_for', conf: 0.9 },
@@ -1540,7 +1610,30 @@
     { match: /^\[?\s*pick\s+random\s*\]?$/i, type: 'device_random', conf: 1.0 },
     { match: /^\(?\s*pick\s+random\s*\)?$/i, type: 'device_random', conf: 1.0 },
     { match: /^[<\[\(]?\s*%?\s*chance\s*[>\]\)]?$/i, type: 'percentchance', conf: 1.0 },
-    { match: /^[<\[\(]?\s*is\s+sprite\s+hitting\s+wall\s*[>\]\)]?$/i, type: 'spritehasobstacle', mutator: (b) => { const f = b.getField('direction'); if (f) f.setValue('CollisionDirection.Bottom'); }, conf: 1.0 },
+    {
+      match: /^[<\[\(]?\s*is\s+sprite\s+hitting\s+wall(?:\s*\[?(bottom|top|left|right)?\]?)?\s*[>\]\)]?$/i,
+      type: 'spritehasobstacle',
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/(bottom|top|left|right)/i);
+        const dir = m ? (m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase()) : 'Bottom';
+        const f = b.getField('direction');
+        if (f) f.setValue(`CollisionDirection.${dir}`);
+        try {
+          const inp = b.getInput('sprite');
+          if (inp && inp.connection && !inp.connection.targetConnection) {
+            const vb = ws.newBlock('variables_get');
+            vb.setShadow(true);
+            const v = ensureVariable(ws, 'mySprite');
+            const fv = vb.getField('VAR');
+            if (fv && v) fv.setValue(v.getId());
+            vb.initSvg();
+            vb.render();
+            inp.connection.connect(vb.outputConnection);
+          }
+        } catch (e) {}
+      },
+      conf: 1.0
+    },
 
     // Logic negation: <not ...>
     {
@@ -1885,7 +1978,24 @@
       conf: 1.0
     },
     { match: /^\[?\s*connect\s+.*and\s+.*by\s+.*\]?$/i, type: 'tileUtil_connectMapById', conf: 1.0 },
-    { match: /^\[?\s*load\s+tilemap\s+connected\s+by\s*.*\]?$/i, type: 'tileUtil_loadConnectedMap', conf: 1.0 },
+    {
+      match: /^\[?\s*load\s+tilemap\s+connected\s+by(?:\s*\(?([a-zA-Z0-9_]+)\)?)?\s*\]?$/i,
+      type: 'tileUtil_loadConnectedMap',
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/load\s+tilemap\s+connected\s+by\s*[\(\[]?\s*([a-zA-Z0-9_]+)\s*[\)\]]?/i);
+        const val = m && m[1] ? m[1].trim() : '0';
+        const inp = b.inputList && b.inputList.find(i => i.connection && i.type === 1);
+        if (inp && inp.connection && !inp.connection.targetConnection) {
+          try {
+            const sub = createSubBlock(val, ws, { B: blockly(), ws });
+            if (sub && sub.outputConnection) {
+              inp.connection.connect(sub.outputConnection);
+            }
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*unload\s+current\s+tilemap\s*\]?$/i, type: 'tileUtil_unloadTilemap', conf: 1.0 },
     { match: /^\[?\s*cover\s+all\s+.*tiles\s+with\s*.*\]?$/i, type: 'tileutil_coverAllTiles', conf: 1.0 },
     {
@@ -1960,6 +2070,17 @@
     clone.removeAttribute('transform');
     clone.setAttribute('transform', 'translate(' + (-bbox.x) + ',' + (-bbox.y) + ')');
 
+    // Strip Blockly selection/outline path layers and any stale filter references —
+    // they render as ghost outlines around text in the serialized SVG.
+    // NOTE: NEVER remove .blocklyBlockShadow — in Blockly, that class belongs to
+    // placeholder/shadow blocks, not drop shadow effects!
+    try {
+      clone.querySelectorAll('.blocklyPathLight, .blocklyPathDark, [filter]').forEach(el => {
+        if (el.hasAttribute('filter')) el.removeAttribute('filter');
+        if (el.classList.contains('blocklyPathLight') || el.classList.contains('blocklyPathDark')) el.remove();
+      });
+    } catch (e) {}
+
     const INPROPS = [
       'fill', 'fill-opacity', 'opacity', 'stroke', 'stroke-width',
       'font-family', 'font-size', 'font-weight', 'letter-spacing',
@@ -1985,14 +2106,16 @@
           // MakeCode block text is crisp white, editable inputs are dark slate
           const isWhite = !el.closest('.blocklyTextInputField, .blocklyNumberField');
           const fill = isWhite ? '#ffffff' : '#575e75';
-          s += `fill:${fill} !important;font-family:Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace !important;font-size:16px !important;font-weight:600 !important;text-anchor:start;dominant-baseline:central;`;
+          s += `fill:${fill} !important;stroke:none !important;stroke-width:0 !important;font-family:Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace !important;font-size:16px !important;font-weight:600 !important;text-anchor:start;dominant-baseline:central;paint-order:fill !important;`;
         } else if (tag === 'rect') {
           // Check if this is a text input field, dropdown, or toggle
           const isTextInput = el.classList.contains('blocklyFieldRect') && el.closest('.blocklyTextInputField, .blocklyNumberField');
           const isDropdown = el.classList.contains('blocklyDropdownRect') || el.closest('.blocklyDropdownField');
           const isToggle = el.getAttribute('cursor') === 'pointer' || el.classList.contains('blocklyToggleRect');
           if (isTextInput) {
-            s += 'fill:#ffffff !important;stroke:#0f3578 !important;rx:4px !important;ry:4px !important;display:block !important;';
+            // White pill, no border — number/text fields render two rects (pill +
+            // inner focus ring); stroking both draws a ghost ring around the text.
+            s += 'fill:#ffffff !important;stroke:none !important;stroke-width:0 !important;display:block !important;';
           } else if (isDropdown) {
             s += 'fill:transparent !important;stroke:rgba(0,0,0,0.15) !important;';
           } else if (isToggle) {
@@ -2029,6 +2152,9 @@
     styleEl.textContent = `
       text, .blocklyText {
         fill: #ffffff !important;
+        stroke: none !important;
+        stroke-width: 0 !important;
+        paint-order: fill !important;
         font-family: Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace !important;
         font-size: 16px !important;
         font-weight: 600 !important;
@@ -2090,6 +2216,8 @@
       isMultiLine: isMultiLine
     };
   }
+
+  const renderSvg = serializeBlock;
 
   function renderCharacterCreation(rawText, ws) {
     const raw = rawText || '';
@@ -2175,6 +2303,131 @@
     }
   }
 
+  function findToolboxBlockXml(ws, type) {
+    if (!ws) return null;
+    let tree = ws.options && ws.options.languageTree;
+    if (!tree && ws.toolbox_ && ws.toolbox_.tree_) {
+      tree = ws.toolbox_.tree_;
+    }
+    if (!tree) return null;
+    try {
+      const blocks = tree.getElementsByTagName ? tree.getElementsByTagName('block') : [];
+      let best = null;
+      for (let i = 0; i < blocks.length; i++) {
+        const el = blocks[i];
+        if (el.getAttribute('type') === type) {
+          const shadows = el.getElementsByTagName('shadow');
+          if (shadows && shadows.length > 0) {
+            return el;
+          }
+          if (!best) best = el;
+        }
+      }
+      return best;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function populateDefaultShadows(b, ws, B, rawText) {
+    if (!b || !b.inputList || !ws || !B) return;
+    const inputValType = (typeof B.INPUT_VALUE !== 'undefined') ? B.INPUT_VALUE : 1;
+
+    for (const input of b.inputList) {
+      // Only process value inputs that currently have no connected block
+      if (input.type === inputValType && input.connection && !input.connection.targetConnection) {
+        const name = (input.name || '').toLowerCase();
+        const check = input.connection.check_;
+
+        let shadowType = null;
+        let shadowValue = null;
+        let isBoolean = false;
+        let isSprite = false;
+        let isNumber = false;
+        let isString = false;
+
+        // Check connection allowed types
+        if (check && Array.isArray(check) && check.length > 0) {
+          for (const c of check) {
+            const lc = String(c).toLowerCase();
+            if (lc === 'boolean') isBoolean = true;
+            else if (lc === 'number') isNumber = true;
+            else if (lc === 'string') isString = true;
+            else if (lc === 'sprite') isSprite = true;
+          }
+        }
+
+        // Check input name patterns
+        if (!isBoolean && !isNumber && !isString && !isSprite) {
+          if (/^(?:bool|cond|if|condition)/i.test(name)) {
+            isBoolean = true;
+          } else if (/^(?:num|width|height|x|y|vx|vy|ax|ay|dx|dy|speed|step|val|value|index|count|time|ms|delay|by|to|score|life|health|connection)/i.test(name)) {
+            isNumber = true;
+          } else if (/^(?:text|str|msg|message|label|format|string)/i.test(name)) {
+            isString = true;
+          } else if (/^(?:sprite|mysprite|target|source|agent|from|other)/i.test(name)) {
+            isSprite = true;
+          }
+        }
+
+        // Special handling if rawText contains an argument for this block (e.g. Door1, or variable name)
+        if (rawText && (isSprite || isNumber || isString || !shadowType)) {
+          const mArg = rawText.match(/\(\s*([a-zA-Z0-9_]+)\s*\)/);
+          if (mArg && mArg[1]) {
+            const arg = mArg[1].trim();
+            if (!['img', 'kind', 'sprite', 'direction', 'bubble'].includes(arg.toLowerCase())) {
+              try {
+                const sub = createSubBlock(arg, ws, { B, ws });
+                if (sub && sub.outputConnection) {
+                  input.connection.connect(sub.outputConnection);
+                  continue;
+                }
+              } catch (e) {}
+            }
+          }
+        }
+
+        if (isBoolean) {
+          shadowType = 'logic_boolean';
+          shadowValue = 'TRUE';
+        } else if (isNumber) {
+          shadowType = 'math_number';
+          shadowValue = '0';
+        } else if (isSprite) {
+          shadowType = 'variables_get';
+          shadowValue = 'mySprite';
+        } else if (isString) {
+          shadowType = 'text';
+          shadowValue = '';
+        }
+
+        if (shadowType && B.Blocks && B.Blocks[shadowType]) {
+          try {
+            const sb = ws.newBlock(shadowType);
+            sb.setShadow(true);
+            if (shadowType === 'logic_boolean') {
+              const f = sb.getField('BOOL');
+              if (f) f.setValue(shadowValue);
+            } else if (shadowType === 'math_number') {
+              const f = sb.getField('NUM');
+              if (f) f.setValue(shadowValue);
+            } else if (shadowType === 'variables_get') {
+              const v = ensureVariable(ws, shadowValue);
+              const f = sb.getField('VAR');
+              if (f && v) f.setValue(v.getId());
+            } else if (shadowType === 'text') {
+              const f = sb.getField('TEXT');
+              if (f) f.setValue(shadowValue);
+            }
+            sb.initSvg();
+            sb.render();
+            input.connection.connect(sb.outputConnection);
+          } catch (e) {}
+        }
+      }
+    }
+  }
+
   function renderDynamicBlock(type, mutator, rawText) {
     if (type === 'toggleOnOff' || type === 'toggleWinLose') {
       return renderToggleToken(rawText || type);
@@ -2183,9 +2436,30 @@
     if (!tc || !tc.ws) return null;
     try {
       ensureExtensionBlocks(tc.B);
-      const b = tc.ws.newBlock(type);
+      // Fail fast when the block type isn't registered in this MakeCode instance
+      // (extension blocks load lazily). Returning null lets the overlay fall back
+      // to the static catalog template for this token instead of throwing.
+      if (!tc.B.Blocks || !Object.prototype.hasOwnProperty.call(tc.B.Blocks, type)) {
+        return null;
+      }
+
+      let b = null;
+      const toolboxXml = findToolboxBlockXml(tc.ws, type);
+      if (toolboxXml && tc.B.Xml && tc.B.Xml.domToBlock) {
+        try {
+          b = tc.B.Xml.domToBlock(toolboxXml.cloneNode(true), tc.ws);
+        } catch (e) {
+          b = null;
+        }
+      }
+      if (!b) {
+        b = tc.ws.newBlock(type);
+      }
       if (!b) return null;
+
       if (mutator) mutator(b, tc.ws, rawText);
+      populateDefaultShadows(b, tc.ws, tc.B, rawText);
+
       b.initSvg();
       b.render();
       const res = serializeBlock(b);

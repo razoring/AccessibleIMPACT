@@ -669,28 +669,6 @@
       }
     },
     {
-      "id": "variables_set",
-      "category": "variables",
-      "pattern": "^set\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+to(?:\\s+(.+))?",
-      "template": "variables_set_number",
-      "blockType": "variables_set",
-      "params": {
-        "varName": 1,
-        "val": 2
-      }
-    },
-    {
-      "id": "variables_change",
-      "category": "variables",
-      "pattern": "^change\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+by(?:\\s+(.+))?",
-      "template": "variables_change_number",
-      "blockType": "variables_change",
-      "params": {
-        "varName": 1,
-        "val": 2
-      }
-    },
-    {
       "id": "logic_if_else",
       "category": "logic",
       "pattern": "^if(?:\\s+true)?\\s+then\\s*(?:\\/|\\s+else)",
@@ -1030,6 +1008,35 @@
       "pattern": "^(?:Click\\s+)?▶$",
       "template": "play_icon",
       "blockType": "icon"
+    },
+    {
+      "id": "sprites_has_obstacle",
+      "category": "sprites",
+      "pattern": "^is\\s+sprite\\s+hitting\\s+wall$",
+      "template": "spritehasobstacle",
+      "blockType": "spritehasobstacle"
+    },
+    {
+      "id": "variables_set",
+      "category": "variables",
+      "pattern": "^set\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+to(?:\\s+(.+))?",
+      "template": "variables_set_number",
+      "blockType": "variables_set",
+      "params": {
+        "varName": 1,
+        "val": 2
+      }
+    },
+    {
+      "id": "variables_change",
+      "category": "variables",
+      "pattern": "^change\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+by(?:\\s+(.+))?",
+      "template": "variables_change_number",
+      "blockType": "variables_change",
+      "params": {
+        "varName": 1,
+        "val": 2
+      }
     }
   ]
 }
