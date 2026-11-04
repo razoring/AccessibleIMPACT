@@ -4,3 +4,8 @@ scratch/test_block_renderer.js
 scratch/test_heuristic.js
 scratch/makecode_catalog.json
 scratch/analyze_tokens.js
+debug-connect-token.mjs
+debug-mutate-svg.mjs
+debug-sibling-shift.mjs
+nlp-routing-verify.mjs
+slot-engine-corpus-verify.mjs
