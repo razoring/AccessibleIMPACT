@@ -407,6 +407,43 @@
     return null;
   }
 
+  function renderCharacterCreation(rawText, ws) {
+    const raw = rawText || '';
+    const m = raw.match(/^(?:\[?\s*set\s+\[?([a-zA-Z0-9_]+)\]?\s+to\s+)?sprite(?:\s*\(img\))?\s*of\s*kind(?:\s*\(?([a-zA-Z0-9_]+)\)?)?/i);
+    const mSet = raw.match(/set\s+\[?([a-zA-Z0-9_]+)\]?\s+to/i);
+    const varName = (m && m[1] && m[1].toLowerCase() !== 'sprite') ? m[1] : ((mSet && mSet[1] && mSet[1].toLowerCase() !== 'sprite') ? mSet[1] : 'mySprite');
+    const kindName = (m && m[2] && m[2].toLowerCase() !== 'kind') ? m[2] : 'Player';
+
+    const B = blockly();
+    if (B && ws) {
+      try {
+        const xml = `<xml xmlns="http://www.w3.org/1999/xhtml">
+          <block type="variables_set">
+            <field name="VAR">${varName}</field>
+            <value name="VALUE">
+              <block type="spritescreate">
+                <value name="img"><shadow type="screen_image_picker"></shadow></value>
+                <value name="kind"><shadow type="spritekind"><field name="MEMBER">${kindName}</field></shadow></value>
+              </block>
+            </value>
+          </block>
+        </xml>`;
+        const doc = new DOMParser().parseFromString(xml, 'text/xml');
+        const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        b.initSvg();
+        b.render();
+        const res = renderSvg(b);
+        b.dispose(false);
+        return res;
+      } catch (e) {
+        console.warn('[AIFX] renderCharacterCreation error:', e);
+      }
+    }
+
+    const cached = getStaticOrCached('[set (mySprite) to sprite (img) of kind (Player)]') || getStaticOrCached('variables_set_mySprite_spritescreate');
+    return cached || null;
+  }
+
   // Ensure built-in extension blocks (e.g. Scroller) are defined in Blockly.Blocks
   function renderToggleToken(rawText) {
     const isWin = /win/i.test(rawText);
@@ -451,6 +488,43 @@
     };
   }
 
+  function renderCharacterCreation(rawText, ws) {
+    const raw = rawText || '';
+    const m = raw.match(/^(?:\[?\s*set\s+\[?([a-zA-Z0-9_]+)\]?\s+to\s+)?sprite(?:\s*\(img\))?\s*of\s*kind(?:\s*\(?([a-zA-Z0-9_]+)\)?)?/i);
+    const mSet = raw.match(/set\s+\[?([a-zA-Z0-9_]+)\]?\s+to/i);
+    const varName = (m && m[1] && m[1].toLowerCase() !== 'sprite') ? m[1] : ((mSet && mSet[1] && mSet[1].toLowerCase() !== 'sprite') ? mSet[1] : 'mySprite');
+    const kindName = (m && m[2] && m[2].toLowerCase() !== 'kind') ? m[2] : 'Player';
+
+    const B = blockly();
+    if (B && ws) {
+      try {
+        const xml = `<xml xmlns="http://www.w3.org/1999/xhtml">
+          <block type="variables_set">
+            <field name="VAR">${varName}</field>
+            <value name="VALUE">
+              <block type="spritescreate">
+                <value name="img"><shadow type="screen_image_picker"></shadow></value>
+                <value name="kind"><shadow type="spritekind"><field name="MEMBER">${kindName}</field></shadow></value>
+              </block>
+            </value>
+          </block>
+        </xml>`;
+        const doc = new DOMParser().parseFromString(xml, 'text/xml');
+        const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        b.initSvg();
+        b.render();
+        const res = renderSvg(b);
+        b.dispose(false);
+        return res;
+      } catch (e) {
+        console.warn('[AIFX] renderCharacterCreation error:', e);
+      }
+    }
+
+    const cached = getStaticOrCached('[set (mySprite) to sprite (img) of kind (Player)]') || getStaticOrCached('variables_set_mySprite_spritescreate');
+    return cached || null;
+  }
+
   function renderDropdownBadge(label, color) {
     const cleanLabel = (label || '').replace(/[\[\]\(\)]/g, '').trim();
     const displayLabel = cleanLabel === '<' ? '&lt;' : (cleanLabel === '>' ? '&gt;' : (cleanLabel === '<=' ? '&lt;=' : (cleanLabel === '>=' ? '&gt;=' : cleanLabel)));
@@ -468,6 +542,43 @@
       height: height,
       isMultiLine: false
     };
+  }
+
+  function renderCharacterCreation(rawText, ws) {
+    const raw = rawText || '';
+    const m = raw.match(/^(?:\[?\s*set\s+\[?([a-zA-Z0-9_]+)\]?\s+to\s+)?sprite(?:\s*\(img\))?\s*of\s*kind(?:\s*\(?([a-zA-Z0-9_]+)\)?)?/i);
+    const mSet = raw.match(/set\s+\[?([a-zA-Z0-9_]+)\]?\s+to/i);
+    const varName = (m && m[1] && m[1].toLowerCase() !== 'sprite') ? m[1] : ((mSet && mSet[1] && mSet[1].toLowerCase() !== 'sprite') ? mSet[1] : 'mySprite');
+    const kindName = (m && m[2] && m[2].toLowerCase() !== 'kind') ? m[2] : 'Player';
+
+    const B = blockly();
+    if (B && ws) {
+      try {
+        const xml = `<xml xmlns="http://www.w3.org/1999/xhtml">
+          <block type="variables_set">
+            <field name="VAR">${varName}</field>
+            <value name="VALUE">
+              <block type="spritescreate">
+                <value name="img"><shadow type="screen_image_picker"></shadow></value>
+                <value name="kind"><shadow type="spritekind"><field name="MEMBER">${kindName}</field></shadow></value>
+              </block>
+            </value>
+          </block>
+        </xml>`;
+        const doc = new DOMParser().parseFromString(xml, 'text/xml');
+        const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        b.initSvg();
+        b.render();
+        const res = renderSvg(b);
+        b.dispose(false);
+        return res;
+      } catch (e) {
+        console.warn('[AIFX] renderCharacterCreation error:', e);
+      }
+    }
+
+    const cached = getStaticOrCached('[set (mySprite) to sprite (img) of kind (Player)]') || getStaticOrCached('variables_set_mySprite_spritescreate');
+    return cached || null;
   }
 
   const CHECKERED_TILE_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAVklEQVR4AdyRwQkAIAzEihN18s7SCbqKkl/+fkQhEAgIp6uqtpmZbdxwN3zF5XnggsyMFN0dLdxwN/yBCZefEIsdhp3GDXfDf3gDdhh2GjfcDf/gDQ4AAAD//xRE6jsAAAAGSURBVAMA0Hd9MQrHq6MAAAAASUVORK5CYII=';
@@ -489,6 +600,43 @@
       height: height,
       isMultiLine: false
     };
+  }
+
+  function renderCharacterCreation(rawText, ws) {
+    const raw = rawText || '';
+    const m = raw.match(/^(?:\[?\s*set\s+\[?([a-zA-Z0-9_]+)\]?\s+to\s+)?sprite(?:\s*\(img\))?\s*of\s*kind(?:\s*\(?([a-zA-Z0-9_]+)\)?)?/i);
+    const mSet = raw.match(/set\s+\[?([a-zA-Z0-9_]+)\]?\s+to/i);
+    const varName = (m && m[1] && m[1].toLowerCase() !== 'sprite') ? m[1] : ((mSet && mSet[1] && mSet[1].toLowerCase() !== 'sprite') ? mSet[1] : 'mySprite');
+    const kindName = (m && m[2] && m[2].toLowerCase() !== 'kind') ? m[2] : 'Player';
+
+    const B = blockly();
+    if (B && ws) {
+      try {
+        const xml = `<xml xmlns="http://www.w3.org/1999/xhtml">
+          <block type="variables_set">
+            <field name="VAR">${varName}</field>
+            <value name="VALUE">
+              <block type="spritescreate">
+                <value name="img"><shadow type="screen_image_picker"></shadow></value>
+                <value name="kind"><shadow type="spritekind"><field name="MEMBER">${kindName}</field></shadow></value>
+              </block>
+            </value>
+          </block>
+        </xml>`;
+        const doc = new DOMParser().parseFromString(xml, 'text/xml');
+        const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        b.initSvg();
+        b.render();
+        const res = renderSvg(b);
+        b.dispose(false);
+        return res;
+      } catch (e) {
+        console.warn('[AIFX] renderCharacterCreation error:', e);
+      }
+    }
+
+    const cached = getStaticOrCached('[set (mySprite) to sprite (img) of kind (Player)]') || getStaticOrCached('variables_set_mySprite_spritescreate');
+    return cached || null;
   }
 
   function renderCreateSpritesOnTiles(rawText) {
@@ -524,6 +672,43 @@
       height: h,
       isMultiLine: false
     };
+  }
+
+  function renderCharacterCreation(rawText, ws) {
+    const raw = rawText || '';
+    const m = raw.match(/^(?:\[?\s*set\s+\[?([a-zA-Z0-9_]+)\]?\s+to\s+)?sprite(?:\s*\(img\))?\s*of\s*kind(?:\s*\(?([a-zA-Z0-9_]+)\)?)?/i);
+    const mSet = raw.match(/set\s+\[?([a-zA-Z0-9_]+)\]?\s+to/i);
+    const varName = (m && m[1] && m[1].toLowerCase() !== 'sprite') ? m[1] : ((mSet && mSet[1] && mSet[1].toLowerCase() !== 'sprite') ? mSet[1] : 'mySprite');
+    const kindName = (m && m[2] && m[2].toLowerCase() !== 'kind') ? m[2] : 'Player';
+
+    const B = blockly();
+    if (B && ws) {
+      try {
+        const xml = `<xml xmlns="http://www.w3.org/1999/xhtml">
+          <block type="variables_set">
+            <field name="VAR">${varName}</field>
+            <value name="VALUE">
+              <block type="spritescreate">
+                <value name="img"><shadow type="screen_image_picker"></shadow></value>
+                <value name="kind"><shadow type="spritekind"><field name="MEMBER">${kindName}</field></shadow></value>
+              </block>
+            </value>
+          </block>
+        </xml>`;
+        const doc = new DOMParser().parseFromString(xml, 'text/xml');
+        const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        b.initSvg();
+        b.render();
+        const res = renderSvg(b);
+        b.dispose(false);
+        return res;
+      } catch (e) {
+        console.warn('[AIFX] renderCharacterCreation error:', e);
+      }
+    }
+
+    const cached = getStaticOrCached('[set (mySprite) to sprite (img) of kind (Player)]') || getStaticOrCached('variables_set_mySprite_spritescreate');
+    return cached || null;
   }
 
   // Ensure built-in extension blocks (e.g. Scroller) are defined in Blockly.Blocks
@@ -771,10 +956,76 @@
       conf: 1.0
     },
 
-    // Sprites
-    { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+to\s+sprite(?:\s+of\s+kind)?\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
-    { match: /^\[?\s*sprite\s*(?:\(img\))?\s*of\s*kind\s*(?:\(kind\))?\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
-    { match: /^\[?\s*set\s+sprite\s+to\s*\]?$/i, type: 'spritescreate', conf: 1.0 },
+    // Status Bars
+    {
+      match: /^[\(\[]?(?:\(statusbar\)|statusbar)\s*[\[\(]?(value|max)[\]\)]?[\)\]]?$/i,
+      type: 'StatusBarSprite_blockCombine_get',
+      conf: 1.0,
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/(?:value|max)/i);
+        const prop = m ? m[0].toLowerCase() : 'value';
+        const f = b.getField('property');
+        if (f) f.setValue(`StatusBarSprite.${prop}@get`);
+      }
+    },
+    {
+      match: /^\[?\s*change\s+(?:\(statusbar\)|statusbar)\s*[\[\(]?(value|max)[\]\)]?\s+by(?:s+[\(\[]?(-?\d+)[\)\]]?)?\s*\]?$/i,
+      type: 'StatusBarSprite_blockCombine_change',
+      conf: 1.0,
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/(?:value|max)/i);
+        const prop = m ? m[0].toLowerCase() : 'value';
+        const f = b.getField('property');
+        if (f) f.setValue(`StatusBarSprite.${prop}@set`);
+      }
+    },
+    {
+      match: /^\[?\s*set\s+(?:\(statusbar\)|statusbar)\s*[\[\(]?(value|max)[\]\)]?\s+to(?:s+[\(\[]?(-?\d+)[\)\]]?)?\s*\]?$/i,
+      type: 'StatusBarSprite_blockCombine_set',
+      conf: 1.0,
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/(?:value|max)/i);
+        const prop = m ? m[0].toLowerCase() : 'value';
+        const f = b.getField('property');
+        if (f) f.setValue(`StatusBarSprite.${prop}@set`);
+      }
+    },
+    {
+      match: /^[\(\[]?status\s*bar\s*(?:of\s*)?(?:kind)?\s*attached\s+to\s*(?:sprite|[a-zA-Z0-9_]+)?[\)\]]?$/i,
+      type: 'statusbars_spriteStatusBarIsAttachedTo',
+      conf: 1.0
+    },
+    {
+      match: /^[\(\[]?sprite\s+that\s*(?:\(statusbar\)|statusbar)?\s*is\s+attached\s+to[\)\]]?$/i,
+      type: 'statusbars_attachSpriteGetter',
+      conf: 1.0
+    },
+
+    // Sprites - character creation statement (Option B)
+    {
+      match: /^\[?\s*(?:set\s+(?:sprite|\[?[a-zA-Z0-9_]+\]?)\s+to\s+)?sprite(?:\s*\(img\))?\s*of\s*kind(?:\s*\(?[a-zA-Z0-9_]+\)?)?\s*\]?$/i,
+      custom: (raw, ws) => renderCharacterCreation(raw, ws),
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*set\s+(?:sprite|\[?[a-zA-Z0-9_]+\]?)\s+to\s*\]?$/i,
+      custom: (raw, ws) => renderCharacterCreation(raw, ws),
+      conf: 1.0
+    },
+    {
+      match: /^[\[\(]?(?:array\s+of\s+sprites|all\s+sprites|sprites|all)\s+of\s+kind(?:\s*\(?([a-zA-Z0-9_]+)\)?)?[\]\)]?$/i,
+      type: 'allOfKind',
+      conf: 1.0,
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/kind\s*\(?([a-zA-Z0-9_]+)\)?/i);
+        const kindName = (m && m[1]) ? m[1] : 'Player';
+        const kindBlock = b.getChildren(false).find(c => c.type === 'spritekind');
+        if (kindBlock) {
+          const f = kindBlock.getField('MEMBER');
+          if (f) f.setValue(kindName);
+        }
+      }
+    },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+position\s+to\s*(?:x\s*y)?\s*[\]\}]?$/i, type: 'spritesetpos', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+velocity\s+to\s*(?:vx\s*vy)?\s*\]?$/i, type: 'spritesetvel', conf: 1.0 },
     {
@@ -1612,6 +1863,43 @@
     };
   }
 
+  function renderCharacterCreation(rawText, ws) {
+    const raw = rawText || '';
+    const m = raw.match(/^(?:\[?\s*set\s+\[?([a-zA-Z0-9_]+)\]?\s+to\s+)?sprite(?:\s*\(img\))?\s*of\s*kind(?:\s*\(?([a-zA-Z0-9_]+)\)?)?/i);
+    const mSet = raw.match(/set\s+\[?([a-zA-Z0-9_]+)\]?\s+to/i);
+    const varName = (m && m[1] && m[1].toLowerCase() !== 'sprite') ? m[1] : ((mSet && mSet[1] && mSet[1].toLowerCase() !== 'sprite') ? mSet[1] : 'mySprite');
+    const kindName = (m && m[2] && m[2].toLowerCase() !== 'kind') ? m[2] : 'Player';
+
+    const B = blockly();
+    if (B && ws) {
+      try {
+        const xml = `<xml xmlns="http://www.w3.org/1999/xhtml">
+          <block type="variables_set">
+            <field name="VAR">${varName}</field>
+            <value name="VALUE">
+              <block type="spritescreate">
+                <value name="img"><shadow type="screen_image_picker"></shadow></value>
+                <value name="kind"><shadow type="spritekind"><field name="MEMBER">${kindName}</field></shadow></value>
+              </block>
+            </value>
+          </block>
+        </xml>`;
+        const doc = new DOMParser().parseFromString(xml, 'text/xml');
+        const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        b.initSvg();
+        b.render();
+        const res = renderSvg(b);
+        b.dispose(false);
+        return res;
+      } catch (e) {
+        console.warn('[AIFX] renderCharacterCreation error:', e);
+      }
+    }
+
+    const cached = getStaticOrCached('[set (mySprite) to sprite (img) of kind (Player)]') || getStaticOrCached('variables_set_mySprite_spritescreate');
+    return cached || null;
+  }
+
   function ensureVariable(ws, name) {
     if (!ws) return null;
     try {
@@ -2039,7 +2327,7 @@
 
     const matchQuick = resolveTokenMatch(tokenText, null);
     if (matchQuick && matchQuick.custom) {
-      const res = matchQuick.custom(tokenText);
+      const res = matchQuick.custom(tokenText, tc ? tc.ws : null);
       if (res && res.svg) {
         CACHE[tokenText] = res;
         return res;
@@ -2057,7 +2345,7 @@
     }
 
     if (match.custom) {
-      const res = match.custom(tokenText);
+      const res = match.custom(tokenText, tc ? tc.ws : null);
       if (res && res.svg) {
         CACHE[tokenText] = res;
         return res;

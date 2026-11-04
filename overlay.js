@@ -470,13 +470,28 @@
       const tokenText = seg.text;
       let lookupToken = tokenText;
 
-      // Contextual override: dialog [bottom] / [top] dropdown should be Game purple (#8854d0)
-      if (/^\[?\(?(?:bottom|top)\)?\]?$/i.test(tokenText)) {
-        const blockContext = parent.closest('p, div, li')?.textContent || parent.textContent || '';
-        if (/dialog|text bubble|long text|message/i.test(blockContext)) {
-          const val = tokenText.replace(/[\[\]\(\)]/g, '').trim().toLowerCase();
-          lookupToken = `[${val}] (game)`;
+      // Context Engine (Chromebook-fast, < 1ms): Disambiguate isolated tokens & parameters
+      const stepArea = parent.closest('app-step-information, [data-instruction], article, .lesson-content') || document.body;
+      const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
+
+      // 1. Isolated property/dropdown ([bottom], [top], [center], [full screen])
+      if (/^\[?\(?(?:bottom|top|center|full\s*screen)\)?\]?$/i.test(tokenText)) {
+        const isDialog = /dialog|text\s*bubble|long\s*text|message|story|talk|say/i.test(stepText);
+        const val = tokenText.replace(/[\[\]\(\)]/g, '').trim().toLowerCase();
+        lookupToken = isDialog ? `[${val}] (game)` : `[${val}]`;
+      }
+      // 2. Multiplayer vs Sprite Kind: [Player 1] / [Player 2]
+      else if (/^\[?player\s*[1-4]\]?$/i.test(tokenText)) {
+        const isMultiplayer = /multiplayer|player\s*[234]|mp\./i.test(stepText);
+        if (isMultiplayer) {
+          lookupToken = tokenText.toLowerCase();
+        } else {
+          lookupToken = '[Player]';
         }
+      }
+      // 3. Isolated character creation token: [sprite of kind] -> [set sprite to]
+      else if (/^\[?\s*(?:sprite\s*(?:\(img\))?\s*of\s*kind|set\s+sprite\s+to)\s*\]?$/i.test(tokenText)) {
+        lookupToken = '[set sprite to]';
       }
 
       const span = document.createElement('span');
