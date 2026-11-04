@@ -46,23 +46,43 @@
 
   function generateIsolatedPropertyPill(propText, category) {
     const text = (propText || '').replace(/[\[\]\(\)]/g, '').trim();
-    const charWidth = 9;
+    const charWidth = 9.5;
     const textWidth = Math.max(30, text.length * charWidth);
     const totalWidth = textWidth + 34; // text + arrow + padding
     const height = 30;
 
     let bg = '#4b7bec'; // default scene blue
     let stroke = '#385cb1';
-    if (category === 'game') {
-      bg = '#8b449b'; stroke = '#6c3483';
-    } else if (category === 'controller') {
-      bg = '#d63031'; stroke = '#c0392b';
-    } else if (category === 'statusbars') {
-      bg = '#20bf6b'; stroke = '#0fb9b1';
+    let rx = 6;
+    let ry = 6;
+
+    if (category === 'statusbars_property' || category === 'statusbars') {
+      // Exact dropdown from [statusbar value]: dark slate rectangular button with rounded corners
+      bg = '#312f43';
+      stroke = '#1f1e2b';
+      rx = 4;
+      ry = 4;
     } else if (category === 'statusbars_kind') {
-      bg = '#5d4d8c'; stroke = '#52447c';
+      // Exact status bar kind dropdown: purple pill
+      bg = '#5d4d8c';
+      stroke = '#52447c';
+      rx = 15;
+      ry = 15;
+    } else if (category === 'game') {
+      bg = '#8b449b';
+      stroke = '#6c3483';
+      rx = 6;
+      ry = 6;
+    } else if (category === 'controller') {
+      bg = '#d63031';
+      stroke = '#c0392b';
+      rx = 6;
+      ry = 6;
     } else if (category === 'music') {
-      bg = '#e67e22'; stroke = '#d35400';
+      bg = '#e67e22';
+      stroke = '#d35400';
+      rx = 6;
+      ry = 6;
     }
 
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${height}" width="${totalWidth}" height="${height}">
@@ -70,9 +90,9 @@
 .blocklyText { font-family: Consolas, Monaco, Menlo, monospace; font-size: 15px; font-weight: 600; fill: #fff; }
 </style>
 <g>
-  <rect x="1" y="1" width="${totalWidth - 2}" height="${height - 2}" rx="6" ry="6" fill="${bg}" stroke="${stroke}" stroke-width="1.5" />
-  <text class="blocklyText" x="10" y="${height / 2 + 1}" dominant-baseline="central">${text}</text>
-  <text class="blocklyText" x="${totalWidth - 16}" y="${height / 2 + 1}" dominant-baseline="central" font-size="12">▾</text>
+  <rect x="1" y="1" width="${totalWidth - 2}" height="${height - 2}" rx="${rx}" ry="${ry}" fill="${bg}" stroke="${stroke}" stroke-width="1.5" />
+  <text class="blocklyText" x="10" y="${height / 2 + 1}" dominant-baseline="central" fill="#ffffff">${text}</text>
+  <text class="blocklyText" x="${totalWidth - 14}" y="${height / 2 + 1}" dominant-baseline="central" font-size="12" fill="#ffffff">▾</text>
 </g>
 </svg>`;
 
@@ -85,8 +105,12 @@
   }
 
   function mutateSvgWithParams(svgStr, params) {
-    if (!svgStr || !params) return svgStr;
+    if (!svgStr) return '';
     let s = svgStr;
+    if (s.includes('</style>')) {
+      s = s.replace('</style>', '.blocklyNumberField text, .blocklyTextInputField text, .blocklyInputField text, .math_number text, .timePicker text { fill: #575e75 !important; }\n</style>');
+    }
+    if (!params) return s;
 
     // 1. Variable name replacement
     if (params.varName) {
@@ -184,7 +208,50 @@
   }
   loadCatalog();
 
-  function resolveTokenWithNLP(tokenText, stepText) {
+  function getContextCategory(cleanFlat, stepText, overallText) {
+    const step = (stepText || '').toLowerCase();
+    const overall = (overallText || '').toLowerCase();
+
+    // 1. Status Bar properties: value, max, zero
+    if (/^(?:value|max|zero)$/i.test(cleanFlat)) {
+      if (/status\s*bar|statusbar/i.test(step)) return 'statusbars_property';
+      if (/status\s*bar|statusbar/i.test(overall)) return 'statusbars_property';
+      return 'statusbars_property';
+    }
+
+    // 2. Status Bar kinds: Health, Hunger, Energy, Magic, Life, Heat, Cold
+    if (/^(?:Health|Hunger|Energy|Magic|Life|Heat|Cold)$/i.test(cleanFlat)) {
+      if (/status\s*bar|statusbar/i.test(step)) return 'statusbars_kind';
+      if (/status\s*bar|statusbar/i.test(overall)) return 'statusbars_kind';
+      return 'statusbars_kind';
+    }
+
+    // 3. Dialog layouts: bottom, top, center, full screen
+    if (/^(?:bottom|top|center|full\s*screen)$/i.test(cleanFlat)) {
+      if (/dialog|show\s*long\s*text|splash|text\s*at/i.test(step)) return 'game';
+      if (/dialog|show\s*long\s*text|splash/i.test(overall)) return 'game';
+      return 'game';
+    }
+
+    // 4. Direction properties: left, right, up, down
+    if (/^(?:left|right|up|down)$/i.test(cleanFlat)) {
+      if (/tile\s*scanner|scanner|scan/i.test(step)) return 'tileScanner';
+      if (/controller|button|press/i.test(step)) return 'controller';
+      if (/tile\s*scanner|scanner|scan/i.test(overall)) return 'tileScanner';
+      return 'scene';
+    }
+
+    // 5. Sprite properties: x, y, vx, vy, ax, ay, lifespan
+    if (/^(?:x|y|vx|vy|ax|ay|lifespan)$/i.test(cleanFlat)) {
+      if (/sprite|velocity|position/i.test(step) || /sprite|velocity|position/i.test(overall)) {
+        return 'sprites';
+      }
+    }
+
+    return null;
+  }
+
+  function resolveTokenWithNLP(tokenText, stepText, overallText) {
     if (!tokenText) return null;
     let clean = tokenText.trim();
     if ((clean.startsWith('[') && clean.endsWith(']')) ||
@@ -194,13 +261,13 @@
     }
     const cleanFlat = clean.replace(/[\[\]\(\)]/g, ' ').replace(/\s+/g, ' ').trim();
 
-    // Context check: If step mentions "status bar" or "status bar kind" and token is (Health), (Hunger), etc.
-    const isStatusBarContext = /status\s*bar/i.test(stepText || '');
-    if (isStatusBarContext && /^(?:Health|Hunger|Energy|Magic|Life|Heat|Cold)$/i.test(cleanFlat)) {
+    // Contextual property / dropdown check
+    const ctxCategory = getContextCategory(cleanFlat, stepText, overallText);
+    if (ctxCategory) {
       return {
-        rule: { id: 'property_statusbar_kind', category: 'statusbars_kind' },
+        rule: { id: 'property_' + ctxCategory, category: ctxCategory },
         template: 'isolated_pill',
-        params: { prop: cleanFlat, pillCategory: 'statusbars_kind' }
+        params: { prop: cleanFlat, pillCategory: ctxCategory }
       };
     }
 
@@ -322,6 +389,22 @@
     const style = document.createElement('style');
     style.id = 'aifx-styles';
     style.textContent = `
+      /* Fix number and text input fields blending in with white background */
+      .aifx-rendered .blocklyNumberField text,
+      .aifx-rendered .blocklyTextInputField text,
+      .aifx-rendered .timePicker text,
+      .aifx-rendered .math_number text,
+      .aifx-rendered .blocklyNumberField .blocklyText,
+      .aifx-rendered .blocklyTextInputField .blocklyText,
+      .aifx-rendered .timePicker .blocklyText,
+      .aifx-rendered .math_number .blocklyText,
+      .aifx-rendered g[class*="math_number"] text,
+      .aifx-rendered g[class*="timePicker"] text,
+      .aifx-rendered g[class*="blocklyNumberField"] text,
+      .aifx-rendered g[class*="blocklyTextInputField"] text {
+        fill: #575e75 !important;
+      }
+
       .aifx-rendered.aifx-inline {
         display: inline-block !important;
         vertical-align: middle !important;
@@ -459,7 +542,8 @@
       } else if (catalogMap && tokenRules.length > 0) {
         const stepArea = span.closest('app-step-information, [data-instruction], article, .lesson-content') || document.body;
         const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
-        const resolution = resolveTokenWithNLP(tokenText, stepText);
+        const overallText = (document.body ? document.body.textContent : '').toLowerCase();
+        const resolution = resolveTokenWithNLP(tokenText, stepText, overallText);
         if (resolution) {
           fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
             if (data && data.svg) {
@@ -708,6 +792,7 @@
       const tokenText = seg.text;
       const stepArea = parent.closest('app-step-information, [data-instruction], article, .lesson-content') || document.body;
       const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
+      const overallText = (document.body ? document.body.textContent : '').toLowerCase();
 
       const span = document.createElement('span');
       span.className = 'aifx-rendered'; // Set immediately to prevent re-wrapping
@@ -717,7 +802,7 @@
       if (cached && cached.svg) {
         applySvg(span, cached);
       } else if (catalogMap && tokenRules.length > 0) {
-        const resolution = resolveTokenWithNLP(tokenText, stepText);
+        const resolution = resolveTokenWithNLP(tokenText, stepText, overallText);
         if (resolution) {
           fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
             if (data && data.svg) {
