@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 104" width="160" height="104">
+<style>
+.blocklyText { font-family: Consolas, Monaco, Menlo, "Ubuntu Mono", monospace; font-size: 16px; font-weight: 600; fill: #fff; }
+.blocklyNonEditableText > text { pointer-events: none; }
+.blocklyDropdownText { fill: #fff; }
+</style>
+<g class="pxt-on-start blocklyBlock blocklyDraggable" data-id="Z3U2khWO(GF-4Rl=hIW5" style="opacity: 1;"><path class="blocklyPath" id="blockly-45i" stroke="#188f50" fill="#20bf6b" d=" m 0,0  m 0,4 a 4 4 0 0,1 4,-4  h 152 a 4 4 0 0,1 4,4  v 4  V 8  V 40  V 44 a 4 4 0 0,1 -4,4  H 64  c -2,0  -3,1  -4,2  l -4,4  c -1,1  -2,2  -4,2  h -12  c -2,0  -3,-1  -4,-2  l -4,-4  c -1,-1  -2,-2  -4,-2  h -8 a 4 4 0 0,0 -4,4  v 16 a 4 4 0 0,0 4,4  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  H 156 a 4 4 0 0,1 4,4  V 80  V 100 a 4 4 0 0,1 -4,4  h -152 a 4 4 0 0,1 -4,-4 z
+" style="opacity: 1;"></path><g id="Z3U2khWO(GF-4Rl=hIW5_field_blockly-45j" class="blocklyLabelField" transform="translate(8,14.5)" style="opacity: 1;"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="opacity: 1;">on&nbsp;start</text></g><path id="Z3U2khWO(GF-4Rl=hIW5_connection_blockly-45k" class="blocklyHighlightedConnectionPath" style="display: none; opacity: 1;" d=" m -8,0  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 8 " transform="translate(28, 48)"></path><g class="blocklyConnectionIndicatorParent" style="opacity: 1;"></g></g>
+</svg>

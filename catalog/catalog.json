@@ -1,695 +1,3004 @@
 {
-  "set sprite position to": {
-    "tokenRaw": "set sprite position to",
-    "blockType": "spritescreatenoset",
-    "category": "Create",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "scroller_scrollBackgroundWithCamera": {
+    "type": "scroller_scrollBackgroundWithCamera",
+    "file": "scroller_scrollBackgroundWithCamera.svg",
+    "width": 497,
+    "height": 56,
+    "fields": [
+      {
+        "name": "mode",
+        "text": "only horizontally"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "layer",
+      "0_add_button"
+    ]
   },
-  "set sprite to": {
-    "tokenRaw": "set sprite to",
-    "blockType": "spritescreatenoset",
-    "category": "Create",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "scroller_scrollBackgroundWithSpeed": {
+    "type": "scroller_scrollBackgroundWithSpeed",
+    "file": "scroller_scrollBackgroundWithSpeed.svg",
+    "width": 411,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "vx",
+      "vy",
+      "",
+      "layer",
+      "0_add_button"
+    ]
   },
-  "on start": {
-    "tokenRaw": "on start",
-    "blockType": "startEffectOnSprite",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "scroller_setCameraScrollingMultipliers": {
+    "type": "scroller_setCameraScrollingMultipliers",
+    "file": "scroller_setCameraScrollingMultipliers.svg",
+    "width": 557,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "xMultiplier",
+      "yMultiplier",
+      "",
+      "layer",
+      "0_add_button"
+    ]
   },
-  "sprite say": {
-    "tokenRaw": "sprite say",
-    "blockType": "sprites_destroy_all_sprites_of_kind",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "scroller_setBackgroundScrollOffset": {
+    "type": "scroller_setBackgroundScrollOffset",
+    "file": "scroller_setBackgroundScrollOffset.svg",
+    "width": 390,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "x",
+      "y",
+      "",
+      "layer",
+      "0_add_button"
+    ]
   },
-  "set background color to": {
-    "tokenRaw": "set background color to",
-    "blockType": "gamesetbackgroundcolor",
-    "category": "Screen",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "scroller_getBackgroundXOffset": {
+    "type": "scroller_getBackgroundXOffset",
+    "file": "scroller_getBackgroundXOffset.svg",
+    "width": 224,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "",
+      "layer",
+      "0_add_button"
+    ]
   },
-  "play sound": {
-    "tokenRaw": "play sound",
-    "blockType": "music_playable_play",
-    "category": "Tone",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "scroller_getBackgroundYOffset": {
+    "type": "scroller_getBackgroundYOffset",
+    "file": "scroller_getBackgroundYOffset.svg",
+    "width": 224,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "",
+      "layer",
+      "0_add_button"
+    ]
   },
-  "ba ding": {
-    "tokenRaw": "ba ding",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "scroller_setLayerImage": {
+    "type": "scroller_setLayerImage",
+    "file": "scroller_setLayerImage.svg",
+    "width": 430,
+    "height": 74,
+    "fields": [],
+    "inputs": [
+      "layer",
+      "image"
+    ]
   },
-  "until done": {
-    "tokenRaw": "until done",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "scroller_setLayerZIndex": {
+    "type": "scroller_setLayerZIndex",
+    "file": "scroller_setLayerZIndex.svg",
+    "width": 442,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "layer",
+      "z"
+    ]
   },
-  "start screen effect": {
-    "tokenRaw": "start screen effect",
-    "blockType": "startEffectOnSprite",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "scroller_backgroundLayer": {
+    "type": "scroller_backgroundLayer",
+    "file": "scroller_backgroundLayer.svg",
+    "width": 200,
+    "height": 40,
+    "fields": [
+      {
+        "name": "layer",
+        "text": "0 (bottom)"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
   },
-  "confetti": {
-    "tokenRaw": "confetti",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "tileUtil_tilemapProperty": {
+    "type": "tileUtil_tilemapProperty",
+    "file": "tileUtil_tilemapProperty.svg",
+    "width": 316,
+    "height": 48,
+    "fields": [
+      {
+        "name": "prop",
+        "text": "number of columns"
+      }
+    ],
+    "inputs": [
+      "data",
+      ""
+    ]
   },
-  "set sprite image to": {
-    "tokenRaw": "set sprite image to",
-    "blockType": "spritesetimage",
-    "category": "Image",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_createSmallMap": {
+    "type": "tileUtil_createSmallMap",
+    "file": "tileUtil_createSmallMap.svg",
+    "width": 179,
+    "height": 50,
+    "fields": [
+      {
+        "name": "tilemap",
+        "text": ""
+      }
+    ],
+    "inputs": [
+      ""
+    ]
   },
-  "splash": {
-    "tokenRaw": "splash",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "tileUtil_getLoadedMap": {
+    "type": "tileUtil_getLoadedMap",
+    "file": "tileUtil_getLoadedMap.svg",
+    "width": 156,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      ""
+    ]
   },
-  "on game update every ms": {
-    "tokenRaw": "on game update every ms",
-    "blockType": "game_setgameovereffect",
-    "category": "Game Over",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_cloneMap": {
+    "type": "tileUtil_cloneMap",
+    "file": "tileUtil_cloneMap.svg",
+    "width": 174,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "map"
+    ]
   },
-  "set sprite bounce on wall": {
-    "tokenRaw": "set sprite bounce on wall",
-    "blockType": "spritesetsetbounceonwall",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_coverAllTiles": {
+    "type": "tileUtil_coverAllTiles",
+    "file": "tileUtil_coverAllTiles.svg",
+    "width": 360,
+    "height": 74,
+    "fields": [],
+    "inputs": [
+      "tileKind",
+      "cover"
+    ]
   },
-  "move sprite with buttons": {
-    "tokenRaw": "move sprite with buttons",
-    "blockType": "sprites_destroy_all_sprites_of_kind",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_coverTile": {
+    "type": "tileUtil_coverTile",
+    "file": "tileUtil_coverTile.svg",
+    "width": 439,
+    "height": 74,
+    "fields": [],
+    "inputs": [
+      "location",
+      "cover"
+    ]
   },
-  "on sprite overlaps sprite": {
-    "tokenRaw": "on sprite overlaps sprite",
-    "blockType": "sprites_destroy_all_sprites_of_kind",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_createSpritesOnTiles": {
+    "type": "tileUtil_createSpritesOnTiles",
+    "file": "tileUtil_createSpritesOnTiles.svg",
+    "width": 690,
+    "height": 74,
+    "fields": [],
+    "inputs": [
+      "tileKind",
+      "spriteImage",
+      "spriteKind"
+    ]
   },
-  "destroy sprite": {
-    "tokenRaw": "destroy sprite",
-    "blockType": "sprites_destroy_all_sprites_of_kind",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_replaceAllTiles": {
+    "type": "tileUtil_replaceAllTiles",
+    "file": "tileUtil_replaceAllTiles.svg",
+    "width": 377,
+    "height": 74,
+    "fields": [],
+    "inputs": [
+      "from",
+      "to"
+    ]
   },
-  "set life to": {
-    "tokenRaw": "set life to",
-    "blockType": "hudSetLife",
-    "category": "Life",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_setWalls": {
+    "type": "tileUtil_setWalls",
+    "file": "tileUtil_setWalls.svg",
+    "width": 420,
+    "height": 74,
+    "fields": [],
+    "inputs": [
+      "on",
+      "tile",
+      ""
+    ]
   },
-  "change life by": {
-    "tokenRaw": "change life by",
-    "blockType": "hudChangeLifeBy",
-    "category": "Life",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_setTileAt": {
+    "type": "tileUtil_setTileAt",
+    "file": "tileUtil_setTileAt.svg",
+    "width": 566,
+    "height": 66,
+    "fields": [],
+    "inputs": [
+      "tile",
+      "location",
+      "tilemap"
+    ]
   },
-  "start countdown": {
-    "tokenRaw": "start countdown",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "tileUtil_setWallAt": {
+    "type": "tileUtil_setWallAt",
+    "file": "tileUtil_setWallAt.svg",
+    "width": 632,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "on",
+      "location",
+      "tilemap"
+    ]
   },
-  "on countdown end": {
-    "tokenRaw": "on countdown end",
-    "blockType": "particlesEndScreenAnimation",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_tileIs": {
+    "type": "tileUtil_tileIs",
+    "file": "tileUtil_tileIs.svg",
+    "width": 629,
+    "height": 58,
+    "fields": [],
+    "inputs": [
+      "tilemap",
+      "location",
+      "tile"
+    ]
   },
-  "game over": {
-    "tokenRaw": "game over",
-    "blockType": "game_setgameovereffect",
-    "category": "Game Over",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_tileIsWall": {
+    "type": "tileUtil_tileIsWall",
+    "file": "tileUtil_tileIsWall.svg",
+    "width": 580,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "tilemap",
+      "location",
+      ""
+    ]
   },
-  "pick random": {
-    "tokenRaw": "pick random",
-    "blockType": "array_pickRandom",
-    "category": "Read",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_getTileImage": {
+    "type": "tileUtil_getTileImage",
+    "file": "tileUtil_getTileImage.svg",
+    "width": 539,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "tilemap",
+      "location"
+    ]
   },
-  "set sprite velocity to": {
-    "tokenRaw": "set sprite velocity to",
-    "blockType": "spritescreatenoset",
-    "category": "Create",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_forEachTileInMap": {
+    "type": "tileUtil_forEachTileInMap",
+    "file": "tileUtil_forEachTileInMap.svg",
+    "width": 610,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "tilemap",
+      "HANDLER_DRAG_PARAM_column",
+      "HANDLER_DRAG_PARAM_row",
+      "HANDLER_DRAG_PARAM_location",
+      "HANDLER"
+    ]
   },
-  "on a button pressed": {
-    "tokenRaw": "on a button pressed",
-    "blockType": "ctrlonbuttonevent",
-    "category": "Multiplayer",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_onMapLoaded": {
+    "type": "tileUtil_onMapLoaded",
+    "file": "tileUtil_onMapLoaded.svg",
+    "width": 260,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "HANDLER_DRAG_PARAM_tilemap",
+      "HANDLER"
+    ]
   },
-  "set projectile to projectile from sprite": {
-    "tokenRaw": "set projectile to projectile from sprite",
-    "blockType": "tileset_tile_picker",
-    "category": "Locations",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_onMapUnloaded": {
+    "type": "tileUtil_onMapUnloaded",
+    "file": "tileUtil_onMapUnloaded.svg",
+    "width": 277,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "HANDLER_DRAG_PARAM_tilemap",
+      "HANDLER"
+    ]
   },
-  "set projectile to projectile from side": {
-    "tokenRaw": "set projectile to projectile from side",
-    "blockType": "tileset_tile_picker",
-    "category": "Locations",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_unloadTilemap": {
+    "type": "tileUtil_unloadTilemap",
+    "file": "tileUtil_unloadTilemap.svg",
+    "width": 210,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      ""
+    ]
   },
-  "set sprite x to": {
-    "tokenRaw": "set sprite x to",
-    "blockType": "spritescreatenoset",
-    "category": "Create",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_connectMapById": {
+    "type": "tileUtil_connectMapById",
+    "file": "tileUtil_connectMapById.svg",
+    "width": 479,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "mapA",
+      "mapB",
+      "connectionId"
+    ]
   },
-  "set sprite kind to": {
-    "tokenRaw": "set sprite kind to",
-    "blockType": "sprites_destroy_all_sprites_of_kind",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_loadConnectedMap": {
+    "type": "tileUtil_loadConnectedMap",
+    "file": "tileUtil_loadConnectedMap.svg",
+    "width": 332,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "connectionId"
+    ]
   },
-  "if true then": {
-    "tokenRaw": "if true then",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "tileUtil_getConnectedMap": {
+    "type": "tileUtil_getConnectedMap",
+    "file": "tileUtil_getConnectedMap.svg",
+    "width": 463,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "map",
+      "connectionId"
+    ]
   },
-  "set sprite stay in screen": {
-    "tokenRaw": "set sprite stay in screen",
-    "blockType": "spritesetsetstayinscreen",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_connectionKind": {
+    "type": "tileUtil_connectionKind",
+    "file": "tileUtil_connectionKind.svg",
+    "width": 104,
+    "height": 40,
+    "fields": [
+      {
+        "name": "MEMBER",
+        "text": "Door1"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
   },
-  "set score to": {
-    "tokenRaw": "set score to",
-    "blockType": "hudsetScore",
-    "category": "Score",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "tileUtil_createCameraOnTile": {
+    "type": "tileUtil_createCameraOnTile",
+    "file": "tileUtil_createCameraOnTile.svg",
+    "width": 408,
+    "height": 64,
+    "fields": [],
+    "inputs": [
+      "location"
+    ]
   },
-  "change score by": {
-    "tokenRaw": "change score by",
-    "blockType": "hudChangeScoreBy",
-    "category": "Score",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spritescreatenoset": {
+    "type": "spritescreatenoset",
+    "file": "spritescreatenoset.svg",
+    "width": 326,
+    "height": 58,
+    "fields": [],
+    "inputs": [
+      "img",
+      "kind"
+    ]
   },
-  "else": {
-    "tokenRaw": "else",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "spritesetvel": {
+    "type": "spritesetvel",
+    "file": "spritesetvel.svg",
+    "width": 427,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "vx",
+      "vy"
+    ]
   },
-  "if true then / else": {
-    "tokenRaw": "if true then / else",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "spritesetpos": {
+    "type": "spritesetpos",
+    "file": "spritesetpos.svg",
+    "width": 406,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "x",
+      "y"
+    ]
   },
-  "0=0": {
-    "tokenRaw": "0=0",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "Sprite_blockCombine_set": {
+    "type": "Sprite_blockCombine_set",
+    "file": "Sprite_blockCombine_set.svg",
+    "width": 297,
+    "height": 56,
+    "fields": [
+      {
+        "name": "property",
+        "text": "x"
+      }
+    ],
+    "inputs": [
+      "mySprite",
+      "",
+      "value"
+    ]
   },
-  "animate image": {
-    "tokenRaw": "animate image",
-    "blockType": "tiles_image_at_location",
-    "category": "Locations",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "Sprite_blockCombine_change": {
+    "type": "Sprite_blockCombine_change",
+    "file": "Sprite_blockCombine_change.svg",
+    "width": 318,
+    "height": 56,
+    "fields": [
+      {
+        "name": "property",
+        "text": "x"
+      }
+    ],
+    "inputs": [
+      "mySprite",
+      "",
+      "value"
+    ]
   },
-  "animate movement": {
-    "tokenRaw": "animate movement",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "Sprite_blockCombine_get": {
+    "type": "Sprite_blockCombine_get",
+    "file": "Sprite_blockCombine_get.svg",
+    "width": 184,
+    "height": 48,
+    "fields": [
+      {
+        "name": "property",
+        "text": "x"
+      }
+    ],
+    "inputs": [
+      "mySprite",
+      ""
+    ]
   },
-  "play melody": {
-    "tokenRaw": "play melody",
-    "blockType": "music_playable_play",
-    "category": "Tone",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spriteFollowOtherSprite": {
+    "type": "spriteFollowOtherSprite",
+    "file": "spriteFollowOtherSprite.svg",
+    "width": 377,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "target",
+      "",
+      "speed",
+      "0_add_button"
+    ]
   },
-  "looping in background": {
-    "tokenRaw": "looping in background",
-    "blockType": "info_PlayerInfo_life",
-    "category": "Multiplayer",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spriteUnfollow": {
+    "type": "spriteUnfollow",
+    "file": "spriteUnfollow.svg",
+    "width": 240,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "this",
+      ""
+    ]
   },
-  "set volume": {
-    "tokenRaw": "set volume",
-    "blockType": "synth_set_volume",
-    "category": "Volume",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "startEffectOnSprite": {
+    "type": "startEffectOnSprite",
+    "file": "startEffectOnSprite.svg",
+    "width": 404,
+    "height": 56,
+    "fields": [
+      {
+        "name": "effect",
+        "text": "spray"
+      }
+    ],
+    "inputs": [
+      "sprite",
+      "",
+      "",
+      "duration",
+      "0_optional_dummy0",
+      "0_add_button"
+    ]
   },
-  "stop all sounds": {
-    "tokenRaw": "stop all sounds",
-    "blockType": "music_stop_all_sounds",
-    "category": "Sounds",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "particlesclearparticles": {
+    "type": "particlesclearparticles",
+    "file": "particlesclearparticles.svg",
+    "width": 280,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "anchor"
+    ]
   },
-  "on life zero": {
-    "tokenRaw": "on life zero",
-    "blockType": "playerinfoonlifezero",
-    "category": "Multiplayer",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spritedestroy2": {
+    "type": "spritedestroy2",
+    "file": "spritedestroy2.svg",
+    "width": 232,
+    "height": 56,
+    "fields": [
+      {
+        "name": "effect",
+        "text": "spray"
+      }
+    ],
+    "inputs": [
+      "sprite",
+      "",
+      "0_optional_field0",
+      "duration",
+      "0_optional_dummy1",
+      "0_add_button"
+    ]
   },
-  "set tilemap to": {
-    "tokenRaw": "set tilemap to",
-    "blockType": "tiles_tilemap_editor",
-    "category": "Tilemaps",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "sprites_destroy_all_sprites_of_kind": {
+    "type": "sprites_destroy_all_sprites_of_kind",
+    "file": "sprites_destroy_all_sprites_of_kind.svg",
+    "width": 391,
+    "height": 56,
+    "fields": [
+      {
+        "name": "effect",
+        "text": "spray"
+      }
+    ],
+    "inputs": [
+      "kind",
+      "",
+      "0_optional_field0",
+      "duration",
+      "0_optional_dummy1",
+      "0_add_button"
+    ]
   },
-  "place sprite on top of": {
-    "tokenRaw": "place sprite on top of",
-    "blockType": "sprites_destroy_all_sprites_of_kind",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spritesaytext": {
+    "type": "spritesaytext",
+    "file": "spritesaytext.svg",
+    "width": 301,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "this",
+      "text",
+      "timeOnScreen",
+      "animated",
+      "0_add_button"
+    ]
   },
-  "camera follow sprite": {
-    "tokenRaw": "camera follow sprite",
-    "blockType": "camerafollow",
-    "category": "Camera",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spritesetsetstayinscreen": {
+    "type": "spritesetsetstayinscreen",
+    "file": "spritesetsetstayinscreen.svg",
+    "width": 403,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "on"
+    ]
   },
-  "place sprite on top of random tile": {
-    "tokenRaw": "place sprite on top of random tile",
-    "blockType": "mapplaceonrandomtile",
-    "category": "Tilemap Operations",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spritesetsetbounceonwall": {
+    "type": "spritesetsetbounceonwall",
+    "file": "spritesetsetbounceonwall.svg",
+    "width": 403,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "on"
+    ]
   },
-  "on sprite hits wall": {
-    "tokenRaw": "on sprite hits wall",
-    "blockType": "sprites_destroy_all_sprites_of_kind",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spritesetsetflag": {
+    "type": "spritesetsetflag",
+    "file": "spritesetsetflag.svg",
+    "width": 421,
+    "height": 56,
+    "fields": [
+      {
+        "name": "flag",
+        "text": "auto destroy"
+      }
+    ],
+    "inputs": [
+      "sprite",
+      "",
+      "on"
+    ]
   },
-  "camera shake": {
-    "tokenRaw": "camera shake",
-    "blockType": "camerashake",
-    "category": "Camera",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spritesoverlap": {
+    "type": "spritesoverlap",
+    "file": "spritesoverlap.svg",
+    "width": 675,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "HANDLER_DRAG_PARAM_sprite",
+      "kind",
+      "HANDLER_DRAG_PARAM_otherSprite",
+      "otherKind",
+      "HANDLER"
+    ]
   },
-  "say": {
-    "tokenRaw": "say",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "spriteoverlapswith": {
+    "type": "spriteoverlapswith",
+    "file": "spriteoverlapswith.svg",
+    "width": 434,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "other"
+    ]
   },
-  "set sprite follow": {
-    "tokenRaw": "set sprite follow",
-    "blockType": "spritescreatenoset",
-    "category": "Create",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spritesetkind": {
+    "type": "spritesetkind",
+    "file": "spritesetkind.svg",
+    "width": 345,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "kind"
+    ]
   },
-  "set wall at": {
-    "tokenRaw": "set wall at",
-    "blockType": "mapsetwallat",
-    "category": "Tilemap Operations",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spritegetkind": {
+    "type": "spritegetkind",
+    "file": "spritegetkind.svg",
+    "width": 174,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      ""
+    ]
   },
-  "on sprite overlaps tile": {
-    "tokenRaw": "on sprite overlaps tile",
-    "blockType": "tiles_location_of_sprite",
-    "category": "Locations",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spritesoncreated": {
+    "type": "spritesoncreated",
+    "file": "spritesoncreated.svg",
+    "width": 364,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "HANDLER_DRAG_PARAM_sprite",
+      "kind",
+      "HANDLER"
+    ]
   },
-  "use effect": {
-    "tokenRaw": "use effect",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "spritesondestroyed": {
+    "type": "spritesondestroyed",
+    "file": "spritesondestroyed.svg",
+    "width": 381,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "HANDLER_DRAG_PARAM_sprite",
+      "kind",
+      "",
+      "HANDLER"
+    ]
   },
-  "on button pressed": {
-    "tokenRaw": "on button pressed",
-    "blockType": "ctrlonbuttonevent",
-    "category": "Multiplayer",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "allOfKind": {
+    "type": "allOfKind",
+    "file": "allOfKind.svg",
+    "width": 332,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "kind"
+    ]
   },
-  "change sprite x": {
-    "tokenRaw": "change sprite x",
-    "blockType": "Sprite_blockCombine_change",
-    "category": "Physics",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spritekind": {
+    "type": "spritekind",
+    "file": "spritekind.svg",
+    "width": 113,
+    "height": 40,
+    "fields": [
+      {
+        "name": "MEMBER",
+        "text": "Player"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
   },
-  "on destroyed": {
-    "tokenRaw": "on destroyed",
-    "blockType": "spritesondestroyed",
-    "category": "Lifecycle",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spriteimage": {
+    "type": "spriteimage",
+    "file": "spriteimage.svg",
+    "width": 183,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      ""
+    ]
   },
-  "on created": {
-    "tokenRaw": "on created",
-    "blockType": "spritesoncreated",
-    "category": "Lifecycle",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "spritesetimage": {
+    "type": "spritesetimage",
+    "file": "spritesetimage.svg",
+    "width": 331,
+    "height": 66,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "img"
+    ]
   },
-  "sprite start effect": {
-    "tokenRaw": "sprite start effect",
-    "blockType": "startEffectOnSprite",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "sprite_change_scale": {
+    "type": "sprite_change_scale",
+    "file": "sprite_change_scale.svg",
+    "width": 476,
+    "height": 56,
+    "fields": [
+      {
+        "name": "anchor",
+        "text": "middle"
+      }
+    ],
+    "inputs": [
+      "sprite",
+      "value",
+      ""
+    ]
   },
-  "set name": {
-    "tokenRaw": "set name",
-    "blockType": null,
-    "category": "Unknown",
-    "subcategory": null,
-    "confidence": "none",
-    "source": "blocks.txt",
-    "matchedBy": null,
-    "dataIdRef": null,
-    "note": "unmatched: preserve original [token] text, do not render wrong block"
+  "sprite_set_scale": {
+    "type": "sprite_set_scale",
+    "file": "sprite_set_scale.svg",
+    "width": 455,
+    "height": 56,
+    "fields": [
+      {
+        "name": "anchor",
+        "text": "middle"
+      }
+    ],
+    "inputs": [
+      "sprite",
+      "value",
+      ""
+    ]
   },
-  "show long text": {
-    "tokenRaw": "show long text",
-    "blockType": "game_show_long_text",
-    "category": "Dialogs",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "game_control_sprite": {
+    "type": "game_control_sprite",
+    "file": "game_control_sprite.svg",
+    "width": 320,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "",
+      "vx",
+      "vy",
+      "0_add_button"
+    ]
   },
-  "set background image to (img)": {
-    "tokenRaw": "set background image to (img)",
-    "blockType": "gamesetbackgroundimage",
-    "category": "Screen",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "keyonevent": {
+    "type": "keyonevent",
+    "file": "keyonevent.svg",
+    "width": 253,
+    "height": 104,
+    "fields": [
+      {
+        "name": "button",
+        "text": "A"
+      },
+      {
+        "name": "event",
+        "text": "pressed"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "HANDLER"
+    ]
   },
-  "sprite (img) of kind (kind)": {
-    "tokenRaw": "sprite (img) of kind (kind)",
-    "blockType": "sprites_destroy_all_sprites_of_kind",
-    "category": "Effects",
-    "subcategory": null,
-    "confidence": "high",
-    "source": "blocks.txt",
-    "matchedBy": "taxonomy-normalization",
-    "dataIdRef": null,
-    "note": "inline-SVG toolbox-default clone"
+  "keyispressed": {
+    "type": "keyispressed",
+    "file": "keyispressed.svg",
+    "width": 241,
+    "height": 40,
+    "fields": [
+      {
+        "name": "button",
+        "text": "A"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "gameupdate": {
+    "type": "gameupdate",
+    "file": "gameupdate.svg",
+    "width": 160,
+    "height": 104,
+    "fields": [],
+    "inputs": [
+      "",
+      "HANDLER"
+    ]
+  },
+  "gameinterval": {
+    "type": "gameinterval",
+    "file": "gameinterval.svg",
+    "width": 294,
+    "height": 104,
+    "fields": [],
+    "inputs": [
+      "period",
+      "",
+      "HANDLER"
+    ]
+  },
+  "gameOver2": {
+    "type": "gameOver2",
+    "file": "gameOver2.svg",
+    "width": 212,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "win"
+    ]
+  },
+  "game_setgameovereffect": {
+    "type": "game_setgameovereffect",
+    "file": "game_setgameovereffect.svg",
+    "width": 369,
+    "height": 56,
+    "fields": [
+      {
+        "name": "effect",
+        "text": "confetti"
+      }
+    ],
+    "inputs": [
+      "",
+      "win"
+    ]
+  },
+  "game_setgameoverplayable": {
+    "type": "game_setgameoverplayable",
+    "file": "game_setgameoverplayable.svg",
+    "width": 544,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "sound",
+      "looping",
+      "win"
+    ]
+  },
+  "game_setgameovermessage": {
+    "type": "game_setgameovermessage",
+    "file": "game_setgameovermessage.svg",
+    "width": 398,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "message",
+      "win"
+    ]
+  },
+  "game_setgameoverscoringtype": {
+    "type": "game_setgameoverscoringtype",
+    "file": "game_setgameoverscoringtype.svg",
+    "width": 303,
+    "height": 56,
+    "fields": [
+      {
+        "name": "type",
+        "text": "high score"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "gameSplash": {
+    "type": "gameSplash",
+    "file": "gameSplash.svg",
+    "width": 149,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "title",
+      "subtitle",
+      "0_add_button"
+    ]
+  },
+  "gameaskfornumber": {
+    "type": "gameaskfornumber",
+    "file": "gameaskfornumber.svg",
+    "width": 228,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "message",
+      "",
+      "answerLength",
+      "useOnScreenKeyboard",
+      "0_add_button"
+    ]
+  },
+  "gameaskforstring": {
+    "type": "gameaskforstring",
+    "file": "gameaskforstring.svg",
+    "width": 228,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "message",
+      "",
+      "answerLength",
+      "useOnScreenKeyboard",
+      "0_add_button"
+    ]
+  },
+  "game_dialog_set_text_color": {
+    "type": "game_dialog_set_text_color",
+    "file": "game_dialog_set_text_color.svg",
+    "width": 276,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "color"
+    ]
+  },
+  "game_dialog_set_cursor": {
+    "type": "game_dialog_set_cursor",
+    "file": "game_dialog_set_cursor.svg",
+    "width": 274,
+    "height": 74,
+    "fields": [],
+    "inputs": [
+      "frame"
+    ]
+  },
+  "game_dialog_set_frame": {
+    "type": "game_dialog_set_frame",
+    "file": "game_dialog_set_frame.svg",
+    "width": 266,
+    "height": 74,
+    "fields": [],
+    "inputs": [
+      "frame"
+    ]
+  },
+  "game_show_long_text": {
+    "type": "game_show_long_text",
+    "file": "game_show_long_text.svg",
+    "width": 284,
+    "height": 56,
+    "fields": [
+      {
+        "name": "layout",
+        "text": "bottom"
+      }
+    ],
+    "inputs": [
+      "str",
+      ""
+    ]
+  },
+  "mp_setPlayerSprite": {
+    "type": "mp_setPlayerSprite",
+    "file": "mp_setPlayerSprite.svg",
+    "width": 590,
+    "height": 82,
+    "fields": [],
+    "inputs": [
+      "player",
+      "sprite"
+    ]
+  },
+  "mp_playerSelector": {
+    "type": "mp_playerSelector",
+    "file": "mp_playerSelector.svg",
+    "width": 130,
+    "height": 40,
+    "fields": [
+      {
+        "name": "number",
+        "text": "1"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "mp_allPlayers": {
+    "type": "mp_allPlayers",
+    "file": "mp_allPlayers.svg",
+    "width": 200,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      ""
+    ]
+  },
+  "mp_getPlayerSprite": {
+    "type": "mp_getPlayerSprite",
+    "file": "mp_getPlayerSprite.svg",
+    "width": 191,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "player",
+      ""
+    ]
+  },
+  "mp_getPlayerBySprite": {
+    "type": "mp_getPlayerBySprite",
+    "file": "mp_getPlayerBySprite.svg",
+    "width": 192,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      ""
+    ]
+  },
+  "mp_moveWithButtons": {
+    "type": "mp_moveWithButtons",
+    "file": "mp_moveWithButtons.svg",
+    "width": 319,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "player",
+      "",
+      "vx",
+      "vy",
+      "0_add_button"
+    ]
+  },
+  "mp_onButtonEvent": {
+    "type": "mp_onButtonEvent",
+    "file": "mp_onButtonEvent.svg",
+    "width": 372,
+    "height": 112,
+    "fields": [
+      {
+        "name": "button",
+        "text": "A"
+      },
+      {
+        "name": "event",
+        "text": "pressed"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "HANDLER_DRAG_PARAM_player",
+      "HANDLER"
+    ]
+  },
+  "mp_isButtonPressed": {
+    "type": "mp_isButtonPressed",
+    "file": "mp_isButtonPressed.svg",
+    "width": 364,
+    "height": 40,
+    "fields": [
+      {
+        "name": "button",
+        "text": "A"
+      }
+    ],
+    "inputs": [
+      "player",
+      "",
+      ""
+    ]
+  },
+  "mp_onControllerEvent": {
+    "type": "mp_onControllerEvent",
+    "file": "mp_onControllerEvent.svg",
+    "width": 242,
+    "height": 112,
+    "fields": [
+      {
+        "name": "event",
+        "text": "connected"
+      }
+    ],
+    "inputs": [
+      "HANDLER_DRAG_PARAM_player",
+      "",
+      "HANDLER"
+    ]
+  },
+  "mp_isConnected": {
+    "type": "mp_isConnected",
+    "file": "mp_isConnected.svg",
+    "width": 241,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "player",
+      ""
+    ]
+  },
+  "mp_getPlayerProperty": {
+    "type": "mp_getPlayerProperty",
+    "file": "mp_getPlayerProperty.svg",
+    "width": 218,
+    "height": 40,
+    "fields": [
+      {
+        "name": "prop",
+        "text": "index"
+      }
+    ],
+    "inputs": [
+      "player",
+      ""
+    ]
+  },
+  "mp_getPlayerState": {
+    "type": "mp_getPlayerState",
+    "file": "mp_getPlayerState.svg",
+    "width": 218,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "player",
+      "state"
+    ]
+  },
+  "mp_setPlayerState": {
+    "type": "mp_setPlayerState",
+    "file": "mp_setPlayerState.svg",
+    "width": 340,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "player",
+      "state",
+      "value"
+    ]
+  },
+  "mp_changePlayerStateBy": {
+    "type": "mp_changePlayerStateBy",
+    "file": "mp_changePlayerStateBy.svg",
+    "width": 360,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "player",
+      "state",
+      "delta"
+    ]
+  },
+  "mp_onScore": {
+    "type": "mp_onScore",
+    "file": "mp_onScore.svg",
+    "width": 264,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "score",
+      "HANDLER_DRAG_PARAM_player",
+      "HANDLER"
+    ]
+  },
+  "mp_onLifeZero": {
+    "type": "mp_onLifeZero",
+    "file": "mp_onLifeZero.svg",
+    "width": 242,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "HANDLER_DRAG_PARAM_player",
+      "HANDLER"
+    ]
+  },
+  "mp_gameOverPlayerWin": {
+    "type": "mp_gameOverPlayerWin",
+    "file": "mp_gameOverPlayerWin.svg",
+    "width": 260,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "player",
+      ""
+    ]
+  },
+  "mp_setPlayerIndicatorsVisible": {
+    "type": "mp_setPlayerIndicatorsVisible",
+    "file": "mp_setPlayerIndicatorsVisible.svg",
+    "width": 302,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "visible"
+    ]
+  },
+  "mp_getPlayerByIndex": {
+    "type": "mp_getPlayerByIndex",
+    "file": "mp_getPlayerByIndex.svg",
+    "width": 192,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "index"
+    ]
+  },
+  "mp_getPlayerByNumber": {
+    "type": "mp_getPlayerByNumber",
+    "file": "mp_getPlayerByNumber.svg",
+    "width": 174,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "number"
+    ]
+  },
+  "music_playable_play": {
+    "type": "music_playable_play",
+    "file": "music_playable_play.svg",
+    "width": 349,
+    "height": 56,
+    "fields": [
+      {
+        "name": "playbackMode",
+        "text": "until done"
+      }
+    ],
+    "inputs": [
+      "toPlay",
+      ""
+    ]
+  },
+  "music_stop_all_sounds": {
+    "type": "music_stop_all_sounds",
+    "file": "music_stop_all_sounds.svg",
+    "width": 148,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      ""
+    ]
+  },
+  "synth_set_volume": {
+    "type": "synth_set_volume",
+    "file": "synth_set_volume.svg",
+    "width": 154,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "volume"
+    ]
+  },
+  "device_change_tempo": {
+    "type": "device_change_tempo",
+    "file": "device_change_tempo.svg",
+    "width": 250,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "value",
+      ""
+    ]
+  },
+  "device_set_tempo": {
+    "type": "device_set_tempo",
+    "file": "device_set_tempo.svg",
+    "width": 232,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "value",
+      ""
+    ]
+  },
+  "gamesetbackgroundcolor": {
+    "type": "gamesetbackgroundcolor",
+    "file": "gamesetbackgroundcolor.svg",
+    "width": 267,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "color"
+    ]
+  },
+  "gamesetbackgroundimage": {
+    "type": "gamesetbackgroundimage",
+    "file": "gamesetbackgroundimage.svg",
+    "width": 301,
+    "height": 74,
+    "fields": [],
+    "inputs": [
+      "img"
+    ]
+  },
+  "camerafollow": {
+    "type": "camerafollow",
+    "file": "camerafollow.svg",
+    "width": 315,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "sprite"
+    ]
+  },
+  "camerashake": {
+    "type": "camerashake",
+    "file": "camerashake.svg",
+    "width": 394,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "amplitude",
+      "duration",
+      ""
+    ]
+  },
+  "particlesStartScreenAnimation": {
+    "type": "particlesStartScreenAnimation",
+    "file": "particlesStartScreenAnimation.svg",
+    "width": 329,
+    "height": 56,
+    "fields": [
+      {
+        "name": "effect",
+        "text": "confetti"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "duration",
+      "0_optional_dummy0",
+      "0_add_button"
+    ]
+  },
+  "particlesEndScreenAnimation": {
+    "type": "particlesEndScreenAnimation",
+    "file": "particlesEndScreenAnimation.svg",
+    "width": 280,
+    "height": 56,
+    "fields": [
+      {
+        "name": "effect",
+        "text": "confetti"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "set_current_tilemap": {
+    "type": "set_current_tilemap",
+    "file": "set_current_tilemap.svg",
+    "width": 291,
+    "height": 74,
+    "fields": [],
+    "inputs": [
+      "tilemap"
+    ]
+  },
+  "tiles_tilemap_editor": {
+    "type": "tiles_tilemap_editor",
+    "file": "tiles_tilemap_editor.svg",
+    "width": 144,
+    "height": 50,
+    "fields": [
+      {
+        "name": "tilemap",
+        "text": ""
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "spriteshittile": {
+    "type": "spriteshittile",
+    "file": "spriteshittile.svg",
+    "width": 584,
+    "height": 122,
+    "fields": [],
+    "inputs": [
+      "HANDLER_DRAG_PARAM_sprite",
+      "kind",
+      "tile",
+      "HANDLER_DRAG_PARAM_location",
+      "HANDLER"
+    ]
+  },
+  "spriteshitwall": {
+    "type": "spriteshitwall",
+    "file": "spriteshitwall.svg",
+    "width": 509,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "HANDLER_DRAG_PARAM_sprite",
+      "kind",
+      "HANDLER_DRAG_PARAM_location",
+      "HANDLER"
+    ]
+  },
+  "mapplaceontile": {
+    "type": "mapplaceontile",
+    "file": "mapplaceontile.svg",
+    "width": 521,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "loc"
+    ]
+  },
+  "mapplaceonrandomtile": {
+    "type": "mapplaceonrandomtile",
+    "file": "mapplaceonrandomtile.svg",
+    "width": 416,
+    "height": 66,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "tile"
+    ]
+  },
+  "mapsettileat": {
+    "type": "mapsettileat",
+    "file": "mapsettileat.svg",
+    "width": 409,
+    "height": 74,
+    "fields": [],
+    "inputs": [
+      "tile",
+      "loc"
+    ]
+  },
+  "mapsetwallat": {
+    "type": "mapsetwallat",
+    "file": "mapsetwallat.svg",
+    "width": 465,
+    "height": 64,
+    "fields": [],
+    "inputs": [
+      "on",
+      "loc"
+    ]
+  },
+  "mapgettile": {
+    "type": "mapgettile",
+    "file": "mapgettile.svg",
+    "width": 244,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "col",
+      "row"
+    ]
+  },
+  "tiles_location_of_sprite": {
+    "type": "tiles_location_of_sprite",
+    "file": "tiles_location_of_sprite.svg",
+    "width": 306,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "this"
+    ]
+  },
+  "tiles.Location_blockCombine_get": {
+    "type": "tiles.Location_blockCombine_get",
+    "file": "tiles.Location_blockCombine_get.svg",
+    "width": 228,
+    "height": 48,
+    "fields": [
+      {
+        "name": "property",
+        "text": "column"
+      }
+    ],
+    "inputs": [
+      "location",
+      ""
+    ]
+  },
+  "maplocationistile": {
+    "type": "maplocationistile",
+    "file": "maplocationistile.svg",
+    "width": 472,
+    "height": 58,
+    "fields": [],
+    "inputs": [
+      "location",
+      "tile"
+    ]
+  },
+  "tiles_tile_at_location_is_wall": {
+    "type": "tiles_tile_at_location_is_wall",
+    "file": "tiles_tile_at_location_is_wall.svg",
+    "width": 423,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "location",
+      ""
+    ]
+  },
+  "spritetileat": {
+    "type": "spritetileat",
+    "file": "spritetileat.svg",
+    "width": 448,
+    "height": 58,
+    "fields": [
+      {
+        "name": "direction",
+        "text": "left"
+      }
+    ],
+    "inputs": [
+      "",
+      "this",
+      "tile"
+    ]
+  },
+  "spritehasobstacle": {
+    "type": "spritehasobstacle",
+    "file": "spritehasobstacle.svg",
+    "width": 373,
+    "height": 48,
+    "fields": [
+      {
+        "name": "direction",
+        "text": "left"
+      }
+    ],
+    "inputs": [
+      "sprite",
+      ""
+    ]
+  },
+  "mapgettilestype": {
+    "type": "mapgettilestype",
+    "file": "mapgettilestype.svg",
+    "width": 301,
+    "height": 58,
+    "fields": [],
+    "inputs": [
+      "tile",
+      ""
+    ]
+  },
+  "tiles_location_get_neighboring_location": {
+    "type": "tiles_location_get_neighboring_location",
+    "file": "tiles_location_get_neighboring_location.svg",
+    "width": 384,
+    "height": 48,
+    "fields": [
+      {
+        "name": "direction",
+        "text": "left"
+      }
+    ],
+    "inputs": [
+      "",
+      "this"
+    ]
+  },
+  "tiles_image_at_location": {
+    "type": "tiles_image_at_location",
+    "file": "tiles_image_at_location.svg",
+    "width": 382,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "location"
+    ]
+  },
+  "hudScore": {
+    "type": "hudScore",
+    "file": "hudScore.svg",
+    "width": 68,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      ""
+    ]
+  },
+  "hudsetScore": {
+    "type": "hudsetScore",
+    "file": "hudsetScore.svg",
+    "width": 170,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "value"
+    ]
+  },
+  "hudChangeScoreBy": {
+    "type": "hudChangeScoreBy",
+    "file": "hudChangeScoreBy.svg",
+    "width": 196,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "value"
+    ]
+  },
+  "hudLife": {
+    "type": "hudLife",
+    "file": "hudLife.svg",
+    "width": 60,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      ""
+    ]
+  },
+  "hudSetLife": {
+    "type": "hudSetLife",
+    "file": "hudSetLife.svg",
+    "width": 161,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "value"
+    ]
+  },
+  "hudChangeLifeBy": {
+    "type": "hudChangeLifeBy",
+    "file": "hudChangeLifeBy.svg",
+    "width": 189,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "value"
+    ]
+  },
+  "gamelifeevent": {
+    "type": "gamelifeevent",
+    "file": "gamelifeevent.svg",
+    "width": 160,
+    "height": 104,
+    "fields": [],
+    "inputs": [
+      "",
+      "HANDLER"
+    ]
+  },
+  "gamegetcountdown": {
+    "type": "gamegetcountdown",
+    "file": "gamegetcountdown.svg",
+    "width": 104,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      ""
+    ]
+  },
+  "gamecountdown": {
+    "type": "gamecountdown",
+    "file": "gamecountdown.svg",
+    "width": 232,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "duration",
+      ""
+    ]
+  },
+  "gamestopcountdown": {
+    "type": "gamestopcountdown",
+    "file": "gamestopcountdown.svg",
+    "width": 140,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      ""
+    ]
+  },
+  "gamecountdownevent": {
+    "type": "gamecountdownevent",
+    "file": "gamecountdownevent.svg",
+    "width": 160,
+    "height": 104,
+    "fields": [],
+    "inputs": [
+      "",
+      "HANDLER"
+    ]
+  },
+  "StatusBarSprite_blockCombine_set": {
+    "type": "StatusBarSprite_blockCombine_set",
+    "file": "StatusBarSprite_blockCombine_set.svg",
+    "width": 341,
+    "height": 56,
+    "fields": [
+      {
+        "name": "property",
+        "text": "value"
+      }
+    ],
+    "inputs": [
+      "statusbar",
+      "",
+      "value"
+    ]
+  },
+  "StatusBarSprite_blockCombine_change": {
+    "type": "StatusBarSprite_blockCombine_change",
+    "file": "StatusBarSprite_blockCombine_change.svg",
+    "width": 362,
+    "height": 56,
+    "fields": [
+      {
+        "name": "property",
+        "text": "value"
+      }
+    ],
+    "inputs": [
+      "statusbar",
+      "",
+      "value"
+    ]
+  },
+  "StatusBarSprite_blockCombine_get": {
+    "type": "StatusBarSprite_blockCombine_get",
+    "file": "StatusBarSprite_blockCombine_get.svg",
+    "width": 228,
+    "height": 48,
+    "fields": [
+      {
+        "name": "property",
+        "text": "value"
+      }
+    ],
+    "inputs": [
+      "statusbar",
+      ""
+    ]
+  },
+  "statusbars_attachToSprite": {
+    "type": "statusbars_attachToSprite",
+    "file": "statusbars_attachToSprite.svg",
+    "width": 380,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "this",
+      "toFollow",
+      "padding",
+      "offset",
+      "0_add_button"
+    ]
+  },
+  "statusbars_spriteStatusBarIsAttachedTo": {
+    "type": "statusbars_spriteStatusBarIsAttachedTo",
+    "file": "statusbars_spriteStatusBarIsAttachedTo.svg",
+    "width": 480,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "kind",
+      "sprite"
+    ]
+  },
+  "statusbars_attachSpriteGetter": {
+    "type": "statusbars_attachSpriteGetter",
+    "file": "statusbars_attachSpriteGetter.svg",
+    "width": 384,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "this",
+      ""
+    ]
+  },
+  "statusbars_setColor": {
+    "type": "statusbars_setColor",
+    "file": "statusbars_setColor.svg",
+    "width": 447,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "this",
+      "fillColor",
+      "bkgdColor",
+      "drainColor",
+      "0_add_button"
+    ]
+  },
+  "statusbars_setBorder": {
+    "type": "statusbars_setBorder",
+    "file": "statusbars_setBorder.svg",
+    "width": 389,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "this",
+      "borderWidth",
+      "color"
+    ]
+  },
+  "statusbar_setLabel": {
+    "type": "statusbar_setLabel",
+    "file": "statusbar_setLabel.svg",
+    "width": 327,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "this",
+      "label",
+      "color",
+      "0_add_button"
+    ]
+  },
+  "statusbars_setFlag": {
+    "type": "statusbars_setFlag",
+    "file": "statusbars_setFlag.svg",
+    "width": 474,
+    "height": 56,
+    "fields": [
+      {
+        "name": "flag",
+        "text": "smooth transition"
+      }
+    ],
+    "inputs": [
+      "this",
+      "",
+      "on"
+    ]
+  },
+  "statusbars_setBarSize": {
+    "type": "statusbars_setBarSize",
+    "file": "statusbars_setBarSize.svg",
+    "width": 390,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "this",
+      "width",
+      "height"
+    ]
+  },
+  "statusbars_positionNextToSprite": {
+    "type": "statusbars_positionNextToSprite",
+    "file": "statusbars_positionNextToSprite.svg",
+    "width": 364,
+    "height": 56,
+    "fields": [
+      {
+        "name": "dir",
+        "text": "left"
+      }
+    ],
+    "inputs": [
+      "this",
+      ""
+    ]
+  },
+  "setPaddingOffset": {
+    "type": "setPaddingOffset",
+    "file": "setPaddingOffset.svg",
+    "width": 406,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "this",
+      "padding",
+      "offset"
+    ]
+  },
+  "statusbars_onZero": {
+    "type": "statusbars_onZero",
+    "file": "statusbars_onZero.svg",
+    "width": 408,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "kind",
+      "HANDLER_DRAG_PARAM_status",
+      "HANDLER"
+    ]
+  },
+  "statusbars_postprocessDisplay": {
+    "type": "statusbars_postprocessDisplay",
+    "file": "statusbars_postprocessDisplay.svg",
+    "width": 580,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "kind",
+      "HANDLER_DRAG_PARAM_status",
+      "HANDLER_DRAG_PARAM_image",
+      "HANDLER"
+    ]
+  },
+  "statusbars_onStatusReached": {
+    "type": "statusbars_onStatusReached",
+    "file": "statusbars_onStatusReached.svg",
+    "width": 520,
+    "height": 112,
+    "fields": [
+      {
+        "name": "comparison",
+        "text": "≤"
+      },
+      {
+        "name": "comparisonType",
+        "text": "%"
+      }
+    ],
+    "inputs": [
+      "kind",
+      "",
+      "value",
+      "",
+      "HANDLER_DRAG_PARAM_status",
+      "HANDLER"
+    ]
+  },
+  "forever": {
+    "type": "forever",
+    "file": "forever.svg",
+    "width": 160,
+    "height": 104,
+    "fields": [],
+    "inputs": [
+      "",
+      "HANDLER"
+    ]
+  },
+  "device_pause": {
+    "type": "device_pause",
+    "file": "device_pause.svg",
+    "width": 162,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "pause",
+      ""
+    ]
+  },
+  "controls_repeat_ext": {
+    "type": "controls_repeat_ext",
+    "file": "controls_repeat_ext.svg",
+    "width": 169,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "TIMES",
+      "",
+      "DO"
+    ]
+  },
+  "device_while": {
+    "type": "device_while",
+    "file": "device_while.svg",
+    "width": 172,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "COND",
+      "DO"
+    ]
+  },
+  "pxt_controls_for": {
+    "type": "pxt_controls_for",
+    "file": "pxt_controls_for.svg",
+    "width": 296,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "VAR",
+      "TO",
+      "DO"
+    ]
+  },
+  "pxt_controls_for_of": {
+    "type": "pxt_controls_for_of",
+    "file": "pxt_controls_for_of.svg",
+    "width": 338,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "VAR",
+      "LIST",
+      "DO"
+    ]
+  },
+  "pxt-on-start": {
+    "type": "pxt-on-start",
+    "file": "pxt-on-start.svg",
+    "width": 160,
+    "height": 104,
+    "fields": [],
+    "inputs": [
+      "",
+      "HANDLER"
+    ]
+  },
+  "controls_if": {
+    "type": "controls_if",
+    "file": "controls_if.svg",
+    "width": 195,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "IF0",
+      "THEN0",
+      "DO0",
+      "ADDBUTTON"
+    ]
+  },
+  "controls_if_else": {
+    "type": "controls_if",
+    "file": "controls_if_else.svg",
+    "width": 195,
+    "height": 184,
+    "fields": [],
+    "inputs": [
+      "IF0",
+      "THEN0",
+      "DO0",
+      "ELSETITLE",
+      "ELSEBUTTONS",
+      "ELSE",
+      "ADDBUTTON"
+    ]
+  },
+  "logic_compare_eq": {
+    "type": "logic_compare",
+    "file": "logic_compare_eq.svg",
+    "width": 181,
+    "height": 40,
+    "fields": [
+      {
+        "name": "OP",
+        "text": "="
+      }
+    ],
+    "inputs": [
+      "A",
+      "B"
+    ]
+  },
+  "logic_compare_lt": {
+    "type": "logic_compare",
+    "file": "logic_compare_lt.svg",
+    "width": 181,
+    "height": 40,
+    "fields": [
+      {
+        "name": "OP",
+        "text": "‏<"
+      }
+    ],
+    "inputs": [
+      "A",
+      "B"
+    ]
+  },
+  "logic_operation_and": {
+    "type": "logic_operation",
+    "file": "logic_operation_and.svg",
+    "width": 191,
+    "height": 40,
+    "fields": [
+      {
+        "name": "OP",
+        "text": "and"
+      }
+    ],
+    "inputs": [
+      "A",
+      "B"
+    ]
+  },
+  "logic_operation_or": {
+    "type": "logic_operation",
+    "file": "logic_operation_or.svg",
+    "width": 182,
+    "height": 40,
+    "fields": [
+      {
+        "name": "OP",
+        "text": "or"
+      }
+    ],
+    "inputs": [
+      "A",
+      "B"
+    ]
+  },
+  "logic_negate": {
+    "type": "logic_negate",
+    "file": "logic_negate.svg",
+    "width": 111,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "BOOL"
+    ]
+  },
+  "logic_boolean_true": {
+    "type": "logic_boolean",
+    "file": "logic_boolean_true.svg",
+    "width": 112,
+    "height": 40,
+    "fields": [
+      {
+        "name": "BOOL",
+        "text": "true"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "logic_boolean_false": {
+    "type": "logic_boolean",
+    "file": "logic_boolean_false.svg",
+    "width": 120,
+    "height": 40,
+    "fields": [
+      {
+        "name": "BOOL",
+        "text": "false"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "math_arithmetic_add": {
+    "type": "math_arithmetic",
+    "file": "math_arithmetic_add.svg",
+    "width": 149,
+    "height": 40,
+    "fields": [
+      {
+        "name": "OP",
+        "text": "+"
+      }
+    ],
+    "inputs": [
+      "A",
+      "B"
+    ]
+  },
+  "math_arithmetic_minus": {
+    "type": "math_arithmetic",
+    "file": "math_arithmetic_minus.svg",
+    "width": 149,
+    "height": 40,
+    "fields": [
+      {
+        "name": "OP",
+        "text": "-"
+      }
+    ],
+    "inputs": [
+      "A",
+      "B"
+    ]
+  },
+  "math_arithmetic_multiply": {
+    "type": "math_arithmetic",
+    "file": "math_arithmetic_multiply.svg",
+    "width": 149,
+    "height": 40,
+    "fields": [
+      {
+        "name": "OP",
+        "text": "×"
+      }
+    ],
+    "inputs": [
+      "A",
+      "B"
+    ]
+  },
+  "math_arithmetic_divide": {
+    "type": "math_arithmetic",
+    "file": "math_arithmetic_divide.svg",
+    "width": 149,
+    "height": 40,
+    "fields": [
+      {
+        "name": "OP",
+        "text": "/"
+      }
+    ],
+    "inputs": [
+      "A",
+      "B"
+    ]
+  },
+  "device_random": {
+    "type": "device_random",
+    "file": "device_random.svg",
+    "width": 236,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "min",
+      "limit"
+    ]
+  },
+  "percentchance": {
+    "type": "percentchance",
+    "file": "percentchance.svg",
+    "width": 159,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "percentage",
+      ""
+    ]
+  },
+  "tileScanner_scanInDirection": {
+    "type": "tileScanner_scanInDirection",
+    "file": "tileScanner_scanInDirection.svg",
+    "width": 571,
+    "height": 48,
+    "fields": [
+      {
+        "name": "direction",
+        "text": "top"
+      }
+    ],
+    "inputs": [
+      "origin",
+      "",
+      "maxTileDistance",
+      "rule",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_bfs": {
+    "type": "tileScanner_bfs",
+    "file": "tileScanner_bfs.svg",
+    "width": 378,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "origin",
+      "maxTileDistance",
+      "rule",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_getAllMatchingLocations": {
+    "type": "tileScanner_getAllMatchingLocations",
+    "file": "tileScanner_getAllMatchingLocations.svg",
+    "width": 472,
+    "height": 66,
+    "fields": [],
+    "inputs": [
+      "rule",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_getAdjacentLocations": {
+    "type": "tileScanner_getAdjacentLocations",
+    "file": "tileScanner_getAdjacentLocations.svg",
+    "width": 527,
+    "height": 48,
+    "fields": [
+      {
+        "name": "mode",
+        "text": "adjacent"
+      }
+    ],
+    "inputs": [
+      "",
+      "origin",
+      "rule",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_scanForLines": {
+    "type": "tileScanner_scanForLines",
+    "file": "tileScanner_scanForLines.svg",
+    "width": 577,
+    "height": 66,
+    "fields": [
+      {
+        "name": "lineType",
+        "text": "horizontal"
+      }
+    ],
+    "inputs": [
+      "",
+      "rule",
+      "minLength",
+      "maxLength",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_scanForGroups": {
+    "type": "tileScanner_scanForGroups",
+    "file": "tileScanner_scanForGroups.svg",
+    "width": 455,
+    "height": 66,
+    "fields": [],
+    "inputs": [
+      "rule",
+      "minSize",
+      "maxSize",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_matchesRule": {
+    "type": "tileScanner_matchesRule",
+    "file": "tileScanner_matchesRule.svg",
+    "width": 568,
+    "height": 66,
+    "fields": [],
+    "inputs": [
+      "location",
+      "rule",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_tileIs": {
+    "type": "tileScanner_tileIs",
+    "file": "tileScanner_tileIs.svg",
+    "width": 162,
+    "height": 58,
+    "fields": [],
+    "inputs": [
+      "tile"
+    ]
+  },
+  "tileScanner_isWall": {
+    "type": "tileScanner_isWall",
+    "file": "tileScanner_isWall.svg",
+    "width": 165,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      ""
+    ]
+  },
+  "tileScanner_isInsideMap": {
+    "type": "tileScanner_isInsideMap",
+    "file": "tileScanner_isInsideMap.svg",
+    "width": 218,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      ""
+    ]
+  },
+  "tileScanner_comparison": {
+    "type": "tileScanner_comparison",
+    "file": "tileScanner_comparison.svg",
+    "width": 284,
+    "height": 40,
+    "fields": [
+      {
+        "name": "property",
+        "text": "column"
+      },
+      {
+        "name": "op",
+        "text": "="
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "value"
+    ]
+  },
+  "tileScanner_borders": {
+    "type": "tileScanner_borders",
+    "file": "tileScanner_borders.svg",
+    "width": 367,
+    "height": 66,
+    "fields": [
+      {
+        "name": "mode",
+        "text": "adjacent"
+      }
+    ],
+    "inputs": [
+      "rule",
+      "0_optional_field0",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_bordersSides": {
+    "type": "tileScanner_bordersSides",
+    "file": "tileScanner_bordersSides.svg",
+    "width": 532,
+    "height": 66,
+    "fields": [],
+    "inputs": [
+      "rule",
+      "sideGroups"
+    ]
+  },
+  "tileScanner_not": {
+    "type": "tileScanner_not",
+    "file": "tileScanner_not.svg",
+    "width": 212,
+    "height": 66,
+    "fields": [],
+    "inputs": [
+      "rule"
+    ]
+  },
+  "tileScanner_and": {
+    "type": "tileScanner_and",
+    "file": "tileScanner_and.svg",
+    "width": 187,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "arg1",
+      "arg2",
+      "arg3",
+      "arg4",
+      "arg5",
+      "arg6",
+      "arg7",
+      "arg8",
+      "arg9",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_or": {
+    "type": "tileScanner_or",
+    "file": "tileScanner_or.svg",
+    "width": 178,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "arg1",
+      "arg2",
+      "arg3",
+      "arg4",
+      "arg5",
+      "arg6",
+      "arg7",
+      "arg8",
+      "arg9",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_setTileAtLocations": {
+    "type": "tileScanner_setTileAtLocations",
+    "file": "tileScanner_setTileAtLocations.svg",
+    "width": 339,
+    "height": 66,
+    "fields": [],
+    "inputs": [
+      "tile",
+      "locations",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_setWallAtLocations": {
+    "type": "tileScanner_setWallAtLocations",
+    "file": "tileScanner_setWallAtLocations.svg",
+    "width": 405,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "isWall",
+      "locations",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_filterLocations": {
+    "type": "tileScanner_filterLocations",
+    "file": "tileScanner_filterLocations.svg",
+    "width": 453,
+    "height": 66,
+    "fields": [],
+    "inputs": [
+      "locations",
+      "rule",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_overlapsSprite": {
+    "type": "tileScanner_overlapsSprite",
+    "file": "tileScanner_overlapsSprite.svg",
+    "width": 418,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "locations",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_indexOfLocation": {
+    "type": "tileScanner_indexOfLocation",
+    "file": "tileScanner_indexOfLocation.svg",
+    "width": 479,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "locations",
+      "toFind"
+    ]
+  },
+  "tileScanner_containsLocation": {
+    "type": "tileScanner_containsLocation",
+    "file": "tileScanner_containsLocation.svg",
+    "width": 519,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "locations",
+      "toFind"
+    ]
+  },
+  "tileScanner_calculateMetric": {
+    "type": "tileScanner_calculateMetric",
+    "file": "tileScanner_calculateMetric.svg",
+    "width": 408,
+    "height": 48,
+    "fields": [
+      {
+        "name": "metric",
+        "text": "min column"
+      }
+    ],
+    "inputs": [
+      "locations",
+      "",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "tileScanner_joinLocations": {
+    "type": "tileScanner_joinLocations",
+    "file": "tileScanner_joinLocations.svg",
+    "width": 499,
+    "height": 48,
+    "fields": [
+      {
+        "name": "operation",
+        "text": "concatenate"
+      }
+    ],
+    "inputs": [
+      "",
+      "a",
+      "b"
+    ]
+  },
+  "tileScanner_deduplicateLocations": {
+    "type": "tileScanner_deduplicateLocations",
+    "file": "tileScanner_deduplicateLocations.svg",
+    "width": 262,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "locations"
+    ]
+  },
+  "tileScanner_sortByDistance": {
+    "type": "tileScanner_sortByDistance",
+    "file": "tileScanner_sortByDistance.svg",
+    "width": 611,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "locations",
+      "origin"
+    ]
+  },
+  "tileScanner_sortByColumnRow": {
+    "type": "tileScanner_sortByColumnRow",
+    "file": "tileScanner_sortByColumnRow.svg",
+    "width": 385,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "locations",
+      ""
+    ]
+  },
+  "tileScanner_updateTiles": {
+    "type": "tileScanner_updateTiles",
+    "file": "tileScanner_updateTiles.svg",
+    "width": 556,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "outlineSprite",
+      "locations"
+    ]
+  },
+  "tileScanner_setOutlineColor": {
+    "type": "tileScanner_setOutlineColor",
+    "file": "tileScanner_setOutlineColor.svg",
+    "width": 438,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "outlineSprite",
+      "color"
+    ]
+  },
+  "tileScanner_setOutlineThickness": {
+    "type": "tileScanner_setOutlineThickness",
+    "file": "tileScanner_setOutlineThickness.svg",
+    "width": 473,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "outlineSprite",
+      "thickness"
+    ]
+  },
+  "tileScanner_createOverlapTester": {
+    "type": "tileScanner_createOverlapTester",
+    "file": "tileScanner_createOverlapTester.svg",
+    "width": 591,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "locations",
+      "kind",
+      "map",
+      "0_add_button"
+    ]
+  },
+  "run_image_animation": {
+    "type": "run_image_animation",
+    "file": "run_image_animation.svg",
+    "width": 207,
+    "height": 202,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "frames",
+      "frameInterval",
+      "loop"
+    ]
+  },
+  "run_movement_animation": {
+    "type": "run_movement_animation",
+    "file": "run_movement_animation.svg",
+    "width": 218,
+    "height": 184,
+    "fields": [],
+    "inputs": [
+      "sprite",
+      "pathString",
+      "duration",
+      "loop"
+    ]
+  },
+  "stop_animations": {
+    "type": "stop_animations",
+    "file": "stop_animations.svg",
+    "width": 367,
+    "height": 56,
+    "fields": [
+      {
+        "name": "type",
+        "text": "all"
+      }
+    ],
+    "inputs": [
+      "",
+      "sprite"
+    ]
+  },
+  "Image_replace": {
+    "type": "Image_replace",
+    "file": "Image_replace.svg",
+    "width": 427,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "picture",
+      "from",
+      "to"
+    ]
+  },
+  "Image_equals": {
+    "type": "Image_equals",
+    "file": "Image_equals.svg",
+    "width": 404,
+    "height": 58,
+    "fields": [],
+    "inputs": [
+      "this",
+      "other"
+    ]
+  },
+  "lists_create_with": {
+    "type": "lists_create_with",
+    "file": "lists_create_with.svg",
+    "width": 153,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "EMPTY",
+      "BUTTONS"
+    ]
+  },
+  "lists_length": {
+    "type": "lists_length",
+    "file": "lists_length.svg",
+    "width": 236,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "VALUE"
+    ]
+  },
+  "lists_index_get": {
+    "type": "lists_index_get",
+    "file": "lists_index_get.svg",
+    "width": 249,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "LIST",
+      "INDEX"
+    ]
+  },
+  "array_removeat": {
+    "type": "array_removeat",
+    "file": "array_removeat.svg",
+    "width": 346,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "list",
+      "index"
+    ]
+  },
+  "array_pop": {
+    "type": "array_pop",
+    "file": "array_pop.svg",
+    "width": 368,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "list"
+    ]
+  },
+  "array_shift": {
+    "type": "array_shift",
+    "file": "array_shift.svg",
+    "width": 376,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "list"
+    ]
+  },
+  "array_pickRandom": {
+    "type": "array_pickRandom",
+    "file": "array_pickRandom.svg",
+    "width": 288,
+    "height": 48,
+    "fields": [],
+    "inputs": [
+      "list"
+    ]
+  },
+  "array_push": {
+    "type": "array_push",
+    "file": "array_push.svg",
+    "width": 340,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "list",
+      "value",
+      ""
+    ]
+  },
+  "text": {
+    "type": "text",
+    "file": "text.svg",
+    "width": 48,
+    "height": 40,
+    "fields": [
+      {
+        "name": "TEXT",
+        "text": ""
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "text_join": {
+    "type": "text_join",
+    "file": "text_join.svg",
+    "width": 304,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "TITLE",
+      "ADD0",
+      "ADD1",
+      "BUTTONS"
+    ]
+  },
+  "device_pause_2": {
+    "type": "device_pause",
+    "file": "device_pause_2.svg",
+    "width": 162,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "pause",
+      ""
+    ]
+  },
+  "array_push_2": {
+    "type": "array_push",
+    "file": "array_push_2.svg",
+    "width": 340,
+    "height": 56,
+    "fields": [],
+    "inputs": [
+      "list",
+      "value",
+      ""
+    ]
+  },
+  "allOfKind_2": {
+    "type": "allOfKind",
+    "file": "allOfKind_2.svg",
+    "width": 332,
+    "height": 40,
+    "fields": [],
+    "inputs": [
+      "kind"
+    ]
+  },
+  "sprites_destroy_all_sprites_of_kind_2": {
+    "type": "sprites_destroy_all_sprites_of_kind",
+    "file": "sprites_destroy_all_sprites_of_kind_2.svg",
+    "width": 391,
+    "height": 56,
+    "fields": [
+      {
+        "name": "effect",
+        "text": "spray"
+      }
+    ],
+    "inputs": [
+      "kind",
+      "",
+      "0_optional_field0",
+      "duration",
+      "0_optional_dummy1",
+      "0_add_button"
+    ]
+  },
+  "spritesoncreated_2": {
+    "type": "spritesoncreated",
+    "file": "spritesoncreated_2.svg",
+    "width": 364,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "HANDLER_DRAG_PARAM_sprite",
+      "kind",
+      "HANDLER"
+    ]
+  },
+  "spritesondestroyed_2": {
+    "type": "spritesondestroyed",
+    "file": "spritesondestroyed_2.svg",
+    "width": 381,
+    "height": 112,
+    "fields": [],
+    "inputs": [
+      "HANDLER_DRAG_PARAM_sprite",
+      "kind",
+      "",
+      "HANDLER"
+    ]
+  },
+  "variables_set_mySprite_spritescreate": {
+    "type": "variables_set",
+    "file": "variables_set_mySprite_spritescreate.svg",
+    "width": 522,
+    "height": 74,
+    "fields": [
+      {
+        "name": "VAR",
+        "text": "mySprite"
+      }
+    ],
+    "inputs": [
+      "VALUE"
+    ]
+  },
+  "variables_set_number": {
+    "type": "variables_set",
+    "file": "variables_set_number.svg",
+    "width": 201,
+    "height": 56,
+    "fields": [
+      {
+        "name": "VAR",
+        "text": "item"
+      }
+    ],
+    "inputs": [
+      "VALUE"
+    ]
+  },
+  "variables_change_number": {
+    "type": "variables_change",
+    "file": "variables_change_number.svg",
+    "width": 222,
+    "height": 56,
+    "fields": [
+      {
+        "name": "VAR",
+        "text": "item"
+      }
+    ],
+    "inputs": [
+      "VALUE"
+    ]
+  },
+  "variables_get": {
+    "type": "variables_get",
+    "file": "variables_get.svg",
+    "width": 115,
+    "height": 40,
+    "fields": [
+      {
+        "name": "VAR",
+        "text": "mySprite"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
   }
 }

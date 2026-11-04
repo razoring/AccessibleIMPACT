@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" width="60" height="40">
+<style>
+.blocklyText { font-family: Consolas, Monaco, Menlo, "Ubuntu Mono", monospace; font-size: 16px; font-weight: 600; fill: #fff; }
+.blocklyNonEditableText > text { pointer-events: none; }
+.blocklyDropdownText { fill: #fff; }
+</style>
+<g class="hudLife blocklyBlock blocklyDraggable" data-id="~yJ7RniWQ`T{,f,nlZk%" style="opacity: 1;"><path class="blocklyPath" id="blockly-3uf" stroke="#9b5065" fill="#cf6a87" d=" m 20,0  h 19.1875 a 20 20 0 0,1 20,20  v 0 a 20 20 0 0,1 -20,20  V 40  h -19.1875 a 20 20 0 0,1 -20,-20  v 0 a 20 20 0 0,1 20,-20 z
+" style="opacity: 1;"></path><g id="~yJ7RniWQ`T{,f,nlZk%_field_blockly-3ug" class="blocklyLabelField" transform="translate(12,10.5)" style="opacity: 1;"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="opacity: 1;">life</text></g></g>
+</svg>

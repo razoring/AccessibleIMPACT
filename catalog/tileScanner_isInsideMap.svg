@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 218 40" width="218" height="40">
+<style>
+.blocklyText { font-family: Consolas, Monaco, Menlo, "Ubuntu Mono", monospace; font-size: 16px; font-weight: 600; fill: #fff; }
+.blocklyNonEditableText > text { pointer-events: none; }
+.blocklyDropdownText { fill: #fff; }
+</style>
+<g class="tileScanner_isInsideMap blocklyBlock blocklyDraggable" data-id="-:wvV=+Ft:9Lgh-fSBfv" style="opacity: 1;"><path class="blocklyPath" id="blockly-4g5" stroke="#374a80" fill="#4963ab" d=" m 20,0  h 177.53125 a 20 20 0 0,1 20,20  v 0 a 20 20 0 0,1 -20,20  V 40  h -177.53125 a 20 20 0 0,1 -20,-20  v 0 a 20 20 0 0,1 20,-20 z
+" style="opacity: 1;"></path><g id="-:wvV=+Ft:9Lgh-fSBfv_field_blockly-4g6" class="blocklyLabelField" transform="translate(12,10.5)" style="opacity: 1;"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="opacity: 1;">location&nbsp;is&nbsp;inside&nbsp;map</text></g></g>
+</svg>

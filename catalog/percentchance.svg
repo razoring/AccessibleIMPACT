@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 159 40" width="159" height="40">
+<style>
+.blocklyText { font-family: Consolas, Monaco, Menlo, "Ubuntu Mono", monospace; font-size: 16px; font-weight: 600; fill: #fff; }
+.blocklyNonEditableText > text { pointer-events: none; }
+.blocklyDropdownText { fill: #fff; }
+</style>
+<g class="percentchance blocklyBlock blocklyDraggable" data-id="%B|TE2/}dSY-pX,5pTgD" style="opacity: 1;"><path class="blocklyPath" id="blockly-49h" stroke="#7c47b0" fill="#a55eea" d=" m 20,0  h 118.375  l 20,20  l -20,20  V 40  h -118.375  l -20,-20  l 20,-20 z
+" style="opacity: 1;"></path><g class="math_number_minmax blocklyBlock field_blocks blocklyDraggable blocklyShadow" data-id="KyT9]3U::H793MDqJhwP" style="display: block; opacity: 1;" transform="translate(20, 4)"><path class="blocklyPath" id="blockly-49l" stroke="#bfbfbf" fill="#fff" d=" m 16,0  h 8 a 16 16 0 0,1 16,16  v 0 a 16 16 0 0,1 -16,16  V 32  h -8 a 16 16 0 0,1 -16,-16  v 0 a 16 16 0 0,1 16,-16 z
+" style="opacity: 1;"></path><g id="KyT9]3U::H793MDqJhwP_field_blockly-49m" class="blocklyField blocklyInputField blocklyNumberField blocklyEditableField" transform="translate(13,6.5)" style="opacity: 1;"><rect rx="4" ry="4" x="0" y="0" height="19" width="14" class="blocklyFieldRect" style="display: none; opacity: 1;"></rect><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="2.6015625" y="9.5" style="opacity: 1;">0</text></g></g><g id="%B|TE2/}dSY-pX,5pTgD_field_blockly-49j" class="blocklyLabelField" transform="translate(68,10.5)" style="opacity: 1;"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="opacity: 1;">%&nbsp;chance</text></g><path id="%B|TE2/}dSY-pX,5pTgD_connection_blockly-49i" class="blocklyHighlightedConnectionPath" style="display: none; opacity: 1;" d=" M 16,-16  h 8 a 16 16 0 0,1 16,16  v 0 a 16 16 0 0,1 -16,16  h -8 a 16 16 0 0,1 -16,-16  v 0 a 16 16 0 0,1 16,-16 z" transform="translate(20, 20)"></path><g class="blocklyConnectionIndicatorParent" style="opacity: 1;"></g></g>
+</svg>
