@@ -473,7 +473,7 @@
     {
       "id": "statusbars_create",
       "category": "statusbars",
-      "pattern": "^(?:set\\s+\\[?(statusbar)\\]?\\s+to.*|create\\s+status\\s*bar.*)",
+      "pattern": "^(?:set\\s+\\[?(?:statusbar\\d*|sb\\d*)\\]?\\s+to.*|create\\s+status\\s*bar.*)",
       "template": "variables_set_statusbar_statusbars_create",
       "blockType": "variables_set",
       "params": {
@@ -511,6 +511,16 @@
       "params": {
         "prop": 1,
         "val": 2
+      }
+    },
+    {
+      "id": "statusbars_set_color",
+      "category": "statusbars",
+      "pattern": "^set\\s+(?:\\(statusbar\\)|statusbar)\\s+fill\\s+background",
+      "template": "statusbars_setColor",
+      "blockType": "statusbars_setColor",
+      "params": {
+        "varName": "statusbar"
       }
     },
     {

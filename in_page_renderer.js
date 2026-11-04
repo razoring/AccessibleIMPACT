@@ -2462,7 +2462,9 @@
       let best = null;
       let highestScore = 0;
 
+      const isMpActive = /multiplayer|mp\.|player\s*[234]/i.test(document.body ? document.body.innerText : '');
       for (const b of catalog) {
+        if (b.type && b.type.startsWith('mp_') && !isMpActive) continue;
         let score = (jaccardSimilarity(wTok, b.words) * 0.5) + (diceSimilarity(bgTok, b.bigrams) * 0.5);
         if (b.normText.length >= 4) {
           if (norm === b.normText) {
@@ -2497,7 +2499,7 @@
       if (['background image'].includes(name.toLowerCase())) {
         return { confidence: 1.0, type: 'gamebackgroundimage', name: raw };
       }
-      if (['othersprite', 'sprite', 'location', 'picture'].includes(name.toLowerCase())) {
+      if (['othersprite', 'location', 'picture'].includes(name.toLowerCase())) {
         return {
           confidence: 1.0,
           type: 'argument_reporter_custom',

@@ -112,17 +112,41 @@
     }
     if (!params) return s;
 
-    // 1. Variable name replacement
+    // 1. Variable name replacement & dynamic pill stretch for variables_get
     if (params.varName) {
       const v = escapeXml(params.varName);
-      s = s.replace(/>mySprite</g, `>${v}<`);
-      s = s.replace(/>projectile</g, `>${v}<`);
-      s = s.replace(/>sprite</g, `>${v}<`);
-      s = s.replace(/>statusbar</g, `>${v}<`);
-      s = s.replace(/>item</g, `>${v}<`);
+      if (s.includes('class="variables_get ') && !s.includes('variables_set')) {
+        const charWidth = 9.5;
+        const textWidth = Math.max(30, v.length * charWidth);
+        const hStretch = Math.round(textWidth + 16);
+        const totalWidth = hStretch + 44;
+
+        s = s.replace(/viewBox="0 0 \d+ 40"/, `viewBox="0 0 ${totalWidth} 40"`);
+        s = s.replace(/width="\d+"/, `width="${totalWidth}"`);
+        s = s.replace(/h\s+74\.375/, `h ${hStretch}`);
+        s = s.replace(/h\s+-74\.375/, `h -${hStretch}`);
+        s = s.replace(/>mySprite<\/text>/, `>${v}<\/text>`);
+        const arrowX = Math.round(textWidth + 18);
+        s = s.replace(/transform="translate\([0-9\.]+,3\.5\)"/, `transform="translate(${arrowX},3.5)"`);
+        s = s.replace(/width="90\.375"/, `width="${hStretch + 16}"`);
+      } else {
+        s = s.replace(/>mySprite</g, `>${v}<`);
+        s = s.replace(/>projectile</g, `>${v}<`);
+        s = s.replace(/>sprite</g, `>${v}<`);
+        s = s.replace(/>statusbar</g, `>${v}<`);
+        s = s.replace(/>item</g, `>${v}<`);
+      }
     }
 
     // 2. Kind replacement
+    if (params.kind1) {
+      const k1 = escapeXml(params.kind1);
+      s = s.replace(/>Player</, `>${k1}<`);
+    }
+    if (params.kind2) {
+      const k2 = escapeXml(params.kind2);
+      s = s.replace(/>Player</, `>${k2}<`);
+    }
     if (params.kind) {
       const k = escapeXml(params.kind);
       s = s.replace(/>Player</g, `>${k}<`);
@@ -251,6 +275,26 @@
     return null;
   }
 
+  function getActiveCategories(stepText, overallText) {
+    const combined = ((stepText || '') + ' ' + (overallText || '')).toLowerCase();
+    const active = new Set(['variables', 'common', 'logic', 'loops', 'math']);
+
+    if (/status\s*bars?|statusbar/i.test(combined)) active.add('statusbars');
+    if (/scene|tilemap|camera|background/i.test(combined)) active.add('scene');
+    if (/sprites?|projectile/i.test(combined)) active.add('sprites');
+    if (/controller|button/i.test(combined)) active.add('controller');
+    if (/music|sound|melody|tune/i.test(combined)) active.add('music');
+    if (/tile\s*util/i.test(combined)) active.add('tileUtil');
+    if (/tile\s*scanner/i.test(combined)) active.add('tileScanner');
+    if (/scroller/i.test(combined)) active.add('scroller');
+    if (/multiplayer|mp\.|player\s*[234]/i.test(combined)) active.add('mp');
+    if (/animation|animat/i.test(combined)) active.add('animation');
+    if (/game|dialog|splash/i.test(combined)) active.add('game');
+    if (/info|score|life/i.test(combined)) active.add('info');
+
+    return active;
+  }
+
   function resolveTokenWithNLP(tokenText, stepText, overallText) {
     if (!tokenText) return null;
     let clean = tokenText.trim();
@@ -260,6 +304,19 @@
       clean = clean.slice(1, -1).trim();
     }
     const cleanFlat = clean.replace(/[\[\]\(\)]/g, ' ').replace(/\s+/g, ' ').trim();
+
+    // Context check 1: Variable references in instructions (e.g. "Click on the (mySprite) variable")
+    const varRegex = new RegExp('(?:variable\\s+[\\[\\(]?' + cleanFlat + '[\\]\\)]?|[\\[\\(]?' + cleanFlat + '[\\]\\)]?\\s+variable)', 'i');
+    const isExplicitVariable = varRegex.test(stepText || '');
+    const isKnownVarPattern = /^(?:mySprite|customerSprite|burgerMaker|burgerProjectile|customerList|statusbar|item|[a-zA-Z_][a-zA-Z0-9_]*Sprite|[a-zA-Z_][a-zA-Z0-9_]*List)$/i.test(cleanFlat);
+
+    if (isExplicitVariable || (isKnownVarPattern && !cleanFlat.includes(' '))) {
+      return {
+        rule: { id: 'variables_get', category: 'variables' },
+        template: 'variables_get',
+        params: { varName: cleanFlat }
+      };
+    }
 
     // Contextual property / dropdown check
     const ctxCategory = getContextCategory(cleanFlat, stepText, overallText);
@@ -271,11 +328,11 @@
       };
     }
 
-    // Context disambiguation for multiplayer
-    const isMultiplayer = /multiplayer|player\s*[234]|mp\./i.test(stepText || '');
+    // Category whitelist: If the instructions do not include a category, the NLP will not choose it!
+    const activeCategories = getActiveCategories(stepText, overallText);
 
     for (const rule of tokenRules) {
-      if (rule.category === 'mp' && !isMultiplayer) continue;
+      if (rule.category && !activeCategories.has(rule.category)) continue;
 
       const m = cleanFlat.match(rule.regex) || clean.match(rule.regex);
       if (m) {
@@ -342,9 +399,15 @@
       const rawSvg = await res.text();
       const mutatedSvg = mutateSvgWithParams(rawSvg, resolution.params);
 
+      let w = entry.width;
+      const wMatch = mutatedSvg.match(/viewBox="0 0 (\d+) (\d+)"/);
+      if (wMatch) {
+        w = parseInt(wMatch[1], 10);
+      }
+
       return {
         svg: mutatedSvg,
-        width: entry.width,
+        width: w,
         height: entry.height,
         category: entry.type
       };
@@ -425,16 +488,19 @@
         z-index: 10 !important;
       }
       .aifx-rendered.aifx-play-icon {
-        display: inline-block !important;
-        vertical-align: -0.25em !important;
+        display: inline-flex !important;
+        vertical-align: middle !important;
+        align-items: center !important;
+        justify-content: center !important;
         margin: 0 4px !important;
+        position: relative !important;
+        top: -1.5px !important;
         line-height: 1 !important;
       }
       .aifx-rendered.aifx-play-icon svg {
-        display: inline-block !important;
-        vertical-align: middle !important;
-        width: 1.35em !important;
-        height: 1.35em !important;
+        display: block !important;
+        width: 1.25em !important;
+        height: 1.25em !important;
         max-width: none !important;
         filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2)) !important;
         transition: transform 0.15s ease !important;
@@ -444,22 +510,35 @@
         position: relative !important;
         z-index: 10 !important;
       }
+      strong:has(> .aifx-rendered.aifx-multiline),
+      em:has(> .aifx-rendered.aifx-multiline),
+      p:has(> strong > .aifx-rendered.aifx-multiline),
+      p:has(> .aifx-rendered.aifx-multiline) {
+        display: block !important;
+        max-width: 100% !important;
+      }
       .aifx-rendered.aifx-multiline {
         display: block !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+        overflow-y: hidden !important;
         margin: 12px 0 !important;
+        padding-bottom: 2px !important;
         clear: both !important;
         text-align: left !important;
         line-height: normal !important;
+        box-sizing: border-box !important;
       }
       .aifx-rendered.aifx-multiline svg {
         display: block !important;
-        height: auto !important;
+        width: 100% !important;
         max-width: 100% !important;
+        height: auto !important;
         filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)) !important;
         transition: transform 0.15s ease !important;
       }
       .aifx-rendered.aifx-multiline:hover svg {
-        transform: scale(1.03) !important;
+        transform: scale(1.02) !important;
         position: relative !important;
         z-index: 10 !important;
       }
@@ -477,7 +556,8 @@
     if (!span || !data || !data.svg) return;
     const tokenText = span.getAttribute('data-token') || '';
     const isPlayIcon = (tokenText === '▶' || tokenText === '[▶]');
-    const isMultiLine = !isPlayIcon && (data.isMultiLine || data.height > 70);
+    const isStatementBlock = data.svg && (data.svg.includes('class="variables_set') || data.svg.includes('gameinterval') || data.svg.includes('statusbars_create') || data.svg.includes('StatusBarSprite_blockCombine_set')) && !data.svg.includes('class="variables_get');
+    const isMultiLine = !isPlayIcon && (data.isMultiLine || data.height > 70 || data.width > 260 || isStatementBlock);
     span.className = 'aifx-rendered ' + (isPlayIcon ? 'aifx-play-icon' : (isMultiLine ? 'aifx-multiline' : 'aifx-inline'));
     span.innerHTML = data.svg;
     span.setAttribute('data-rendered', 'true');
@@ -487,17 +567,13 @@
       if (isPlayIcon) {
         svgEl.style.display = 'inline-block';
         svgEl.style.verticalAlign = 'middle';
-        svgEl.style.setProperty('width', '1.35em', 'important');
-        svgEl.style.setProperty('height', '1.35em', 'important');
+        svgEl.style.setProperty('width', '1.25em', 'important');
+        svgEl.style.setProperty('height', '1.25em', 'important');
       } else if (isMultiLine) {
         svgEl.style.display = 'block';
-        // Benchmark: scale factor 2.25 / 44 keeps font size consistent at ~13-14px visual (17px text bounding box)
-        const emScale = 2.25 / 44;
-        const emWidth = ((data.width || 100) * emScale).toFixed(3);
-        const emHeight = ((data.height || 70) * emScale).toFixed(3);
-        svgEl.style.setProperty('width', `${emWidth}em`, 'important');
-        svgEl.style.setProperty('height', `${emHeight}em`, 'important');
-        svgEl.style.maxWidth = '100%';
+        svgEl.style.setProperty('width', '100%', 'important');
+        svgEl.style.setProperty('max-width', '100%', 'important');
+        svgEl.style.setProperty('height', 'auto', 'important');
       } else {
         svgEl.style.display = 'inline-block';
         svgEl.style.verticalAlign = 'middle';
