@@ -417,6 +417,28 @@
       } catch (e) {}
     }
 
+    // 9c. Array pick random: (get random value from (list)), get random value from list
+    if (/get\s+random\s+value\s+from/i.test(raw)) {
+      try {
+        const m = raw.match(/get\s+random\s+value\s+from\s*\(?([a-zA-Z0-9_ ]+)\)?/i);
+        const listName = m && m[1] ? m[1].trim() : 'list';
+        const ab = ws.newBlock('array_pickRandom');
+        const listInput = ab.getInput('list');
+        if (listInput && listInput.connection) {
+          const listBlock = ws.newBlock('variables_get');
+          const v = ensureVariable(ws, listName);
+          const fv = listBlock.getField('VAR');
+          if (fv && v) fv.setValue(v.getId());
+          listBlock.initSvg();
+          listBlock.render();
+          listInput.connection.connect(listBlock.outputConnection);
+        }
+        ab.initSvg();
+        ab.render();
+        return ab;
+      } catch (e) {}
+    }
+
     // 10. Default: Variable getter
     try {
       const vb = ws.newBlock('variables_get');
@@ -958,7 +980,7 @@
     if (!B.Blocks['scroller_scrollBackgroundWithCamera']) {
       B.Blocks['scroller_scrollBackgroundWithCamera'] = {
         init: function () {
-          this.setColour('#4b6584');
+          this.setColour('#ff85a7');
           this.appendDummyInput()
             .appendField('scroll background with camera')
             .appendField(new B.FieldDropdown([
@@ -975,7 +997,7 @@
     if (!B.Blocks['scroller_setBackgroundScrollOffset']) {
       B.Blocks['scroller_setBackgroundScrollOffset'] = {
         init: function () {
-          this.setColour('#4b6584');
+          this.setColour('#ff85a7');
           this.appendDummyInput()
             .appendField('set background offset to')
             .appendField('x')
@@ -991,7 +1013,7 @@
     if (!B.Blocks['scroller_mode_bubble']) {
       B.Blocks['scroller_mode_bubble'] = {
         init: function () {
-          this.setColour('#4b6584');
+          this.setColour('#ff85a7');
           this.appendDummyInput().appendField(new B.FieldDropdown([
             ['only vertically', 'OnlyVertical'],
             ['only horizontally', 'OnlyHorizontal']
@@ -1049,6 +1071,19 @@
             ]), 'withTile');
           this.setPreviousStatement(true);
           this.setNextStatement(true);
+        }
+      };
+    }
+
+    if (!B.Blocks['function_definition']) {
+      B.Blocks['function_definition'] = {
+        init: function () {
+          this.setColour('#00aaaa');
+          this.appendDummyInput()
+            .appendField('function')
+            .appendField(new B.FieldTextInput('doSomething'), 'function_name');
+          this.appendStatementInput('STACK');
+          this.setInputsInline(true);
         }
       };
     }
@@ -1845,7 +1880,78 @@
     { match: /^\[?\s*set\s+background\s+color\s+to(?:\s*\(color\))?\s*\]?$/i, type: 'gamesetbackgroundcolor', conf: 1.0 },
     { match: /^\[?\s*set\s+background\s+image(?:\s+to)?\s*\]?$/i, type: 'gamesetbackgroundimage', conf: 1.0 },
     { match: /^\(?\s*background\s+image\s*\)?$/i, type: 'gamebackgroundimage', conf: 1.0 },
-    { match: /^\[?\s*change\s+color\s+in\s+.*from.*to.*\]?$/i, type: 'Image_replace', conf: 1.0 },
+    {
+      match: /^\[?\s*change\s+color\s+in\s+.*from.*to.*\]?$/i,
+      type: 'Image_replace',
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/change\s+color\s+in\s*\(?([a-zA-Z0-9_]+)\)?(?:\s+from\s*\(?([a-zA-Z0-9_]*)\)?)?(?:\s+to\s*\(?([a-zA-Z0-9_]*)\)?)?/i);
+        const picName = (m && m[1] && m[1].toLowerCase() !== 'picture') ? m[1] : 'picture';
+        const fromVal = m && m[2] ? m[2].trim() : '';
+        const toVal = m && m[3] ? m[3].trim() : '';
+
+        // Only wire the picture variable into 'this' input
+        const inThis = b.getInput('this') || b.getInput('picture');
+        if (inThis && inThis.connection && !inThis.connection.targetConnection) {
+          try {
+            const vb = ws.newBlock('variables_get');
+            vb.setShadow(true);
+            const v = ensureVariable(ws, picName);
+            const fv = vb.getField('VAR');
+            if (fv && v) fv.setValue(v.getId());
+            vb.initSvg();
+            vb.render();
+            inThis.connection.connect(vb.outputConnection);
+          } catch (e) {}
+        }
+
+        // Only wire 'from' and 'to' if explicitly provided with non-empty values
+        if (fromVal) {
+          const inFrom = b.getInput('from');
+          if (inFrom && inFrom.connection && !inFrom.connection.targetConnection) {
+            try {
+              const sub = createSubBlock(fromVal, ws, { B: blockly(), ws });
+              if (sub && sub.outputConnection) inFrom.connection.connect(sub.outputConnection);
+            } catch (e) {}
+          }
+        } else {
+          const inFrom = b.getInput('from');
+          if (inFrom && inFrom.connection && !inFrom.connection.targetConnection) {
+            try {
+              if (ws.newBlock && blockly().Blocks && blockly().Blocks['colorindexpicker']) {
+                const cb = ws.newBlock('colorindexpicker');
+                cb.setShadow(true);
+                cb.initSvg();
+                cb.render();
+                inFrom.connection.connect(cb.outputConnection);
+              }
+            } catch (e) {}
+          }
+        }
+        if (toVal) {
+          const inTo = b.getInput('to');
+          if (inTo && inTo.connection && !inTo.connection.targetConnection) {
+            try {
+              const sub = createSubBlock(toVal, ws, { B: blockly(), ws });
+              if (sub && sub.outputConnection) inTo.connection.connect(sub.outputConnection);
+            } catch (e) {}
+          }
+        } else {
+          const inTo = b.getInput('to');
+          if (inTo && inTo.connection && !inTo.connection.targetConnection) {
+            try {
+              if (ws.newBlock && blockly().Blocks && blockly().Blocks['colorindexpicker']) {
+                const cb = ws.newBlock('colorindexpicker');
+                cb.setShadow(true);
+                cb.initSvg();
+                cb.render();
+                inTo.connection.connect(cb.outputConnection);
+              }
+            } catch (e) {}
+          }
+        }
+      },
+      conf: 1.0
+    },
     { match: /^\[?\s*(?:start\s+screen\s+effect|confetti)\s*\]?$/i, type: 'particlesStartScreenAnimation', conf: 1.0 },
     { match: /^\[?\s*camera\s+follow(?:\s+sprite)?\s*\]?$/i, type: 'camerafollow', conf: 1.0 },
     { match: /^\[?\s*camera\s+shake\s*\]?$/i, type: 'camerashake', conf: 1.0 },
@@ -2055,7 +2161,27 @@
     { match: /^\(?\s*length\s+of\s+array\s*\)?$/i, type: 'lists_length', conf: 1.0 },
     { match: /^\[?\s*(?:list\s+)?add\s+value\s+to\s+end\s*\]?$/i, type: 'array_push', conf: 1.0 },
     { match: /^\(?\s*empty\s+array\s*\)?$/i, type: 'lists_create_with', mutator: (b) => { b.itemCount_ = 0; if (b.updateShape_) b.updateShape_(); }, conf: 1.0 },
-    { match: /^\(?\s*get\s+random\s+value\s+from\s*\(?[a-zA-Z0-9_ ]+\)?\s*\)?$/i, type: 'array_pickRandom', conf: 1.0 }
+    {
+      match: /^\(?\s*get\s+random\s+value\s+from(?:\s*\(?([a-zA-Z0-9_ ]+)\)?)?\s*\)?$/i,
+      type: 'array_pickRandom',
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/get\s+random\s+value\s+from\s*\(?([a-zA-Z0-9_ ]+)\)?/i);
+        const listName = m && m[1] ? m[1].trim() : 'list';
+        const listInput = b.getInput('list');
+        if (listInput && listInput.connection && !listInput.connection.targetConnection) {
+          try {
+            const listBlock = ws.newBlock('variables_get');
+            const v = ensureVariable(ws, listName);
+            const fv = listBlock.getField('VAR');
+            if (fv && v) fv.setValue(v.getId());
+            listBlock.initSvg();
+            listBlock.render();
+            listInput.connection.connect(listBlock.outputConnection);
+          } catch (e) {}
+        }
+      },
+      conf: 1.0
+    }
   ];
 
   function serializeBlock(block) {
@@ -2365,25 +2491,8 @@
             isNumber = true;
           } else if (/^(?:text|str|msg|message|label|format|string)/i.test(name)) {
             isString = true;
-          } else if (/^(?:sprite|mysprite|target|source|agent|from|other)/i.test(name)) {
+          } else if (b.type !== 'Image_replace' && /^(?:sprite|mysprite|target|source|agent|from|other)/i.test(name)) {
             isSprite = true;
-          }
-        }
-
-        // Special handling if rawText contains an argument for this block (e.g. Door1, or variable name)
-        if (rawText && (isSprite || isNumber || isString || !shadowType)) {
-          const mArg = rawText.match(/\(\s*([a-zA-Z0-9_]+)\s*\)/);
-          if (mArg && mArg[1]) {
-            const arg = mArg[1].trim();
-            if (!['img', 'kind', 'sprite', 'direction', 'bubble'].includes(arg.toLowerCase())) {
-              try {
-                const sub = createSubBlock(arg, ws, { B, ws });
-                if (sub && sub.outputConnection) {
-                  input.connection.connect(sub.outputConnection);
-                  continue;
-                }
-              } catch (e) {}
-            }
           }
         }
 
@@ -2457,8 +2566,34 @@
       }
       if (!b) return null;
 
+      if (type === 'controls_if' || type === 'controls_if_else') {
+        b.setColour('#45aaf2');
+        if (b.inputList) {
+          for (const inp of b.inputList) {
+            for (const f of inp.fieldRow) {
+              if (f && f.getText && f.getText().trim().toLowerCase() === 'do' && f.setValue) {
+                f.setValue('then');
+              }
+            }
+          }
+        }
+      }
+
       if (mutator) mutator(b, tc.ws, rawText);
       populateDefaultShadows(b, tc.ws, tc.B, rawText);
+
+      if (type === 'controls_if' || type === 'controls_if_else') {
+        b.setColour('#45aaf2');
+        if (b.inputList) {
+          for (const inp of b.inputList) {
+            for (const f of inp.fieldRow) {
+              if (f && f.getText && f.getText().trim().toLowerCase() === 'do' && f.setValue) {
+                f.setValue('then');
+              }
+            }
+          }
+        }
+      }
 
       b.initSvg();
       b.render();
@@ -2859,14 +2994,16 @@
     // 0. Filter out parenthetical English prose side comments (confidence < 80%)
     if (raw.startsWith('(') && raw.endsWith(')')) {
       if (!parseMath(raw)) {
-        const inner = raw.slice(1, -1).trim();
-        const proseRegex = /\b(using|such as|for example|or|and|with|from|in|by|not|to|how|whatever|of|that|the|a|an|both|when|before|after|if|where|due|such|except|keeping|navigating|moving|including|instead|out|all|apply|vice versa)\b/i;
-        if (proseRegex.test(inner)) {
-          return { confidence: 0.0, err: `(${inner}) is an instruction side comment, not a block (confidence < 80%)` };
-        }
-        if (inner.includes(' ') && !['text list'].includes(inner.toLowerCase())) {
-          const isCanonical = CANONICAL_MAP.some(e => e.match.test(raw));
-          if (!isCanonical) {
+        const isCanonical = CANONICAL_MAP.some(e => {
+          try { return e.match.test(raw); } catch (e) { return false; }
+        });
+        if (!isCanonical) {
+          const inner = raw.slice(1, -1).trim();
+          const proseRegex = /\b(using|such as|for example|or|and|with|from|in|by|not|to|how|whatever|of|that|the|a|an|both|when|before|after|if|where|due|such|except|keeping|navigating|moving|including|instead|out|all|apply|vice versa)\b/i;
+          if (proseRegex.test(inner)) {
+            return { confidence: 0.0, err: `(${inner}) is an instruction side comment, not a block (confidence < 80%)` };
+          }
+          if (inner.includes(' ') && !['text list'].includes(inner.toLowerCase())) {
             return { confidence: 0.0, err: `(${inner}) is an instruction side comment, not a block (confidence < 80%)` };
           }
         }
@@ -2948,9 +3085,18 @@
           name: raw
         };
       }
+      // Scroller directions
+      const scrollerOptions = ['only horizontally', 'only vertically', 'both directions'];
+      if (scrollerOptions.includes(inner)) {
+        return {
+          confidence: 1.0,
+          custom: () => renderDropdownBadge(dropdownMatch[1].trim(), '#ff85a7'),
+          name: raw
+        };
+      }
       // Scene directions and screen effects
       const sceneOptions = [
-        'bottom', 'top', 'only horizontally', 'only vertically', 'both directions',
+        'bottom', 'top',
         'confetti', 'bubbles', 'hearts', 'star field', 'clouds', 'halo',
         'fountain', 'rings', 'warm radial', 'cool radial', 'fire', 'blizzard',
         'ashes', 'disintegrate', 'spray'

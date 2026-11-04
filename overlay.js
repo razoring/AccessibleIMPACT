@@ -91,6 +91,11 @@
       stroke = '#d35400';
       rx = 6;
       ry = 6;
+    } else if (category === 'scroller') {
+      bg = '#ff85a7';
+      stroke = '#bf647d';
+      rx = 6;
+      ry = 6;
     }
 
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${height}" width="${totalWidth}" height="${height}">
@@ -320,6 +325,11 @@
       if (/sprite|velocity|position/i.test(step) || /sprite|velocity|position/i.test(overall)) {
         return 'sprites';
       }
+    }
+
+    // 6. Scroller modes: only horizontally, only vertically, both directions
+    if (/^(?:only\s*horizontally|only\s*vertically|both\s*directions)$/i.test(cleanFlat)) {
+      return 'scroller';
     }
 
     return null;

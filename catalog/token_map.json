@@ -459,7 +459,7 @@
     {
       "id": "scroller_offset",
       "category": "scroller",
-      "pattern": "^set\\s+background\\s+scroll\\s+offset",
+      "pattern": "^set\\s+background\\s+(?:scroll\\s+)?offset",
       "template": "scroller_setBackgroundScrollOffset",
       "blockType": "scroller_setBackgroundScrollOffset"
     },
