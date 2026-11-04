@@ -21,23 +21,48 @@
   ],
   "content_scripts": [
     {
-      "matches": ["https://impact.codeninjas.com/*"],
-      "js": ["static_block_cache.js", "overlay.js"],
+      "matches": [
+        "https://impact.codeninjas.com/*"
+      ],
+      "js": [
+        "overlay.js"
+      ],
       "run_at": "document_idle",
       "all_frames": false
     },
     {
-      "matches": ["https://arcade.makecode.com/*"],
+      "matches": [
+        "https://arcade.makecode.com/*"
+      ],
       "all_frames": true,
-      "js": ["in_page_renderer.js"],
+      "js": [
+        "in_page_renderer.js"
+      ],
       "run_at": "document_idle",
       "world": "MAIN"
     },
     {
-      "matches": ["https://arcade.makecode.com/*"],
+      "matches": [
+        "https://arcade.makecode.com/*"
+      ],
       "all_frames": true,
-      "js": ["renderer.js"],
+      "js": [
+        "renderer.js"
+      ],
       "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "catalog/*",
+        "catalog/catalog.json",
+        "catalog/token_map.json"
+      ],
+      "matches": [
+        "https://impact.codeninjas.com/*",
+        "https://arcade.makecode.com/*"
+      ]
     }
   ]
 }

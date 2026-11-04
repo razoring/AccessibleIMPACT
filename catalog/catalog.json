@@ -3000,5 +3000,23 @@
     "inputs": [
       ""
     ]
+  },
+  "variables_set_projectile_createfromsprite": {
+    "type": "variables_set",
+    "file": "variables_set_projectile_createfromsprite.svg",
+    "width": 760,
+    "height": 74
+  },
+  "variables_set_projectile_createfromside": {
+    "type": "variables_set",
+    "file": "variables_set_projectile_createfromside.svg",
+    "width": 682,
+    "height": 74
+  },
+  "play_icon": {
+    "type": "icon",
+    "file": "play_icon.svg",
+    "width": 100,
+    "height": 96
   }
 }

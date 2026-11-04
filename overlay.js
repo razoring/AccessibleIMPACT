@@ -35,11 +35,43 @@
     }
   }
 
-  // Initialize static cache from static_block_cache.js
-  const staticSource = (typeof window !== 'undefined' && (window.STATIC_BLOCK_CACHE || window.__STATIC_BLOCK_CACHE));
-  if (staticSource) {
-    for (const [k, v] of Object.entries(staticSource)) {
-      svgCache.set(k, v);
+  // Initialize directly from catalog/
+  let catalogMap = null;
+  let tokenToFileMap = null;
+
+  async function loadCatalog() {
+    try {
+      if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) {
+        const [catRes, mapRes] = await Promise.all([
+          fetch(chrome.runtime.getURL('catalog/catalog.json')),
+          fetch(chrome.runtime.getURL('catalog/token_map.json'))
+        ]);
+        catalogMap = await catRes.json();
+        tokenToFileMap = await mapRes.json();
+        scan();
+      }
+    } catch (e) {
+      console.warn('[AIFX] Error loading catalog:', e);
+    }
+  }
+  loadCatalog();
+
+  async function fetchCatalogSvg(fileKey) {
+    if (!catalogMap || !fileKey) return null;
+    const entry = catalogMap[fileKey];
+    if (!entry) return null;
+    try {
+      const url = chrome.runtime.getURL('catalog/' + entry.file);
+      const res = await fetch(url);
+      const svg = await res.text();
+      return {
+        svg: svg,
+        width: entry.width,
+        height: entry.height,
+        category: entry.type
+      };
+    } catch(e) {
+      return null;
     }
   }
 
@@ -238,6 +270,17 @@
       const cached = getStaticOrCached(lookupToken) || getStaticOrCached(tokenText);
       if (cached && cached.svg) {
         applySvg(span, cached);
+      } else if (tokenToFileMap) {
+        const fileKey = tokenToFileMap[lookupToken] || tokenToFileMap[tokenText];
+        if (fileKey) {
+          fetchCatalogSvg(fileKey).then(data => {
+            if (data && data.svg) {
+              svgCache.set(lookupToken, data);
+              svgCache.set(tokenText, data);
+              applySvg(span, data);
+            }
+          });
+        }
       }
     }
   }
@@ -500,14 +543,24 @@
       span.setAttribute('data-lookup-token', lookupToken);
 
       const cached = getStaticOrCached(lookupToken) || getStaticOrCached(tokenText);
-      if (cached) {
-        if (cached.svg) {
-          applySvg(span, cached);
+      if (cached && cached.svg) {
+        applySvg(span, cached);
+      } else if (tokenToFileMap) {
+        const fileKey = tokenToFileMap[lookupToken] || tokenToFileMap[tokenText];
+        if (fileKey) {
+          fetchCatalogSvg(fileKey).then(data => {
+            if (data && data.svg) {
+              svgCache.set(lookupToken, data);
+              svgCache.set(tokenText, data);
+              applySvg(span, data);
+            } else {
+              requestTokenRender(lookupToken, tokenText, span);
+            }
+          });
         } else {
-          span.textContent = tokenText;
+          requestTokenRender(lookupToken, tokenText, span);
         }
       } else {
-        span.textContent = tokenText;
         requestTokenRender(lookupToken, tokenText, span);
       }
 
