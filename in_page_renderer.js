@@ -290,8 +290,14 @@
     const raw = expr.trim();
     if (!raw) return null;
 
-    // 1. Numeric literal (e.g. 0, 1, -5, 3.14, (0), (1))
+    // 1. Default: Variable getter — never create a variable with an empty name
+    // (e.g. from empty () placeholders); an unnamed variable corrupts pxt's
+    // Variables flyout. The empty-parens pattern from [change color in (picture)
+    // from () to ()] would strip to "" → bail out.
     const cleanNum = raw.replace(/[\[\]\(\)<>]/g, '').trim();
+    if (!cleanNum) return null;
+
+    // 1. Numeric literal (e.g. 0, 1, -5, 3.14, (0), (1))
     if (/^-?\d+(?:\.\d+)?$/.test(cleanNum)) {
       try {
         const nb = ws.newBlock('math_number');

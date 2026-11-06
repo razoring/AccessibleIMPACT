@@ -1140,6 +1140,9 @@
   }
 
   function scan() {
+    // Disconnect observer temporarily to avoid self-triggering during DOM mutations
+    observer.disconnect();
+    try {
     injectStyles();
     ensureToggleButton();
     // Strictly query content containers only
@@ -1168,6 +1171,14 @@
       }
     }
     applyCacheToPage();
+    } finally {
+      // Reconnect observer after scan completes
+      observer.observe(document.body || document.documentElement, {
+        subtree: true,
+        childList: true,
+        characterData: true
+      });
+    }
   }
 
   const observer = new MutationObserver(() => {
