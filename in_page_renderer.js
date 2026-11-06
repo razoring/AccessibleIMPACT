@@ -19,9 +19,45 @@
   function toolchain() {
     const B = blockly();
     if (!B) return null;
-    const ws = B.getMainWorkspace ? B.getMainWorkspace() : null;
-    if (!ws) return null;
+    const main = B.getMainWorkspace ? B.getMainWorkspace() : null;
+    if (!main) return null;
+    // Render on an isolated scratch workspace: creating/disposing hundreds of
+    // scratch blocks on the MAIN workspace corrupts pxt's flyout state
+    // (clearOldBlocks crash) and pollutes the user's variable map on first load.
+    const ws = getScratchWorkspace(B) || main;
     return { B, ws };
+  }
+
+  // Lazily-injected offscreen Blockly workspace used exclusively for rendering
+  // token SVGs. Fully isolated from the main workspace: its own variable map,
+  // no toolbox, no flyout, never disposed.
+  let scratchWs = null;
+  let scratchContainer = null;
+  let scratchFailed = false;
+  function getScratchWorkspace(B) {
+    if (scratchWs) return scratchWs;
+    if (scratchFailed) return null;
+    try {
+      scratchContainer = document.createElement('div');
+      // Real size (not display:none) so getBBox() works; parked offscreen.
+      scratchContainer.style.cssText = 'position:fixed;left:-10000px;top:-10000px;width:2400px;height:1600px;pointer-events:none;opacity:0;overflow:hidden;';
+      (document.body || document.documentElement).appendChild(scratchContainer);
+      scratchWs = B.inject(scratchContainer, {
+        scrollbars: false,
+        sounds: false,
+        trashcan: false,
+        grid: { spacing: 0, length: 0, snap: false },
+        zoom: { enabled: false, controls: false, wheel: false, startScale: 1, minScale: 1, maxScale: 1 }
+      });
+      return scratchWs;
+    } catch (e) {
+      console.warn('[AIFX in-page] scratch workspace injection failed; falling back to main workspace:', e);
+      try { if (scratchContainer) scratchContainer.remove(); } catch (e2) {}
+      scratchContainer = null;
+      scratchWs = null;
+      scratchFailed = true;
+      return null;
+    }
   }
 
   function ensureVariable(ws, name) {
@@ -439,7 +475,10 @@
       } catch (e) {}
     }
 
-    // 10. Default: Variable getter
+    // 10. Default: Variable getter — never create a variable with an empty name
+    // (e.g. from empty () placeholders); an unnamed variable corrupts pxt's
+    // Variables flyout.
+    if (!cleanNum) return null;
     try {
       const vb = ws.newBlock('variables_get');
       const v = ensureVariable(ws, cleanNum);
