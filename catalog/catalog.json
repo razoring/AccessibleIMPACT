@@ -123,27 +123,38 @@
   "tileUtil_tilemapProperty": {
     "type": "tileUtil_tilemapProperty",
     "file": "tileUtil_tilemapProperty.svg",
-    "width": 316,
-    "height": 48,
+    "width": 320,
+    "height": 52,
+    "category": "Tile Util",
+    "isMultiLine": false,
     "fields": [
       {
         "name": "prop",
+        "kind": "dropdown",
         "text": "number of columns"
       }
     ],
     "inputs": [
-      "data",
+      "",
       ""
     ]
   },
   "tileUtil_createSmallMap": {
     "type": "tileUtil_createSmallMap",
     "file": "tileUtil_createSmallMap.svg",
-    "width": 179,
-    "height": 50,
+    "width": 183,
+    "height": 54,
+    "category": "Tile Util",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "8x8 tilemap"
+      },
+      {
         "name": "tilemap",
+        "kind": "r",
         "text": ""
       }
     ],
@@ -154,9 +165,17 @@
   "tileUtil_getLoadedMap": {
     "type": "tileUtil_getLoadedMap",
     "file": "tileUtil_getLoadedMap.svg",
-    "width": 156,
-    "height": 40,
-    "fields": [],
+    "width": 160,
+    "height": 44,
+    "category": "Tile Util",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "current tilemap"
+      }
+    ],
     "inputs": [
       ""
     ]
@@ -164,171 +183,376 @@
   "tileUtil_cloneMap": {
     "type": "tileUtil_cloneMap",
     "file": "tileUtil_cloneMap.svg",
-    "width": 174,
-    "height": 48,
-    "fields": [],
+    "width": 178,
+    "height": 52,
+    "category": "Tile Util",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "clone"
+      }
+    ],
     "inputs": [
-      "map"
+      ""
     ]
   },
   "tileUtil_coverAllTiles": {
     "type": "tileUtil_coverAllTiles",
     "file": "tileUtil_coverAllTiles.svg",
-    "width": 360,
-    "height": 74,
-    "fields": [],
+    "width": 364,
+    "height": 78,
+    "category": "Tile Util",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "cover all"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tiles with"
+      }
+    ],
     "inputs": [
-      "tileKind",
-      "cover"
+      "tileset_tile_picker",
+      "tileset_tile_picker"
     ]
   },
   "tileUtil_coverTile": {
     "type": "tileUtil_coverTile",
     "file": "tileUtil_coverTile.svg",
-    "width": 439,
-    "height": 74,
-    "fields": [],
+    "width": 443,
+    "height": 78,
+    "category": "Tile Util",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "cover"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with"
+      }
+    ],
     "inputs": [
-      "location",
-      "cover"
+      "mapgettile",
+      "tileset_tile_picker"
     ]
   },
   "tileUtil_createSpritesOnTiles": {
     "type": "tileUtil_createSpritesOnTiles",
     "file": "tileUtil_createSpritesOnTiles.svg",
-    "width": 690,
-    "height": 74,
-    "fields": [],
+    "width": 694,
+    "height": 78,
+    "category": "Tile Util",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on each"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tile create sprite with image"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and kind"
+      }
+    ],
     "inputs": [
-      "tileKind",
-      "spriteImage",
-      "spriteKind"
+      "tileset_tile_picker",
+      "screen_image_picker",
+      "spritekind"
     ]
   },
   "tileUtil_replaceAllTiles": {
     "type": "tileUtil_replaceAllTiles",
     "file": "tileUtil_replaceAllTiles.svg",
-    "width": 377,
-    "height": 74,
-    "fields": [],
+    "width": 381,
+    "height": 78,
+    "category": "Tile Util",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "replace all"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tiles with"
+      }
+    ],
     "inputs": [
-      "from",
-      "to"
+      "tileset_tile_picker",
+      "tileset_tile_picker"
     ]
   },
   "tileUtil_setWalls": {
     "type": "tileUtil_setWalls",
     "file": "tileUtil_setWalls.svg",
-    "width": 420,
-    "height": 74,
-    "fields": [],
+    "width": 424,
+    "height": 78,
+    "category": "Tile Util",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set wall"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at all"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "locations"
+      }
+    ],
     "inputs": [
-      "on",
-      "tile",
+      "toggleOnOff",
+      "tileset_tile_picker",
       ""
     ]
   },
   "tileUtil_setTileAt": {
     "type": "tileUtil_setTileAt",
     "file": "tileUtil_setTileAt.svg",
-    "width": 566,
-    "height": 66,
-    "fields": [],
+    "width": 570,
+    "height": 70,
+    "category": "Tile Util",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      }
+    ],
     "inputs": [
-      "tile",
-      "location",
-      "tilemap"
+      "tileset_tile_picker",
+      "mapgettile",
+      ""
     ]
   },
   "tileUtil_setWallAt": {
     "type": "tileUtil_setWallAt",
     "file": "tileUtil_setWallAt.svg",
-    "width": 632,
-    "height": 56,
-    "fields": [],
+    "width": 636,
+    "height": 60,
+    "category": "Tile Util",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set wall"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      }
+    ],
     "inputs": [
-      "on",
-      "location",
-      "tilemap"
+      "logic_boolean",
+      "mapgettile",
+      ""
     ]
   },
   "tileUtil_tileIs": {
     "type": "tileUtil_tileIs",
     "file": "tileUtil_tileIs.svg",
-    "width": 629,
-    "height": 58,
-    "fields": [],
+    "width": 633,
+    "height": 62,
+    "category": "Tile Util",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tile in"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is"
+      }
+    ],
     "inputs": [
-      "tilemap",
-      "location",
-      "tile"
+      "",
+      "mapgettile",
+      "tileset_tile_picker"
     ]
   },
   "tileUtil_tileIsWall": {
     "type": "tileUtil_tileIsWall",
     "file": "tileUtil_tileIsWall.svg",
-    "width": 580,
-    "height": 48,
-    "fields": [],
+    "width": 584,
+    "height": 52,
+    "category": "Tile Util",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tile in"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is wall"
+      }
+    ],
     "inputs": [
-      "tilemap",
-      "location",
+      "",
+      "mapgettile",
       ""
     ]
   },
   "tileUtil_getTileImage": {
     "type": "tileUtil_getTileImage",
     "file": "tileUtil_getTileImage.svg",
-    "width": 539,
-    "height": 48,
-    "fields": [],
+    "width": 543,
+    "height": 52,
+    "category": "Tile Util",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tile image in"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      }
+    ],
     "inputs": [
-      "tilemap",
-      "location"
+      "",
+      "mapgettile"
     ]
   },
   "tileUtil_forEachTileInMap": {
     "type": "tileUtil_forEachTileInMap",
     "file": "tileUtil_forEachTileInMap.svg",
-    "width": 610,
-    "height": 112,
-    "fields": [],
+    "width": 614,
+    "height": 116,
+    "category": "Tile Util",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for each tile in"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with"
+      }
+    ],
     "inputs": [
-      "tilemap",
-      "HANDLER_DRAG_PARAM_column",
-      "HANDLER_DRAG_PARAM_row",
-      "HANDLER_DRAG_PARAM_location",
-      "HANDLER"
+      "tileUtil_getLoadedMap",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "tileUtil_onMapLoaded": {
     "type": "tileUtil_onMapLoaded",
     "file": "tileUtil_onMapLoaded.svg",
-    "width": 260,
-    "height": 112,
-    "fields": [],
+    "width": 264,
+    "height": 116,
+    "category": "Tile Util",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on tilemap loaded"
+      }
+    ],
     "inputs": [
-      "HANDLER_DRAG_PARAM_tilemap",
-      "HANDLER"
+      "",
+      ""
     ]
   },
   "tileUtil_onMapUnloaded": {
     "type": "tileUtil_onMapUnloaded",
     "file": "tileUtil_onMapUnloaded.svg",
-    "width": 277,
-    "height": 112,
-    "fields": [],
+    "width": 281,
+    "height": 116,
+    "category": "Tile Util",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on tilemap unloaded"
+      }
+    ],
     "inputs": [
-      "HANDLER_DRAG_PARAM_tilemap",
-      "HANDLER"
+      "",
+      ""
     ]
   },
   "tileUtil_unloadTilemap": {
     "type": "tileUtil_unloadTilemap",
     "file": "tileUtil_unloadTilemap.svg",
-    "width": 210,
-    "height": 56,
-    "fields": [],
+    "width": 214,
+    "height": 60,
+    "category": "Tile Util",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "unload current tilemap"
+      }
+    ],
     "inputs": [
       ""
     ]
@@ -336,44 +560,86 @@
   "tileUtil_connectMapById": {
     "type": "tileUtil_connectMapById",
     "file": "tileUtil_connectMapById.svg",
-    "width": 479,
-    "height": 56,
-    "fields": [],
+    "width": 483,
+    "height": 60,
+    "category": "Tile Util",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "connect"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "by"
+      }
+    ],
     "inputs": [
-      "mapA",
-      "mapB",
-      "connectionId"
+      "",
+      "",
+      "tileUtil_connectionKind"
     ]
   },
   "tileUtil_loadConnectedMap": {
     "type": "tileUtil_loadConnectedMap",
     "file": "tileUtil_loadConnectedMap.svg",
-    "width": 332,
-    "height": 56,
-    "fields": [],
+    "width": 336,
+    "height": 60,
+    "category": "Tile Util",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "load tilemap connected by"
+      }
+    ],
     "inputs": [
-      "connectionId"
+      "tileUtil_connectionKind"
     ]
   },
   "tileUtil_getConnectedMap": {
     "type": "tileUtil_getConnectedMap",
     "file": "tileUtil_getConnectedMap.svg",
-    "width": 463,
-    "height": 48,
-    "fields": [],
+    "width": 467,
+    "height": 52,
+    "category": "Tile Util",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "get tilemap connected to"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "by"
+      }
+    ],
     "inputs": [
-      "map",
-      "connectionId"
+      "",
+      "tileUtil_connectionKind"
     ]
   },
   "tileUtil_connectionKind": {
     "type": "tileUtil_connectionKind",
     "file": "tileUtil_connectionKind.svg",
-    "width": 104,
-    "height": 40,
+    "width": 108,
+    "height": 44,
+    "category": "Tile Util",
+    "isMultiLine": false,
     "fields": [
       {
         "name": "MEMBER",
+        "kind": "dropdown",
         "text": "Door1"
       }
     ],
@@ -384,336 +650,696 @@
   "tileUtil_createCameraOnTile": {
     "type": "tileUtil_createCameraOnTile",
     "file": "tileUtil_createCameraOnTile.svg",
-    "width": 408,
-    "height": 64,
-    "fields": [],
+    "width": 412,
+    "height": 68,
+    "category": "Tile Util",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "center camera on"
+      }
+    ],
     "inputs": [
-      "location"
+      "mapgettile"
     ]
   },
   "spritescreatenoset": {
     "type": "spritescreatenoset",
     "file": "spritescreatenoset.svg",
-    "width": 326,
-    "height": 58,
-    "fields": [],
+    "width": 330,
+    "height": 62,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "sprite"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "of kind"
+      }
+    ],
     "inputs": [
-      "img",
-      "kind"
+      "screen_image_picker",
+      "spritekind"
     ]
   },
   "spritesetvel": {
     "type": "spritesetvel",
     "file": "spritesetvel.svg",
-    "width": 427,
-    "height": 56,
-    "fields": [],
+    "width": 431,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "velocity to vx"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "vy"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "vx",
-      "vy"
+      "",
+      "spriteSpeedPicker",
+      "spriteSpeedPicker"
     ]
   },
   "spritesetpos": {
     "type": "spritesetpos",
     "file": "spritesetpos.svg",
-    "width": 406,
-    "height": 56,
-    "fields": [],
+    "width": 410,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "position to x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "x",
-      "y"
+      "",
+      "positionPicker",
+      "positionPicker"
     ]
   },
   "Sprite_blockCombine_set": {
     "type": "Sprite_blockCombine_set",
     "file": "Sprite_blockCombine_set.svg",
-    "width": 297,
-    "height": 56,
+    "width": 301,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
         "name": "property",
+        "kind": "dropdown",
         "text": "x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
       }
     ],
     "inputs": [
-      "mySprite",
       "",
-      "value"
+      "",
+      "math_number"
     ]
   },
   "Sprite_blockCombine_change": {
     "type": "Sprite_blockCombine_change",
     "file": "Sprite_blockCombine_change.svg",
-    "width": 318,
-    "height": 56,
+    "width": 322,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "change"
+      },
+      {
         "name": "property",
+        "kind": "dropdown",
         "text": "x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "by"
       }
     ],
     "inputs": [
-      "mySprite",
       "",
-      "value"
+      "",
+      "math_number"
     ]
   },
   "Sprite_blockCombine_get": {
     "type": "Sprite_blockCombine_get",
     "file": "Sprite_blockCombine_get.svg",
-    "width": 184,
-    "height": 48,
+    "width": 188,
+    "height": 52,
+    "category": "Sprites",
+    "isMultiLine": false,
     "fields": [
       {
         "name": "property",
+        "kind": "dropdown",
         "text": "x"
       }
     ],
     "inputs": [
-      "mySprite",
+      "",
       ""
     ]
   },
   "spriteFollowOtherSprite": {
     "type": "spriteFollowOtherSprite",
     "file": "spriteFollowOtherSprite.svg",
-    "width": 377,
-    "height": 56,
-    "fields": [],
+    "width": 381,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "follow"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with speed"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "target",
       "",
-      "speed",
-      "0_add_button"
+      "",
+      "",
+      "math_number",
+      ""
     ]
   },
   "spriteUnfollow": {
     "type": "spriteUnfollow",
     "file": "spriteUnfollow.svg",
-    "width": 240,
-    "height": 56,
-    "fields": [],
+    "width": 244,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "unfollow"
+      }
+    ],
     "inputs": [
-      "this",
+      "",
       ""
     ]
   },
   "startEffectOnSprite": {
     "type": "startEffectOnSprite",
     "file": "startEffectOnSprite.svg",
-    "width": 404,
-    "height": 56,
+    "width": 408,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "start"
+      },
+      {
         "name": "effect",
+        "kind": "dropdown",
         "text": "spray"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "effect"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ms"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
       }
     ],
     "inputs": [
-      "sprite",
       "",
       "",
-      "duration",
-      "0_optional_dummy0",
-      "0_add_button"
+      "",
+      "timePicker",
+      "",
+      ""
     ]
   },
   "particlesclearparticles": {
     "type": "particlesclearparticles",
     "file": "particlesclearparticles.svg",
-    "width": 280,
-    "height": 56,
-    "fields": [],
+    "width": 284,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "clear effects on"
+      }
+    ],
     "inputs": [
-      "anchor"
+      ""
     ]
   },
   "spritedestroy2": {
     "type": "spritedestroy2",
     "file": "spritedestroy2.svg",
-    "width": 232,
-    "height": 56,
+    "width": 236,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "destroy"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with"
+      },
+      {
         "name": "effect",
+        "kind": "opaque",
         "text": "spray"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "effect for"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ms"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
       }
     ],
     "inputs": [
-      "sprite",
       "",
-      "0_optional_field0",
-      "duration",
-      "0_optional_dummy1",
-      "0_add_button"
+      "",
+      "",
+      "timePicker",
+      "",
+      ""
     ]
   },
   "sprites_destroy_all_sprites_of_kind": {
     "type": "sprites_destroy_all_sprites_of_kind",
     "file": "sprites_destroy_all_sprites_of_kind.svg",
-    "width": 391,
-    "height": 56,
+    "width": 395,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "destroy all sprites of kind"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with"
+      },
+      {
         "name": "effect",
+        "kind": "opaque",
         "text": "spray"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "effect for"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ms"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
       }
     ],
     "inputs": [
-      "kind",
+      "spritekind",
       "",
-      "0_optional_field0",
-      "duration",
-      "0_optional_dummy1",
-      "0_add_button"
+      "",
+      "timePicker",
+      "",
+      ""
     ]
   },
   "spritesaytext": {
     "type": "spritesaytext",
     "file": "spritesaytext.svg",
-    "width": 301,
-    "height": 56,
-    "fields": [],
+    "width": 305,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "say"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ms with animation"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "this",
+      "",
       "text",
-      "timeOnScreen",
-      "animated",
-      "0_add_button"
+      "timePicker",
+      "logic_boolean",
+      ""
     ]
   },
   "spritesetsetstayinscreen": {
     "type": "spritesetsetstayinscreen",
     "file": "spritesetsetstayinscreen.svg",
-    "width": 403,
-    "height": 56,
-    "fields": [],
+    "width": 407,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "stay in screen"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "on"
+      "",
+      "toggleOnOff"
     ]
   },
   "spritesetsetbounceonwall": {
     "type": "spritesetsetbounceonwall",
     "file": "spritesetsetbounceonwall.svg",
-    "width": 403,
-    "height": 56,
-    "fields": [],
+    "width": 407,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "bounce on wall"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "on"
+      "",
+      "toggleOnOff"
     ]
   },
   "spritesetsetflag": {
     "type": "spritesetsetflag",
     "file": "spritesetsetflag.svg",
-    "width": 421,
-    "height": 56,
+    "width": 425,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
         "name": "flag",
+        "kind": "dropdown",
         "text": "auto destroy"
       }
     ],
     "inputs": [
-      "sprite",
       "",
-      "on"
+      "",
+      "toggleOnOff"
     ]
   },
   "spritesoverlap": {
     "type": "spritesoverlap",
     "file": "spritesoverlap.svg",
-    "width": 675,
-    "height": 112,
-    "fields": [],
+    "width": 679,
+    "height": 116,
+    "category": "Sprites",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "of kind"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "overlaps"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "of kind"
+      }
+    ],
     "inputs": [
-      "HANDLER_DRAG_PARAM_sprite",
-      "kind",
-      "HANDLER_DRAG_PARAM_otherSprite",
-      "otherKind",
-      "HANDLER"
+      "",
+      "spritekind",
+      "",
+      "spritekind",
+      ""
     ]
   },
   "spriteoverlapswith": {
     "type": "spriteoverlapswith",
     "file": "spriteoverlapswith.svg",
-    "width": 434,
-    "height": 48,
-    "fields": [],
+    "width": 438,
+    "height": 52,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "overlaps with"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "other"
+      "",
+      ""
     ]
   },
   "spritesetkind": {
     "type": "spritesetkind",
     "file": "spritesetkind.svg",
-    "width": 345,
-    "height": 56,
-    "fields": [],
+    "width": 349,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "kind to"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "kind"
+      "",
+      "spritekind"
     ]
   },
   "spritegetkind": {
     "type": "spritegetkind",
     "file": "spritegetkind.svg",
-    "width": 174,
-    "height": 48,
-    "fields": [],
+    "width": 178,
+    "height": 52,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "kind"
+      }
+    ],
     "inputs": [
-      "sprite",
+      "",
       ""
     ]
   },
   "spritesoncreated": {
     "type": "spritesoncreated",
     "file": "spritesoncreated.svg",
-    "width": 364,
-    "height": 112,
-    "fields": [],
+    "width": 368,
+    "height": 116,
+    "category": "Sprites",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on created"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "of kind"
+      }
+    ],
     "inputs": [
-      "HANDLER_DRAG_PARAM_sprite",
-      "kind",
-      "HANDLER"
+      "",
+      "spritekind",
+      ""
     ]
   },
   "spritesondestroyed": {
     "type": "spritesondestroyed",
     "file": "spritesondestroyed.svg",
-    "width": 381,
-    "height": 112,
-    "fields": [],
+    "width": 385,
+    "height": 116,
+    "category": "Sprites",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on destroyed"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "of kind"
+      }
+    ],
     "inputs": [
-      "HANDLER_DRAG_PARAM_sprite",
-      "kind",
       "",
-      "HANDLER"
+      "spritekind",
+      "",
+      ""
     ]
   },
   "allOfKind": {
     "type": "allOfKind",
     "file": "allOfKind.svg",
-    "width": 332,
-    "height": 40,
-    "fields": [],
+    "width": 336,
+    "height": 44,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "array of sprites of kind"
+      }
+    ],
     "inputs": [
-      "kind"
+      "spritekind"
     ]
   },
   "spritekind": {
     "type": "spritekind",
     "file": "spritekind.svg",
-    "width": 113,
-    "height": 40,
+    "width": 117,
+    "height": 44,
+    "category": "Sprites",
+    "isMultiLine": false,
     "fields": [
       {
         "name": "MEMBER",
+        "kind": "dropdown",
         "text": "Player"
       }
     ],
@@ -724,103 +1350,220 @@
   "spriteimage": {
     "type": "spriteimage",
     "file": "spriteimage.svg",
-    "width": 183,
-    "height": 48,
-    "fields": [],
+    "width": 187,
+    "height": 52,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "image"
+      }
+    ],
     "inputs": [
-      "sprite",
+      "",
       ""
     ]
   },
   "spritesetimage": {
     "type": "spritesetimage",
     "file": "spritesetimage.svg",
-    "width": 331,
-    "height": 66,
-    "fields": [],
+    "width": 335,
+    "height": 70,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "image to"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "img"
+      "",
+      "screen_image_picker"
     ]
   },
   "sprite_change_scale": {
     "type": "sprite_change_scale",
     "file": "sprite_change_scale.svg",
-    "width": 476,
-    "height": 56,
+    "width": 480,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "change"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "scale by"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "anchor"
+      },
+      {
         "name": "anchor",
+        "kind": "dropdown",
         "text": "middle"
       }
     ],
     "inputs": [
-      "sprite",
-      "value",
+      "",
+      "math_number",
       ""
     ]
   },
   "sprite_set_scale": {
     "type": "sprite_set_scale",
     "file": "sprite_set_scale.svg",
-    "width": 455,
-    "height": 56,
+    "width": 459,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "scale to"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "anchor"
+      },
+      {
         "name": "anchor",
+        "kind": "dropdown",
         "text": "middle"
       }
     ],
     "inputs": [
-      "sprite",
-      "value",
+      "",
+      "math_number",
       ""
     ]
   },
   "game_control_sprite": {
     "type": "game_control_sprite",
     "file": "game_control_sprite.svg",
-    "width": 320,
-    "height": 56,
-    "fields": [],
+    "width": 324,
+    "height": 60,
+    "category": "Controller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "move"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with buttons"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "vx"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "vy"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "sprite",
       "",
-      "vx",
-      "vy",
-      "0_add_button"
+      "",
+      "spriteSpeedPicker",
+      "spriteSpeedPicker",
+      ""
     ]
   },
   "keyonevent": {
     "type": "keyonevent",
     "file": "keyonevent.svg",
-    "width": 253,
-    "height": 104,
+    "width": 257,
+    "height": 108,
+    "category": "Controller",
+    "isMultiLine": true,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
         "name": "button",
+        "kind": "dropdown",
         "text": "A"
       },
       {
+        "name": "",
+        "kind": "r",
+        "text": "button"
+      },
+      {
         "name": "event",
+        "kind": "dropdown",
         "text": "pressed"
       }
     ],
     "inputs": [
       "",
       "",
-      "HANDLER"
+      ""
     ]
   },
   "keyispressed": {
     "type": "keyispressed",
     "file": "keyispressed.svg",
-    "width": 241,
-    "height": 40,
+    "width": 245,
+    "height": 44,
+    "category": "Controller",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "is"
+      },
+      {
         "name": "button",
+        "kind": "dropdown",
         "text": "A"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "button"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pressed"
       }
     ],
     "inputs": [
@@ -831,84 +1574,170 @@
   "gameupdate": {
     "type": "gameupdate",
     "file": "gameupdate.svg",
-    "width": 160,
-    "height": 104,
-    "fields": [],
+    "width": 164,
+    "height": 108,
+    "category": "Game",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on game update"
+      }
+    ],
     "inputs": [
       "",
-      "HANDLER"
+      ""
     ]
   },
   "gameinterval": {
     "type": "gameinterval",
     "file": "gameinterval.svg",
-    "width": 294,
-    "height": 104,
-    "fields": [],
+    "width": 298,
+    "height": 108,
+    "category": "Game",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on game update every"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ms"
+      }
+    ],
     "inputs": [
-      "period",
+      "timePicker",
       "",
-      "HANDLER"
+      ""
     ]
   },
   "gameOver2": {
     "type": "gameOver2",
     "file": "gameOver2.svg",
-    "width": 212,
-    "height": 56,
-    "fields": [],
+    "width": 216,
+    "height": 60,
+    "category": "Game",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "game over"
+      }
+    ],
     "inputs": [
-      "win"
+      "toggleWinLose"
     ]
   },
   "game_setgameovereffect": {
     "type": "game_setgameovereffect",
     "file": "game_setgameovereffect.svg",
-    "width": 369,
-    "height": 56,
+    "width": 373,
+    "height": 60,
+    "category": "Game",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "use effect"
+      },
+      {
         "name": "effect",
+        "kind": "dropdown",
         "text": "confetti"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
       }
     ],
     "inputs": [
       "",
-      "win"
+      "toggleWinLose"
     ]
   },
   "game_setgameoverplayable": {
     "type": "game_setgameoverplayable",
     "file": "game_setgameoverplayable.svg",
-    "width": 544,
-    "height": 56,
-    "fields": [],
+    "width": 548,
+    "height": 60,
+    "category": "Game",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "use"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "looping"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      }
+    ],
     "inputs": [
-      "sound",
-      "looping",
-      "win"
+      "music_melody_playable",
+      "toggleOnOff",
+      "toggleWinLose"
     ]
   },
   "game_setgameovermessage": {
     "type": "game_setgameovermessage",
     "file": "game_setgameovermessage.svg",
-    "width": 398,
-    "height": 56,
-    "fields": [],
+    "width": 402,
+    "height": 60,
+    "category": "Game",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "use message"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      }
+    ],
     "inputs": [
-      "message",
-      "win"
+      "text",
+      "toggleWinLose"
     ]
   },
   "game_setgameoverscoringtype": {
     "type": "game_setgameoverscoringtype",
     "file": "game_setgameoverscoringtype.svg",
-    "width": 303,
-    "height": 56,
+    "width": 307,
+    "height": 60,
+    "category": "Game",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "use"
+      },
+      {
         "name": "type",
+        "kind": "dropdown",
         "text": "high score"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "as best score"
       }
     ],
     "inputs": [
@@ -919,108 +1748,220 @@
   "gameSplash": {
     "type": "gameSplash",
     "file": "gameSplash.svg",
-    "width": 149,
-    "height": 56,
-    "fields": [],
+    "width": 153,
+    "height": 60,
+    "category": "Game",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "splash"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "title",
-      "subtitle",
-      "0_add_button"
+      "text",
+      "text",
+      ""
     ]
   },
   "gameaskfornumber": {
     "type": "gameaskfornumber",
     "file": "gameaskfornumber.svg",
-    "width": 228,
-    "height": 40,
-    "fields": [],
+    "width": 232,
+    "height": 44,
+    "category": "Game",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ask for number"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and max length"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "use on-screen keyboard"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "message",
+      "text",
       "",
-      "answerLength",
-      "useOnScreenKeyboard",
-      "0_add_button"
+      "math_number_minmax",
+      "logic_boolean",
+      ""
     ]
   },
   "gameaskforstring": {
     "type": "gameaskforstring",
     "file": "gameaskforstring.svg",
-    "width": 228,
-    "height": 40,
-    "fields": [],
+    "width": 232,
+    "height": 44,
+    "category": "Game",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ask for string"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and max length"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "use on-screen keyboard"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "message",
+      "text",
       "",
-      "answerLength",
-      "useOnScreenKeyboard",
-      "0_add_button"
+      "math_number_minmax",
+      "logic_boolean",
+      ""
     ]
   },
   "game_dialog_set_text_color": {
     "type": "game_dialog_set_text_color",
     "file": "game_dialog_set_text_color.svg",
-    "width": 276,
-    "height": 56,
-    "fields": [],
+    "width": 280,
+    "height": 60,
+    "category": "Game",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set dialog text color to"
+      }
+    ],
     "inputs": [
-      "color"
+      "colorindexpicker"
     ]
   },
   "game_dialog_set_cursor": {
     "type": "game_dialog_set_cursor",
     "file": "game_dialog_set_cursor.svg",
-    "width": 274,
-    "height": 74,
-    "fields": [],
+    "width": 278,
+    "height": 78,
+    "category": "Game",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set dialog cursor to"
+      }
+    ],
     "inputs": [
-      "frame"
+      "screen_image_picker"
     ]
   },
   "game_dialog_set_frame": {
     "type": "game_dialog_set_frame",
     "file": "game_dialog_set_frame.svg",
-    "width": 266,
-    "height": 74,
-    "fields": [],
+    "width": 270,
+    "height": 78,
+    "category": "Game",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set dialog frame to"
+      }
+    ],
     "inputs": [
-      "frame"
+      "dialog_image_picker"
     ]
   },
   "game_show_long_text": {
     "type": "game_show_long_text",
     "file": "game_show_long_text.svg",
-    "width": 284,
-    "height": 56,
+    "width": 288,
+    "height": 60,
+    "category": "Game",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "show long text"
+      },
+      {
         "name": "layout",
+        "kind": "dropdown",
         "text": "bottom"
       }
     ],
     "inputs": [
-      "str",
+      "text",
       ""
     ]
   },
   "mp_setPlayerSprite": {
     "type": "mp_setPlayerSprite",
     "file": "mp_setPlayerSprite.svg",
-    "width": 590,
-    "height": 82,
-    "fields": [],
+    "width": 594,
+    "height": 86,
+    "category": "Multiplayer",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "sprite to"
+      }
+    ],
     "inputs": [
-      "player",
-      "sprite"
+      "mp_playerSelector",
+      "spritescreatenoset"
     ]
   },
   "mp_playerSelector": {
     "type": "mp_playerSelector",
     "file": "mp_playerSelector.svg",
-    "width": 130,
-    "height": 40,
+    "width": 134,
+    "height": 44,
+    "category": "Multiplayer",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
         "name": "number",
+        "kind": "dropdown",
         "text": "1"
       }
     ],
@@ -1031,9 +1972,17 @@
   "mp_allPlayers": {
     "type": "mp_allPlayers",
     "file": "mp_allPlayers.svg",
-    "width": 200,
-    "height": 40,
-    "fields": [],
+    "width": 204,
+    "height": 44,
+    "category": "Multiplayer",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "array of all players"
+      }
+    ],
     "inputs": [
       ""
     ]
@@ -1041,74 +1990,150 @@
   "mp_getPlayerSprite": {
     "type": "mp_getPlayerSprite",
     "file": "mp_getPlayerSprite.svg",
-    "width": 191,
-    "height": 40,
-    "fields": [],
+    "width": 195,
+    "height": 44,
+    "category": "Multiplayer",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "sprite"
+      }
+    ],
     "inputs": [
-      "player",
+      "mp_playerSelector",
       ""
     ]
   },
   "mp_getPlayerBySprite": {
     "type": "mp_getPlayerBySprite",
     "file": "mp_getPlayerBySprite.svg",
-    "width": 192,
-    "height": 48,
-    "fields": [],
+    "width": 196,
+    "height": 52,
+    "category": "Multiplayer",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      }
+    ],
     "inputs": [
-      "sprite",
+      "",
       ""
     ]
   },
   "mp_moveWithButtons": {
     "type": "mp_moveWithButtons",
     "file": "mp_moveWithButtons.svg",
-    "width": 319,
-    "height": 56,
-    "fields": [],
+    "width": 323,
+    "height": 60,
+    "category": "Multiplayer",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "move"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with buttons"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "vx"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "vy"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "player",
+      "mp_playerSelector",
       "",
-      "vx",
-      "vy",
-      "0_add_button"
+      "spriteSpeedPicker",
+      "spriteSpeedPicker",
+      ""
     ]
   },
   "mp_onButtonEvent": {
     "type": "mp_onButtonEvent",
     "file": "mp_onButtonEvent.svg",
-    "width": 372,
-    "height": 112,
+    "width": 376,
+    "height": 116,
+    "category": "Multiplayer",
+    "isMultiLine": true,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
         "name": "button",
+        "kind": "dropdown",
         "text": "A"
       },
       {
+        "name": "",
+        "kind": "dh",
+        "text": "button"
+      },
+      {
         "name": "event",
+        "kind": "dropdown",
         "text": "pressed"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
       }
     ],
     "inputs": [
       "",
       "",
-      "HANDLER_DRAG_PARAM_player",
-      "HANDLER"
+      "",
+      ""
     ]
   },
   "mp_isButtonPressed": {
     "type": "mp_isButtonPressed",
     "file": "mp_isButtonPressed.svg",
-    "width": 364,
-    "height": 40,
+    "width": 368,
+    "height": 44,
+    "category": "Multiplayer",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "is"
+      },
+      {
         "name": "button",
+        "kind": "dropdown",
         "text": "A"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "button pressed"
       }
     ],
     "inputs": [
-      "player",
+      "mp_playerSelector",
       "",
       ""
     ]
@@ -1116,168 +2141,289 @@
   "mp_onControllerEvent": {
     "type": "mp_onControllerEvent",
     "file": "mp_onControllerEvent.svg",
-    "width": 242,
-    "height": 112,
+    "width": 246,
+    "height": 116,
+    "category": "Multiplayer",
+    "isMultiLine": true,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
         "name": "event",
+        "kind": "dropdown",
         "text": "connected"
       }
     ],
     "inputs": [
-      "HANDLER_DRAG_PARAM_player",
       "",
-      "HANDLER"
+      "",
+      ""
     ]
   },
   "mp_isConnected": {
     "type": "mp_isConnected",
     "file": "mp_isConnected.svg",
-    "width": 241,
-    "height": 40,
-    "fields": [],
+    "width": 245,
+    "height": 44,
+    "category": "Multiplayer",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "connected"
+      }
+    ],
     "inputs": [
-      "player",
+      "mp_playerSelector",
       ""
     ]
   },
   "mp_getPlayerProperty": {
     "type": "mp_getPlayerProperty",
     "file": "mp_getPlayerProperty.svg",
-    "width": 218,
-    "height": 40,
+    "width": 222,
+    "height": 44,
+    "category": "Multiplayer",
+    "isMultiLine": false,
     "fields": [
       {
         "name": "prop",
+        "kind": "dropdown",
         "text": "index"
       }
     ],
     "inputs": [
-      "player",
+      "mp_playerSelector",
       ""
     ]
   },
   "mp_getPlayerState": {
     "type": "mp_getPlayerState",
     "file": "mp_getPlayerState.svg",
-    "width": 218,
-    "height": 40,
+    "width": 222,
+    "height": 44,
+    "category": "Multiplayer",
+    "isMultiLine": false,
     "fields": [],
     "inputs": [
-      "player",
-      "state"
+      "mp_playerSelector",
+      "mp_multiplayerstate"
     ]
   },
   "mp_setPlayerState": {
     "type": "mp_setPlayerState",
     "file": "mp_setPlayerState.svg",
-    "width": 340,
-    "height": 56,
-    "fields": [],
+    "width": 344,
+    "height": 60,
+    "category": "Multiplayer",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
     "inputs": [
-      "player",
-      "state",
-      "value"
+      "mp_playerSelector",
+      "mp_multiplayerstate",
+      "math_number"
     ]
   },
   "mp_changePlayerStateBy": {
     "type": "mp_changePlayerStateBy",
     "file": "mp_changePlayerStateBy.svg",
-    "width": 360,
-    "height": 56,
-    "fields": [],
+    "width": 364,
+    "height": 60,
+    "category": "Multiplayer",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "change"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "by"
+      }
+    ],
     "inputs": [
-      "player",
-      "state",
-      "delta"
+      "mp_playerSelector",
+      "mp_multiplayerstate",
+      "math_number"
     ]
   },
   "mp_onScore": {
     "type": "mp_onScore",
     "file": "mp_onScore.svg",
-    "width": 264,
-    "height": 112,
-    "fields": [],
+    "width": 268,
+    "height": 116,
+    "category": "Multiplayer",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on score"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      }
+    ],
     "inputs": [
-      "score",
-      "HANDLER_DRAG_PARAM_player",
-      "HANDLER"
+      "math_number",
+      "",
+      ""
     ]
   },
   "mp_onLifeZero": {
     "type": "mp_onLifeZero",
     "file": "mp_onLifeZero.svg",
-    "width": 242,
-    "height": 112,
-    "fields": [],
+    "width": 246,
+    "height": 116,
+    "category": "Multiplayer",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on life zero for"
+      }
+    ],
     "inputs": [
-      "HANDLER_DRAG_PARAM_player",
-      "HANDLER"
+      "",
+      ""
     ]
   },
   "mp_gameOverPlayerWin": {
     "type": "mp_gameOverPlayerWin",
     "file": "mp_gameOverPlayerWin.svg",
-    "width": 260,
-    "height": 56,
-    "fields": [],
+    "width": 264,
+    "height": 60,
+    "category": "Multiplayer",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "game over"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "wins"
+      }
+    ],
     "inputs": [
-      "player",
+      "mp_playerSelector",
       ""
     ]
   },
   "mp_setPlayerIndicatorsVisible": {
     "type": "mp_setPlayerIndicatorsVisible",
     "file": "mp_setPlayerIndicatorsVisible.svg",
-    "width": 302,
-    "height": 56,
-    "fields": [],
+    "width": 306,
+    "height": 60,
+    "category": "Multiplayer",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set player indicators"
+      }
+    ],
     "inputs": [
-      "visible"
+      "toggleOnOff"
     ]
   },
   "mp_getPlayerByIndex": {
     "type": "mp_getPlayerByIndex",
     "file": "mp_getPlayerByIndex.svg",
-    "width": 192,
-    "height": 48,
-    "fields": [],
+    "width": 196,
+    "height": 52,
+    "category": "Multiplayer",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player at"
+      }
+    ],
     "inputs": [
-      "index"
+      ""
     ]
   },
   "mp_getPlayerByNumber": {
     "type": "mp_getPlayerByNumber",
     "file": "mp_getPlayerByNumber.svg",
-    "width": 174,
-    "height": 48,
-    "fields": [],
+    "width": 178,
+    "height": 52,
+    "category": "Multiplayer",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      }
+    ],
     "inputs": [
-      "number"
+      ""
     ]
   },
   "music_playable_play": {
     "type": "music_playable_play",
     "file": "music_playable_play.svg",
-    "width": 349,
-    "height": 56,
+    "width": 609,
+    "height": 78,
+    "category": "Music",
+    "isMultiLine": true,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "play"
+      },
+      {
         "name": "playbackMode",
+        "kind": "dropdown",
         "text": "until done"
       }
     ],
     "inputs": [
-      "toPlay",
+      "music_string_playable",
       ""
     ]
   },
   "music_stop_all_sounds": {
     "type": "music_stop_all_sounds",
     "file": "music_stop_all_sounds.svg",
-    "width": 148,
-    "height": 56,
-    "fields": [],
+    "width": 152,
+    "height": 60,
+    "category": "Music",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "stop all sounds"
+      }
+    ],
     "inputs": [
       ""
     ]
@@ -1285,105 +2431,222 @@
   "synth_set_volume": {
     "type": "synth_set_volume",
     "file": "synth_set_volume.svg",
-    "width": 154,
-    "height": 56,
-    "fields": [],
+    "width": 158,
+    "height": 60,
+    "category": "Music",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set volume"
+      }
+    ],
     "inputs": [
-      "volume"
+      "math_number_minmax"
     ]
   },
   "device_change_tempo": {
     "type": "device_change_tempo",
     "file": "device_change_tempo.svg",
-    "width": 250,
-    "height": 56,
-    "fields": [],
+    "width": 254,
+    "height": 60,
+    "category": "Music",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "change tempo by"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "(bpm)"
+      }
+    ],
     "inputs": [
-      "value",
+      "math_number",
       ""
     ]
   },
   "device_set_tempo": {
     "type": "device_set_tempo",
     "file": "device_set_tempo.svg",
-    "width": 232,
-    "height": 56,
-    "fields": [],
+    "width": 236,
+    "height": 60,
+    "category": "Music",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set tempo to"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "(bpm)"
+      }
+    ],
     "inputs": [
-      "value",
+      "math_number_minmax",
       ""
     ]
   },
   "gamesetbackgroundcolor": {
     "type": "gamesetbackgroundcolor",
     "file": "gamesetbackgroundcolor.svg",
-    "width": 267,
-    "height": 56,
-    "fields": [],
+    "width": 271,
+    "height": 60,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set background color to"
+      }
+    ],
     "inputs": [
-      "color"
+      "colorindexpicker"
     ]
   },
   "gamesetbackgroundimage": {
     "type": "gamesetbackgroundimage",
     "file": "gamesetbackgroundimage.svg",
-    "width": 301,
-    "height": 74,
-    "fields": [],
+    "width": 305,
+    "height": 78,
+    "category": "Scene",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set background image to"
+      }
+    ],
     "inputs": [
-      "img"
+      "background_image_picker"
     ]
   },
   "camerafollow": {
     "type": "camerafollow",
     "file": "camerafollow.svg",
-    "width": 315,
-    "height": 56,
-    "fields": [],
+    "width": 319,
+    "height": 60,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "camera follow sprite"
+      }
+    ],
     "inputs": [
-      "sprite"
+      ""
     ]
   },
   "camerashake": {
     "type": "camerashake",
     "file": "camerashake.svg",
-    "width": 394,
-    "height": 56,
-    "fields": [],
+    "width": 398,
+    "height": 60,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "camera shake by"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pixels for"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ms"
+      }
+    ],
     "inputs": [
-      "amplitude",
-      "duration",
+      "math_number_minmax",
+      "timePicker",
       ""
     ]
   },
   "particlesStartScreenAnimation": {
     "type": "particlesStartScreenAnimation",
     "file": "particlesStartScreenAnimation.svg",
-    "width": 329,
-    "height": 56,
+    "width": 333,
+    "height": 60,
+    "category": "Scene",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "start screen"
+      },
+      {
         "name": "effect",
+        "kind": "dropdown",
         "text": "confetti"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "effect"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ms"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
       }
     ],
     "inputs": [
       "",
       "",
-      "duration",
-      "0_optional_dummy0",
-      "0_add_button"
+      "timePicker",
+      "",
+      ""
     ]
   },
   "particlesEndScreenAnimation": {
     "type": "particlesEndScreenAnimation",
     "file": "particlesEndScreenAnimation.svg",
-    "width": 280,
-    "height": 56,
+    "width": 284,
+    "height": 60,
+    "category": "Scene",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "end screen"
+      },
+      {
         "name": "effect",
+        "kind": "dropdown",
         "text": "confetti"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "effect"
       }
     ],
     "inputs": [
@@ -1394,21 +2657,37 @@
   "set_current_tilemap": {
     "type": "set_current_tilemap",
     "file": "set_current_tilemap.svg",
-    "width": 291,
-    "height": 74,
-    "fields": [],
+    "width": 295,
+    "height": 78,
+    "category": "Scene",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set tilemap to"
+      }
+    ],
     "inputs": [
-      "tilemap"
+      "tiles_tilemap_editor"
     ]
   },
   "tiles_tilemap_editor": {
     "type": "tiles_tilemap_editor",
     "file": "tiles_tilemap_editor.svg",
-    "width": 144,
-    "height": 50,
+    "width": 148,
+    "height": 54,
+    "category": "Scene",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "tilemap"
+      },
+      {
         "name": "tilemap",
+        "kind": "r",
         "text": ""
       }
     ],
@@ -1419,209 +2698,425 @@
   "spriteshittile": {
     "type": "spriteshittile",
     "file": "spriteshittile.svg",
-    "width": 584,
-    "height": 122,
-    "fields": [],
+    "width": 588,
+    "height": 126,
+    "category": "Scene",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "of kind"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "overlaps"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      }
+    ],
     "inputs": [
-      "HANDLER_DRAG_PARAM_sprite",
-      "kind",
-      "tile",
-      "HANDLER_DRAG_PARAM_location",
-      "HANDLER"
+      "",
+      "spritekind",
+      "tileset_tile_picker",
+      "",
+      ""
     ]
   },
   "spriteshitwall": {
     "type": "spriteshitwall",
     "file": "spriteshitwall.svg",
-    "width": 509,
-    "height": 112,
-    "fields": [],
+    "width": 513,
+    "height": 116,
+    "category": "Scene",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "of kind"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "hits wall at"
+      }
+    ],
     "inputs": [
-      "HANDLER_DRAG_PARAM_sprite",
-      "kind",
-      "HANDLER_DRAG_PARAM_location",
-      "HANDLER"
+      "",
+      "spritekind",
+      "",
+      ""
     ]
   },
   "mapplaceontile": {
     "type": "mapplaceontile",
     "file": "mapplaceontile.svg",
-    "width": 521,
-    "height": 56,
-    "fields": [],
+    "width": 525,
+    "height": 60,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "place"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on top of"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "loc"
+      "",
+      "mapgettile"
     ]
   },
   "mapplaceonrandomtile": {
     "type": "mapplaceonrandomtile",
     "file": "mapplaceonrandomtile.svg",
-    "width": 416,
-    "height": 66,
-    "fields": [],
+    "width": 420,
+    "height": 70,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "place"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on top of random"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "tile"
+      "",
+      "tileset_tile_picker"
     ]
   },
   "mapsettileat": {
     "type": "mapsettileat",
     "file": "mapsettileat.svg",
-    "width": 409,
-    "height": 74,
-    "fields": [],
+    "width": 413,
+    "height": 78,
+    "category": "Scene",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      }
+    ],
     "inputs": [
-      "tile",
-      "loc"
+      "tileset_tile_picker",
+      "mapgettile"
     ]
   },
   "mapsetwallat": {
     "type": "mapsetwallat",
     "file": "mapsetwallat.svg",
-    "width": 465,
-    "height": 64,
-    "fields": [],
+    "width": 469,
+    "height": 68,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set wall"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      }
+    ],
     "inputs": [
-      "on",
-      "loc"
+      "toggleOnOff",
+      "mapgettile"
     ]
   },
   "mapgettile": {
     "type": "mapgettile",
     "file": "mapgettile.svg",
-    "width": 244,
-    "height": 40,
-    "fields": [],
+    "width": 248,
+    "height": 44,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tilemap col"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "row"
+      }
+    ],
     "inputs": [
-      "col",
-      "row"
+      "math_number",
+      "math_number"
     ]
   },
   "tiles_location_of_sprite": {
     "type": "tiles_location_of_sprite",
     "file": "tiles_location_of_sprite.svg",
-    "width": 306,
-    "height": 48,
-    "fields": [],
+    "width": 310,
+    "height": 52,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tilemap location of"
+      }
+    ],
     "inputs": [
-      "this"
+      ""
     ]
   },
   "tiles.Location_blockCombine_get": {
     "type": "tiles.Location_blockCombine_get",
     "file": "tiles.Location_blockCombine_get.svg",
-    "width": 228,
-    "height": 48,
+    "width": 232,
+    "height": 52,
+    "category": "Scene",
+    "isMultiLine": false,
     "fields": [
       {
         "name": "property",
+        "kind": "dropdown",
         "text": "column"
       }
     ],
     "inputs": [
-      "location",
+      "",
       ""
     ]
   },
   "maplocationistile": {
     "type": "maplocationistile",
     "file": "maplocationistile.svg",
-    "width": 472,
-    "height": 58,
-    "fields": [],
+    "width": 476,
+    "height": 62,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tile at"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is"
+      }
+    ],
     "inputs": [
-      "location",
-      "tile"
+      "mapgettile",
+      "tileset_tile_picker"
     ]
   },
   "tiles_tile_at_location_is_wall": {
     "type": "tiles_tile_at_location_is_wall",
     "file": "tiles_tile_at_location_is_wall.svg",
-    "width": 423,
-    "height": 48,
-    "fields": [],
+    "width": 427,
+    "height": 52,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tile at"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is wall"
+      }
+    ],
     "inputs": [
-      "location",
+      "mapgettile",
       ""
     ]
   },
   "spritetileat": {
     "type": "spritetileat",
     "file": "spritetileat.svg",
-    "width": 448,
-    "height": 58,
+    "width": 452,
+    "height": 62,
+    "category": "Scene",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "tile to"
+      },
+      {
         "name": "direction",
+        "kind": "dropdown",
         "text": "left"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "of"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is"
       }
     ],
     "inputs": [
       "",
-      "this",
-      "tile"
+      "",
+      "tileset_tile_picker"
     ]
   },
   "spritehasobstacle": {
     "type": "spritehasobstacle",
     "file": "spritehasobstacle.svg",
-    "width": 373,
-    "height": 48,
+    "width": 377,
+    "height": 52,
+    "category": "Scene",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "is"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "hitting wall"
+      },
+      {
         "name": "direction",
+        "kind": "dropdown",
         "text": "left"
       }
     ],
     "inputs": [
-      "sprite",
+      "",
       ""
     ]
   },
   "mapgettilestype": {
     "type": "mapgettilestype",
     "file": "mapgettilestype.svg",
-    "width": 301,
-    "height": 58,
-    "fields": [],
+    "width": 305,
+    "height": 62,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "array of all"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "locations"
+      }
+    ],
     "inputs": [
-      "tile",
+      "tileset_tile_picker",
       ""
     ]
   },
   "tiles_location_get_neighboring_location": {
     "type": "tiles_location_get_neighboring_location",
     "file": "tiles_location_get_neighboring_location.svg",
-    "width": 384,
-    "height": 48,
+    "width": 388,
+    "height": 52,
+    "category": "Scene",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "tilemap location"
+      },
+      {
         "name": "direction",
+        "kind": "dropdown",
         "text": "left"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "of"
       }
     ],
     "inputs": [
       "",
-      "this"
+      ""
     ]
   },
   "tiles_image_at_location": {
     "type": "tiles_image_at_location",
     "file": "tiles_image_at_location.svg",
-    "width": 382,
-    "height": 48,
-    "fields": [],
+    "width": 386,
+    "height": 52,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tile image at"
+      }
+    ],
     "inputs": [
-      "location"
+      "mapgettile"
     ]
   },
   "hudScore": {
     "type": "hudScore",
     "file": "hudScore.svg",
-    "width": 68,
-    "height": 40,
-    "fields": [],
+    "width": 72,
+    "height": 44,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "score"
+      }
+    ],
     "inputs": [
       ""
     ]
@@ -1629,29 +3124,53 @@
   "hudsetScore": {
     "type": "hudsetScore",
     "file": "hudsetScore.svg",
-    "width": 170,
-    "height": 56,
-    "fields": [],
+    "width": 174,
+    "height": 60,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set score to"
+      }
+    ],
     "inputs": [
-      "value"
+      "math_number"
     ]
   },
   "hudChangeScoreBy": {
     "type": "hudChangeScoreBy",
     "file": "hudChangeScoreBy.svg",
-    "width": 196,
-    "height": 56,
-    "fields": [],
+    "width": 200,
+    "height": 60,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "change score by"
+      }
+    ],
     "inputs": [
-      "value"
+      "math_number"
     ]
   },
   "hudLife": {
     "type": "hudLife",
     "file": "hudLife.svg",
-    "width": 60,
-    "height": 40,
-    "fields": [],
+    "width": 64,
+    "height": 44,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "life"
+      }
+    ],
     "inputs": [
       ""
     ]
@@ -1659,40 +3178,72 @@
   "hudSetLife": {
     "type": "hudSetLife",
     "file": "hudSetLife.svg",
-    "width": 161,
-    "height": 56,
-    "fields": [],
+    "width": 165,
+    "height": 60,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set life to"
+      }
+    ],
     "inputs": [
-      "value"
+      "math_number"
     ]
   },
   "hudChangeLifeBy": {
     "type": "hudChangeLifeBy",
     "file": "hudChangeLifeBy.svg",
-    "width": 189,
-    "height": 56,
-    "fields": [],
+    "width": 193,
+    "height": 60,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "change life by"
+      }
+    ],
     "inputs": [
-      "value"
+      "math_number"
     ]
   },
   "gamelifeevent": {
     "type": "gamelifeevent",
     "file": "gamelifeevent.svg",
-    "width": 160,
-    "height": 104,
-    "fields": [],
+    "width": 164,
+    "height": 108,
+    "category": "Info",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on life zero"
+      }
+    ],
     "inputs": [
       "",
-      "HANDLER"
+      ""
     ]
   },
   "gamegetcountdown": {
     "type": "gamegetcountdown",
     "file": "gamegetcountdown.svg",
-    "width": 104,
-    "height": 40,
-    "fields": [],
+    "width": 108,
+    "height": 44,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "countdown"
+      }
+    ],
     "inputs": [
       ""
     ]
@@ -1700,20 +3251,41 @@
   "gamecountdown": {
     "type": "gamecountdown",
     "file": "gamecountdown.svg",
-    "width": 232,
-    "height": 56,
-    "fields": [],
+    "width": 236,
+    "height": 60,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "start countdown"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "(s)"
+      }
+    ],
     "inputs": [
-      "duration",
+      "math_number",
       ""
     ]
   },
   "gamestopcountdown": {
     "type": "gamestopcountdown",
     "file": "gamestopcountdown.svg",
-    "width": 140,
-    "height": 56,
-    "fields": [],
+    "width": 144,
+    "height": 60,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "stop countdown"
+      }
+    ],
     "inputs": [
       ""
     ]
@@ -1721,336 +3293,692 @@
   "gamecountdownevent": {
     "type": "gamecountdownevent",
     "file": "gamecountdownevent.svg",
-    "width": 160,
-    "height": 104,
-    "fields": [],
+    "width": 164,
+    "height": 108,
+    "category": "Info",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on countdown end"
+      }
+    ],
     "inputs": [
       "",
-      "HANDLER"
+      ""
     ]
   },
   "StatusBarSprite_blockCombine_set": {
     "type": "StatusBarSprite_blockCombine_set",
     "file": "StatusBarSprite_blockCombine_set.svg",
-    "width": 341,
-    "height": 56,
+    "width": 345,
+    "height": 60,
+    "category": "Status Bars",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
         "name": "property",
+        "kind": "dropdown",
         "text": "value"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
       }
     ],
     "inputs": [
-      "statusbar",
       "",
-      "value"
+      "",
+      "math_number"
     ]
   },
   "StatusBarSprite_blockCombine_change": {
     "type": "StatusBarSprite_blockCombine_change",
     "file": "StatusBarSprite_blockCombine_change.svg",
-    "width": 362,
-    "height": 56,
+    "width": 366,
+    "height": 60,
+    "category": "Status Bars",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "change"
+      },
+      {
         "name": "property",
+        "kind": "dropdown",
         "text": "value"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "by"
       }
     ],
     "inputs": [
-      "statusbar",
       "",
-      "value"
+      "",
+      "math_number"
     ]
   },
   "StatusBarSprite_blockCombine_get": {
     "type": "StatusBarSprite_blockCombine_get",
     "file": "StatusBarSprite_blockCombine_get.svg",
-    "width": 228,
-    "height": 48,
+    "width": 232,
+    "height": 52,
+    "category": "Status Bars",
+    "isMultiLine": false,
     "fields": [
       {
         "name": "property",
+        "kind": "dropdown",
         "text": "value"
       }
     ],
     "inputs": [
-      "statusbar",
+      "",
       ""
     ]
   },
   "statusbars_attachToSprite": {
     "type": "statusbars_attachToSprite",
     "file": "statusbars_attachToSprite.svg",
-    "width": 380,
-    "height": 56,
-    "fields": [],
+    "width": 384,
+    "height": 60,
+    "category": "Status Bars",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "attach"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "padding"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "offset"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "this",
-      "toFollow",
-      "padding",
-      "offset",
-      "0_add_button"
+      "",
+      "",
+      "math_number",
+      "math_number",
+      ""
     ]
   },
   "statusbars_spriteStatusBarIsAttachedTo": {
     "type": "statusbars_spriteStatusBarIsAttachedTo",
     "file": "statusbars_spriteStatusBarIsAttachedTo.svg",
-    "width": 480,
-    "height": 48,
-    "fields": [],
+    "width": 484,
+    "height": 52,
+    "category": "Status Bars",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "status bar kind"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "attached to"
+      }
+    ],
     "inputs": [
-      "kind",
-      "sprite"
+      "statusbars_kind",
+      ""
     ]
   },
   "statusbars_attachSpriteGetter": {
     "type": "statusbars_attachSpriteGetter",
     "file": "statusbars_attachSpriteGetter.svg",
-    "width": 384,
-    "height": 48,
-    "fields": [],
+    "width": 388,
+    "height": 52,
+    "category": "Status Bars",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "sprite that"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is attached to"
+      }
+    ],
     "inputs": [
-      "this",
+      "",
       ""
     ]
   },
   "statusbars_setColor": {
     "type": "statusbars_setColor",
     "file": "statusbars_setColor.svg",
-    "width": 447,
-    "height": 56,
-    "fields": [],
+    "width": 451,
+    "height": 60,
+    "category": "Status Bars",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "fill"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "background"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "drain color"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "this",
-      "fillColor",
-      "bkgdColor",
-      "drainColor",
-      "0_add_button"
+      "",
+      "colorindexpicker",
+      "colorindexpicker",
+      "colorindexpicker",
+      ""
     ]
   },
   "statusbars_setBorder": {
     "type": "statusbars_setBorder",
     "file": "statusbars_setBorder.svg",
-    "width": 389,
-    "height": 56,
-    "fields": [],
+    "width": 393,
+    "height": 60,
+    "category": "Status Bars",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "border width"
+      }
+    ],
     "inputs": [
-      "this",
-      "borderWidth",
-      "color"
+      "",
+      "math_number",
+      "colorindexpicker"
     ]
   },
   "statusbar_setLabel": {
     "type": "statusbar_setLabel",
     "file": "statusbar_setLabel.svg",
-    "width": 327,
-    "height": 56,
-    "fields": [],
+    "width": 331,
+    "height": 60,
+    "category": "Status Bars",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "label"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "this",
-      "label",
-      "color",
-      "0_add_button"
+      "",
+      "text",
+      "colorindexpicker",
+      ""
     ]
   },
   "statusbars_setFlag": {
     "type": "statusbars_setFlag",
     "file": "statusbars_setFlag.svg",
-    "width": 474,
-    "height": 56,
+    "width": 478,
+    "height": 60,
+    "category": "Status Bars",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
         "name": "flag",
+        "kind": "dropdown",
         "text": "smooth transition"
       }
     ],
     "inputs": [
-      "this",
       "",
-      "on"
+      "",
+      "toggleOnOff"
     ]
   },
   "statusbars_setBarSize": {
     "type": "statusbars_setBarSize",
     "file": "statusbars_setBarSize.svg",
-    "width": 390,
-    "height": 56,
-    "fields": [],
+    "width": 394,
+    "height": 60,
+    "category": "Status Bars",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "width"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "height"
+      }
+    ],
     "inputs": [
-      "this",
-      "width",
-      "height"
+      "",
+      "math_number",
+      "math_number"
     ]
   },
   "statusbars_positionNextToSprite": {
     "type": "statusbars_positionNextToSprite",
     "file": "statusbars_positionNextToSprite.svg",
-    "width": 364,
-    "height": 56,
+    "width": 368,
+    "height": 60,
+    "category": "Status Bars",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "position to"
+      },
+      {
         "name": "dir",
+        "kind": "dropdown",
         "text": "left"
       }
     ],
     "inputs": [
-      "this",
+      "",
       ""
     ]
   },
   "setPaddingOffset": {
     "type": "setPaddingOffset",
     "file": "setPaddingOffset.svg",
-    "width": 406,
-    "height": 56,
-    "fields": [],
+    "width": 410,
+    "height": 60,
+    "category": "Status Bars",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "padding"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "offset"
+      }
+    ],
     "inputs": [
-      "this",
-      "padding",
-      "offset"
+      "",
+      "math_number",
+      "math_number"
     ]
   },
   "statusbars_onZero": {
     "type": "statusbars_onZero",
     "file": "statusbars_onZero.svg",
-    "width": 408,
-    "height": 112,
-    "fields": [],
+    "width": 412,
+    "height": 116,
+    "category": "Status Bars",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on status bar kind"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "zero"
+      }
+    ],
     "inputs": [
-      "kind",
-      "HANDLER_DRAG_PARAM_status",
-      "HANDLER"
+      "statusbars_kind",
+      "",
+      ""
     ]
   },
   "statusbars_postprocessDisplay": {
     "type": "statusbars_postprocessDisplay",
     "file": "statusbars_postprocessDisplay.svg",
-    "width": 580,
-    "height": 112,
-    "fields": [],
+    "width": 584,
+    "height": 116,
+    "category": "Status Bars",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on status bar kind"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "display updated"
+      }
+    ],
     "inputs": [
-      "kind",
-      "HANDLER_DRAG_PARAM_status",
-      "HANDLER_DRAG_PARAM_image",
-      "HANDLER"
+      "statusbars_kind",
+      "",
+      "",
+      ""
     ]
   },
   "statusbars_onStatusReached": {
     "type": "statusbars_onStatusReached",
     "file": "statusbars_onStatusReached.svg",
-    "width": 520,
-    "height": 112,
+    "width": 524,
+    "height": 116,
+    "category": "Status Bars",
+    "isMultiLine": true,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "on status bar kind"
+      },
+      {
         "name": "comparison",
+        "kind": "dropdown",
         "text": "≤"
       },
       {
         "name": "comparisonType",
+        "kind": "dropdown",
         "text": "%"
       }
     ],
     "inputs": [
-      "kind",
+      "statusbars_kind",
       "",
-      "value",
+      "math_number",
       "",
-      "HANDLER_DRAG_PARAM_status",
-      "HANDLER"
+      "",
+      ""
     ]
   },
   "forever": {
     "type": "forever",
     "file": "forever.svg",
-    "width": 160,
-    "height": 104,
-    "fields": [],
+    "width": 164,
+    "height": 108,
+    "category": "Loops",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "forever"
+      }
+    ],
     "inputs": [
       "",
-      "HANDLER"
+      ""
     ]
   },
   "device_pause": {
     "type": "device_pause",
     "file": "device_pause.svg",
-    "width": 162,
-    "height": 56,
-    "fields": [],
+    "width": 166,
+    "height": 60,
+    "category": "Loops",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pause"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ms"
+      }
+    ],
     "inputs": [
-      "pause",
+      "timePicker",
       ""
     ]
   },
   "controls_repeat_ext": {
     "type": "controls_repeat_ext",
     "file": "controls_repeat_ext.svg",
-    "width": 169,
-    "height": 112,
-    "fields": [],
+    "width": 173,
+    "height": 116,
+    "category": "Loops",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "repeat"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "times"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "do"
+      }
+    ],
     "inputs": [
-      "TIMES",
+      "math_whole_number",
       "",
-      "DO"
+      ""
     ]
   },
   "device_while": {
     "type": "device_while",
     "file": "device_while.svg",
-    "width": 172,
-    "height": 112,
-    "fields": [],
+    "width": 176,
+    "height": 116,
+    "category": "Loops",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "while"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "do"
+      }
+    ],
     "inputs": [
-      "COND",
-      "DO"
+      "logic_boolean",
+      ""
     ]
   },
   "pxt_controls_for": {
     "type": "pxt_controls_for",
     "file": "pxt_controls_for.svg",
-    "width": 296,
-    "height": 112,
-    "fields": [],
+    "width": 300,
+    "height": 116,
+    "category": "Loops",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "from 0 to"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "do"
+      }
+    ],
     "inputs": [
-      "VAR",
-      "TO",
-      "DO"
+      "",
+      "math_whole_number",
+      ""
     ]
   },
   "pxt_controls_for_of": {
     "type": "pxt_controls_for_of",
     "file": "pxt_controls_for_of.svg",
-    "width": 338,
-    "height": 112,
-    "fields": [],
+    "width": 342,
+    "height": 116,
+    "category": "Loops",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for element"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "of"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "do"
+      }
+    ],
     "inputs": [
-      "VAR",
-      "LIST",
-      "DO"
+      "",
+      "",
+      ""
     ]
   },
   "pxt-on-start": {
     "type": "pxt-on-start",
     "file": "pxt-on-start.svg",
-    "width": 160,
-    "height": 104,
-    "fields": [],
+    "width": 164,
+    "height": 108,
+    "category": "Loops",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on start"
+      }
+    ],
     "inputs": [
       "",
-      "HANDLER"
+      ""
     ]
   },
   "controls_if": {
     "type": "controls_if",
     "file": "controls_if.svg",
-    "width": 195,
-    "height": 112,
-    "fields": [],
+    "width": 199,
+    "height": 116,
+    "category": "Logic",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "if"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "then"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "add else branch"
+      }
+    ],
     "inputs": [
-      "IF0",
-      "THEN0",
-      "DO0",
-      "ADDBUTTON"
+      "logic_boolean",
+      "",
+      "",
+      ""
     ]
   },
   "controls_if_else": {
@@ -2136,11 +4064,19 @@
   "logic_negate": {
     "type": "logic_negate",
     "file": "logic_negate.svg",
-    "width": 111,
-    "height": 40,
-    "fields": [],
+    "width": 115,
+    "height": 44,
+    "category": "Logic",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "not"
+      }
+    ],
     "inputs": [
-      "BOOL"
+      ""
     ]
   },
   "logic_boolean_true": {
@@ -2240,22 +4176,43 @@
   "device_random": {
     "type": "device_random",
     "file": "device_random.svg",
-    "width": 236,
-    "height": 40,
-    "fields": [],
+    "width": 240,
+    "height": 44,
+    "category": "Math",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pick random"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
     "inputs": [
-      "min",
-      "limit"
+      "math_number",
+      "math_number"
     ]
   },
   "percentchance": {
     "type": "percentchance",
     "file": "percentchance.svg",
-    "width": 159,
-    "height": 40,
-    "fields": [],
+    "width": 163,
+    "height": 44,
+    "category": "Math",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "% chance"
+      }
+    ],
     "inputs": [
-      "percentage",
+      "math_number_minmax",
       ""
     ]
   },
@@ -2688,161 +4645,323 @@
   "run_image_animation": {
     "type": "run_image_animation",
     "file": "run_image_animation.svg",
-    "width": 207,
-    "height": 202,
-    "fields": [],
+    "width": 211,
+    "height": 206,
+    "category": "Animation",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "animate"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "frames"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "interval (ms)"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "loop"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "frames",
-      "frameInterval",
-      "loop"
+      "",
+      "animation_editor",
+      "timePicker",
+      "toggleOnOff"
     ]
   },
   "run_movement_animation": {
     "type": "run_movement_animation",
     "file": "run_movement_animation.svg",
-    "width": 218,
-    "height": 184,
-    "fields": [],
+    "width": 222,
+    "height": 188,
+    "category": "Animation",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "animate"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for (ms)"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "loop"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "pathString",
-      "duration",
-      "loop"
+      "",
+      "animation_path",
+      "timePicker",
+      "toggleOnOff"
     ]
   },
   "stop_animations": {
     "type": "stop_animations",
     "file": "stop_animations.svg",
-    "width": 367,
-    "height": 56,
+    "width": 371,
+    "height": 60,
+    "category": "Animation",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "stop"
+      },
+      {
         "name": "type",
+        "kind": "dropdown",
         "text": "all"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "animations on"
       }
     ],
     "inputs": [
       "",
-      "sprite"
+      ""
     ]
   },
   "Image_replace": {
     "type": "Image_replace",
     "file": "Image_replace.svg",
-    "width": 427,
-    "height": 56,
-    "fields": [],
+    "width": 431,
+    "height": 60,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "change color in"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "from"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
     "inputs": [
-      "picture",
-      "from",
-      "to"
+      "",
+      "colorindexpicker",
+      "colorindexpicker"
     ]
   },
   "Image_equals": {
     "type": "Image_equals",
     "file": "Image_equals.svg",
-    "width": 404,
-    "height": 58,
-    "fields": [],
+    "width": 408,
+    "height": 62,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is equal to image"
+      }
+    ],
     "inputs": [
-      "this",
-      "other"
+      "",
+      "screen_image_picker"
     ]
   },
   "lists_create_with": {
     "type": "lists_create_with",
     "file": "lists_create_with.svg",
-    "width": 153,
-    "height": 40,
-    "fields": [],
+    "width": 157,
+    "height": 44,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "empty array"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "add argument"
+      }
+    ],
     "inputs": [
-      "EMPTY",
-      "BUTTONS"
+      "",
+      ""
     ]
   },
   "lists_length": {
     "type": "lists_length",
     "file": "lists_length.svg",
-    "width": 236,
-    "height": 48,
-    "fields": [],
+    "width": 240,
+    "height": 52,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "length of array"
+      }
+    ],
     "inputs": [
-      "VALUE"
+      ""
     ]
   },
   "lists_index_get": {
     "type": "lists_index_get",
     "file": "lists_index_get.svg",
-    "width": 249,
-    "height": 48,
-    "fields": [],
+    "width": 253,
+    "height": 52,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "get value at"
+      }
+    ],
     "inputs": [
-      "LIST",
-      "INDEX"
+      "",
+      "math_number"
     ]
   },
   "array_removeat": {
     "type": "array_removeat",
     "file": "array_removeat.svg",
-    "width": 346,
-    "height": 48,
-    "fields": [],
+    "width": 350,
+    "height": 52,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "get and remove value at"
+      }
+    ],
     "inputs": [
-      "list",
-      "index"
+      "",
+      "math_number"
     ]
   },
   "array_pop": {
     "type": "array_pop",
     "file": "array_pop.svg",
-    "width": 368,
-    "height": 48,
-    "fields": [],
+    "width": 372,
+    "height": 52,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "get and remove last value from"
+      }
+    ],
     "inputs": [
-      "list"
+      ""
     ]
   },
   "array_shift": {
     "type": "array_shift",
     "file": "array_shift.svg",
-    "width": 376,
-    "height": 48,
-    "fields": [],
+    "width": 380,
+    "height": 52,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "get and remove first value from"
+      }
+    ],
     "inputs": [
-      "list"
+      ""
     ]
   },
   "array_pickRandom": {
     "type": "array_pickRandom",
     "file": "array_pickRandom.svg",
-    "width": 288,
-    "height": 48,
-    "fields": [],
+    "width": 292,
+    "height": 52,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "get random value from"
+      }
+    ],
     "inputs": [
-      "list"
+      ""
     ]
   },
   "array_push": {
     "type": "array_push",
     "file": "array_push.svg",
-    "width": 340,
-    "height": 56,
-    "fields": [],
+    "width": 344,
+    "height": 60,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "add value"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to end"
+      }
+    ],
     "inputs": [
-      "list",
-      "value",
+      "",
+      "",
       ""
     ]
   },
   "text": {
     "type": "text",
     "file": "text.svg",
-    "width": 48,
-    "height": 40,
+    "width": 52,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
     "fields": [
       {
         "name": "TEXT",
+        "kind": "text",
         "text": ""
       }
     ],
@@ -2853,14 +4972,32 @@
   "text_join": {
     "type": "text_join",
     "file": "text_join.svg",
-    "width": 304,
-    "height": 40,
-    "fields": [],
+    "width": 308,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "join"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "remove argument"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "add argument"
+      }
+    ],
     "inputs": [
-      "TITLE",
-      "ADD0",
-      "ADD1",
-      "BUTTONS"
+      "",
+      "text",
+      "text",
+      ""
     ]
   },
   "device_pause_2": {
@@ -3032,6 +5169,2597 @@
       "width",
       "height",
       "kind"
+    ]
+  },
+  "variables_set": {
+    "type": "variables_set",
+    "file": "variables_set.svg",
+    "width": 526,
+    "height": 78,
+    "category": "Sprites",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "VAR",
+        "kind": "variable",
+        "text": "mySprite"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "variables_set__2": {
+    "type": "variables_set",
+    "file": "variables_set__2.svg",
+    "width": 764,
+    "height": 78,
+    "category": "Sprites",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "VAR",
+        "kind": "variable",
+        "text": "projectile"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "keydx": {
+    "type": "keydx",
+    "file": "keydx.svg",
+    "width": 263,
+    "height": 44,
+    "category": "Controller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "dx (left-right buttons)"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "scaled by"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      ""
+    ]
+  },
+  "keydy": {
+    "type": "keydy",
+    "file": "keydy.svg",
+    "width": 236,
+    "height": 44,
+    "category": "Controller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "dy (up-down buttons)"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "scaled by"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      ""
+    ]
+  },
+  "ctrlgame_control_sprite": {
+    "type": "ctrlgame_control_sprite",
+    "file": "ctrlgame_control_sprite.svg",
+    "width": 437,
+    "height": 60,
+    "category": "Controller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "controller",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "move"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with buttons"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "vx"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "vy"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "",
+      "spriteSpeedPicker",
+      "spriteSpeedPicker",
+      ""
+    ]
+  },
+  "ctrlonevent": {
+    "type": "ctrlonevent",
+    "file": "ctrlonevent.svg",
+    "width": 275,
+    "height": 108,
+    "category": "Controller",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "controller",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "event",
+        "kind": "dropdown",
+        "text": "connected"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "ctrlonbuttonevent": {
+    "type": "ctrlonbuttonevent",
+    "file": "ctrlonbuttonevent.svg",
+    "width": 371,
+    "height": 108,
+    "category": "Controller",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "controller",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "button",
+        "kind": "dropdown",
+        "text": "A"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "button"
+      },
+      {
+        "name": "event",
+        "kind": "dropdown",
+        "text": "pressed"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "ctrlispressed": {
+    "type": "ctrlispressed",
+    "file": "ctrlispressed.svg",
+    "width": 359,
+    "height": 44,
+    "category": "Controller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "controller",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "button",
+        "kind": "dropdown",
+        "text": "A"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "button"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pressed"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "ctrldx": {
+    "type": "ctrldx",
+    "file": "ctrldx.svg",
+    "width": 376,
+    "height": 44,
+    "category": "Controller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "controller",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "dx (left-right buttons)"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "scaled by"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "math_number",
+      ""
+    ]
+  },
+  "ctrldy": {
+    "type": "ctrldy",
+    "file": "ctrldy.svg",
+    "width": 350,
+    "height": 44,
+    "category": "Controller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "controller",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "dy (up-down buttons)"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "scaled by"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "math_number",
+      ""
+    ]
+  },
+  "arcade_game_runtime": {
+    "type": "arcade_game_runtime",
+    "file": "arcade_game_runtime.svg",
+    "width": 213,
+    "height": 44,
+    "category": "Game",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "time since start (ms)"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "arcade_game_reset": {
+    "type": "arcade_game_reset",
+    "file": "arcade_game_reset.svg",
+    "width": 108,
+    "height": 60,
+    "category": "Game",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "reset game"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "gameask": {
+    "type": "gameask",
+    "file": "gameask.svg",
+    "width": 151,
+    "height": 44,
+    "category": "Game",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ask"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "text",
+      "text",
+      ""
+    ]
+  },
+  "music_playable_play__2": {
+    "type": "music_playable_play",
+    "file": "music_playable_play__2.svg",
+    "width": 345,
+    "height": 78,
+    "category": "Music",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "play"
+      },
+      {
+        "name": "playbackMode",
+        "kind": "dropdown",
+        "text": "until done"
+      }
+    ],
+    "inputs": [
+      "music_song_field_editor",
+      ""
+    ]
+  },
+  "music_playable_play__3": {
+    "type": "music_playable_play",
+    "file": "music_playable_play__3.svg",
+    "width": 353,
+    "height": 60,
+    "category": "Music",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "play"
+      },
+      {
+        "name": "playbackMode",
+        "kind": "dropdown",
+        "text": "until done"
+      }
+    ],
+    "inputs": [
+      "music_melody_playable",
+      ""
+    ]
+  },
+  "music_playable_play__4": {
+    "type": "music_playable_play",
+    "file": "music_playable_play__4.svg",
+    "width": 417,
+    "height": 84,
+    "category": "Music",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "play"
+      },
+      {
+        "name": "playbackMode",
+        "kind": "dropdown",
+        "text": "until done"
+      }
+    ],
+    "inputs": [
+      "soundExpression_createSoundEffect",
+      ""
+    ]
+  },
+  "soundExpression_generateSimilarSound": {
+    "type": "soundExpression_generateSimilarSound",
+    "file": "soundExpression_generateSimilarSound.svg",
+    "width": 329,
+    "height": 68,
+    "category": "Music",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "randomize"
+      }
+    ],
+    "inputs": [
+      "soundExpression_createSoundEffect"
+    ]
+  },
+  "music_ring": {
+    "type": "music_ring",
+    "file": "music_ring.svg",
+    "width": 228,
+    "height": 60,
+    "category": "Music",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ring tone"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      }
+    ],
+    "inputs": [
+      "",
+      "device_note"
+    ]
+  },
+  "music_rest": {
+    "type": "music_rest",
+    "file": "music_rest.svg",
+    "width": 212,
+    "height": 60,
+    "category": "Music",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "rest"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      }
+    ],
+    "inputs": [
+      "",
+      "device_beat"
+    ]
+  },
+  "music_playable_play__5": {
+    "type": "music_playable_play",
+    "file": "music_playable_play__5.svg",
+    "width": 505,
+    "height": 68,
+    "category": "Music",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "play"
+      },
+      {
+        "name": "playbackMode",
+        "kind": "dropdown",
+        "text": "until done"
+      }
+    ],
+    "inputs": [
+      "music_tone_playable",
+      ""
+    ]
+  },
+  "device_note": {
+    "type": "device_note",
+    "file": "device_note.svg",
+    "width": 99,
+    "height": 44,
+    "category": "Music",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "note",
+        "kind": "number",
+        "text": "Middle C"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "device_tempo": {
+    "type": "device_tempo",
+    "file": "device_tempo.svg",
+    "width": 125,
+    "height": 44,
+    "category": "Music",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tempo (bpm)"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "device_beat": {
+    "type": "device_beat",
+    "file": "device_beat.svg",
+    "width": 134,
+    "height": 44,
+    "category": "Music",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "fraction",
+        "kind": "dropdown",
+        "text": "1/2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "beat"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "scenescreenwidth": {
+    "type": "scenescreenwidth",
+    "file": "scenescreenwidth.svg",
+    "width": 134,
+    "height": 44,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "screen width"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "scenescreenheight": {
+    "type": "scenescreenheight",
+    "file": "scenescreenheight.svg",
+    "width": 143,
+    "height": 44,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "screen height"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "gamebackgroundimage": {
+    "type": "gamebackgroundimage",
+    "file": "gamebackgroundimage.svg",
+    "width": 169,
+    "height": 44,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "background image"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "gamebackgroundcolor": {
+    "type": "gamebackgroundcolor",
+    "file": "gamebackgroundcolor.svg",
+    "width": 169,
+    "height": 44,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "background color"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "camerapos": {
+    "type": "camerapos",
+    "file": "camerapos.svg",
+    "width": 292,
+    "height": 60,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "center camera at x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      "math_number"
+    ]
+  },
+  "cameraproperty": {
+    "type": "cameraproperty",
+    "file": "cameraproperty.svg",
+    "width": 134,
+    "height": 44,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "camera"
+      },
+      {
+        "name": "property",
+        "kind": "dropdown",
+        "text": "x"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "tileset_tile_picker": {
+    "type": "tileset_tile_picker",
+    "file": "tileset_tile_picker.svg",
+    "width": 96,
+    "height": 54,
+    "category": "Scene",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "tile",
+        "kind": "opaque",
+        "text": "assets.tile`transparency16`"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "highScore": {
+    "type": "highScore",
+    "file": "highScore.svg",
+    "width": 116,
+    "height": 44,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "high score"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "gameonscore": {
+    "type": "gameonscore",
+    "file": "gameonscore.svg",
+    "width": 164,
+    "height": 108,
+    "category": "Info",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on score"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      ""
+    ]
+  },
+  "gamechangecountdown": {
+    "type": "gamechangecountdown",
+    "file": "gamechangecountdown.svg",
+    "width": 270,
+    "height": 60,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "change countdown by"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "(s)"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      ""
+    ]
+  },
+  "playerinfoonscore": {
+    "type": "playerinfoonscore",
+    "file": "playerinfoonscore.svg",
+    "width": 262,
+    "height": 108,
+    "category": "Info",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "this",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "score"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      ""
+    ]
+  },
+  "playerinfoonlifezero": {
+    "type": "playerinfoonlifezero",
+    "file": "playerinfoonlifezero.svg",
+    "width": 239,
+    "height": 108,
+    "category": "Info",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "player",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "life zero"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "pihaslife": {
+    "type": "pihaslife",
+    "file": "pihaslife.svg",
+    "width": 228,
+    "height": 44,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "player",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "has life"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "pichangelife": {
+    "type": "pichangelife",
+    "file": "pichangelife.svg",
+    "width": 306,
+    "height": 60,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "change"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "player",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "life by"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number"
+    ]
+  },
+  "pisetlife": {
+    "type": "pisetlife",
+    "file": "pisetlife.svg",
+    "width": 278,
+    "height": 60,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "player",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "life to"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number"
+    ]
+  },
+  "info_PlayerInfo_life": {
+    "type": "info_PlayerInfo_life",
+    "file": "info_PlayerInfo_life.svg",
+    "width": 177,
+    "height": 44,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "player",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "life"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "pichangescore": {
+    "type": "pichangescore",
+    "file": "pichangescore.svg",
+    "width": 313,
+    "height": 60,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "change"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "player",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "score by"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number"
+    ]
+  },
+  "pisetscore": {
+    "type": "pisetscore",
+    "file": "pisetscore.svg",
+    "width": 287,
+    "height": 60,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "player",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "score to"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number"
+    ]
+  },
+  "piscore": {
+    "type": "piscore",
+    "file": "piscore.svg",
+    "width": 186,
+    "height": 44,
+    "category": "Info",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "player",
+        "kind": "dropdown",
+        "text": "2"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "score"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "variables_set__3": {
+    "type": "variables_set",
+    "file": "variables_set__3.svg",
+    "width": 796,
+    "height": 60,
+    "category": "Status Bars",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "VAR",
+        "kind": "variable",
+        "text": "statusbar"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "variables_set__4": {
+    "type": "variables_set",
+    "file": "variables_set__4.svg",
+    "width": 585,
+    "height": 60,
+    "category": "Status Bars",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "VAR",
+        "kind": "variable",
+        "text": "status bar list"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "break_keyword": {
+    "type": "break_keyword",
+    "file": "break_keyword.svg",
+    "width": 64,
+    "height": 60,
+    "category": "Loops",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "break"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "continue_keyword": {
+    "type": "continue_keyword",
+    "file": "continue_keyword.svg",
+    "width": 91,
+    "height": 60,
+    "category": "Loops",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "continue"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "pxt_pause_until": {
+    "type": "pxt_pause_until",
+    "file": "pxt_pause_until.svg",
+    "width": 220,
+    "height": 60,
+    "category": "Loops",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pause until"
+      }
+    ],
+    "inputs": [
+      "logic_boolean"
+    ]
+  },
+  "logic_compare": {
+    "type": "logic_compare",
+    "file": "logic_compare.svg",
+    "width": 185,
+    "height": 44,
+    "category": "Logic",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "OP",
+        "kind": "dropdown",
+        "text": "="
+      }
+    ],
+    "inputs": [
+      "math_number",
+      "math_number"
+    ]
+  },
+  "logic_compare__2": {
+    "type": "logic_compare",
+    "file": "logic_compare__2.svg",
+    "width": 185,
+    "height": 44,
+    "category": "Logic",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "OP",
+        "kind": "dropdown",
+        "text": "="
+      }
+    ],
+    "inputs": [
+      "text",
+      "text"
+    ]
+  },
+  "logic_operation": {
+    "type": "logic_operation",
+    "file": "logic_operation.svg",
+    "width": 195,
+    "height": 44,
+    "category": "Logic",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "OP",
+        "kind": "dropdown",
+        "text": "and"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "logic_boolean": {
+    "type": "logic_boolean",
+    "file": "logic_boolean.svg",
+    "width": 116,
+    "height": 44,
+    "category": "Logic",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "BOOL",
+        "kind": "dropdown",
+        "text": "true"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "math_arithmetic": {
+    "type": "math_arithmetic",
+    "file": "math_arithmetic.svg",
+    "width": 153,
+    "height": 44,
+    "category": "Math",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "OP",
+        "kind": "dropdown",
+        "text": "+"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      "math_number"
+    ]
+  },
+  "math_number": {
+    "type": "math_number",
+    "file": "math_number.svg",
+    "width": 52,
+    "height": 44,
+    "category": "Math",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "NUM",
+        "kind": "number",
+        "text": "0"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "math_modulo": {
+    "type": "math_modulo",
+    "file": "math_modulo.svg",
+    "width": 239,
+    "height": 44,
+    "category": "Math",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "remainder of"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "/"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      "math_number"
+    ]
+  },
+  "math_op2": {
+    "type": "math_op2",
+    "file": "math_op2.svg",
+    "width": 239,
+    "height": 44,
+    "category": "Math",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "op",
+        "kind": "dropdown",
+        "text": "min"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "of"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      "math_number"
+    ]
+  },
+  "math_op3": {
+    "type": "math_op3",
+    "file": "math_op3.svg",
+    "width": 165,
+    "height": 44,
+    "category": "Math",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "absolute of"
+      }
+    ],
+    "inputs": [
+      "math_number"
+    ]
+  },
+  "math_js_op": {
+    "type": "math_js_op",
+    "file": "math_js_op.svg",
+    "width": 201,
+    "height": 44,
+    "category": "Math",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "OP",
+        "kind": "dropdown",
+        "text": "square root"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number"
+    ]
+  },
+  "math_js_round": {
+    "type": "math_js_round",
+    "file": "math_js_round.svg",
+    "width": 148,
+    "height": 44,
+    "category": "Math",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "OP",
+        "kind": "dropdown",
+        "text": "round"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number"
+    ]
+  },
+  "math_constrain_value": {
+    "type": "math_constrain_value",
+    "file": "math_constrain_value.svg",
+    "width": 348,
+    "height": 44,
+    "category": "Math",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "constrain"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "between"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      "math_number",
+      "math_number"
+    ]
+  },
+  "math_map": {
+    "type": "math_map",
+    "file": "math_map.svg",
+    "width": 532,
+    "height": 44,
+    "category": "Math",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "map"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "from low"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "high"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to low"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "high"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      "math_number",
+      "math_number",
+      "math_number",
+      "math_number"
+    ]
+  },
+  "Math__constant": {
+    "type": "Math__constant",
+    "file": "Math__constant.svg",
+    "width": 73,
+    "height": 44,
+    "category": "Math",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "MEMBER",
+        "kind": "dropdown",
+        "text": "π"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "animation_editor": {
+    "type": "animation_editor",
+    "file": "animation_editor.svg",
+    "width": 108,
+    "height": 54,
+    "category": "Animation",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "frames",
+        "kind": "a",
+        "text": "[img`\n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n`]"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "screen_image_picker": {
+    "type": "screen_image_picker",
+    "file": "screen_image_picker.svg",
+    "width": 78,
+    "height": 54,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "img",
+        "kind": "r",
+        "text": "img`\n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n. . . . . . . . . . . . . . . . \n`"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "image_create": {
+    "type": "image_create",
+    "file": "image_create.svg",
+    "width": 336,
+    "height": 44,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "create image width"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "height"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      "math_number"
+    ]
+  },
+  "Image_clone": {
+    "type": "Image_clone",
+    "file": "Image_clone.svg",
+    "width": 178,
+    "height": 52,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "clone"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "imagescreen": {
+    "type": "imagescreen",
+    "file": "imagescreen.svg",
+    "width": 81,
+    "height": 44,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "screen"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "image_get_dimension": {
+    "type": "image_get_dimension",
+    "file": "image_get_dimension.svg",
+    "width": 214,
+    "height": 52,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "dimension",
+        "kind": "dropdown",
+        "text": "width"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "Image_fill": {
+    "type": "Image_fill",
+    "file": "Image_fill.svg",
+    "width": 260,
+    "height": 60,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "fill"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with"
+      }
+    ],
+    "inputs": [
+      "",
+      "colorindexpicker"
+    ]
+  },
+  "Image_getPixel": {
+    "type": "Image_getPixel",
+    "file": "Image_getPixel.svg",
+    "width": 327,
+    "height": 52,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "color at x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      "math_number"
+    ]
+  },
+  "Image_setPixel": {
+    "type": "Image_setPixel",
+    "file": "Image_setPixel.svg",
+    "width": 448,
+    "height": 60,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "color at x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      "math_number",
+      "colorindexpicker"
+    ]
+  },
+  "Image_drawRect": {
+    "type": "Image_drawRect",
+    "file": "Image_drawRect.svg",
+    "width": 696,
+    "height": 60,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "draw rectangle in"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "width"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "height"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      "math_number",
+      "math_number",
+      "math_number",
+      "colorindexpicker"
+    ]
+  },
+  "Image_drawLine": {
+    "type": "Image_drawLine",
+    "file": "Image_drawLine.svg",
+    "width": 617,
+    "height": 60,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "draw line in"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "from x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      "math_number",
+      "math_number",
+      "math_number",
+      "colorindexpicker"
+    ]
+  },
+  "Image_fillRect": {
+    "type": "Image_fillRect",
+    "file": "Image_fillRect.svg",
+    "width": 696,
+    "height": 60,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "fill rectangle in"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "width"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "height"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      "math_number",
+      "math_number",
+      "math_number",
+      "colorindexpicker"
+    ]
+  },
+  "image_draw_transparent_image": {
+    "type": "image_draw_transparent_image",
+    "file": "image_draw_transparent_image.svg",
+    "width": 447,
+    "height": 70,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "draw"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      }
+    ],
+    "inputs": [
+      "",
+      "screen_image_picker",
+      "math_number",
+      "math_number"
+    ]
+  },
+  "Image_flipY": {
+    "type": "Image_flipY",
+    "file": "Image_flipY.svg",
+    "width": 265,
+    "height": 60,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "flip"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "vertically"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "Image_flipX": {
+    "type": "Image_flipX",
+    "file": "Image_flipX.svg",
+    "width": 283,
+    "height": 60,
+    "category": "Images",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "flip"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "horizontally"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "function_return": {
+    "type": "function_return",
+    "file": "function_return.svg",
+    "width": 153,
+    "height": 52,
+    "category": "Functions",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "return"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Remove return value"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      ""
+    ]
+  },
+  "function_call": {
+    "type": "function_call",
+    "file": "function_call.svg",
+    "width": 160,
+    "height": 60,
+    "category": "Functions",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "function_title",
+        "kind": "dh",
+        "text": "call"
+      },
+      {
+        "name": "function_name",
+        "kind": "dh",
+        "text": "doSomething"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "variables_set__5": {
+    "type": "variables_set",
+    "file": "variables_set__5.svg",
+    "width": 420,
+    "height": 60,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "VAR",
+        "kind": "variable",
+        "text": "list"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "variables_set__6": {
+    "type": "variables_set",
+    "file": "variables_set__6.svg",
+    "width": 548,
+    "height": 60,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "VAR",
+        "kind": "variable",
+        "text": "text list"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "lists_index_set": {
+    "type": "lists_index_set",
+    "file": "lists_index_set.svg",
+    "width": 383,
+    "height": 60,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set value at"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      ""
+    ]
+  },
+  "array_pop_statement": {
+    "type": "array_pop_statement",
+    "file": "array_pop_statement.svg",
+    "width": 301,
+    "height": 60,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "remove last value from"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "array_shift_statement": {
+    "type": "array_shift_statement",
+    "file": "array_shift_statement.svg",
+    "width": 310,
+    "height": 60,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "remove first value from"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "array_unshift": {
+    "type": "array_unshift",
+    "file": "array_unshift.svg",
+    "width": 330,
+    "height": 52,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "insert"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at beginning"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "array_unshift_statement": {
+    "type": "array_unshift_statement",
+    "file": "array_unshift_statement.svg",
+    "width": 370,
+    "height": 60,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "insert"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at beginning"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "array_insertAt": {
+    "type": "array_insertAt",
+    "file": "array_insertAt.svg",
+    "width": 383,
+    "height": 60,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "insert at"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "value"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      ""
+    ]
+  },
+  "array_removeat_statement": {
+    "type": "array_removeat_statement",
+    "file": "array_removeat_statement.svg",
+    "width": 328,
+    "height": 60,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "remove value at"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number"
+    ]
+  },
+  "array_indexof": {
+    "type": "array_indexof",
+    "file": "array_indexof.svg",
+    "width": 270,
+    "height": 52,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "find index of"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "array_reverse": {
+    "type": "array_reverse",
+    "file": "array_reverse.svg",
+    "width": 169,
+    "height": 60,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "reverse"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "text_length": {
+    "type": "text_length",
+    "file": "text_length.svg",
+    "width": 190,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "length of"
+      }
+    ],
+    "inputs": [
+      "text"
+    ]
+  },
+  "string_parsefloat": {
+    "type": "string_parsefloat",
+    "file": "string_parsefloat.svg",
+    "width": 225,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "parse to number"
+      }
+    ],
+    "inputs": [
+      "text"
+    ]
+  },
+  "string_split": {
+    "type": "string_split",
+    "file": "string_split.svg",
+    "width": 219,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "split"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      }
+    ],
+    "inputs": [
+      "text",
+      "text"
+    ]
+  },
+  "string_includes": {
+    "type": "string_includes",
+    "file": "string_includes.svg",
+    "width": 244,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "includes"
+      }
+    ],
+    "inputs": [
+      "text",
+      "text"
+    ]
+  },
+  "string_indexof": {
+    "type": "string_indexof",
+    "file": "string_indexof.svg",
+    "width": 256,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "find index of"
+      }
+    ],
+    "inputs": [
+      "text",
+      "text"
+    ]
+  },
+  "string_isempty": {
+    "type": "string_isempty",
+    "file": "string_isempty.svg",
+    "width": 196,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is empty"
+      }
+    ],
+    "inputs": [
+      "text",
+      ""
+    ]
+  },
+  "string_substr_new": {
+    "type": "string_substr_new",
+    "file": "string_substr_new.svg",
+    "width": 475,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "substring of"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "from"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "of length"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Hide optional arguments"
+      }
+    ],
+    "inputs": [
+      "text",
+      "math_number",
+      "math_number",
+      ""
+    ]
+  },
+  "string_compare": {
+    "type": "string_compare",
+    "file": "string_compare.svg",
+    "width": 237,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "compare"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      "text",
+      "text"
+    ]
+  },
+  "string_get": {
+    "type": "string_get",
+    "file": "string_get.svg",
+    "width": 254,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "char from"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      }
+    ],
+    "inputs": [
+      "text",
+      "math_number"
+    ]
+  },
+  "string_charcode_at": {
+    "type": "string_charcode_at",
+    "file": "string_charcode_at.svg",
+    "width": 298,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "char code from"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      }
+    ],
+    "inputs": [
+      "text",
+      "math_number"
+    ]
+  },
+  "variable_to_text": {
+    "type": "variable_to_text",
+    "file": "variable_to_text.svg",
+    "width": 208,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "convert"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to text"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      ""
+    ]
+  },
+  "stringFromCharCode": {
+    "type": "stringFromCharCode",
+    "file": "stringFromCharCode.svg",
+    "width": 236,
+    "height": 44,
+    "category": "Text",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "text from char code"
+      }
+    ],
+    "inputs": [
+      "math_number"
+    ]
+  },
+  "console_log": {
+    "type": "console_log",
+    "file": "console_log.svg",
+    "width": 165,
+    "height": 60,
+    "category": "Console",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "console log"
+      }
+    ],
+    "inputs": [
+      "text"
+    ]
+  },
+  "console_log_value": {
+    "type": "console_log_value",
+    "file": "console_log_value.svg",
+    "width": 294,
+    "height": 60,
+    "category": "Console",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "console"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "log value"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "="
+      }
+    ],
+    "inputs": [
+      "",
+      "text",
+      "math_number"
     ]
   }
 }

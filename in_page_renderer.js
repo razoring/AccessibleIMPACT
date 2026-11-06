@@ -30,9 +30,12 @@
 
   // Lazily-injected offscreen Blockly workspace used exclusively for rendering
   // token SVGs. Fully isolated from the main workspace: its own variable map,
-  // its own toolbox (a clone of the main one — needed so renderDynamicBlock can
-  // build blocks from authentic toolbox XML including default shadow sockets),
-  // no flyout interaction with the main workspace, never disposed.
+  // no toolbox, no flyout, never disposed.
+  // NOTE: deliberately toolbox-less. Attaching the main workspace's languageTree
+  // here enables the toolbox-XML (domToBlock) render path, which produces
+  // blocks with clipped/wrong geometry on this minimal workspace (blocks render
+  // with their right side cut off). Default sockets are instead populated by
+  // populateDefaultShadows, which handles colour/image/text/boolean/number.
   let scratchWs = null;
   let scratchContainer = null;
   let scratchFailed = false;
@@ -44,23 +47,13 @@
       // Real size (not display:none) so getBBox() works; parked offscreen.
       scratchContainer.style.cssText = 'position:fixed;left:-10000px;top:-10000px;width:2400px;height:1600px;pointer-events:none;opacity:0;overflow:hidden;';
       (document.body || document.documentElement).appendChild(scratchContainer);
-      const opts = {
+      scratchWs = B.inject(scratchContainer, {
         scrollbars: false,
         sounds: false,
         trashcan: false,
         grid: { spacing: 0, length: 0, snap: false },
         zoom: { enabled: false, controls: false, wheel: false, startScale: 1, minScale: 1, maxScale: 1 }
-      };
-      // Reuse the main workspace's toolbox tree so blocks built here carry the
-      // same default shadow sockets (colour/image/text/boolean) as the flyout.
-      // The languageTree is an XML Element; Blockly accepts it as the toolbox
-      // option. The scratch workspace gets its OWN toolbox instance — the main
-      // workspace's flyout state is never touched.
-      try {
-        const tree = main && main.options && main.options.languageTree;
-        if (tree) opts.toolbox = tree;
-      } catch (e) {}
-      scratchWs = B.inject(scratchContainer, opts);
+      });
       return scratchWs;
     } catch (e) {
       console.warn('[AIFX in-page] scratch workspace injection failed; falling back to main workspace:', e);

@@ -352,6 +352,10 @@
     if (/game|dialog|splash/i.test(combined)) active.add('game');
     if (/info|score|life/i.test(combined)) active.add('info');
     if (/functions?|procedure|call\b/i.test(combined)) active.add('functions');
+    if (/image|pixel|draw|flip/i.test(combined)) active.add('images');
+    if (/array|list\b/i.test(combined)) active.add('arrays');
+    if (/text|string|char|join|split|length\s+of/i.test(combined)) active.add('text');
+    if (/console|\blog\b/i.test(combined)) active.add('console');
 
     return active;
   }

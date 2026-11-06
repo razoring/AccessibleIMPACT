@@ -1,5 +1,5 @@
 {
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Dynamic pattern regex lookup table for AccessibleIMPACT NLP engine",
   "rules": [
     {
@@ -1123,6 +1123,977 @@
         "varName": 1,
         "val": 2
       }
+    },
+    {
+      "id": "derived_game_setgameoverscoringtype",
+      "category": "game",
+      "pattern": "^use(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?high\\s+score(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?as\\s+best\\s+score(?:\\s+.*)?$",
+      "template": "game_setgameoverscoringtype",
+      "blockType": "game_setgameoverscoringtype",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_particlesStartScreenAnimation",
+      "category": "scene",
+      "pattern": "^start\\s+screen(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?confetti(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?effect(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?for(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?ms(?:\\s+.*)?$",
+      "template": "particlesStartScreenAnimation",
+      "blockType": "particlesStartScreenAnimation",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_statusbars_onStatusReached",
+      "category": "statusbars",
+      "pattern": "^on\\s+status\\s+bar\\s+kind(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?(?:\\s+.*)?$",
+      "template": "statusbars_onStatusReached",
+      "blockType": "statusbars_onStatusReached",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_ctrlonbuttonevent",
+      "category": "controller",
+      "pattern": "^on(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?player(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?2(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?([AB]|up|down|left|right)(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?button(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?(?:\\s+.*)?$",
+      "template": "ctrlonbuttonevent",
+      "blockType": "ctrlonbuttonevent",
+      "params": {
+        "button": 1
+      },
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_ctrlispressed",
+      "category": "controller",
+      "pattern": "^is(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?player(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?2(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?([AB]|up|down|left|right)(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?button(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?pressed(?:\\s+.*)?$",
+      "template": "ctrlispressed",
+      "blockType": "ctrlispressed",
+      "params": {
+        "button": 1
+      },
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tileUtil_tileIsWall",
+      "category": "tileUtil",
+      "pattern": "^tile\\s+in(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?at(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?is\\s+wall(?:\\s+.*)?$",
+      "template": "tileUtil_tileIsWall",
+      "blockType": "tileUtil_tileIsWall",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tileUtil_forEachTileInMap",
+      "category": "tileUtil",
+      "pattern": "^for\\s+each\\s+tile\\s+in(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?with(?:\\s+.*)?$",
+      "template": "tileUtil_forEachTileInMap",
+      "blockType": "tileUtil_forEachTileInMap",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tileUtil_getConnectedMap",
+      "category": "tileUtil",
+      "pattern": "^get\\s+tilemap\\s+connected\\s+to(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?by(?:\\s+.*)?$",
+      "template": "tileUtil_getConnectedMap",
+      "blockType": "tileUtil_getConnectedMap",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_sprite_change_scale",
+      "category": "sprites",
+      "pattern": "^change(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?scale\\s+by(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?anchor(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?(?:\\s+.*)?$",
+      "template": "sprite_change_scale",
+      "blockType": "sprite_change_scale",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_sprite_set_scale",
+      "category": "sprites",
+      "pattern": "^set(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?scale\\s+to(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?anchor(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?(?:\\s+.*)?$",
+      "template": "sprite_set_scale",
+      "blockType": "sprite_set_scale",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_game_dialog_set_text_color",
+      "category": "game",
+      "pattern": "^set\\s+dialog\\s+text\\s+color\\s+to(?:\\s+.*)?$",
+      "template": "game_dialog_set_text_color",
+      "blockType": "game_dialog_set_text_color",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_mp_onButtonEvent",
+      "category": "mp",
+      "pattern": "^on(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?([AB]|up|down|left|right)(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?button(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?pressed(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?for(?:\\s+.*)?$",
+      "template": "mp_onButtonEvent",
+      "blockType": "mp_onButtonEvent",
+      "params": {
+        "button": 1
+      },
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_spriteshittile",
+      "category": "scene",
+      "pattern": "^on(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?of\\s+kind(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?overlaps(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?at(?:\\s+.*)?$",
+      "template": "spriteshittile",
+      "blockType": "spriteshittile",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_spritetileat",
+      "category": "scene",
+      "pattern": "^tile\\s+to(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?left(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?of(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?is(?:\\s+.*)?$",
+      "template": "spritetileat",
+      "blockType": "spritetileat",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_statusbars_onZero",
+      "category": "statusbars",
+      "pattern": "^on\\s+status\\s+bar\\s+kind(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?zero(?:\\s+.*)?$",
+      "template": "statusbars_onZero",
+      "blockType": "statusbars_onZero",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_keydx",
+      "category": "controller",
+      "pattern": "^dx\\s+left-right\\s+buttons(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?scaled\\s+by(?:\\s+.*)?$",
+      "template": "keydx",
+      "blockType": "keydx",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_keydy",
+      "category": "controller",
+      "pattern": "^dy\\s+up-down\\s+buttons(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?scaled\\s+by(?:\\s+.*)?$",
+      "template": "keydy",
+      "blockType": "keydy",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_camerapos",
+      "category": "scene",
+      "pattern": "^center\\s+camera\\s+at\\s+x(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?y(?:\\s+.*)?$",
+      "template": "camerapos",
+      "blockType": "camerapos",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_playerinfoonlifezero",
+      "category": "info",
+      "pattern": "^on(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?player(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?2(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?life\\s+zero(?:\\s+.*)?$",
+      "template": "playerinfoonlifezero",
+      "blockType": "playerinfoonlifezero",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_pichangelife",
+      "category": "info",
+      "pattern": "^change(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?player(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?2(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?life\\s+by(?:\\s+.*)?$",
+      "template": "pichangelife",
+      "blockType": "pichangelife",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_pisetlife",
+      "category": "info",
+      "pattern": "^set(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?player(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?2(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?life\\s+to(?:\\s+.*)?$",
+      "template": "pisetlife",
+      "blockType": "pisetlife",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_pichangescore",
+      "category": "info",
+      "pattern": "^change(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?player(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?2(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?score\\s+by(?:\\s+.*)?$",
+      "template": "pichangescore",
+      "blockType": "pichangescore",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_pisetscore",
+      "category": "info",
+      "pattern": "^set(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?player(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?2(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?score\\s+to(?:\\s+.*)?$",
+      "template": "pisetscore",
+      "blockType": "pisetscore",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_string_substr_new",
+      "category": "text",
+      "pattern": "^substring\\s+of(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?from(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?of\\s+length(?:\\s+.*)?$",
+      "template": "string_substr_new",
+      "blockType": "string_substr_new",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tileUtil_getTileImage",
+      "category": "tileUtil",
+      "pattern": "^tile\\s+image\\s+in(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?at(?:\\s+.*)?$",
+      "template": "tileUtil_getTileImage",
+      "blockType": "tileUtil_getTileImage",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_game_dialog_set_cursor",
+      "category": "game",
+      "pattern": "^set\\s+dialog\\s+cursor\\s+to(?:\\s+.*)?$",
+      "template": "game_dialog_set_cursor",
+      "blockType": "game_dialog_set_cursor",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_game_dialog_set_frame",
+      "category": "game",
+      "pattern": "^set\\s+dialog\\s+frame\\s+to(?:\\s+.*)?$",
+      "template": "game_dialog_set_frame",
+      "blockType": "game_dialog_set_frame",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_mp_allPlayers",
+      "category": "mp",
+      "pattern": "^array\\s+of\\s+all\\s+players(?:\\s+.*)?$",
+      "template": "mp_allPlayers",
+      "blockType": "mp_allPlayers",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_mp_isButtonPressed",
+      "category": "mp",
+      "pattern": "^is(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?([AB]|up|down|left|right)(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?button\\s+pressed(?:\\s+.*)?$",
+      "template": "mp_isButtonPressed",
+      "blockType": "mp_isButtonPressed",
+      "params": {
+        "button": 1
+      },
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_mp_onLifeZero",
+      "category": "mp",
+      "pattern": "^on\\s+life\\s+zero\\s+for(?:\\s+.*)?$",
+      "template": "mp_onLifeZero",
+      "blockType": "mp_onLifeZero",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_device_change_tempo",
+      "category": "music",
+      "pattern": "^change\\s+tempo\\s+by(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?bpm(?:\\s+.*)?$",
+      "template": "device_change_tempo",
+      "blockType": "device_change_tempo",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_device_set_tempo",
+      "category": "music",
+      "pattern": "^set\\s+tempo\\s+to(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?bpm(?:\\s+.*)?$",
+      "template": "device_set_tempo",
+      "blockType": "device_set_tempo",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_particlesEndScreenAnimation",
+      "category": "scene",
+      "pattern": "^end\\s+screen(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?confetti(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?effect(?:\\s+.*)?$",
+      "template": "particlesEndScreenAnimation",
+      "blockType": "particlesEndScreenAnimation",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tiles_tile_at_location_is_wall",
+      "category": "scene",
+      "pattern": "^tile\\s+at(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?is\\s+wall(?:\\s+.*)?$",
+      "template": "tiles_tile_at_location_is_wall",
+      "blockType": "tiles_tile_at_location_is_wall",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_mapgettilestype",
+      "category": "scene",
+      "pattern": "^array\\s+of\\s+all(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?locations(?:\\s+.*)?$",
+      "template": "mapgettilestype",
+      "blockType": "mapgettilestype",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tiles_location_get_neighboring_location",
+      "category": "scene",
+      "pattern": "^tilemap\\s+location(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?left(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?of(?:\\s+.*)?$",
+      "template": "tiles_location_get_neighboring_location",
+      "blockType": "tiles_location_get_neighboring_location",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_statusbars_positionNextToSprite",
+      "category": "statusbars",
+      "pattern": "^set(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?position\\s+to(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?(?:\\s+.*)?$",
+      "template": "statusbars_positionNextToSprite",
+      "blockType": "statusbars_positionNextToSprite",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_Image_equals",
+      "category": "images",
+      "pattern": "^is\\s+equal\\s+to\\s+image(?:\\s+.*)?$",
+      "template": "Image_equals",
+      "blockType": "Image_equals",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_ctrlonevent",
+      "category": "controller",
+      "pattern": "^on(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?player(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?(?:\\s+.*)?$",
+      "template": "ctrlonevent",
+      "blockType": "ctrlonevent",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_arcade_game_runtime",
+      "category": "game",
+      "pattern": "^time\\s+since\\s+start\\s+ms(?:\\s+.*)?$",
+      "template": "arcade_game_runtime",
+      "blockType": "arcade_game_runtime",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_gamechangecountdown",
+      "category": "info",
+      "pattern": "^change\\s+countdown\\s+by(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?s(?:\\s+.*)?$",
+      "template": "gamechangecountdown",
+      "blockType": "gamechangecountdown",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_playerinfoonscore",
+      "category": "info",
+      "pattern": "^on(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?player(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?2(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?score(?:\\s+.*)?$",
+      "template": "playerinfoonscore",
+      "blockType": "playerinfoonscore",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_pihaslife",
+      "category": "info",
+      "pattern": "^player(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?2(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?has\\s+life(?:\\s+.*)?$",
+      "template": "pihaslife",
+      "blockType": "pihaslife",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_image_create",
+      "category": "images",
+      "pattern": "^create\\s+image\\s+width(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?height(?:\\s+.*)?$",
+      "template": "image_create",
+      "blockType": "image_create",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_Image_getPixel",
+      "category": "images",
+      "pattern": "^color\\s+at\\s+x(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?y(?:\\s+.*)?$",
+      "template": "Image_getPixel",
+      "blockType": "Image_getPixel",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_image_draw_transparent_image",
+      "category": "images",
+      "pattern": "^draw(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?at\\s+x(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?y(?:\\s+.*)?$",
+      "template": "image_draw_transparent_image",
+      "blockType": "image_draw_transparent_image",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_function_return",
+      "category": "functions",
+      "pattern": "^return(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?Remove\\s+return\\s+value(?:\\s+.*)?$",
+      "template": "function_return",
+      "blockType": "function_return",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_array_pop_statement",
+      "category": "arrays",
+      "pattern": "^remove\\s+last\\s+value\\s+from(?:\\s+.*)?$",
+      "template": "array_pop_statement",
+      "blockType": "array_pop_statement",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_array_shift_statement",
+      "category": "arrays",
+      "pattern": "^remove\\s+first\\s+value\\s+from(?:\\s+.*)?$",
+      "template": "array_shift_statement",
+      "blockType": "array_shift_statement",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_string_charcode_at",
+      "category": "text",
+      "pattern": "^char\\s+code\\s+from(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?at(?:\\s+.*)?$",
+      "template": "string_charcode_at",
+      "blockType": "string_charcode_at",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_stringFromCharCode",
+      "category": "text",
+      "pattern": "^text\\s+from\\s+char\\s+code(?:\\s+.*)?$",
+      "template": "stringFromCharCode",
+      "blockType": "stringFromCharCode",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_console_log_value",
+      "category": "console",
+      "pattern": "^console(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?log\\s+value(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?=(?:\\s+.*)?$",
+      "template": "console_log_value",
+      "blockType": "console_log_value",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tileUtil_onMapLoaded",
+      "category": "tileUtil",
+      "pattern": "^on\\s+tilemap\\s+loaded(?:\\s+.*)?$",
+      "template": "tileUtil_onMapLoaded",
+      "blockType": "tileUtil_onMapLoaded",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tileUtil_onMapUnloaded",
+      "category": "tileUtil",
+      "pattern": "^on\\s+tilemap\\s+unloaded(?:\\s+.*)?$",
+      "template": "tileUtil_onMapUnloaded",
+      "blockType": "tileUtil_onMapUnloaded",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tileUtil_unloadTilemap",
+      "category": "tileUtil",
+      "pattern": "^unload\\s+current\\s+tilemap(?:\\s+.*)?$",
+      "template": "tileUtil_unloadTilemap",
+      "blockType": "tileUtil_unloadTilemap",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tileUtil_createCameraOnTile",
+      "category": "tileUtil",
+      "pattern": "^center\\s+camera\\s+on(?:\\s+.*)?$",
+      "template": "tileUtil_createCameraOnTile",
+      "blockType": "tileUtil_createCameraOnTile",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_particlesclearparticles",
+      "category": "sprites",
+      "pattern": "^clear\\s+effects\\s+on(?:\\s+.*)?$",
+      "template": "particlesclearparticles",
+      "blockType": "particlesclearparticles",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_gameupdate",
+      "category": "game",
+      "pattern": "^on\\s+game\\s+update(?:\\s+.*)?$",
+      "template": "gameupdate",
+      "blockType": "gameupdate",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_game_setgameoverplayable",
+      "category": "game",
+      "pattern": "^use(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?looping(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?for(?:\\s+.*)?$",
+      "template": "game_setgameoverplayable",
+      "blockType": "game_setgameoverplayable",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_game_setgameovermessage",
+      "category": "game",
+      "pattern": "^use\\s+message(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?for(?:\\s+.*)?$",
+      "template": "game_setgameovermessage",
+      "blockType": "game_setgameovermessage",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_mp_onScore",
+      "category": "mp",
+      "pattern": "^on\\s+score(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?for(?:\\s+.*)?$",
+      "template": "mp_onScore",
+      "blockType": "mp_onScore",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_mp_gameOverPlayerWin",
+      "category": "mp",
+      "pattern": "^game\\s+over(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?wins(?:\\s+.*)?$",
+      "template": "mp_gameOverPlayerWin",
+      "blockType": "mp_gameOverPlayerWin",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_mp_setPlayerIndicatorsVisible",
+      "category": "mp",
+      "pattern": "^set\\s+player\\s+indicators(?:\\s+.*)?$",
+      "template": "mp_setPlayerIndicatorsVisible",
+      "blockType": "mp_setPlayerIndicatorsVisible",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_mapsetwallat",
+      "category": "scene",
+      "pattern": "^set\\s+wall(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?at(?:\\s+.*)?$",
+      "template": "mapsetwallat",
+      "blockType": "mapsetwallat",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_mapgettile",
+      "category": "scene",
+      "pattern": "^tilemap\\s+col(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?row(?:\\s+.*)?$",
+      "template": "mapgettile",
+      "blockType": "mapgettile",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tiles_location_of_sprite",
+      "category": "scene",
+      "pattern": "^tilemap\\s+location\\s+of(?:\\s+.*)?$",
+      "template": "tiles_location_of_sprite",
+      "blockType": "tiles_location_of_sprite",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_maplocationistile",
+      "category": "scene",
+      "pattern": "^tile\\s+at(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?is(?:\\s+.*)?$",
+      "template": "maplocationistile",
+      "blockType": "maplocationistile",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tiles_image_at_location",
+      "category": "scene",
+      "pattern": "^tile\\s+image\\s+at(?:\\s+.*)?$",
+      "template": "tiles_image_at_location",
+      "blockType": "tiles_image_at_location",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_statusbars_setBorder",
+      "category": "statusbars",
+      "pattern": "^set(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?border\\s+width(?:\\s+.*)?$",
+      "template": "statusbars_setBorder",
+      "blockType": "statusbars_setBorder",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_statusbars_setBarSize",
+      "category": "statusbars",
+      "pattern": "^set(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?width(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?height(?:\\s+.*)?$",
+      "template": "statusbars_setBarSize",
+      "blockType": "statusbars_setBarSize",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_setPaddingOffset",
+      "category": "statusbars",
+      "pattern": "^set(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?padding(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?offset(?:\\s+.*)?$",
+      "template": "setPaddingOffset",
+      "blockType": "setPaddingOffset",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_music_ring",
+      "category": "music",
+      "pattern": "^ring\\s+tone(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?at(?:\\s+.*)?$",
+      "template": "music_ring",
+      "blockType": "music_ring",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_info_PlayerInfo_life",
+      "category": "info",
+      "pattern": "^player(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?2(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?life(?:\\s+.*)?$",
+      "template": "info_PlayerInfo_life",
+      "blockType": "info_PlayerInfo_life",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_piscore",
+      "category": "info",
+      "pattern": "^player(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?2(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?score(?:\\s+.*)?$",
+      "template": "piscore",
+      "blockType": "piscore",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_math_modulo",
+      "category": "math",
+      "pattern": "^remainder\\s+of(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?/(?:\\s+.*)?$",
+      "template": "math_modulo",
+      "blockType": "math_modulo",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_math_constrain_value",
+      "category": "math",
+      "pattern": "^constrain(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?between(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?and(?:\\s+.*)?$",
+      "template": "math_constrain_value",
+      "blockType": "math_constrain_value",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_array_unshift",
+      "category": "arrays",
+      "pattern": "^insert(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?at\\s+beginning(?:\\s+.*)?$",
+      "template": "array_unshift",
+      "blockType": "array_unshift",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_array_indexof",
+      "category": "arrays",
+      "pattern": "^find\\s+index\\s+of(?:\\s+.*)?$",
+      "template": "array_indexof",
+      "blockType": "array_indexof",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_string_parsefloat",
+      "category": "text",
+      "pattern": "^parse\\s+to\\s+number(?:\\s+.*)?$",
+      "template": "string_parsefloat",
+      "blockType": "string_parsefloat",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_string_get",
+      "category": "text",
+      "pattern": "^char\\s+from(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?at(?:\\s+.*)?$",
+      "template": "string_get",
+      "blockType": "string_get",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_variable_to_text",
+      "category": "text",
+      "pattern": "^convert(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?to\\s+text(?:\\s+.*)?$",
+      "template": "variable_to_text",
+      "blockType": "variable_to_text",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tileUtil_createSmallMap",
+      "category": "tileUtil",
+      "pattern": "^8x8\\s+tilemap(?:\\s+.*)?$",
+      "template": "tileUtil_createSmallMap",
+      "blockType": "tileUtil_createSmallMap",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_tileUtil_coverTile",
+      "category": "tileUtil",
+      "pattern": "^cover(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?with(?:\\s+.*)?$",
+      "template": "tileUtil_coverTile",
+      "blockType": "tileUtil_coverTile",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_spriteUnfollow",
+      "category": "sprites",
+      "pattern": "^set(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?unfollow(?:\\s+.*)?$",
+      "template": "spriteUnfollow",
+      "blockType": "spriteUnfollow",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_mp_getPlayerByIndex",
+      "category": "mp",
+      "pattern": "^player\\s+at(?:\\s+.*)?$",
+      "template": "mp_getPlayerByIndex",
+      "blockType": "mp_getPlayerByIndex",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_gamestopcountdown",
+      "category": "info",
+      "pattern": "^stop\\s+countdown(?:\\s+.*)?$",
+      "template": "gamestopcountdown",
+      "blockType": "gamestopcountdown",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_statusbar_setLabel",
+      "category": "statusbars",
+      "pattern": "^set(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?label(?:\\s+.*)?$",
+      "template": "statusbar_setLabel",
+      "blockType": "statusbar_setLabel",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_device_pause",
+      "category": "loops",
+      "pattern": "^pause(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?ms(?:\\s+.*)?$",
+      "template": "device_pause",
+      "blockType": "device_pause",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_arcade_game_reset",
+      "category": "game",
+      "pattern": "^reset\\s+game(?:\\s+.*)?$",
+      "template": "arcade_game_reset",
+      "blockType": "arcade_game_reset",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_music_rest",
+      "category": "music",
+      "pattern": "^rest(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?for(?:\\s+.*)?$",
+      "template": "music_rest",
+      "blockType": "music_rest",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_device_tempo",
+      "category": "music",
+      "pattern": "^tempo\\s+bpm(?:\\s+.*)?$",
+      "template": "device_tempo",
+      "blockType": "device_tempo",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_scenescreenwidth",
+      "category": "scene",
+      "pattern": "^screen\\s+width(?:\\s+.*)?$",
+      "template": "scenescreenwidth",
+      "blockType": "scenescreenwidth",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_scenescreenheight",
+      "category": "scene",
+      "pattern": "^screen\\s+height(?:\\s+.*)?$",
+      "template": "scenescreenheight",
+      "blockType": "scenescreenheight",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_gamebackgroundimage",
+      "category": "scene",
+      "pattern": "^background\\s+image(?:\\s+.*)?$",
+      "template": "gamebackgroundimage",
+      "blockType": "gamebackgroundimage",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_gamebackgroundcolor",
+      "category": "scene",
+      "pattern": "^background\\s+color(?:\\s+.*)?$",
+      "template": "gamebackgroundcolor",
+      "blockType": "gamebackgroundcolor",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_highScore",
+      "category": "info",
+      "pattern": "^high\\s+score(?:\\s+.*)?$",
+      "template": "highScore",
+      "blockType": "highScore",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_gameonscore",
+      "category": "info",
+      "pattern": "^on\\s+score(?:\\s+.*)?$",
+      "template": "gameonscore",
+      "blockType": "gameonscore",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_pxt_pause_until",
+      "category": "loops",
+      "pattern": "^pause\\s+until(?:\\s+.*)?$",
+      "template": "pxt_pause_until",
+      "blockType": "pxt_pause_until",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_math_op3",
+      "category": "math",
+      "pattern": "^absolute\\s+of(?:\\s+.*)?$",
+      "template": "math_op3",
+      "blockType": "math_op3",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_Image_fill",
+      "category": "images",
+      "pattern": "^fill(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?with(?:\\s+.*)?$",
+      "template": "Image_fill",
+      "blockType": "Image_fill",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_Image_flipY",
+      "category": "images",
+      "pattern": "^flip(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?vertically(?:\\s+.*)?$",
+      "template": "Image_flipY",
+      "blockType": "Image_flipY",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_Image_flipX",
+      "category": "images",
+      "pattern": "^flip(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?horizontally(?:\\s+.*)?$",
+      "template": "Image_flipX",
+      "blockType": "Image_flipX",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_text_length",
+      "category": "text",
+      "pattern": "^length\\s+of(?:\\s+.*)?$",
+      "template": "text_length",
+      "blockType": "text_length",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_string_split",
+      "category": "text",
+      "pattern": "^split(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?at(?:\\s+.*)?$",
+      "template": "string_split",
+      "blockType": "string_split",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_string_isempty",
+      "category": "text",
+      "pattern": "^is\\s+empty(?:\\s+.*)?$",
+      "template": "string_isempty",
+      "blockType": "string_isempty",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_string_compare",
+      "category": "text",
+      "pattern": "^compare(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?)?to(?:\\s+.*)?$",
+      "template": "string_compare",
+      "blockType": "string_compare",
+      "params": {},
+      "source": "console-extract"
+    },
+    {
+      "id": "derived_console_log",
+      "category": "console",
+      "pattern": "^console\\s+log(?:\\s+.*)?$",
+      "template": "console_log",
+      "blockType": "console_log",
+      "params": {},
+      "source": "console-extract"
     }
   ]
 }
