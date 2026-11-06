@@ -24,17 +24,19 @@
     // Render on an isolated scratch workspace: creating/disposing hundreds of
     // scratch blocks on the MAIN workspace corrupts pxt's flyout state
     // (clearOldBlocks crash) and pollutes the user's variable map on first load.
-    const ws = getScratchWorkspace(B) || main;
+    const ws = getScratchWorkspace(B, main) || main;
     return { B, ws };
   }
 
   // Lazily-injected offscreen Blockly workspace used exclusively for rendering
   // token SVGs. Fully isolated from the main workspace: its own variable map,
-  // no toolbox, no flyout, never disposed.
+  // its own toolbox (a clone of the main one — needed so renderDynamicBlock can
+  // build blocks from authentic toolbox XML including default shadow sockets),
+  // no flyout interaction with the main workspace, never disposed.
   let scratchWs = null;
   let scratchContainer = null;
   let scratchFailed = false;
-  function getScratchWorkspace(B) {
+  function getScratchWorkspace(B, main) {
     if (scratchWs) return scratchWs;
     if (scratchFailed) return null;
     try {
@@ -42,13 +44,23 @@
       // Real size (not display:none) so getBBox() works; parked offscreen.
       scratchContainer.style.cssText = 'position:fixed;left:-10000px;top:-10000px;width:2400px;height:1600px;pointer-events:none;opacity:0;overflow:hidden;';
       (document.body || document.documentElement).appendChild(scratchContainer);
-      scratchWs = B.inject(scratchContainer, {
+      const opts = {
         scrollbars: false,
         sounds: false,
         trashcan: false,
         grid: { spacing: 0, length: 0, snap: false },
         zoom: { enabled: false, controls: false, wheel: false, startScale: 1, minScale: 1, maxScale: 1 }
-      });
+      };
+      // Reuse the main workspace's toolbox tree so blocks built here carry the
+      // same default shadow sockets (colour/image/text/boolean) as the flyout.
+      // The languageTree is an XML Element; Blockly accepts it as the toolbox
+      // option. The scratch workspace gets its OWN toolbox instance — the main
+      // workspace's flyout state is never touched.
+      try {
+        const tree = main && main.options && main.options.languageTree;
+        if (tree) opts.toolbox = tree;
+      } catch (e) {}
+      scratchWs = B.inject(scratchContainer, opts);
       return scratchWs;
     } catch (e) {
       console.warn('[AIFX in-page] scratch workspace injection failed; falling back to main workspace:', e);
@@ -3028,6 +3040,8 @@
         let isImage = false;
         let isTile = false;
         let isTilemap = false;
+        let isColour = false;
+        let isList = false;
 
         // Check connection allowed types
         if (check && Array.isArray(check) && check.length > 0) {
@@ -3037,6 +3051,8 @@
             else if (lc === 'number') isNumber = true;
             else if (lc === 'string') isString = true;
             else if (lc === 'sprite') isSprite = true;
+            else if (lc === 'colour' || lc === 'color') isColour = true;
+            else if (lc === 'array') isList = true;
             else if (lc.includes('image') || lc.includes('bitmap')) isImage = true;
             else if (lc.includes('tilemap')) isTilemap = true;
             else if (lc.includes('tile')) isTile = true;
@@ -3044,13 +3060,15 @@
         }
 
         // Check input name patterns
-        if (!isBoolean && !isNumber && !isString && !isSprite && !isImage && !isTile && !isTilemap) {
+        if (!isBoolean && !isNumber && !isString && !isSprite && !isImage && !isTile && !isTilemap && !isColour && !isList) {
           if (/^(?:bool|cond|if|condition)/i.test(name)) {
             isBoolean = true;
           } else if (/^(?:num|width|height|x|y|vx|vy|ax|ay|dx|dy|speed|step|val|value|index|count|time|ms|delay|by|to|score|life|health|connection)/i.test(name)) {
             isNumber = true;
           } else if (/^(?:text|str|msg|message|label|format|string|title|subtitle)/i.test(name)) {
             isString = true;
+          } else if (/^(?:colou?r)/i.test(name)) {
+            isColour = true;
           } else if (b.type !== 'Image_replace' && /^(?:sprite|mysprite|target|source|agent|from|other)/i.test(name)) {
             isSprite = true;
           } else if (/^(?:img|image|picture|bitmap|frame)/i.test(name)) {
@@ -3062,25 +3080,40 @@
           }
         }
 
+        // Pick the first shadow block type actually registered in this MakeCode
+        // instance — silent skips here are what make sockets disappear.
+        const firstRegistered = (candidates) => {
+          for (const t of candidates) {
+            if (B.Blocks && Object.prototype.hasOwnProperty.call(B.Blocks, t)) return t;
+          }
+          return null;
+        };
+
         if (isBoolean) {
           if (b.type && (b.type.startsWith('game_setgameover') || b.type === 'gameOver2')) {
-            shadowType = (B.Blocks && B.Blocks['toggleWinLose']) ? 'toggleWinLose' : 'logic_boolean';
+            shadowType = firstRegistered(['toggleWinLose']) || 'logic_boolean';
             shadowValue = 'WIN';
           } else if (b.type && (b.type.startsWith('spritesetset') || b.type === 'spritesetflag' || b.type.includes('animation') || name === 'on' || name === 'loop')) {
-            shadowType = (B.Blocks && B.Blocks['toggleOnOff']) ? 'toggleOnOff' : 'logic_boolean';
+            shadowType = firstRegistered(['toggleOnOff']) || 'logic_boolean';
             shadowValue = 'OFF';
           } else {
             shadowType = 'logic_boolean';
             shadowValue = 'TRUE';
           }
+        } else if (isColour) {
+          shadowType = firstRegistered(['colour_picker', 'color_picker', 'pxt_colour_picker', 'colour_wheel']);
+          shadowValue = '#ffffff';
+        } else if (isList) {
+          shadowType = firstRegistered(['variables_get_reporter', 'variables_get']);
+          shadowValue = 'list';
         } else if (isNumber) {
           shadowType = 'math_number';
           shadowValue = (b.type === 'pxt_controls_for' && name === 'to') ? '4' : '0';
         } else if (b.type === 'pxt_controls_for' && name.includes('var')) {
-          shadowType = (B.Blocks && B.Blocks['variables_get_reporter']) ? 'variables_get_reporter' : 'variables_get';
+          shadowType = firstRegistered(['variables_get_reporter', 'variables_get']);
           shadowValue = 'index';
         } else if (b.type === 'pxt_controls_for_of' && name.includes('var')) {
-          shadowType = (B.Blocks && B.Blocks['variables_get_reporter']) ? 'variables_get_reporter' : 'variables_get';
+          shadowType = firstRegistered(['variables_get_reporter', 'variables_get']);
           shadowValue = 'value';
         } else if (b.type === 'pxt_controls_for_of' && name.includes('list')) {
           shadowType = 'variables_get';
@@ -3092,15 +3125,14 @@
           shadowType = 'text';
           shadowValue = '';
         } else if (isImage) {
-          shadowType = (b.type === 'gamesetbackgroundimage' && B.Blocks && B.Blocks['background_image_picker'])
-            ? 'background_image_picker'
-            : 'screen_image_picker';
+          shadowType = firstRegistered(['screen_image_picker', 'image_picker', 'images_image_picker'])
+            || ((b.type === 'gamesetbackgroundimage' && firstRegistered(['background_image_picker'])) ? 'background_image_picker' : null);
         } else if (isTilemap) {
-          shadowType = 'tiles_tilemap_editor';
+          shadowType = firstRegistered(['tiles_tilemap_editor', 'tileset_tile_picker']);
         } else if (isTile) {
-          shadowType = 'tileset_tile_picker';
+          shadowType = firstRegistered(['tileset_tile_picker']);
         } else if (b.type === 'run_movement_animation' && (name.includes('anim') || name.includes('with') || name.includes('path'))) {
-          shadowType = 'animation_path';
+          shadowType = firstRegistered(['animation_path']);
           shadowValue = 'fly to center';
         }
 
@@ -3114,12 +3146,15 @@
             } else if (shadowType === 'math_number') {
               const f = sb.getField('NUM');
               if (f) f.setValue(shadowValue);
-            } else if (shadowType === 'variables_get') {
+            } else if (shadowType === 'variables_get' || shadowType === 'variables_get_reporter') {
               const v = ensureVariable(ws, shadowValue);
               const f = sb.getField('VAR');
               if (f && v) f.setValue(v.getId());
             } else if (shadowType === 'text') {
               const f = sb.getField('TEXT');
+              if (f) f.setValue(shadowValue);
+            } else if (shadowType === 'colour_picker' || shadowType === 'color_picker') {
+              const f = sb.getField('COLOUR') || sb.getField('COLOR');
               if (f) f.setValue(shadowValue);
             }
             sb.initSvg();
