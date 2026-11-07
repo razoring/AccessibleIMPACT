@@ -117,8 +117,208 @@
     };
   }
 
+  // ---------------------------------------------------------------------------
+  // Annotation-driven field mutation (WYSIWYG auto-resize).
+  //
+  // Extracted catalog SVGs carry data-aifx-* annotations on their editable
+  // field groups (see tools/console-extract-blocks.js):
+  //   data-aifx-field  field name ('' on labels)
+  //   data-aifx-kind   text | number | variable | dropdown
+  //   data-aifx-charw  measured per-character advance (Consolas 16px w600)
+  //   data-aifx-value  the default value the SVG was extracted with
+  //
+  // applySvgFields maps resolution params onto those fields, replaces the text
+  // and re-flows the geometry: pill rect width, dropdown arrow, same-row
+  // siblings (labels, sockets, shadow blocks), the block path's long h-runs and
+  // the viewBox/width. Opaque groups (image/colour/effect pickers, labels) are
+  // never touched. Returns null when the SVG is not annotated or no param
+  // applies — the caller then falls back to the legacy regex mutator.
+  function applySvgFields(svgStr, params) {
+    if (!params || !svgStr || svgStr.indexOf('data-aifx-field') === -1) return null;
+    if (typeof DOMParser === 'undefined') return null;
+
+    let doc;
+    try {
+      doc = new DOMParser().parseFromString(svgStr, 'image/svg+xml');
+      if (doc.querySelector('parsererror')) return null;
+    } catch (e) { return null; }
+
+    const root = doc.querySelector('g[data-aifx-type]');
+    if (!root) return null;
+
+    const escapeXml = (v) => String(v)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+
+    // ---- collect editable field groups -------------------------------------
+    const fields = [];
+    root.querySelectorAll('g[data-aifx-field]').forEach(g => {
+      if (g.getAttribute('data-aifx-opaque') === '1') return;
+      const kind = g.getAttribute('data-aifx-kind') || '';
+      if (!kind) return; // opaque (no kind annotated)
+      fields.push({
+        g,
+        name: g.getAttribute('data-aifx-field') || '',
+        kind,
+        charw: parseFloat(g.getAttribute('data-aifx-charw') || '8.8') || 8.8,
+        value: g.getAttribute('data-aifx-value') || ''
+      });
+    });
+    if (!fields.length) return null;
+
+    // ---- map params onto fields ---------------------------------------------
+    const want = (p) => (params[p] !== undefined && params[p] !== null && String(params[p]) !== '') ? String(params[p]) : null;
+    const edits = []; // { field, text }
+    const pushEdit = (f, text) => {
+      if (!f || !text) return;
+      if (text === f.value) return; // nothing to change
+      if (edits.some(e => e.field === f)) return; // one edit per field
+      edits.push({ field: f, text: text });
+    };
+
+    const varVal = want('varName');
+    if (varVal) pushEdit(fields.find(f => f.kind === 'variable'), varVal);
+
+    const btnVal = want('button');
+    if (btnVal) pushEdit(fields.find(f => f.kind === 'dropdown' && f.name === 'button'), btnVal);
+
+    // kind / kind1 / kind2 target dropdowns whose default value is a kind-ish
+    // token (the legacy mutator hard-replaced ">Player<" / ">Health<").
+    const kindDefaults = ['Player', 'Health', 'Hunger', 'Energy', 'Magic', 'Life'];
+    const kindDropdowns = fields.filter(f => f.kind === 'dropdown' && kindDefaults.includes(f.value));
+    const k1 = want('kind') || want('kind1');
+    const k2 = want('kind2');
+    if (k1) pushEdit(kindDropdowns[0], k1);
+    if (k2) pushEdit(kindDropdowns[1], k2);
+
+    // op targets the operator dropdown (legacy replaced "=" / "+" texts)
+    const opVal = want('op');
+    if (opVal) pushEdit(fields.find(f => f.kind === 'dropdown' && ['=', '+', '!=', '%', '\u2264', '\u2265'].includes(f.value)), opVal);
+
+    // prop targets property dropdowns whose default is "x" / "value"
+    const propVal = want('prop');
+    if (propVal) pushEdit(fields.find(f => f.kind === 'dropdown' && ['x', 'value', 'column'].includes(f.value)), propVal);
+
+    // numeric params land on number-kind fields, in legacy param order
+    const numFields = fields.filter(f => f.kind === 'number');
+    const numVals = ['val', 'left', 'right', 'x', 'y', 'vx', 'vy'].map(want).filter(v => v !== null);
+    numVals.forEach((v, i) => pushEdit(numFields[i], v));
+
+    if (!edits.length) return null;
+
+    // ---- apply edits with reflow ---------------------------------------------
+    const svgEl = doc.documentElement;
+
+    const shiftSubtree = (el, dx) => {
+      // shift every transform-carrying element inside el (used for sockets)
+      el.querySelectorAll('[transform]').forEach(t => {
+        const m = t.getAttribute('transform').match(/translate\((-?[\d.]+),\s*(-?[\d.]+)\)/);
+        if (m) t.setAttribute('transform', 'translate(' + (parseFloat(m[1]) + dx) + ',' + m[2] + ')');
+      });
+      const m0 = (el.getAttribute('transform') || '').match(/translate\((-?[\d.]+),\s*(-?[\d.]+)\)/);
+      if (m0) el.setAttribute('transform', 'translate(' + (parseFloat(m0[1]) + dx) + ',' + m0[2] + ')');
+    };
+
+    for (const edit of edits) {
+      const f = edit.field;
+      const g = f.g;
+
+      // 1. replace the field text (main field text node, not quote decorations)
+      let textEl = g.querySelector('text.blocklyFieldText, text.blocklyDropdownText');
+      if (!textEl) {
+        textEl = Array.from(g.querySelectorAll('text')).find(t => !t.classList.contains('field-text-quote') && (t.textContent || '').length > 0);
+      }
+      if (!textEl) continue;
+      textEl.textContent = edit.text;
+
+      // 2. resize the pill rect (expand or shrink, with a usable minimum)
+      const rect = g.querySelector('rect');
+      const arrow = g.querySelector('image');
+      const oldLen = f.value.length;
+      const newLen = edit.text.length;
+      const pad = arrow ? 25 : 16; // 8 left + 5 gap + 12 arrow + 8 right | text-input padding
+      const minWidth = Math.ceil((8 + newLen * f.charw + pad) * 2) / 2;
+      const origW = rect ? parseFloat(rect.getAttribute('width') || '0') : oldLen * f.charw + 16;
+      let delta = 0;
+      if (rect) {
+        const curW = origW;
+        let newW = Math.max(minWidth, curW + (newLen - oldLen) * f.charw);
+        newW = Math.ceil(newW * 2) / 2;
+        delta = newW - curW;
+        if (Math.abs(delta) > 0.01) rect.setAttribute('width', String(newW));
+      } else {
+        delta = (newLen - oldLen) * f.charw;
+      }
+      if (Math.abs(delta) < 0.01) continue; // text-only change
+
+      // 3. move the dropdown arrow inside the pill
+      if (arrow && delta) {
+        if (arrow.hasAttribute('x')) {
+          arrow.setAttribute('x', String(parseFloat(arrow.getAttribute('x')) + delta));
+        }
+        const am = (arrow.getAttribute('transform') || '').match(/translate\((-?[\d.]+),\s*(-?[\d.]+)\)/);
+        if (am) arrow.setAttribute('transform', 'translate(' + (parseFloat(am[1]) + delta) + ',' + am[2] + ')');
+      }
+
+      // 4. shift same-row siblings that sit to the right of this field
+      const gm = (g.getAttribute('transform') || '').match(/translate\((-?[\d.]+),\s*(-?[\d.]+)\)/);
+      if (gm) {
+        const fx = parseFloat(gm[1]);
+        const fy = parseFloat(gm[2]);
+        const rightEdge = fx + origW - 1; // ORIGINAL extent: everything right of it shifts
+        root.querySelectorAll('[transform]').forEach(el => {
+          // skip the field group itself and everything inside it
+          if (g.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_CONTAINED_BY) return;
+          // only elements AFTER this field in document order
+          if (!(g.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)) return;
+          const m = el.getAttribute('transform').match(/translate\((-?[\d.]+),\s*(-?[\d.]+)\)/);
+          if (!m) return;
+          const ex = parseFloat(m[1]);
+          const ey = parseFloat(m[2]);
+          if (ex >= rightEdge && Math.abs(ey - fy) < 20) {
+            el.setAttribute('transform', 'translate(' + (ex + delta) + ',' + m[2] + ')');
+          }
+        });
+      }
+
+      // 5. widen the main block path's long horizontal runs
+      root.querySelectorAll('path.blocklyPath').forEach(p => {
+        // only the root block's own path (direct child), not shadow paths
+        if (p.parentNode !== root) return;
+        const d = p.getAttribute('d') || '';
+        // patch every long horizontal run (top AND bottom edges); notch runs
+        // are 8/12 units and stay untouched
+        const nd = d.replace(/h\s(-?[\d.]+)/g, (m0, num) => {
+          const v = parseFloat(num);
+          if (Math.abs(v) < 40) return m0;
+          return 'h ' + (v + (v > 0 ? delta : -delta));
+        });
+        if (nd !== d) p.setAttribute('d', nd);
+      });
+
+      // 6. widen viewBox + width
+      const vb = (svgEl.getAttribute('viewBox') || '').match(/^([\d.-]+)\s+([\d.-]+)\s+([\d.]+)\s+([\d.]+)$/);
+      if (vb) {
+        svgEl.setAttribute('viewBox', vb[1] + ' ' + vb[2] + ' ' + (parseFloat(vb[3]) + delta) + ' ' + vb[4]);
+        if (svgEl.hasAttribute('width')) {
+          svgEl.setAttribute('width', String(Math.ceil(parseFloat(svgEl.getAttribute('width')) + delta)));
+        }
+      }
+    }
+
+    try {
+      return new XMLSerializer().serializeToString(doc.documentElement);
+    } catch (e) { return null; }
+  }
+
   function mutateSvgWithParams(svgStr, params) {
     if (!svgStr) return '';
+    // Annotation-driven path first (WYSIWYG resize); legacy regex mutator is
+    // the fallback for non-annotated (legacy preserved) catalog SVGs.
+    if (params) {
+      const applied = applySvgFields(svgStr, params);
+      if (applied) return applied;
+    }
     let s = svgStr;
     if (s.includes('</style>')) {
       s = s.replace('</style>', '.blocklyNumberField text, .blocklyTextInputField text, .blocklyInputField text, .math_number text, .timePicker text { fill: #575e75 !important; }\n</style>');
