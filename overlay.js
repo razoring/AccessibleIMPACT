@@ -52,6 +52,49 @@
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  function renderToggleToken(rawText) {
+    const isWin = /win/i.test(rawText);
+    const isLose = /lose/i.test(rawText);
+    const isOn = /on/i.test(rawText);
+
+    let label = 'OFF';
+    let isRight = false;
+    let thumbFill = '#879599';
+    let thumbStroke = '#636e72';
+
+    if (isOn) {
+      label = 'ON';
+      isRight = true;
+      thumbFill = '#2ecc71';
+      thumbStroke = '#27ae60';
+    } else if (isWin) {
+      label = 'WIN';
+      isRight = true;
+      thumbFill = '#2ecc71';
+      thumbStroke = '#27ae60';
+    } else if (isLose) {
+      label = 'LOSE';
+      isRight = false;
+      thumbFill = '#e74c3c';
+      thumbStroke = '#c0392b';
+    }
+
+    const thumbPath = isRight
+      ? 'M 71,3 H 101 L 117,19 L 101,35 H 71 L 55,19 Z'
+      : 'M 19,3 H 49 L 65,19 L 49,35 H 19 L 3,19 Z';
+    const textX = isRight ? 86 : 34;
+
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 38" width="120" height="38"><path d="M 18,0 H 102 L 120,19 L 102,38 H 18 L 0,19 Z" fill="#52447c" stroke="#413663" stroke-width="1" /><path d="${thumbPath}" fill="${thumbFill}" stroke="${thumbStroke}" stroke-width="1.5" /><text x="${textX}" y="19" fill="#ffffff" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-weight="700" font-size="14px" text-anchor="middle" dominant-baseline="central">${label}</text></svg>`;
+
+    return {
+      svg: svg,
+      width: 120,
+      height: 38,
+      category: 'game',
+      isMultiLine: false
+    };
+  }
+
   function generateIsolatedPropertyPill(propText, category) {
     const text = (propText || '').replace(/[\[\]\(\)]/g, '').trim();
     const charWidth = 9.5;
@@ -268,14 +311,12 @@
         const rightEdge = fx + origW - 1; // ORIGINAL extent: everything right of it shifts
         root.querySelectorAll('[transform]').forEach(el => {
           // skip the field group itself and everything inside it
-          if (g.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_CONTAINED_BY) return;
-          // only elements AFTER this field in document order
-          if (!(g.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)) return;
+          if (el === g || (g.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_CONTAINED_BY)) return;
           const m = el.getAttribute('transform').match(/translate\((-?[\d.]+),\s*(-?[\d.]+)\)/);
           if (!m) return;
           const ex = parseFloat(m[1]);
           const ey = parseFloat(m[2]);
-          if (ex >= rightEdge && Math.abs(ey - fy) < 20) {
+          if (ex >= rightEdge && Math.abs(ey - fy) < 25) {
             el.setAttribute('transform', 'translate(' + (ex + delta) + ',' + m[2] + ')');
           }
         });
@@ -290,7 +331,7 @@
         // are 8/12 units and stay untouched
         const nd = d.replace(/h\s(-?[\d.]+)/g, (m0, num) => {
           const v = parseFloat(num);
-          if (Math.abs(v) < 40) return m0;
+          if (Math.abs(v) < 20) return m0;
           return 'h ' + (v + (v > 0 ? delta : -delta));
         });
         if (nd !== d) p.setAttribute('d', nd);
@@ -345,7 +386,6 @@
       } else {
         s = s.replace(/>mySprite</g, `>${v}<`);
         s = s.replace(/>projectile</g, `>${v}<`);
-        s = s.replace(/>sprite</g, `>${v}<`);
         s = s.replace(/>statusbar</g, `>${v}<`);
         s = s.replace(/>item</g, `>${v}<`);
       }
@@ -364,6 +404,24 @@
       const k = escapeXml(params.kind);
       s = s.replace(/>Player</g, `>${k}<`);
       s = s.replace(/>Health</g, `>${k}<`);
+    }
+
+    // 2b. Outcome replacement (WIN / LOSE toggle)
+    if (params.outcome) {
+      const out = String(params.outcome).toUpperCase();
+      if (out === 'LOSE' && s.includes('blocklyToggleOn')) {
+        s = s.replace(/class="blocklyToggle blocklyToggleOn"\s+transform="translate\(\d+,\s*0\)"/, 'class="blocklyToggle blocklyToggleOff" transform="translate(0, 0)"');
+        s = s.replace(/fill="#2ecc71"/g, 'fill="#e74c3c"');
+        s = s.replace(/stroke="#27ae60"/g, 'stroke="#c0392b"');
+        s = s.replace(/>WIN<\/text>/, '>LOSE</text>');
+        s = s.replace(/x="51"/, 'x="17"');
+      } else if (out === 'WIN' && s.includes('blocklyToggleOff')) {
+        s = s.replace(/class="blocklyToggle blocklyToggleOff"\s+transform="translate\(\d+,\s*0\)"/, 'class="blocklyToggle blocklyToggleOn" transform="translate(34, 0)"');
+        s = s.replace(/fill="#e74c3c"/g, 'fill="#2ecc71"');
+        s = s.replace(/stroke="#c0392b"/g, 'stroke="#27ae60"');
+        s = s.replace(/>LOSE<\/text>/, '>WIN</text>');
+        s = s.replace(/x="17"/, 'x="51"');
+      }
     }
 
     // 3. Button replacement
@@ -582,7 +640,7 @@
         (clean.startsWith('<') && clean.endsWith('>'))) {
       clean = clean.slice(1, -1).trim();
     }
-    const cleanFlat = clean.replace(/[\[\]\(\)]/g, ' ').replace(/\s+/g, ' ').trim();
+    const cleanFlat = clean.replace(/[\[\]\(\)<>]/g, ' ').replace(/\s+/g, ' ').trim();
 
     // Context check 1: Variable references in instructions (e.g. "Click on the (mySprite) variable")
     const esc = cleanFlat.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -599,6 +657,21 @@
     }
 
     // Contextual property / dropdown check
+    if (/^(?:win|lose)$/i.test(cleanFlat)) {
+      return {
+        rule: { id: 'toggle_win_lose', category: 'game' },
+        template: 'toggleWinLose',
+        params: {}
+      };
+    }
+    if (/^(?:on|off)$/i.test(cleanFlat)) {
+      return {
+        rule: { id: 'toggle_on_off', category: 'game' },
+        template: 'toggleOnOff',
+        params: {}
+      };
+    }
+
     const ctxCategory = getContextCategory(cleanFlat, stepText, overallText);
     if (ctxCategory) {
       return {
@@ -634,26 +707,11 @@
           }
         }
 
-        // Contextual NLP assistance for missing parameters
+        // Sprites block default fallback: if token is literal "set sprite to", keep default variables
         if (rule.category === 'sprites' && rule.blockType === 'variables_set') {
-          if (!params.varName) {
-            const varM = (stepText || '').match(/(?:variable|add a|create a|sprite named|named|called)\s+['"\[]?([a-zA-Z0-9_]+)['"\]]?/i);
-            if (varM && !['sprite', 'the', 'a', 'an', 'new', 'block'].includes(varM[1].toLowerCase())) {
-              params.varName = varM[1];
-            } else {
-              params.varName = 'mySprite';
-            }
-          }
-          if (!params.kind) {
-            const kindM = (stepText || '').match(/kind\s+['"\[]?([a-zA-Z0-9_]+)['"\]]?/i);
-            params.kind = kindM ? kindM[1] : 'Player';
-          }
-        }
-
-        if (rule.id === 'controller_on_button_pressed' || rule.id === 'controller_is_button_pressed') {
-          if (!params.button) {
-            const btnM = (stepText || '').match(/(?:button|press)\s+['"\[]?([AB]|up|down|left|right)['"\]]?/i);
-            params.button = btnM ? btnM[1].toUpperCase() : 'A';
+          if (rule.id === 'sprites_set_sprite_to' || cleanFlat.toLowerCase() === 'set sprite to') {
+            params.varName = 'mySprite';
+            params.kind = 'Player';
           }
         }
 
@@ -685,6 +743,9 @@
 
   async function fetchAndRenderResolvedToken(resolution, tokenText) {
     if (!resolution) return null;
+    if (resolution.template === 'toggleWinLose' || resolution.template === 'toggleOnOff') {
+      return renderToggleToken(tokenText);
+    }
     if (resolution.template === 'isolated_pill') {
       const prop = (resolution.params && resolution.params.prop !== undefined) ? resolution.params.prop : tokenText;
       const cat = (resolution.params && resolution.params.pillCategory) || resolution.rule.category;
@@ -785,10 +846,20 @@
         stroke: #485460 !important;
       }
 
+      /* Prevent disabled or orphaned scratch workspace blocks from rendering faded */
+      .aifx-rendered .blocklyDisabled {
+        opacity: 1 !important;
+      }
+      .aifx-rendered .blocklyDisabled .blocklyPath,
+      .aifx-rendered path.blocklyPath {
+        fill-opacity: 1 !important;
+        stroke-opacity: 1 !important;
+      }
+
       .aifx-rendered.aifx-inline {
         display: inline-block !important;
         vertical-align: middle !important;
-        margin: 0 3px !important;
+        margin: 2px 3px !important;
         line-height: 1 !important;
       }
       .aifx-rendered.aifx-inline svg {
@@ -839,12 +910,18 @@
         max-width: 100% !important;
         overflow-x: hidden !important;
         overflow-y: hidden !important;
-        margin: 12px 0 !important;
+        margin: 6px 0 !important;
         padding-bottom: 2px !important;
         clear: both !important;
         text-align: left !important;
         line-height: normal !important;
         box-sizing: border-box !important;
+      }
+      app-step-information content,
+      .lesson-content,
+      [data-instruction] {
+        overflow-y: auto !important;
+        max-height: none !important;
       }
       .aifx-disabled .aifx-rendered,
       .aifx-disabled .aifx-rendered.aifx-multiline,
@@ -923,8 +1000,11 @@
     if (!span || !data || !data.svg) return;
     const tokenText = span.getAttribute('data-token') || '';
     const isPlayIcon = (tokenText === '▶' || tokenText === '[▶]');
-    const isStatementBlock = data.svg && (data.svg.includes('class="variables_set') || data.svg.includes('gameinterval') || data.svg.includes('statusbars_create') || data.svg.includes('StatusBarSprite_blockCombine_set')) && !data.svg.includes('class="variables_get');
-    const isMultiLine = !isPlayIcon && (data.isMultiLine || data.height > 70 || data.width > 260 || isStatementBlock);
+    const blockParent = span.closest('p, li, div, app-step-information, article, .step, [data-instruction]') || span.parentElement;
+    const parentText = (blockParent ? blockParent.textContent : '').replace(/\s+/g, ' ').trim();
+    const tokenClean = tokenText.replace(/[\[\]\(\)<>]/g, '').trim();
+    const isInsideSentence = parentText.length > tokenClean.length + 8;
+    const isMultiLine = !isInsideSentence && !isPlayIcon && (data.isMultiLine || data.height > 75);
     span.className = 'aifx-rendered ' + (isPlayIcon ? 'aifx-play-icon' : (isMultiLine ? 'aifx-multiline' : 'aifx-inline'));
     span.innerHTML = data.svg;
     span.setAttribute('data-rendered', 'true');
@@ -938,10 +1018,9 @@
         svgEl.style.setProperty('height', '1.25em', 'important');
       } else if (isMultiLine) {
         svgEl.style.display = 'block';
-        // Benchmark: scale factor 2.25 / 44 matches regular text size (~13-14px visual font)
-        let emScale = 2.25 / 44;
+        let emScale = 2.2 / 44;
         if ((data.height || 0) <= 60 && (data.width || 0) > 300) {
-          emScale = 2.25 / data.height;
+          emScale = 2.2 / data.height;
         }
         const naturalEmWidth = ((data.width || 100) * emScale).toFixed(3);
         svgEl.style.setProperty('width', `${naturalEmWidth}em`, 'important');
@@ -950,10 +1029,8 @@
       } else {
         svgEl.style.display = 'inline-block';
         svgEl.style.verticalAlign = 'middle';
-        // Benchmark: 44px bubble/reporter viewBox height scales to 2.25em
-        // Scale proportionally by viewBox height so text font size is identical across all blocks
         const h = data.height || 44;
-        const emHeight = ((h / 44) * 2.25).toFixed(3);
+        const emHeight = ((h / 44) * 2.2).toFixed(3);
         svgEl.style.setProperty('height', `${emHeight}em`, 'important');
         svgEl.style.setProperty('width', 'auto', 'important');
       }
@@ -993,7 +1070,7 @@
         const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
         const overallText = (document.body ? document.body.textContent : '').toLowerCase();
         const resolution = (catalogMap && tokenRules.length > 0) ? resolveTokenWithNLP(tokenText, stepText, overallText) : null;
-        if (resolution && (resolution.template === 'isolated_pill' || (catalogMap[resolution.template] && catalogMap[resolution.template].file))) {
+        if (resolution && (resolution.template === 'isolated_pill' || resolution.template === 'toggleWinLose' || resolution.template === 'toggleOnOff' || (catalogMap[resolution.template] && catalogMap[resolution.template].file))) {
           fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
             if (data && data.svg) {
               applyTokenToPage(tokenText, data);
@@ -1024,7 +1101,7 @@
         const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
         const overallText = (document.body ? document.body.textContent : '').toLowerCase();
         const resolution = (catalogMap && tokenRules.length > 0) ? resolveTokenWithNLP(tokenText, stepText, overallText) : null;
-        if (resolution && (resolution.template === 'isolated_pill' || (catalogMap[resolution.template] && catalogMap[resolution.template].file))) {
+        if (resolution && (resolution.template === 'isolated_pill' || resolution.template === 'toggleWinLose' || resolution.template === 'toggleOnOff' || (catalogMap[resolution.template] && catalogMap[resolution.template].file))) {
           fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
             if (data && data.svg) {
               applyTokenToPage(tokenText, data);
@@ -1305,7 +1382,7 @@
         let resolvedAndRendered = false;
         if (catalogMap && tokenRules.length > 0) {
           const resolution = resolveTokenWithNLP(tokenText, stepText, overallText);
-          if (resolution && (resolution.template === 'isolated_pill' || (catalogMap[resolution.template] && catalogMap[resolution.template].file))) {
+          if (resolution && (resolution.template === 'isolated_pill' || resolution.template === 'toggleWinLose' || resolution.template === 'toggleOnOff' || (catalogMap[resolution.template] && catalogMap[resolution.template].file))) {
             resolvedAndRendered = true;
             fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
               if (data && data.svg) {
@@ -1318,7 +1395,7 @@
             });
           }
         }
-        if (!resolvedAndRendered) {
+        if (!resolvedAndRendered && catalogMap !== null) {
           requestTokenRender(tokenText, tokenText, span);
         }
       }

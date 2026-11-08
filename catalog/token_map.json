@@ -132,7 +132,8 @@
       "template": "variables_set_mySprite_spritescreate",
       "blockType": "variables_set",
       "params": {
-        "varName": "mySprite"
+        "varName": "mySprite",
+        "kind": "Player"
       }
     },
     {
@@ -722,7 +723,7 @@
     {
       "id": "arrays_create_with",
       "category": "arrays",
-      "pattern": "^(?:set\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+to\\s+)?(?:array\\s+of|list\\s+of)",
+      "pattern": "^(?:set\\\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\\\s+to\\\\s+)?(?:empty\\\\s+array|array\\\\s+of(?!(?:\\\\s+all|\\\\s+sprites))\\\\b|list\\\\s+of(?!(?:\\\\s+all|\\\\s+sprites))\\\\b)",
       "template": "lists_create_with",
       "blockType": "lists_create_with",
       "params": {
@@ -2087,6 +2088,22 @@
       "params": {
         "val": 1
       }
+    },
+    {
+      "id": "toggle_win_lose",
+      "category": "game",
+      "pattern": "^(?:WIN|LOSE)$",
+      "template": "toggleWinLose",
+      "blockType": "toggleWinLose",
+      "params": {}
+    },
+    {
+      "id": "toggle_on_off",
+      "category": "game",
+      "pattern": "^(?:ON|OFF)$",
+      "template": "toggleOnOff",
+      "blockType": "toggleOnOff",
+      "params": {}
     }
   ],
   "else": "controls_else",

@@ -532,6 +532,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, 'text/xml');
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
@@ -570,6 +572,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, "text/xml");
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
@@ -606,6 +610,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, 'text/xml');
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
@@ -690,6 +696,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, 'text/xml');
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
@@ -728,6 +736,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, 'text/xml');
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
@@ -782,6 +792,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, 'text/xml');
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
@@ -820,6 +832,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, 'text/xml');
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
@@ -876,6 +890,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, 'text/xml');
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
@@ -914,6 +930,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, 'text/xml');
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
@@ -984,6 +1002,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, 'text/xml');
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
@@ -1022,6 +1042,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, 'text/xml');
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
@@ -2709,20 +2731,23 @@
     try { bbox = svgRoot.getBBox(); } catch (e) { return null; }
     if (!bbox || bbox.width < 10 || bbox.height < 10) return null;
 
+    const pad = 6;
     const clone = svgRoot.cloneNode(true);
     clone.removeAttribute('transform');
-    clone.setAttribute('transform', 'translate(' + (-bbox.x) + ',' + (-bbox.y) + ')');
+    clone.setAttribute('transform', 'translate(' + (-bbox.x + pad / 2) + ',' + (-bbox.y + pad / 2) + ')');
 
     // Strip Blockly selection/outline path layers and any stale filter references —
     // they render as ghost outlines around text in the serialized SVG.
     // NOTE: NEVER remove .blocklyBlockShadow — in Blockly, that class belongs to
     // placeholder/shadow blocks, not drop shadow effects!
     try {
+      clone.classList.remove('blocklyDisabled');
       clone.querySelectorAll('.blocklyPathLight, .blocklyPathDark, [filter]').forEach(el => {
         if (el.hasAttribute('filter')) el.removeAttribute('filter');
         if (el.classList.contains('blocklyPathLight') || el.classList.contains('blocklyPathDark')) el.remove();
       });
       clone.querySelectorAll('.sr-only, span').forEach(el => el.remove());
+      clone.querySelectorAll('.blocklyDisabled').forEach(el => el.classList.remove('blocklyDisabled'));
     } catch (e) {}
 
     const INPROPS = [
@@ -2742,10 +2767,11 @@
 
         if (tag === 'g') {
           // Never inline fill/stroke on group containers, let them cascade to children
-          const opacity = cs.getPropertyValue('opacity');
-          if (opacity && opacity !== '1') s += 'opacity:' + opacity + ';';
           const display = cs.getPropertyValue('display');
           if (display && display === 'none') s += 'display:none;';
+        } else if (tag === 'path') {
+          // Force full opacity so scratch-workspace orphaned blocks are never serialized faded
+          s += 'opacity:1 !important;fill-opacity:1 !important;stroke-opacity:1 !important;';
         } else if (tag === 'text') {
           if (el.classList.contains('field-text-quote')) {
             s += `fill:#a31515 !important;stroke:none !important;stroke-width:0 !important;font-size:16px !important;opacity:1 !important;`;
@@ -2816,11 +2842,12 @@
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-    const width = Math.ceil(bbox.width + 4);
-    const height = Math.ceil(bbox.height + 4);
+    const width = Math.ceil(bbox.width + pad);
+    const height = Math.ceil(bbox.height + pad);
     svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
     svg.setAttribute('width', width);
     svg.setAttribute('height', height);
+    svg.style.overflow = 'visible';
 
     // Defs: embed checkered pattern with pixel-accurate 8x8 checkerboard (16x16 repeat) using authentic MakeCode gray palette
     const defsEl = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
@@ -3055,6 +3082,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, 'text/xml');
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
@@ -3093,6 +3122,8 @@
         </xml>`;
         const doc = new DOMParser().parseFromString(xml, 'text/xml');
         const b = B.Xml.domToBlock(doc.documentElement.firstElementChild, ws);
+        if (b.setDisabled) b.setDisabled(false);
+        if (b.setEnabled) b.setEnabled(true);
         b.initSvg();
         b.render();
         const res = renderSvg(b);
