@@ -79,17 +79,15 @@
       thumbStroke = '#c0392b';
     }
 
-    const thumbPath = isRight
-      ? 'M 71,3 H 101 L 117,19 L 101,35 H 71 L 55,19 Z'
-      : 'M 19,3 H 49 L 65,19 L 49,35 H 19 L 3,19 Z';
-    const textX = isRight ? 86 : 34;
+    const tx = isRight ? 34 : 0;
+    const textX = isRight ? 51 : 17;
 
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 38" width="120" height="38"><path d="M 18,0 H 102 L 120,19 L 102,38 H 18 L 0,19 Z" fill="#52447c" stroke="#413663" stroke-width="1" /><path d="${thumbPath}" fill="${thumbFill}" stroke="${thumbStroke}" stroke-width="1.5" /><text x="${textX}" y="19" fill="#ffffff" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-weight="700" font-size="14px" text-anchor="middle" dominant-baseline="central">${label}</text></svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 32" width="108" height="32"><path class="blocklyPath" stroke="#413663" fill="#52447c" stroke-width="1" d="m 16,0 h 76 l 16,16 l -16,16 V 32 h -76 l -16,-16 l 16,-16 z" /><g transform="translate(20, 16)"><g class="blocklyToggle ${isRight ? 'blocklyToggleOn' : 'blocklyToggleOff'}" transform="translate(${tx}, 0)"><polygon class="blocklyToggleRect" points="0,-14 -14,0 0,14 34,14 48,0 34,-14" fill="${thumbFill}" stroke="${thumbStroke}" stroke-width="1.5" /></g><text class="blocklyText blocklyToggleText" x="${textX}" y="0" fill="#ffffff" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-size="16px" font-weight="700" text-anchor="middle" dominant-baseline="central">${label}</text></g></svg>`;
 
     return {
       svg: svg,
-      width: 120,
-      height: 38,
+      width: 108,
+      height: 32,
       category: 'game',
       isMultiLine: false
     };
@@ -264,6 +262,7 @@
 
     for (const edit of edits) {
       const f = edit.field;
+      if (f.value === edit.text) continue;
       const g = f.g;
 
       // 1. replace the field text (main field text node, not quote decorations)
@@ -657,10 +656,17 @@
     }
 
     // Contextual property / dropdown check
-    if (/^(?:win|lose)$/i.test(cleanFlat)) {
+    if (/^lose$/i.test(cleanFlat)) {
       return {
-        rule: { id: 'toggle_win_lose', category: 'game' },
-        template: 'toggleWinLose',
+        rule: { id: 'toggle_lose', category: 'game' },
+        template: 'toggle_lose',
+        params: {}
+      };
+    }
+    if (/^win$/i.test(cleanFlat)) {
+      return {
+        rule: { id: 'toggle_win', category: 'game' },
+        template: 'toggle_win',
         params: {}
       };
     }
@@ -669,6 +675,16 @@
         rule: { id: 'toggle_on_off', category: 'game' },
         template: 'toggleOnOff',
         params: {}
+      };
+    }
+
+    // Standalone comparison operator: (>), (<), (>=), (<=), (=), (==), (!=), >, <
+    const compOp = clean.replace(/[\[\]\(\)]/g, '').trim();
+    if (/^(?:>|<|>=|<=|==|!=|=)$/.test(compOp)) {
+      return {
+        rule: { id: 'logic_compare_standalone', category: 'logic' },
+        template: 'logic_compare',
+        params: { op: compOp }
       };
     }
 
@@ -710,8 +726,8 @@
         // Sprites block default fallback: if token is literal "set sprite to", keep default variables
         if (rule.category === 'sprites' && rule.blockType === 'variables_set') {
           if (rule.id === 'sprites_set_sprite_to' || cleanFlat.toLowerCase() === 'set sprite to') {
-            params.varName = 'mySprite';
-            params.kind = 'Player';
+            delete params.varName;
+            delete params.kind;
           }
         }
 
@@ -1004,7 +1020,7 @@
     const parentText = (blockParent ? blockParent.textContent : '').replace(/\s+/g, ' ').trim();
     const tokenClean = tokenText.replace(/[\[\]\(\)<>]/g, '').trim();
     const isInsideSentence = parentText.length > tokenClean.length + 8;
-    const isMultiLine = !isInsideSentence && !isPlayIcon && (data.isMultiLine || data.height > 75);
+    const isMultiLine = !isPlayIcon && (data.isMultiLine || data.height > 70 || data.width > 300 || !isInsideSentence);
     span.className = 'aifx-rendered ' + (isPlayIcon ? 'aifx-play-icon' : (isMultiLine ? 'aifx-multiline' : 'aifx-inline'));
     span.innerHTML = data.svg;
     span.setAttribute('data-rendered', 'true');

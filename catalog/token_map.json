@@ -3,6 +3,32 @@
   "description": "Dynamic pattern regex lookup table for AccessibleIMPACT NLP engine",
   "rules": [
     {
+      "id": "toggle_lose",
+      "category": "game",
+      "pattern": "^LOSE$",
+      "template": "toggle_lose",
+      "blockType": "toggleWinLose",
+      "params": {}
+    },
+    {
+      "id": "toggle_win",
+      "category": "game",
+      "pattern": "^WIN$",
+      "template": "toggle_win",
+      "blockType": "toggleWinLose",
+      "params": {}
+    },
+    {
+      "id": "logic_compare_standalone",
+      "category": "logic",
+      "pattern": "^(?:>|<|>=|<=|==|!=|=)$",
+      "template": "logic_compare",
+      "blockType": "logic_compare",
+      "params": {
+        "op": ""
+      }
+    },
+    {
       "id": "music_play_sound_effect",
       "category": "music",
       "pattern": "^play\\s+sound\\s+effect(?:\\s+.*)?",
@@ -131,10 +157,7 @@
       "pattern": "^set\\s+sprite\\s+to$",
       "template": "variables_set_mySprite_spritescreate",
       "blockType": "variables_set",
-      "params": {
-        "varName": "mySprite",
-        "kind": "Player"
-      }
+      "params": {}
     },
     {
       "id": "sprites_create_char",
@@ -763,7 +786,7 @@
     {
       "id": "arrays_pick_random",
       "category": "arrays",
-      "pattern": "^pick\\s+random\\s+from\\s+(?:list|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)",
+      "pattern": "^(?:get\\s+random\\s+value\\s+from|pick\\s+random\\s+from)(?:\\s+(?:list|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?))?",
       "template": "array_pickRandom",
       "blockType": "array_pickRandom",
       "params": {

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 32" width="108" height="32">
+  <path class="blocklyPath" stroke="#413663" fill="#52447c" stroke-width="1" d="m 16,0 h 76 l 16,16 l -16,16 V 32 h -76 l -16,-16 l 16,-16 z" />
+  <g transform="translate(20, 16)">
+    <g class="blocklyToggle blocklyToggleOn" transform="translate(34, 0)">
+      <polygon class="blocklyToggleRect" points="0,-14 -14,0 0,14 34,14 48,0 34,-14" fill="#2ecc71" stroke="#27ae60" stroke-width="1.5" />
+    </g>
+    <text class="blocklyText blocklyToggleText" x="51" y="0" fill="#ffffff" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-size="16px" font-weight="700" text-anchor="middle" dominant-baseline="central">WIN</text>
+  </g>
+</svg>
+

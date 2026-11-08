@@ -658,17 +658,15 @@
       thumbStroke = '#636e72';
     }
 
-    const thumbPath = isRight
-      ? 'M 71,3 H 101 L 117,19 L 101,35 H 71 L 55,19 Z'
-      : 'M 19,3 H 49 L 65,19 L 49,35 H 19 L 3,19 Z';
-    const textX = isRight ? 86 : 34;
+    const tx = isRight ? 34 : 0;
+    const textX = isRight ? 51 : 17;
 
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 38" width="120" height="38" style="display: inline-block; vertical-align: middle; width: auto !important; margin: 0 3px !important;"><path d="M 18,0 H 102 L 120,19 L 102,38 H 18 L 0,19 Z" fill="#52447c" stroke="#413663" stroke-width="1" /><path d="${thumbPath}" fill="${thumbFill}" stroke="${thumbStroke}" stroke-width="1.5" /><text x="${textX}" y="19" fill="#ffffff" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-weight="700" font-size="14px" text-anchor="middle" dominant-baseline="central">${label}</text></svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 32" width="108" height="32" style="display: inline-block; vertical-align: middle; width: auto !important; margin: 0 3px !important;"><path class="blocklyPath" stroke="#413663" fill="#52447c" stroke-width="1" d="m 16,0 h 76 l 16,16 l -16,16 V 32 h -76 l -16,-16 l 16,-16 z" /><g transform="translate(20, 16)"><g class="blocklyToggle ${isRight ? 'blocklyToggleOn' : 'blocklyToggleOff'}" transform="translate(${tx}, 0)"><polygon class="blocklyToggleRect" points="0,-14 -14,0 0,14 34,14 48,0 34,-14" fill="${thumbFill}" stroke="${thumbStroke}" stroke-width="1.5" /></g><text class="blocklyText blocklyToggleText" x="${textX}" y="0" fill="#ffffff" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-size="16px" font-weight="700" text-anchor="middle" dominant-baseline="central">${label}</text></g></svg>`;
 
     return {
       svg: svg,
-      width: 120,
-      height: 38,
+      width: 108,
+      height: 32,
       isMultiLine: false
     };
   }

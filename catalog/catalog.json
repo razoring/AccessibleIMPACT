@@ -10628,5 +10628,37 @@
       "",
       ""
     ]
+  },
+  "toggle_lose": {
+    "type": "toggleWinLose",
+    "file": "toggle_lose.svg",
+    "width": 108,
+    "height": 32,
+    "category": "Game",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "LOSE"
+      }
+    ],
+    "inputs": []
+  },
+  "toggle_win": {
+    "type": "toggleWinLose",
+    "file": "toggle_win.svg",
+    "width": 108,
+    "height": 32,
+    "category": "Game",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "WIN"
+      }
+    ],
+    "inputs": []
   }
 }
