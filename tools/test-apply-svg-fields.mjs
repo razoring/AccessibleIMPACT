@@ -144,5 +144,20 @@ const check = (name, cond, detail) => {
   check('opaque: text content unchanged', same);
 }
 
+// ---------- Test 6: variables_get.svg pill stretch (item -> otherSprite) ----------
+{
+  const svg = fs.readFileSync('catalog/variables_get.svg', 'utf8');
+  const out = applySvgFields(svg, { varName: 'otherSprite' });
+  check('variables_get: returns svg', !!out && out !== svg);
+  const d = parseXml(out);
+  const root = d.querySelector('g[data-aifx-type]');
+  const txt = root.querySelectorAll('text')[0];
+  check('variables_get: text is otherSprite', txt.textContent === 'otherSprite', txt.textContent);
+  const pathD = root.querySelector('path.blocklyPath').getAttribute('d');
+  check('variables_get: pill path widened to ~114.5', pathD.includes('h 114.5'), pathD);
+  const vb = d.documentElement.getAttribute('viewBox');
+  check('variables_get: viewBox widened', vb.includes('159.3125'), vb);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

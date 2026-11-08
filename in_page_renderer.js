@@ -628,36 +628,41 @@
     let label = 'OFF';
     let isRight = false;
     let thumbFill = '#879599';
+    let thumbStroke = '#636e72';
 
     if (isOn) {
       label = 'ON';
       isRight = true;
       thumbFill = '#2ecc71';
+      thumbStroke = '#27ae60';
     } else if (isWin) {
       label = 'WIN';
       isRight = true;
       thumbFill = '#2ecc71';
+      thumbStroke = '#27ae60';
     } else if (isLose) {
       label = 'LOSE';
       isRight = false;
       thumbFill = '#e74c3c';
+      thumbStroke = '#c0392b';
     } else {
       label = 'OFF';
       isRight = false;
       thumbFill = '#879599';
+      thumbStroke = '#636e72';
     }
 
     const thumbPath = isRight
-      ? 'M 71,3 H 89 L 106,20 L 89,37 H 71 L 54,20 Z'
-      : 'M 20,3 H 38 L 55,20 L 38,37 H 20 L 3,20 Z';
-    const textX = isRight ? 80 : 29;
+      ? 'M 71,3 H 101 L 117,19 L 101,35 H 71 L 55,19 Z'
+      : 'M 19,3 H 49 L 65,19 L 49,35 H 19 L 3,19 Z';
+    const textX = isRight ? 86 : 34;
 
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 109 40" width="109" height="40" style="display: inline-block; vertical-align: middle; width: auto !important; margin: 0 3px !important;"><path d="M 20,0 H 89 L 109,20 L 89,40 H 20 L 0,20 Z" fill="#52447c" stroke="#413663" stroke-width="1" /><path d="${thumbPath}" fill="${thumbFill}" /><text x="${textX}" y="20" fill="#ffffff" font-family="'Segoe UI', 'Lucida Grande', Ubuntu, sans-serif" font-weight="700" font-size="15px" text-anchor="middle" dominant-baseline="central">${label}</text></svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 38" width="120" height="38" style="display: inline-block; vertical-align: middle; width: auto !important; margin: 0 3px !important;"><path d="M 18,0 H 102 L 120,19 L 102,38 H 18 L 0,19 Z" fill="#52447c" stroke="#413663" stroke-width="1" /><path d="${thumbPath}" fill="${thumbFill}" stroke="${thumbStroke}" stroke-width="1.5" /><text x="${textX}" y="19" fill="#ffffff" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-weight="700" font-size="14px" text-anchor="middle" dominant-baseline="central">${label}</text></svg>`;
 
     return {
       svg: svg,
-      width: 109,
-      height: 40,
+      width: 120,
+      height: 38,
       isMultiLine: false
     };
   }
@@ -2227,12 +2232,12 @@
         const toggleType = (toolchain() && toolchain().B && toolchain().B.Blocks && toolchain().B.Blocks['toggleWinLose'])
           ? 'toggleWinLose'
           : 'logic_boolean';
-        const inWin = b.getInput('win') || (b.inputList && b.inputList[0]);
+        const inWin = b.getInput('win') || b.getInput('BOOL') || (b.inputList && b.inputList.find(inp => inp.type === 1)) || (b.inputList && b.inputList[0]);
         if (inWin && inWin.connection && !inWin.connection.targetConnection) {
           try {
             const tb = ws.newBlock(toggleType);
             tb.setShadow(true);
-            const f = tb.getField('BOOL');
+            const f = tb.getField('BOOL') || tb.getField('win');
             if (f) f.setValue(isLose ? (toggleType === 'toggleWinLose' ? 'LOSE' : 'FALSE') : (toggleType === 'toggleWinLose' ? 'WIN' : 'TRUE'));
             tb.initSvg();
             tb.render();
@@ -2717,6 +2722,7 @@
         if (el.hasAttribute('filter')) el.removeAttribute('filter');
         if (el.classList.contains('blocklyPathLight') || el.classList.contains('blocklyPathDark')) el.remove();
       });
+      clone.querySelectorAll('.sr-only, span').forEach(el => el.remove());
     } catch (e) {}
 
     const INPROPS = [
@@ -2787,9 +2793,13 @@
           }
         } else if (tag === 'polygon' && (el.classList.contains('blocklyToggleRect') || el.closest('.blocklyToggle'))) {
           // Authentic MakeCode switch thumb styling - never default to black!
-          const isParentOn = !!el.closest('.blocklyToggleOn');
-          const thumbFill = isParentOn ? '#2ecc71' : '#808e9b';
-          const thumbStroke = isParentOn ? '#27ae60' : '#485460';
+          const toggleG = el.closest('.blocklyToggle');
+          const isParentOn = !!(toggleG && toggleG.classList.contains('blocklyToggleOn'));
+          const textEl = toggleG ? toggleG.querySelector('text') : (el.parentNode ? el.parentNode.querySelector('text') : null);
+          const tText = (textEl ? textEl.textContent : '').trim().toUpperCase();
+          const isLose = tText === 'LOSE' || tText === 'FALSE';
+          const thumbFill = isParentOn ? '#2ecc71' : (isLose ? '#e74c3c' : '#808e9b');
+          const thumbStroke = isParentOn ? '#27ae60' : (isLose ? '#c0392b' : '#485460');
           s += `fill:${thumbFill} !important;stroke:${thumbStroke} !important;stroke-width:1.5px !important;`;
         } else {
           // path, circle, polygon, etc.
@@ -2957,9 +2967,12 @@
       const toggleG = poly.closest('.blocklyToggle');
       const fieldG = poly.closest('.blocklyEditableField') || poly.parentNode;
       const isParentOn = !!(toggleG && toggleG.classList.contains('blocklyToggleOn'));
+      const textEl = fieldG ? fieldG.querySelector('text.blocklyToggleText, text') : null;
+      const tText = (textEl ? textEl.textContent : '').trim().toUpperCase();
+      const isLose = tText === 'LOSE' || tText === 'FALSE';
 
-      const thumbFill = isParentOn ? '#2ecc71' : '#808e9b';
-      const thumbStroke = isParentOn ? '#27ae60' : '#485460';
+      const thumbFill = isParentOn ? '#2ecc71' : (isLose ? '#e74c3c' : '#808e9b');
+      const thumbStroke = isParentOn ? '#27ae60' : (isLose ? '#c0392b' : '#485460');
       poly.setAttribute('style', 'fill:' + thumbFill + ' !important;stroke:' + thumbStroke + ' !important;stroke-width:1.5px !important;');
       poly.setAttribute('fill', thumbFill);
       poly.setAttribute('stroke', thumbStroke);
@@ -3297,6 +3310,9 @@
     if (!tc || !tc.ws) return null;
     try {
       ensureExtensionBlocks(tc.B);
+      if (type === 'gameOver2' && (!tc.B.Blocks || !tc.B.Blocks['gameOver2']) && (tc.B.Blocks && tc.B.Blocks['gameOver'])) {
+        type = 'gameOver';
+      }
       // Fail fast when the block type isn't registered in this MakeCode instance
       // (extension blocks load lazily). Returning null lets the overlay fall back
       // to the static catalog template for this token instead of throwing.

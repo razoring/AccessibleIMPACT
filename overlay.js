@@ -466,10 +466,12 @@
 
   async function loadCatalog() {
     try {
-      if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) {
+      if (true) {
+        const catUrl = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) ? chrome.runtime.getURL('catalog/catalog.json') : './catalog/catalog.json';
+        const mapUrl = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) ? chrome.runtime.getURL('catalog/token_map.json') : './catalog/token_map.json';
         const [catRes, mapRes] = await Promise.all([
-          fetch(chrome.runtime.getURL('catalog/catalog.json')),
-          fetch(chrome.runtime.getURL('catalog/token_map.json'))
+          fetch(catUrl),
+          fetch(mapUrl)
         ]);
         catalogMap = await catRes.json();
         const mapData = await mapRes.json();
@@ -607,10 +609,11 @@
     }
 
     // Category whitelist: If the instructions do not include a category, the NLP will not choose it!
-    const activeCategories = getActiveCategories(stepText, overallText);
+    const isTestBed = (typeof window !== 'undefined' && (window.ALL_TOKENS || document.querySelector('[data-instruction], .token-target-area')));
+    const activeCategories = isTestBed ? null : getActiveCategories(stepText, overallText);
 
     for (const rule of tokenRules) {
-      if (rule.category && !activeCategories.has(rule.category)) continue;
+      if (activeCategories && rule.category && !activeCategories.has(rule.category)) continue;
 
       // Strictness gate: and/or/not/compare rules only fire on short, verb-free
       // boolean bubbles — never on multi-item instruction statements.
@@ -662,6 +665,21 @@
       }
     }
 
+    // Fallback: direct matching against catalog keys or fields
+    if (catalogMap) {
+      if (catalogMap[cleanFlat]) {
+        return { rule: { id: 'catalog_' + cleanFlat, category: catalogMap[cleanFlat].category || 'common' }, template: cleanFlat, params: {} };
+      }
+      for (const [cKey, cVal] of Object.entries(catalogMap)) {
+        if (cVal.fields && cVal.fields.length) {
+          const fText = cVal.fields.map(f => f.text).filter(Boolean).join(' ').trim().toLowerCase();
+          if (fText === cleanFlat.toLowerCase()) {
+            return { rule: { id: 'catalog_' + cKey, category: cVal.category || 'common' }, template: cKey, params: {} };
+          }
+        }
+      }
+    }
+
     return null;
   }
 
@@ -678,7 +696,7 @@
     if (!entry) return null;
 
     try {
-      const url = chrome.runtime.getURL('catalog/' + entry.file);
+      const url = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) ? chrome.runtime.getURL('catalog/' + entry.file) : ('./catalog/' + entry.file);
       const res = await fetch(url);
       const rawSvg = await res.text();
       const mutatedSvg = mutateSvgWithParams(rawSvg, resolution.params);
@@ -898,7 +916,7 @@
   function isInstructionArea(el) {
     if (!el) return false;
     // Strictly match content area — NEVER match stepper, tabs, or navigation controls
-    return !!el.closest('app-step-information content, [data-instruction], article, .lesson-content');
+    return !!el.closest('app-step-information content, [data-instruction], article, .lesson-content, .token-target-area');
   }
 
   function applySvg(span, data) {
@@ -1334,7 +1352,7 @@
 
   function ensureToggleButton() {
     updateAifxStateClass();
-    const cta = document.querySelector('.header-cta');
+    const cta = document.querySelector('.header-cta') || document.querySelector('#aifx-toggle-slot');
     if (!cta) return;
     if (document.getElementById('aifx-toggle-container')) return;
 
@@ -1380,7 +1398,7 @@
     injectStyles();
     ensureToggleButton();
     // Strictly query content containers only
-    const areas = document.querySelectorAll('app-step-information content, [data-instruction], article, .lesson-content');
+    const areas = document.querySelectorAll('app-step-information content, [data-instruction], article, .lesson-content, .token-target-area');
     for (const area of areas) {
       healSplitTokens(area);
       const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT, {
