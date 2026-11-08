@@ -124,8 +124,8 @@ for (const tc of testCases) {
         svgError += ' Contains unstyled blocklyToggle polygon;';
       }
 
-      // 4. No unrendered private-use font glyphs
-      if (/[\uE000-\uF8FF]/.test(content)) {
+      // 4. Check unrendered private-use font glyphs (except when embedded font-family: Icons is present)
+      if (/[\uE000-\uF8FF]/.test(content) && !content.includes('Icons') && !content.includes('font-family: Icons')) {
         svgOk = false;
         svgError += ' Contains unrendered private-use Unicode font glyph;';
       }

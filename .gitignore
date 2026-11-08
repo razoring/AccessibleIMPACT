@@ -25,3 +25,5 @@ scratch/scrub-data-id.js
 tools/console-extract-blocks.js
 tools/derive-token-rules.mjs
 tools/import-block-catalog.mjs
+scratch/hex2_3.txt
+scratch/chunk_8.txt

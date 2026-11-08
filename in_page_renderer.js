@@ -47,13 +47,14 @@
       // Real size (not display:none) so getBBox() works; parked offscreen.
       scratchContainer.style.cssText = 'position:fixed;left:-10000px;top:-10000px;width:2400px;height:1600px;pointer-events:none;opacity:0;overflow:hidden;';
       (document.body || document.documentElement).appendChild(scratchContainer);
-      scratchWs = B.inject(scratchContainer, {
+      const options = Object.assign({}, main.options || {}, {
         scrollbars: false,
         sounds: false,
         trashcan: false,
         grid: { spacing: 0, length: 0, snap: false },
         zoom: { enabled: false, controls: false, wheel: false, startScale: 1, minScale: 1, maxScale: 1 }
       });
+      scratchWs = B.inject(scratchContainer, options);
       return scratchWs;
     } catch (e) {
       console.warn('[AIFX in-page] scratch workspace injection failed; falling back to main workspace:', e);
@@ -67,9 +68,14 @@
 
   function ensureVariable(ws, name) {
     if (!ws) return null;
-    let v = ws.getVariable ? ws.getVariable(name) : null;
-    if (!v && ws.createVariable) v = ws.createVariable(name);
-    return v;
+    try {
+      const vm = ws.getVariableMap ? ws.getVariableMap() : ws;
+      let v = vm.getVariable ? vm.getVariable(name) : null;
+      if (!v && vm.createVariable) v = vm.createVariable(name);
+      return v;
+    } catch (e) {
+      return null;
+    }
   }
 
   function connectInput(parentBlock, inputName, childBlock) {
@@ -2722,6 +2728,8 @@
         } else if (tag === 'text') {
           if (el.classList.contains('field-text-quote')) {
             s += `fill:#a31515 !important;stroke:none !important;stroke-width:0 !important;font-size:16px !important;opacity:1 !important;`;
+          } else if (el.classList.contains('blocklyToggleText')) {
+            s += `fill:#ffffff !important;stroke:none !important;stroke-width:0 !important;font-family:Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace !important;font-size:16px !important;font-weight:600 !important;text-anchor:middle !important;dominant-baseline:central !important;paint-order:fill !important;`;
           } else {
             // MakeCode block text is crisp white, editable inputs are dark slate
             const isWhite = !el.closest('.blocklyTextInputField, .blocklyNumberField');
@@ -2733,6 +2741,8 @@
           const isTextInput = el.classList.contains('blocklyFieldRect') && el.closest('.blocklyTextInputField, .blocklyNumberField');
           const isDropdown = el.classList.contains('blocklyDropdownRect') || el.closest('.blocklyDropdownField');
           const isToggle = el.getAttribute('cursor') === 'pointer' || el.classList.contains('blocklyToggleRect');
+          const isAnimation = el.classList.contains('blocklyAnimationField') || el.closest('.animation_editor');
+          const isSpriteOrImage = el.classList.contains('blocklySpriteField') || el.closest('.screen_image_picker, .tileset_tile_picker, .image_picker');
           if (isTextInput) {
             // White pill, no border — number/text fields render two rects (pill +
             // inner focus ring); stroking both draws a ghost ring around the text.
@@ -2742,9 +2752,10 @@
           } else if (isToggle) {
             // Authentic MakeCode switch styling
             s += 'fill:#808e9b !important;stroke:#485460 !important;stroke-width:1.5px !important;rx:4px !important;ry:4px !important;';
-          } else if (el.classList.contains('blocklyAnimationField')) {
-            // Authentic MakeCode animation frames editor socket: crisp white square
-            s += 'fill:#ffffff !important;stroke:none !important;stroke-width:0 !important;opacity:1 !important;';
+          } else if (isAnimation) {
+            s += 'fill:url(#aifx-checkered-tile) !important;stroke:#ffffff !important;stroke-width:2px !important;rx:4px !important;ry:4px !important;opacity:1 !important;';
+          } else if (isSpriteOrImage) {
+            s += 'fill:url(#aifx-checkered-tile) !important;stroke:#000000 !important;stroke-width:2px !important;rx:4px !important;ry:4px !important;opacity:1 !important;';
           } else {
             for (const p of INPROPS) {
               const v = cs.getPropertyValue(p);
@@ -2777,6 +2788,16 @@
     svg.setAttribute('width', width);
     svg.setAttribute('height', height);
 
+    // Defs: embed checkered pattern with pixel-accurate 8x8 checkerboard (16x16 repeat)
+    const defsEl = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    defsEl.innerHTML =
+      '<pattern id="aifx-checkered-tile" width="16" height="16" patternUnits="userSpaceOnUse">' +
+      '<rect width="16" height="16" fill="#dedede"/>' +
+      '<rect x="0" y="0" width="8" height="8" fill="#ffffff"/>' +
+      '<rect x="8" y="8" width="8" height="8" fill="#ffffff"/>' +
+      '</pattern>';
+    svg.appendChild(defsEl);
+
     // Embed style tag for absolute rendering fidelity
     const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
     styleEl.textContent = `
@@ -2788,6 +2809,13 @@
         font-family: Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace !important;
         font-size: 16px !important;
         font-weight: 600 !important;
+        text-anchor: start;
+        dominant-baseline: central;
+      }
+      .blocklyToggleText {
+        text-anchor: middle !important;
+        dominant-baseline: central !important;
+        fill: #ffffff !important;
       }
       .field-text-quote {
         fill: #a31515 !important;
@@ -2829,57 +2857,120 @@
     `;
     svg.appendChild(styleEl);
 
-    // Clean up any empty broken <image> tags without href that Chromium might render as broken icons
-    // and replace blank transparent 32x32 PNG with authentic checkered pattern
+    // Image/tile sockets: apply pattern fill directly to rect and remove superimposed image overlays
+    const imageAndTileFields = clone.querySelectorAll('.blocklySpriteField, g.blocklyEditableField rect[width="40"], g.blocklyEditableField rect[width="40px"], g.screen_image_picker rect, g.tileset_tile_picker rect');
+    for (const rect of imageAndTileFields) {
+      if (rect.classList.contains('blocklyAnimationField')) continue;
+      const parentG = rect.parentNode;
+      if (parentG) {
+        parentG.querySelectorAll('image').forEach(img => {
+          const href = img.getAttribute('href') || img.getAttribute('xlink:href') || '';
+          if (!href || href.indexOf('iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0') !== -1 || href.indexOf('image/x-mkcd') !== -1) {
+            img.remove();
+          }
+        });
+      }
+      rect.setAttribute('fill', 'url(#aifx-checkered-tile)');
+      rect.setAttribute('stroke', '#000000');
+      rect.setAttribute('stroke-width', '2');
+      rect.setAttribute('rx', '4');
+      rect.setAttribute('ry', '4');
+      rect.setAttribute('style', 'fill:url(#aifx-checkered-tile) !important;stroke:#000000 !important;stroke-width:2px !important;rx:4px !important;ry:4px !important;opacity:1 !important;');
+    }
+
+    // Ensure filmstrip reel icon and white bordered square on animation fields (.blocklyAnimationField)
+    clone.querySelectorAll('.blocklyAnimationField').forEach(rect => {
+      const parentG = rect.parentNode;
+      if (parentG) {
+        parentG.querySelectorAll('image').forEach(img => img.remove());
+        rect.setAttribute('x', '40');
+        rect.setAttribute('y', '3');
+        rect.setAttribute('width', '36');
+        rect.setAttribute('height', '36');
+        rect.setAttribute('rx', '4');
+        rect.setAttribute('ry', '4');
+        rect.setAttribute('fill', 'url(#aifx-checkered-tile)');
+        rect.setAttribute('stroke', '#ffffff');
+        rect.setAttribute('stroke-width', '2');
+        rect.setAttribute('style', 'fill:url(#aifx-checkered-tile) !important;stroke:#ffffff !important;stroke-width:2px !important;rx:4px !important;ry:4px !important;opacity:1 !important;');
+
+        if (!parentG.querySelector('.filmstrip-icon')) {
+          const iconG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          iconG.setAttribute('class', 'filmstrip-icon');
+          iconG.setAttribute('transform', 'translate(8, 9)');
+          iconG.innerHTML =
+            '<rect x="0" y="0" width="24" height="24" rx="4" fill="none" stroke="#ffffff" stroke-width="2"/>' +
+            '<line x1="8" y1="0" x2="8" y2="24" stroke="#ffffff" stroke-width="1.8"/>' +
+            '<line x1="16" y1="0" x2="16" y2="24" stroke="#ffffff" stroke-width="1.8"/>' +
+            '<line x1="0" y1="8" x2="24" y2="8" stroke="#ffffff" stroke-width="1.8"/>' +
+            '<line x1="0" y1="16" x2="24" y2="16" stroke="#ffffff" stroke-width="1.8"/>';
+          parentG.insertBefore(iconG, rect);
+        }
+      }
+    });
+
+    // Clean remaining broken/placeholder images without href
     clone.querySelectorAll('image').forEach(img => {
       const href = img.getAttribute('href') || img.getAttribute('xlink:href') || img.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
       if (!href) {
         img.remove();
-      } else if (href.includes('iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0')) {
+      } else if (href.indexOf('iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0') !== -1) {
         img.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', CHECKERED_TILE_PNG);
         img.setAttribute('href', CHECKERED_TILE_PNG);
       }
     });
 
-    // Remove any unrendered semanticIcon or private-use Unicode font glyphs (e.g. film glyph in animation)
-    clone.querySelectorAll('text').forEach(t => {
-      if (t.classList.contains('semanticIcon') || /[\uE000-\uF8FF]/.test(t.textContent || '')) {
-        t.remove();
+    // Center boolean toggle buttons (.blocklyToggle)
+    const togglePolygons = clone.querySelectorAll('polygon.blocklyToggleRect, .blocklyToggle polygon');
+    togglePolygons.forEach(poly => {
+      const toggleG = poly.closest('.blocklyToggle');
+      const fieldG = poly.closest('.blocklyEditableField') || poly.parentNode;
+      const isParentOn = !!(toggleG && toggleG.classList.contains('blocklyToggleOn'));
+
+      const thumbFill = isParentOn ? '#2ecc71' : '#808e9b';
+      const thumbStroke = isParentOn ? '#27ae60' : '#485460';
+      poly.setAttribute('style', 'fill:' + thumbFill + ' !important;stroke:' + thumbStroke + ' !important;stroke-width:1.5px !important;');
+      poly.setAttribute('fill', thumbFill);
+      poly.setAttribute('stroke', thumbStroke);
+      poly.setAttribute('stroke-width', '1.5');
+
+      const pointsAttr = poly.getAttribute('points') || '';
+      const coords = pointsAttr.trim().split(/[\s,]+/).map(parseFloat).filter(isFinite);
+      if (coords.length >= 4) {
+        const xs = [];
+        const ys = [];
+        for (let i = 0; i < coords.length; i += 2) {
+          xs.push(coords[i]);
+          ys.push(coords[i + 1]);
+        }
+        const minX = Math.min(...xs);
+        const maxX = Math.max(...xs);
+        const minY = Math.min(...ys);
+        const maxY = Math.max(...ys);
+
+        let tx = 0, ty = 0;
+        if (toggleG) {
+          const tMatch = (toggleG.getAttribute('transform') || '').match(/translate\(\s*([-\d.]+)(?:[\s,]+([-\d.]+))?\s*\)/);
+          if (tMatch) {
+            tx = parseFloat(tMatch[1]) || 0;
+            ty = parseFloat(tMatch[2]) || 0;
+          }
+        }
+
+        const polyCenterX = tx + (minX + maxX) / 2;
+        const polyCenterY = ty + (minY + maxY) / 2;
+
+        const textEl = fieldG ? fieldG.querySelector('text.blocklyToggleText, text') : null;
+        if (textEl && (textEl.classList.contains('blocklyToggleText') || /^(WIN|LOSE|ON|OFF|TRUE|FALSE)$/i.test((textEl.textContent || '').trim()))) {
+          textEl.setAttribute('x', String(polyCenterX));
+          textEl.setAttribute('y', String(polyCenterY));
+          textEl.removeAttribute('dy');
+          textEl.setAttribute('dominant-baseline', 'central');
+          textEl.setAttribute('text-anchor', 'middle');
+          textEl.setAttribute('style', 'fill:#ffffff !important;stroke:none !important;stroke-width:0 !important;font-family:Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace !important;font-size:16px !important;font-weight:600 !important;text-anchor:middle !important;dominant-baseline:central !important;paint-order:fill !important;');
+        }
       }
     });
-
-    // Ensure filmstrip icon and white square on animation fields (.blocklyAnimationField)
-    clone.querySelectorAll('.blocklyAnimationField').forEach(rect => {
-      rect.setAttribute('style', 'fill:#ffffff !important;stroke:none !important;stroke-width:0 !important;opacity:1 !important;');
-      rect.setAttribute('fill', '#ffffff');
-      const parentG = rect.parentNode;
-      if (parentG && !parentG.querySelector('.filmstrip-icon')) {
-        const iconG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        iconG.setAttribute('class', 'filmstrip-icon');
-        iconG.setAttribute('transform', 'translate(6, 12)');
-        iconG.innerHTML = '<rect x="0" y="0" width="18" height="18" rx="2" fill="none" stroke="#ffffff" stroke-width="2"/><line x1="0" y1="6" x2="18" y2="6" stroke="#ffffff" stroke-width="1.5"/><line x1="0" y1="12" x2="18" y2="12" stroke="#ffffff" stroke-width="1.5"/><line x1="5" y1="0" x2="5" y2="18" stroke="#ffffff" stroke-width="1.5"/><line x1="13" y1="0" x2="13" y2="18" stroke="#ffffff" stroke-width="1.5"/>';
-        parentG.insertBefore(iconG, rect);
-      }
-    });
-
-    // If block contains tilemap field/socket or image socket (excluding animation fields), ensure checkered tile placeholder image is present
-    const imageAndTileFields = clone.querySelectorAll('.blocklySpriteField, g.blocklyEditableField rect[width="40"], g.blocklyEditableField rect[width="40px"]');
-    for (const rect of imageAndTileFields) {
-      if (rect.classList.contains('blocklyAnimationField')) continue;
-      const parentG = rect.parentNode;
-      const existingImg = parentG ? parentG.querySelector('image') : null;
-      if (parentG && !existingImg) {
-        const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-        img.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', CHECKERED_TILE_PNG);
-        img.setAttribute('height', '32');
-        img.setAttribute('width', '32');
-        const rx = parseFloat(rect.getAttribute('x') || '0');
-        const ry = parseFloat(rect.getAttribute('y') || '0');
-        img.setAttribute('x', String(rx + 4));
-        img.setAttribute('y', String(ry + 4));
-        parentG.appendChild(img);
-      }
-    }
 
     svg.appendChild(clone);
 
@@ -2973,8 +3064,9 @@
   function ensureVariable(ws, name) {
     if (!ws) return null;
     try {
-      let v = ws.getVariable ? ws.getVariable(name) : null;
-      if (!v && ws.createVariable) v = ws.createVariable(name);
+      const vm = ws.getVariableMap ? ws.getVariableMap() : ws;
+      let v = vm.getVariable ? vm.getVariable(name) : null;
+      if (!v && vm.createVariable) v = vm.createVariable(name);
       return v;
     } catch (e) {
       return null;

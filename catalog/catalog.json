@@ -2,117 +2,274 @@
   "scroller_scrollBackgroundWithCamera": {
     "type": "scroller_scrollBackgroundWithCamera",
     "file": "scroller_scrollBackgroundWithCamera.svg",
-    "width": 497,
-    "height": 56,
+    "width": 501,
+    "height": 60,
+    "category": "Scroller",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "scroll background with camera"
+      },
+      {
         "name": "mode",
+        "kind": "dropdown",
         "text": "only horizontally"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
       }
     ],
     "inputs": [
       "",
       "",
-      "layer",
-      "0_add_button"
+      "scroller_backgroundLayer",
+      ""
     ]
   },
   "scroller_scrollBackgroundWithSpeed": {
     "type": "scroller_scrollBackgroundWithSpeed",
     "file": "scroller_scrollBackgroundWithSpeed.svg",
-    "width": 411,
-    "height": 56,
-    "fields": [],
+    "width": 415,
+    "height": 60,
+    "category": "Scroller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "scroll background with vx"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "vy"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "vx",
-      "vy",
+      "math_number",
+      "math_number",
       "",
-      "layer",
-      "0_add_button"
+      "scroller_backgroundLayer",
+      ""
     ]
   },
   "scroller_setCameraScrollingMultipliers": {
     "type": "scroller_setCameraScrollingMultipliers",
     "file": "scroller_setCameraScrollingMultipliers.svg",
-    "width": 557,
-    "height": 56,
-    "fields": [],
+    "width": 561,
+    "height": 60,
+    "category": "Scroller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set background camera scroll multipliers to x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "xMultiplier",
-      "yMultiplier",
+      "math_number",
+      "math_number",
       "",
-      "layer",
-      "0_add_button"
+      "scroller_backgroundLayer",
+      ""
     ]
   },
   "scroller_setBackgroundScrollOffset": {
     "type": "scroller_setBackgroundScrollOffset",
     "file": "scroller_setBackgroundScrollOffset.svg",
-    "width": 390,
-    "height": 56,
-    "fields": [],
+    "width": 394,
+    "height": 60,
+    "category": "Scroller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set background offset to x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "x",
-      "y",
+      "math_number",
+      "math_number",
       "",
-      "layer",
-      "0_add_button"
+      "scroller_backgroundLayer",
+      ""
     ]
   },
   "scroller_getBackgroundXOffset": {
     "type": "scroller_getBackgroundXOffset",
     "file": "scroller_getBackgroundXOffset.svg",
-    "width": 224,
-    "height": 40,
-    "fields": [],
+    "width": 228,
+    "height": 44,
+    "category": "Scroller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "background offset x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
       "",
-      "layer",
-      "0_add_button"
+      "scroller_backgroundLayer",
+      ""
     ]
   },
   "scroller_getBackgroundYOffset": {
     "type": "scroller_getBackgroundYOffset",
     "file": "scroller_getBackgroundYOffset.svg",
-    "width": 224,
-    "height": 40,
-    "fields": [],
+    "width": 228,
+    "height": 44,
+    "category": "Scroller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "background offset y"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
       "",
-      "layer",
-      "0_add_button"
+      "scroller_backgroundLayer",
+      ""
     ]
   },
   "scroller_setLayerImage": {
     "type": "scroller_setLayerImage",
     "file": "scroller_setLayerImage.svg",
-    "width": 430,
-    "height": 74,
-    "fields": [],
+    "width": 434,
+    "height": 78,
+    "category": "Scroller",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set image for"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
     "inputs": [
-      "layer",
-      "image"
+      "scroller_backgroundLayer",
+      "background_image_picker"
     ]
   },
   "scroller_setLayerZIndex": {
     "type": "scroller_setLayerZIndex",
     "file": "scroller_setLayerZIndex.svg",
-    "width": 442,
-    "height": 56,
-    "fields": [],
+    "width": 446,
+    "height": 60,
+    "category": "Scroller",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set z-index for"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
     "inputs": [
-      "layer",
-      "z"
+      "scroller_backgroundLayer",
+      "math_number"
     ]
   },
   "scroller_backgroundLayer": {
     "type": "scroller_backgroundLayer",
     "file": "scroller_backgroundLayer.svg",
-    "width": 200,
-    "height": 40,
+    "width": 204,
+    "height": 44,
+    "category": "Scroller",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "layer"
+      },
+      {
         "name": "layer",
+        "kind": "dropdown",
         "text": "0 (bottom)"
       }
     ],
@@ -125,7 +282,7 @@
     "file": "tileUtil_tilemapProperty.svg",
     "width": 320,
     "height": 52,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -144,7 +301,7 @@
     "file": "tileUtil_createSmallMap.svg",
     "width": 183,
     "height": 54,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -167,7 +324,7 @@
     "file": "tileUtil_getLoadedMap.svg",
     "width": 160,
     "height": 44,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -185,7 +342,7 @@
     "file": "tileUtil_cloneMap.svg",
     "width": 178,
     "height": 52,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -203,7 +360,7 @@
     "file": "tileUtil_coverAllTiles.svg",
     "width": 364,
     "height": 78,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": true,
     "fields": [
       {
@@ -227,7 +384,7 @@
     "file": "tileUtil_coverTile.svg",
     "width": 443,
     "height": 78,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": true,
     "fields": [
       {
@@ -251,7 +408,7 @@
     "file": "tileUtil_createSpritesOnTiles.svg",
     "width": 694,
     "height": 78,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": true,
     "fields": [
       {
@@ -281,7 +438,7 @@
     "file": "tileUtil_replaceAllTiles.svg",
     "width": 381,
     "height": 78,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": true,
     "fields": [
       {
@@ -305,7 +462,7 @@
     "file": "tileUtil_setWalls.svg",
     "width": 424,
     "height": 78,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": true,
     "fields": [
       {
@@ -335,7 +492,7 @@
     "file": "tileUtil_setTileAt.svg",
     "width": 570,
     "height": 70,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -365,7 +522,7 @@
     "file": "tileUtil_setWallAt.svg",
     "width": 636,
     "height": 60,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -395,7 +552,7 @@
     "file": "tileUtil_tileIs.svg",
     "width": 633,
     "height": 62,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -425,7 +582,7 @@
     "file": "tileUtil_tileIsWall.svg",
     "width": 584,
     "height": 52,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -455,7 +612,7 @@
     "file": "tileUtil_getTileImage.svg",
     "width": 543,
     "height": 52,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -479,7 +636,7 @@
     "file": "tileUtil_forEachTileInMap.svg",
     "width": 614,
     "height": 116,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": true,
     "fields": [
       {
@@ -506,7 +663,7 @@
     "file": "tileUtil_onMapLoaded.svg",
     "width": 264,
     "height": 116,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": true,
     "fields": [
       {
@@ -525,7 +682,7 @@
     "file": "tileUtil_onMapUnloaded.svg",
     "width": 281,
     "height": 116,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": true,
     "fields": [
       {
@@ -544,7 +701,7 @@
     "file": "tileUtil_unloadTilemap.svg",
     "width": 214,
     "height": 60,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -562,7 +719,7 @@
     "file": "tileUtil_connectMapById.svg",
     "width": 483,
     "height": 60,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -592,7 +749,7 @@
     "file": "tileUtil_loadConnectedMap.svg",
     "width": 336,
     "height": 60,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -610,7 +767,7 @@
     "file": "tileUtil_getConnectedMap.svg",
     "width": 467,
     "height": 52,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -634,7 +791,7 @@
     "file": "tileUtil_connectionKind.svg",
     "width": 108,
     "height": 44,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -652,7 +809,7 @@
     "file": "tileUtil_createCameraOnTile.svg",
     "width": 412,
     "height": 68,
-    "category": "Tile Util",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -975,7 +1132,7 @@
       },
       {
         "name": "effect",
-        "kind": "opaque",
+        "kind": "r",
         "text": "spray"
       },
       {
@@ -1023,7 +1180,7 @@
       },
       {
         "name": "effect",
-        "kind": "opaque",
+        "kind": "r",
         "text": "spray"
       },
       {
@@ -4219,131 +4376,333 @@
   "tileScanner_scanInDirection": {
     "type": "tileScanner_scanInDirection",
     "file": "tileScanner_scanInDirection.svg",
-    "width": 571,
-    "height": 48,
+    "width": 575,
+    "height": 52,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "scan from"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in direction"
+      },
+      {
         "name": "direction",
+        "kind": "dropdown",
         "text": "top"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "max distance"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "while matches"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
       }
     ],
     "inputs": [
-      "origin",
+      "mapgettile",
       "",
-      "maxTileDistance",
-      "rule",
-      "map",
-      "0_add_button"
+      "math_number",
+      "tileScanner_tileIs",
+      "",
+      ""
     ]
   },
   "tileScanner_bfs": {
     "type": "tileScanner_bfs",
     "file": "tileScanner_bfs.svg",
-    "width": 378,
-    "height": 48,
-    "fields": [],
+    "width": 382,
+    "height": 52,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "BFS from"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "max distance"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "while matches"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "origin",
-      "maxTileDistance",
-      "rule",
-      "map",
-      "0_add_button"
+      "mapgettile",
+      "math_number",
+      "tileScanner_tileIs",
+      "",
+      ""
     ]
   },
   "tileScanner_getAllMatchingLocations": {
     "type": "tileScanner_getAllMatchingLocations",
     "file": "tileScanner_getAllMatchingLocations.svg",
-    "width": 472,
-    "height": 66,
-    "fields": [],
+    "width": 476,
+    "height": 70,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "get all locations that match"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "rule",
-      "map",
-      "0_add_button"
+      "tileScanner_tileIs",
+      "",
+      ""
     ]
   },
   "tileScanner_getAdjacentLocations": {
     "type": "tileScanner_getAdjacentLocations",
     "file": "tileScanner_getAdjacentLocations.svg",
-    "width": 527,
-    "height": 48,
+    "width": 531,
+    "height": 52,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "locations"
+      },
+      {
         "name": "mode",
+        "kind": "dropdown",
         "text": "adjacent"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "that match"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
       }
     ],
     "inputs": [
       "",
-      "origin",
-      "rule",
-      "map",
-      "0_add_button"
+      "mapgettile",
+      "tileScanner_tileIs",
+      "",
+      ""
     ]
   },
   "tileScanner_scanForLines": {
     "type": "tileScanner_scanForLines",
     "file": "tileScanner_scanForLines.svg",
-    "width": 577,
-    "height": 66,
+    "width": 581,
+    "height": 70,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "scan for"
+      },
+      {
         "name": "lineType",
+        "kind": "dropdown",
         "text": "horizontal"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "lines that match"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with min length"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "max length"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
       }
     ],
     "inputs": [
       "",
-      "rule",
-      "minLength",
-      "maxLength",
-      "map",
-      "0_add_button"
+      "tileScanner_tileIs",
+      "math_number",
+      "math_number",
+      "",
+      ""
     ]
   },
   "tileScanner_scanForGroups": {
     "type": "tileScanner_scanForGroups",
     "file": "tileScanner_scanForGroups.svg",
-    "width": 455,
-    "height": 66,
-    "fields": [],
+    "width": 459,
+    "height": 70,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "scan for groups that match"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with min size"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "max size"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "rule",
-      "minSize",
-      "maxSize",
-      "map",
-      "0_add_button"
+      "tileScanner_tileIs",
+      "math_number",
+      "math_number",
+      "",
+      ""
     ]
   },
   "tileScanner_matchesRule": {
     "type": "tileScanner_matchesRule",
     "file": "tileScanner_matchesRule.svg",
-    "width": 568,
-    "height": 66,
-    "fields": [],
+    "width": 572,
+    "height": 70,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "matches"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "location",
-      "rule",
-      "map",
-      "0_add_button"
+      "mapgettile",
+      "tileScanner_tileIs",
+      "",
+      ""
     ]
   },
   "tileScanner_tileIs": {
     "type": "tileScanner_tileIs",
     "file": "tileScanner_tileIs.svg",
-    "width": 162,
-    "height": 58,
-    "fields": [],
+    "width": 166,
+    "height": 62,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tile is"
+      }
+    ],
     "inputs": [
-      "tile"
+      "tileset_tile_picker"
     ]
   },
   "tileScanner_isWall": {
     "type": "tileScanner_isWall",
     "file": "tileScanner_isWall.svg",
-    "width": 165,
-    "height": 40,
-    "fields": [],
+    "width": 169,
+    "height": 44,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "location is wall"
+      }
+    ],
     "inputs": [
       ""
     ]
@@ -4351,9 +4710,17 @@
   "tileScanner_isInsideMap": {
     "type": "tileScanner_isInsideMap",
     "file": "tileScanner_isInsideMap.svg",
-    "width": 218,
-    "height": 40,
-    "fields": [],
+    "width": 222,
+    "height": 44,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "location is inside map"
+      }
+    ],
     "inputs": [
       ""
     ]
@@ -4361,285 +4728,624 @@
   "tileScanner_comparison": {
     "type": "tileScanner_comparison",
     "file": "tileScanner_comparison.svg",
-    "width": 284,
-    "height": 40,
+    "width": 288,
+    "height": 44,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "location"
+      },
+      {
         "name": "property",
+        "kind": "dropdown",
         "text": "column"
       },
       {
         "name": "op",
+        "kind": "dropdown",
         "text": "="
       }
     ],
     "inputs": [
       "",
       "",
-      "value"
+      "math_number"
     ]
   },
   "tileScanner_borders": {
     "type": "tileScanner_borders",
     "file": "tileScanner_borders.svg",
-    "width": 367,
-    "height": 66,
+    "width": 371,
+    "height": 70,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "location borders"
+      },
+      {
         "name": "mode",
+        "kind": "r",
         "text": "adjacent"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
       }
     ],
     "inputs": [
-      "rule",
-      "0_optional_field0",
-      "0_add_button"
+      "tileScanner_tileIs",
+      "",
+      ""
     ]
   },
   "tileScanner_bordersSides": {
     "type": "tileScanner_bordersSides",
     "file": "tileScanner_bordersSides.svg",
-    "width": 532,
-    "height": 66,
-    "fields": [],
+    "width": 536,
+    "height": 70,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "location borders"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "only on"
+      }
+    ],
     "inputs": [
-      "rule",
-      "sideGroups"
+      "tileScanner_tileIs",
+      "tileScanner_sideGroups"
     ]
   },
   "tileScanner_not": {
     "type": "tileScanner_not",
     "file": "tileScanner_not.svg",
-    "width": 212,
-    "height": 66,
-    "fields": [],
+    "width": 216,
+    "height": 70,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "not"
+      }
+    ],
     "inputs": [
-      "rule"
+      "tileScanner_tileIs"
     ]
   },
   "tileScanner_and": {
     "type": "tileScanner_and",
     "file": "tileScanner_and.svg",
-    "width": 187,
-    "height": 40,
-    "fields": [],
+    "width": 191,
+    "height": 44,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "arg1",
-      "arg2",
-      "arg3",
-      "arg4",
-      "arg5",
-      "arg6",
-      "arg7",
-      "arg8",
-      "arg9",
-      "0_add_button"
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "tileScanner_or": {
     "type": "tileScanner_or",
     "file": "tileScanner_or.svg",
-    "width": 178,
-    "height": 40,
-    "fields": [],
+    "width": 182,
+    "height": 44,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "or"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "or"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "or"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "or"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "or"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "or"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "or"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "or"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "arg1",
-      "arg2",
-      "arg3",
-      "arg4",
-      "arg5",
-      "arg6",
-      "arg7",
-      "arg8",
-      "arg9",
-      "0_add_button"
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "tileScanner_setTileAtLocations": {
     "type": "tileScanner_setTileAtLocations",
     "file": "tileScanner_setTileAtLocations.svg",
-    "width": 339,
-    "height": 66,
-    "fields": [],
+    "width": 343,
+    "height": 70,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "tile",
-      "locations",
-      "map",
-      "0_add_button"
+      "tileset_tile_picker",
+      "",
+      "",
+      ""
     ]
   },
   "tileScanner_setWallAtLocations": {
     "type": "tileScanner_setWallAtLocations",
     "file": "tileScanner_setWallAtLocations.svg",
-    "width": 405,
-    "height": 56,
-    "fields": [],
+    "width": 409,
+    "height": 60,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set wall"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "isWall",
-      "locations",
-      "map",
-      "0_add_button"
+      "logic_boolean",
+      "",
+      "",
+      ""
     ]
   },
   "tileScanner_filterLocations": {
     "type": "tileScanner_filterLocations",
     "file": "tileScanner_filterLocations.svg",
-    "width": 453,
-    "height": 66,
-    "fields": [],
+    "width": 457,
+    "height": 70,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "filter"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "by"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "locations",
-      "rule",
-      "map",
-      "0_add_button"
+      "",
+      "tileScanner_tileIs",
+      "",
+      ""
     ]
   },
   "tileScanner_overlapsSprite": {
     "type": "tileScanner_overlapsSprite",
     "file": "tileScanner_overlapsSprite.svg",
-    "width": 418,
-    "height": 48,
-    "fields": [],
+    "width": 422,
+    "height": 52,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "overlaps"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "sprite",
-      "locations",
-      "map",
-      "0_add_button"
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "tileScanner_indexOfLocation": {
     "type": "tileScanner_indexOfLocation",
     "file": "tileScanner_indexOfLocation.svg",
-    "width": 479,
-    "height": 48,
-    "fields": [],
+    "width": 483,
+    "height": 52,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "index of"
+      }
+    ],
     "inputs": [
-      "locations",
-      "toFind"
+      "",
+      "mapgettile"
     ]
   },
   "tileScanner_containsLocation": {
     "type": "tileScanner_containsLocation",
     "file": "tileScanner_containsLocation.svg",
-    "width": 519,
-    "height": 48,
-    "fields": [],
+    "width": 523,
+    "height": 52,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "contains"
+      }
+    ],
     "inputs": [
-      "locations",
-      "toFind"
+      "",
+      "mapgettile"
     ]
   },
   "tileScanner_calculateMetric": {
     "type": "tileScanner_calculateMetric",
     "file": "tileScanner_calculateMetric.svg",
-    "width": 408,
-    "height": 48,
+    "width": 412,
+    "height": 52,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
     "fields": [
       {
+        "name": "",
+        "kind": "dh",
+        "text": "calculate"
+      },
+      {
         "name": "metric",
+        "kind": "dropdown",
         "text": "min column"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
       }
     ],
     "inputs": [
-      "locations",
       "",
-      "map",
-      "0_add_button"
+      "",
+      "",
+      ""
     ]
   },
   "tileScanner_joinLocations": {
     "type": "tileScanner_joinLocations",
     "file": "tileScanner_joinLocations.svg",
-    "width": 499,
-    "height": 48,
+    "width": 503,
+    "height": 52,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
     "fields": [
       {
         "name": "operation",
+        "kind": "dropdown",
         "text": "concatenate"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and"
       }
     ],
     "inputs": [
       "",
-      "a",
-      "b"
+      "",
+      ""
     ]
   },
   "tileScanner_deduplicateLocations": {
     "type": "tileScanner_deduplicateLocations",
     "file": "tileScanner_deduplicateLocations.svg",
-    "width": 262,
-    "height": 48,
-    "fields": [],
+    "width": 266,
+    "height": 52,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "deduplicate"
+      }
+    ],
     "inputs": [
-      "locations"
+      ""
     ]
   },
   "tileScanner_sortByDistance": {
     "type": "tileScanner_sortByDistance",
     "file": "tileScanner_sortByDistance.svg",
-    "width": 611,
-    "height": 48,
-    "fields": [],
+    "width": 615,
+    "height": 52,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "sorted by distance from"
+      }
+    ],
     "inputs": [
-      "locations",
-      "origin"
+      "",
+      "mapgettile"
     ]
   },
   "tileScanner_sortByColumnRow": {
     "type": "tileScanner_sortByColumnRow",
     "file": "tileScanner_sortByColumnRow.svg",
-    "width": 385,
-    "height": 48,
-    "fields": [],
+    "width": 389,
+    "height": 52,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "sorted by column then row"
+      }
+    ],
     "inputs": [
-      "locations",
+      "",
       ""
     ]
   },
   "tileScanner_updateTiles": {
     "type": "tileScanner_updateTiles",
     "file": "tileScanner_updateTiles.svg",
-    "width": 556,
-    "height": 56,
-    "fields": [],
+    "width": 560,
+    "height": 60,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "update locations to"
+      }
+    ],
     "inputs": [
-      "outlineSprite",
-      "locations"
+      "",
+      ""
     ]
   },
   "tileScanner_setOutlineColor": {
     "type": "tileScanner_setOutlineColor",
     "file": "tileScanner_setOutlineColor.svg",
-    "width": 438,
-    "height": 56,
-    "fields": [],
+    "width": 442,
+    "height": 60,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set outline color"
+      }
+    ],
     "inputs": [
-      "outlineSprite",
-      "color"
+      "",
+      "colorindexpicker"
     ]
   },
   "tileScanner_setOutlineThickness": {
     "type": "tileScanner_setOutlineThickness",
     "file": "tileScanner_setOutlineThickness.svg",
-    "width": 473,
-    "height": 56,
-    "fields": [],
+    "width": 477,
+    "height": 60,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set outline thickness"
+      }
+    ],
     "inputs": [
-      "outlineSprite",
-      "thickness"
+      "",
+      "math_number"
     ]
   },
   "tileScanner_createOverlapTester": {
     "type": "tileScanner_createOverlapTester",
     "file": "tileScanner_createOverlapTester.svg",
-    "width": 591,
-    "height": 48,
-    "fields": [],
+    "width": 595,
+    "height": 52,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "create bbox sprite for"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with kind"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in map"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
     "inputs": [
-      "locations",
-      "kind",
-      "map",
-      "0_add_button"
+      "",
+      "spritekind",
+      "",
+      ""
     ]
   },
   "run_image_animation": {
@@ -4797,7 +5503,7 @@
     "file": "lists_create_with.svg",
     "width": 157,
     "height": 44,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -4821,7 +5527,7 @@
     "file": "lists_length.svg",
     "width": 240,
     "height": 52,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -4839,7 +5545,7 @@
     "file": "lists_index_get.svg",
     "width": 253,
     "height": 52,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -4858,7 +5564,7 @@
     "file": "array_removeat.svg",
     "width": 350,
     "height": 52,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -4877,7 +5583,7 @@
     "file": "array_pop.svg",
     "width": 372,
     "height": 52,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -4895,7 +5601,7 @@
     "file": "array_shift.svg",
     "width": 380,
     "height": 52,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -4913,7 +5619,7 @@
     "file": "array_pickRandom.svg",
     "width": 292,
     "height": 52,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -4931,7 +5637,7 @@
     "file": "array_push.svg",
     "width": 344,
     "height": 60,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -4956,7 +5662,7 @@
     "file": "text.svg",
     "width": 52,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -4974,7 +5680,7 @@
     "file": "text_join.svg",
     "width": 308,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -5126,12 +5832,15 @@
   "variables_get": {
     "type": "variables_get",
     "file": "variables_get.svg",
-    "width": 115,
-    "height": 40,
+    "width": 84,
+    "height": 44,
+    "category": "Variables",
+    "isMultiLine": false,
     "fields": [
       {
         "name": "VAR",
-        "text": "mySprite"
+        "kind": "variable",
+        "text": "item"
       }
     ],
     "inputs": [
@@ -5960,7 +6669,7 @@
     "fields": [
       {
         "name": "tile",
-        "kind": "opaque",
+        "kind": "s",
         "text": "assets.tile`transparency16`"
       }
     ],
@@ -7202,9 +7911,9 @@
   "variables_set__5": {
     "type": "variables_set",
     "file": "variables_set__5.svg",
-    "width": 420,
+    "width": 240,
     "height": 60,
-    "category": "Arrays",
+    "category": "Variables",
     "isMultiLine": false,
     "fields": [
       {
@@ -7215,7 +7924,7 @@
       {
         "name": "VAR",
         "kind": "variable",
-        "text": "list"
+        "text": "mySprite"
       },
       {
         "name": "",
@@ -7224,16 +7933,16 @@
       }
     ],
     "inputs": [
-      ""
+      "math_number"
     ]
   },
   "variables_set__6": {
     "type": "variables_set",
     "file": "variables_set__6.svg",
-    "width": 548,
-    "height": 60,
-    "category": "Arrays",
-    "isMultiLine": false,
+    "width": 448,
+    "height": 148,
+    "category": "Mini Menu",
+    "isMultiLine": true,
     "fields": [
       {
         "name": "",
@@ -7243,7 +7952,7 @@
       {
         "name": "VAR",
         "kind": "variable",
-        "text": "text list"
+        "text": "myMenu"
       },
       {
         "name": "",
@@ -7260,7 +7969,7 @@
     "file": "lists_index_set.svg",
     "width": 383,
     "height": 60,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7285,7 +7994,7 @@
     "file": "array_pop_statement.svg",
     "width": 301,
     "height": 60,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7303,7 +8012,7 @@
     "file": "array_shift_statement.svg",
     "width": 310,
     "height": 60,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7321,7 +8030,7 @@
     "file": "array_unshift.svg",
     "width": 330,
     "height": 52,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7346,7 +8055,7 @@
     "file": "array_unshift_statement.svg",
     "width": 370,
     "height": 60,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7371,7 +8080,7 @@
     "file": "array_insertAt.svg",
     "width": 383,
     "height": 60,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7396,7 +8105,7 @@
     "file": "array_removeat_statement.svg",
     "width": 328,
     "height": 60,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7415,7 +8124,7 @@
     "file": "array_indexof.svg",
     "width": 270,
     "height": 52,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7434,7 +8143,7 @@
     "file": "array_reverse.svg",
     "width": 169,
     "height": 60,
-    "category": "Arrays",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7452,7 +8161,7 @@
     "file": "text_length.svg",
     "width": 190,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7470,7 +8179,7 @@
     "file": "string_parsefloat.svg",
     "width": 225,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7488,7 +8197,7 @@
     "file": "string_split.svg",
     "width": 219,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7512,7 +8221,7 @@
     "file": "string_includes.svg",
     "width": 244,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7531,7 +8240,7 @@
     "file": "string_indexof.svg",
     "width": 256,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7550,7 +8259,7 @@
     "file": "string_isempty.svg",
     "width": 196,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7569,7 +8278,7 @@
     "file": "string_substr_new.svg",
     "width": 475,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7605,7 +8314,7 @@
     "file": "string_compare.svg",
     "width": 237,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7629,7 +8338,7 @@
     "file": "string_get.svg",
     "width": 254,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7653,7 +8362,7 @@
     "file": "string_charcode_at.svg",
     "width": 298,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7677,7 +8386,7 @@
     "file": "variable_to_text.svg",
     "width": 208,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7701,7 +8410,7 @@
     "file": "stringFromCharCode.svg",
     "width": 236,
     "height": 44,
-    "category": "Text",
+    "category": "Sprites",
     "isMultiLine": false,
     "fields": [
       {
@@ -7760,6 +8469,2057 @@
       "",
       "text",
       "math_number"
+    ]
+  },
+  "browserEvents_onMouseMove": {
+    "type": "browserEvents_onMouseMove",
+    "file": "browserEvents_onMouseMove.svg",
+    "width": 247,
+    "height": 116,
+    "category": "Sprites",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on mouse move"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "browserEvents_mouseButton_onEvent": {
+    "type": "browserEvents_mouseButton_onEvent",
+    "file": "browserEvents_mouseButton_onEvent.svg",
+    "width": 448,
+    "height": 116,
+    "category": "Sprites",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
+        "name": "this",
+        "kind": "dropdown",
+        "text": "left"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "mouse button"
+      },
+      {
+        "name": "event",
+        "kind": "dropdown",
+        "text": "pressed"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "browserEvents_mouseButton_isPressed": {
+    "type": "browserEvents_mouseButton_isPressed",
+    "file": "browserEvents_mouseButton_isPressed.svg",
+    "width": 325,
+    "height": 44,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is"
+      },
+      {
+        "name": "this",
+        "kind": "dropdown",
+        "text": "left"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "mouse button pressed"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "browserEvents_mouseButton_pauseUntil": {
+    "type": "browserEvents_mouseButton_pauseUntil",
+    "file": "browserEvents_mouseButton_pauseUntil.svg",
+    "width": 442,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pause until"
+      },
+      {
+        "name": "this",
+        "kind": "dropdown",
+        "text": "left"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "mouse button is"
+      },
+      {
+        "name": "event",
+        "kind": "dropdown",
+        "text": "pressed"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "browserEvents_onWheel": {
+    "type": "browserEvents_onWheel",
+    "file": "browserEvents_onWheel.svg",
+    "width": 312,
+    "height": 116,
+    "category": "Sprites",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on mouse wheel"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "browserEvents_onEvent": {
+    "type": "browserEvents_onEvent",
+    "file": "browserEvents_onEvent.svg",
+    "width": 311,
+    "height": 108,
+    "category": "Sprites",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on browser event"
+      },
+      {
+        "name": "event",
+        "kind": "dropdown",
+        "text": "pointer down"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "browserEvents_setCursorVisible": {
+    "type": "browserEvents_setCursorVisible",
+    "file": "browserEvents_setCursorVisible.svg",
+    "width": 291,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set cursor visible"
+      }
+    ],
+    "inputs": [
+      "logic_boolean"
+    ]
+  },
+  "browserEvents_key_onEvent": {
+    "type": "browserEvents_key_onEvent",
+    "file": "browserEvents_key_onEvent.svg",
+    "width": 231,
+    "height": 108,
+    "category": "Sprites",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
+        "name": "this",
+        "kind": "dropdown",
+        "text": "A"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "key"
+      },
+      {
+        "name": "event",
+        "kind": "dropdown",
+        "text": "pressed"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "browserEvents_key_isPressed": {
+    "type": "browserEvents_key_isPressed",
+    "file": "browserEvents_key_isPressed.svg",
+    "width": 220,
+    "height": 44,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is"
+      },
+      {
+        "name": "this",
+        "kind": "dropdown",
+        "text": "A"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "key pressed"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "browserEvents_key_pauseUntil": {
+    "type": "browserEvents_key_pauseUntil",
+    "file": "browserEvents_key_pauseUntil.svg",
+    "width": 336,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pause until"
+      },
+      {
+        "name": "this",
+        "kind": "dropdown",
+        "text": "A"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "key is"
+      },
+      {
+        "name": "event",
+        "kind": "dropdown",
+        "text": "pressed"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "browser_events_setKeyboardRepeatDefault": {
+    "type": "browser_events_setKeyboardRepeatDefault",
+    "file": "browser_events_setKeyboardRepeatDefault.svg",
+    "width": 479,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set keyboard repeat delay"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ms interval"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ms"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      "math_number",
+      ""
+    ]
+  },
+  "neopixel_onboard_strip": {
+    "type": "neopixel_onboard_strip",
+    "file": "neopixel_onboard_strip.svg",
+    "width": 143,
+    "height": 44,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "onboard strip"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "neopixel_default_strip": {
+    "type": "neopixel_default_strip",
+    "file": "neopixel_default_strip.svg",
+    "width": 143,
+    "height": 44,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "default strip"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "light_show_animation": {
+    "type": "light_show_animation",
+    "file": "light_show_animation.svg",
+    "width": 504,
+    "height": 74,
+    "category": "Sprites",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "show animation"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "for"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "ms"
+      }
+    ],
+    "inputs": [
+      "",
+      "light_animation_picker",
+      "timePicker",
+      ""
+    ]
+  },
+  "light_set_strip_color": {
+    "type": "light_set_strip_color",
+    "file": "light_set_strip_color.svg",
+    "width": 319,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "all pixels to"
+      }
+    ],
+    "inputs": [
+      "",
+      "colorNumberPicker"
+    ]
+  },
+  "light_show_bar_graph": {
+    "type": "light_show_bar_graph",
+    "file": "light_show_bar_graph.svg",
+    "width": 280,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "graph"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "up to"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      "math_number",
+      ""
+    ]
+  },
+  "light_set_brightness": {
+    "type": "light_set_brightness",
+    "file": "light_set_brightness.svg",
+    "width": 294,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "brightness"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number_minmax"
+    ]
+  },
+  "light_photon_fd": {
+    "type": "light_photon_fd",
+    "file": "light_photon_fd.svg",
+    "width": 354,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "photon forward by"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number"
+    ]
+  },
+  "light_photon_flip": {
+    "type": "light_photon_flip",
+    "file": "light_photon_flip.svg",
+    "width": 253,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "photon flip"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "light_photon_set_pen_hue": {
+    "type": "light_photon_set_pen_hue",
+    "file": "light_photon_set_pen_hue.svg",
+    "width": 364,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "photon set pen hue"
+      }
+    ],
+    "inputs": [
+      "",
+      "colorWheelHsvPicker"
+    ]
+  },
+  "light_photon_set_position": {
+    "type": "light_photon_set_position",
+    "file": "light_photon_set_position.svg",
+    "width": 372,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "photon set position"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number"
+    ]
+  },
+  "light_photon_set_photon": {
+    "type": "light_photon_set_photon",
+    "file": "light_photon_set_photon.svg",
+    "width": 306,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "photon"
+      },
+      {
+        "name": "mode",
+        "kind": "dropdown",
+        "text": "pen up"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "light_photon_set_pen_color": {
+    "type": "light_photon_set_pen_color",
+    "file": "light_photon_set_pen_color.svg",
+    "width": 380,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "photon set pen color"
+      }
+    ],
+    "inputs": [
+      "",
+      "colorNumberPicker"
+    ]
+  },
+  "light_show_animation_frame": {
+    "type": "light_show_animation_frame",
+    "file": "light_show_animation_frame.svg",
+    "width": 446,
+    "height": 74,
+    "category": "Sprites",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "show frame of"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "animation"
+      }
+    ],
+    "inputs": [
+      "",
+      "light_animation_picker",
+      ""
+    ]
+  },
+  "light_move_pixels": {
+    "type": "light_move_pixels",
+    "file": "light_move_pixels.svg",
+    "width": 327,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "kind",
+        "kind": "dropdown",
+        "text": "rotate"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "by"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "light_show": {
+    "type": "light_show",
+    "file": "light_show.svg",
+    "width": 192,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "show"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "light_stop_all_animations": {
+    "type": "light_stop_all_animations",
+    "file": "light_stop_all_animations.svg",
+    "width": 324,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "stop all animations"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "light_clear": {
+    "type": "light_clear",
+    "file": "light_clear.svg",
+    "width": 200,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "clear"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "light_set_pixel_color": {
+    "type": "light_set_pixel_color",
+    "file": "light_set_pixel_color.svg",
+    "width": 401,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pixel color at"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      "colorNumberPicker"
+    ]
+  },
+  "lightsetgradient": {
+    "type": "lightsetgradient",
+    "file": "lightsetgradient.svg",
+    "width": 392,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "gradient from"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      "",
+      "colorNumberPicker",
+      "colorNumberPicker"
+    ]
+  },
+  "light_get_pixel_color": {
+    "type": "light_get_pixel_color",
+    "file": "light_get_pixel_color.svg",
+    "width": 280,
+    "height": 52,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pixel color at"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number"
+    ]
+  },
+  "light_length": {
+    "type": "light_length",
+    "file": "light_length.svg",
+    "width": 169,
+    "height": 52,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "length"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "light_get_brightness": {
+    "type": "light_get_brightness",
+    "file": "light_get_brightness.svg",
+    "width": 204,
+    "height": 52,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "brightness"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "light_set_pixel_white_led": {
+    "type": "light_set_pixel_white_led",
+    "file": "light_set_pixel_white_led.svg",
+    "width": 436,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pixel white LED at"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      "math_number"
+    ]
+  },
+  "light_set_buffered": {
+    "type": "light_set_buffered",
+    "file": "light_set_buffered.svg",
+    "width": 348,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "buffered "
+      }
+    ],
+    "inputs": [
+      "",
+      "logic_boolean"
+    ]
+  },
+  "light_set_length": {
+    "type": "light_set_length",
+    "file": "light_set_length.svg",
+    "width": 360,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "length to"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pixels"
+      }
+    ],
+    "inputs": [
+      "",
+      "lightLengthPicker",
+      ""
+    ]
+  },
+  "light_set_mode": {
+    "type": "light_set_mode",
+    "file": "light_set_mode.svg",
+    "width": 403,
+    "height": 60,
+    "category": "Sprites",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "mode to"
+      },
+      {
+        "name": "mode",
+        "kind": "dropdown",
+        "text": "RGB (GRB format)"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "variables_change": {
+    "type": "variables_change",
+    "file": "variables_change.svg",
+    "width": 261,
+    "height": 60,
+    "category": "Variables",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "change"
+      },
+      {
+        "name": "VAR",
+        "kind": "variable",
+        "text": "mySprite"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "by"
+      }
+    ],
+    "inputs": [
+      "math_number"
+    ]
+  },
+  "variables_set__7": {
+    "type": "variables_set",
+    "file": "variables_set__7.svg",
+    "width": 999,
+    "height": 76,
+    "category": "Mini Menu",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "VAR",
+        "kind": "variable",
+        "text": "myMenu"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "mini_menu_create_menu_item": {
+    "type": "mini_menu_create_menu_item",
+    "file": "mini_menu_create_menu_item.svg",
+    "width": 212,
+    "height": 44,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "menu item"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "disabled"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "text",
+      "screen_image_picker",
+      "logic_boolean",
+      ""
+    ]
+  },
+  "mini_menu_set_menu_dimensions_new": {
+    "type": "mini_menu_set_menu_dimensions_new",
+    "file": "mini_menu_set_menu_dimensions_new.svg",
+    "width": 387,
+    "height": 60,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "width"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "height"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      "math_number"
+    ]
+  },
+  "mini_menu_set_menu_title_new": {
+    "type": "mini_menu_set_menu_title_new",
+    "file": "mini_menu_set_menu_title_new.svg",
+    "width": 326,
+    "height": 60,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "title to"
+      }
+    ],
+    "inputs": [
+      "",
+      "text"
+    ]
+  },
+  "mini_menu_sprite_close_menu_new": {
+    "type": "mini_menu_sprite_close_menu_new",
+    "file": "mini_menu_sprite_close_menu_new.svg",
+    "width": 169,
+    "height": 60,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "close"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "mini_menu_on_button_pressed_new": {
+    "type": "mini_menu_on_button_pressed_new",
+    "file": "mini_menu_on_button_pressed_new.svg",
+    "width": 607,
+    "height": 116,
+    "category": "Mini Menu",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on"
+      },
+      {
+        "name": "button",
+        "kind": "dropdown",
+        "text": "A"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "pressed with"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "mini_menu_on_selection_changed_new": {
+    "type": "mini_menu_on_selection_changed_new",
+    "file": "mini_menu_on_selection_changed_new.svg",
+    "width": 599,
+    "height": 116,
+    "category": "Mini Menu",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "on selection changed"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "mini_menu_sprite_move_selection_up_new": {
+    "type": "mini_menu_sprite_move_selection_up_new",
+    "file": "mini_menu_sprite_move_selection_up_new.svg",
+    "width": 358,
+    "height": 60,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "move selection"
+      }
+    ],
+    "inputs": [
+      "",
+      "mini_menu_move_direction"
+    ]
+  },
+  "mini_menu_sprite_set_button_events_enabled_new": {
+    "type": "mini_menu_sprite_set_button_events_enabled_new",
+    "file": "mini_menu_sprite_set_button_events_enabled_new.svg",
+    "width": 497,
+    "height": 60,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set button events enabled"
+      }
+    ],
+    "inputs": [
+      "",
+      "logic_boolean"
+    ]
+  },
+  "mini_menu_sprite_set_controller": {
+    "type": "mini_menu_sprite_set_controller",
+    "file": "mini_menu_sprite_set_controller.svg",
+    "width": 402,
+    "height": 60,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set controller"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "player"
+      },
+      {
+        "name": "ctrl",
+        "kind": "dropdown",
+        "text": "2"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "mini_menu_set_menu_frame_new": {
+    "type": "mini_menu_set_menu_frame_new",
+    "file": "mini_menu_set_menu_frame_new.svg",
+    "width": 318,
+    "height": 70,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "frame to"
+      }
+    ],
+    "inputs": [
+      "",
+      "dialog_image_picker"
+    ]
+  },
+  "mini_menu_set_menu_style_property_new": {
+    "type": "mini_menu_set_menu_style_property_new",
+    "file": "mini_menu_set_menu_style_property_new.svg",
+    "width": 445,
+    "height": 60,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set menu style for"
+      },
+      {
+        "name": "property",
+        "kind": "dropdown",
+        "text": "width"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "math_number"
+    ]
+  },
+  "mini_menu_set_style_property_new": {
+    "type": "mini_menu_set_style_property_new",
+    "file": "mini_menu_set_style_property_new.svg",
+    "width": 573,
+    "height": 60,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "kind",
+        "kind": "dropdown",
+        "text": "default"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "item style for"
+      },
+      {
+        "name": "property",
+        "kind": "dropdown",
+        "text": "padding"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      "",
+      "",
+      "",
+      "math_number"
+    ]
+  },
+  "mini_menu_create_border_box": {
+    "type": "mini_menu_create_border_box",
+    "file": "mini_menu_create_border_box.svg",
+    "width": 163,
+    "height": 164,
+    "category": "Mini Menu",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "left"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "top"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "right"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "bottom"
+      }
+    ],
+    "inputs": [
+      "math_number",
+      "math_number",
+      "math_number",
+      "math_number"
+    ]
+  },
+  "mini_menu_get_menu_item": {
+    "type": "mini_menu_get_menu_item",
+    "file": "mini_menu_get_menu_item.svg",
+    "width": 271,
+    "height": 52,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "menu item at"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number"
+    ]
+  },
+  "mini_menu_get_menu_items": {
+    "type": "mini_menu_get_menu_items",
+    "file": "mini_menu_get_menu_items.svg",
+    "width": 248,
+    "height": 52,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "all menu items"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "mini_menu_remove_menu_item": {
+    "type": "mini_menu_remove_menu_item",
+    "file": "mini_menu_remove_menu_item.svg",
+    "width": 380,
+    "height": 60,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "remove menu item at"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number"
+    ]
+  },
+  "mini_menu_insert_menu_item": {
+    "type": "mini_menu_insert_menu_item",
+    "file": "mini_menu_insert_menu_item.svg",
+    "width": 466,
+    "height": 60,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "insert"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "",
+      "mini_menu_create_menu_item",
+      "math_number",
+      ""
+    ]
+  },
+  "mini_menu_menu_item_set_text": {
+    "type": "mini_menu_menu_item_set_text",
+    "file": "mini_menu_menu_item_set_text.svg",
+    "width": 319,
+    "height": 60,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set text"
+      }
+    ],
+    "inputs": [
+      "",
+      "text"
+    ]
+  },
+  "mini_menu_menu_item_get_text": {
+    "type": "mini_menu_menu_item_get_text",
+    "file": "mini_menu_menu_item_get_text.svg",
+    "width": 196,
+    "height": 52,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "text"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "mini_menu_menu_item_set_icon": {
+    "type": "mini_menu_menu_item_set_icon",
+    "file": "mini_menu_menu_item_set_icon.svg",
+    "width": 353,
+    "height": 70,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set icon"
+      }
+    ],
+    "inputs": [
+      "",
+      "screen_image_picker"
+    ]
+  },
+  "mini_menu_menu_item_get_icon": {
+    "type": "mini_menu_menu_item_get_icon",
+    "file": "mini_menu_menu_item_get_icon.svg",
+    "width": 196,
+    "height": 52,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "icon"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "mini_menu_menu_item_set_disabled": {
+    "type": "mini_menu_menu_item_set_disabled",
+    "file": "mini_menu_menu_item_set_disabled.svg",
+    "width": 418,
+    "height": 60,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set disabled"
+      }
+    ],
+    "inputs": [
+      "",
+      "logic_boolean"
+    ]
+  },
+  "mini_menu_menu_item_is_disabled": {
+    "type": "mini_menu_menu_item_is_disabled",
+    "file": "mini_menu_menu_item_is_disabled.svg",
+    "width": 285,
+    "height": 52,
+    "category": "Mini Menu",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is disabled"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "variables_set__8": {
+    "type": "variables_set",
+    "file": "variables_set__8.svg",
+    "width": 687,
+    "height": 68,
+    "category": "Tile Scanner",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "VAR",
+        "kind": "variable",
+        "text": "myOutlineSprite"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "story_show_text": {
+    "type": "story_show_text",
+    "file": "story_show_text.svg",
+    "width": 316,
+    "height": 60,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "print"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with text color"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "back color"
+      },
+      {
+        "name": "speed",
+        "kind": "r",
+        "text": "very slow"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "text",
+      "math_number",
+      "math_number",
+      "colorindexpicker",
+      "colorindexpicker",
+      "",
+      ""
+    ]
+  },
+  "story_sprite_say_text": {
+    "type": "story_sprite_say_text",
+    "file": "story_sprite_say_text.svg",
+    "width": 287,
+    "height": 60,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "say"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with text color"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "back color"
+      },
+      {
+        "name": "speed",
+        "kind": "r",
+        "text": "very slow"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "",
+      "text",
+      "",
+      "colorindexpicker",
+      "colorindexpicker",
+      "",
+      ""
+    ]
+  },
+  "story_print_dialog": {
+    "type": "story_print_dialog",
+    "file": "story_print_dialog.svg",
+    "width": 663,
+    "height": 60,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "print"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "at camera x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "in box width"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "height"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with text color"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "back color"
+      },
+      {
+        "name": "speed",
+        "kind": "r",
+        "text": "very slow"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "text",
+      "math_number",
+      "math_number",
+      "math_number",
+      "math_number",
+      "colorindexpicker",
+      "colorindexpicker",
+      "",
+      ""
+    ]
+  },
+  "story_set_page_pause_length": {
+    "type": "story_set_page_pause_length",
+    "file": "story_set_page_pause_length.svg",
+    "width": 586,
+    "height": 60,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set page pause (ms)"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "and final page pause (ms)"
+      }
+    ],
+    "inputs": [
+      "timePicker",
+      "timePicker"
+    ]
+  },
+  "arcade_story_print_character_text": {
+    "type": "arcade_story_print_character_text",
+    "file": "arcade_story_print_character_text.svg",
+    "width": 276,
+    "height": 60,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "print character text"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with label"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "text",
+      "text",
+      ""
+    ]
+  },
+  "story_set_sound_enabled": {
+    "type": "story_set_sound_enabled",
+    "file": "story_set_sound_enabled.svg",
+    "width": 326,
+    "height": 60,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set text sound enabled"
+      }
+    ],
+    "inputs": [
+      "logic_boolean"
+    ]
+  },
+  "story_sprite_move_to_location": {
+    "type": "story_sprite_move_to_location",
+    "file": "story_sprite_move_to_location.svg",
+    "width": 512,
+    "height": 60,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "move to x"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "y"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "with speed"
+      }
+    ],
+    "inputs": [
+      "",
+      "math_number",
+      "math_number",
+      "math_number"
+    ]
+  },
+  "story_sprite_cancel_movement": {
+    "type": "story_sprite_cancel_movement",
+    "file": "story_sprite_cancel_movement.svg",
+    "width": 297,
+    "height": 60,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "cancel movement"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "arcade_story_start_cutscene": {
+    "type": "arcade_story_start_cutscene",
+    "file": "arcade_story_start_cutscene.svg",
+    "width": 164,
+    "height": 116,
+    "category": "Story",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "start cutscene"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "arcade_story_cancel_cutscene": {
+    "type": "arcade_story_cancel_cutscene",
+    "file": "arcade_story_cancel_cutscene.svg",
+    "width": 152,
+    "height": 60,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "cancel cutscene"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "arcade_story_cancel_all_cutscenes": {
+    "type": "arcade_story_cancel_all_cutscenes",
+    "file": "arcade_story_cancel_all_cutscenes.svg",
+    "width": 196,
+    "height": 60,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "cancel all cutscenes"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "story_clear_all_text": {
+    "type": "story_clear_all_text",
+    "file": "story_clear_all_text.svg",
+    "width": 188,
+    "height": 60,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "cancel current text"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "arcade_story_show_player_choices": {
+    "type": "arcade_story_show_player_choices",
+    "file": "arcade_story_show_player_choices.svg",
+    "width": 316,
+    "height": 60,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "show player choices"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "Reveal optional arguments"
+      }
+    ],
+    "inputs": [
+      "text",
+      "text",
+      "",
+      "text",
+      "text",
+      "text",
+      ""
+    ]
+  },
+  "arcade_story_last_answer": {
+    "type": "arcade_story_last_answer",
+    "file": "arcade_story_last_answer.svg",
+    "width": 251,
+    "height": 44,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "last answer equals"
+      }
+    ],
+    "inputs": [
+      "text"
+    ]
+  },
+  "arcade_story_get_last_answer": {
+    "type": "arcade_story_get_last_answer",
+    "file": "arcade_story_get_last_answer.svg",
+    "width": 160,
+    "height": 44,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "get last answer"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "arcade_story_is_menu_open": {
+    "type": "arcade_story_is_menu_open",
+    "file": "arcade_story_is_menu_open.svg",
+    "width": 150,
+    "height": 44,
+    "category": "Story",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "is menu open"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "variables_set__9": {
+    "type": "variables_set",
+    "file": "variables_set__9.svg",
+    "width": 420,
+    "height": 60,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "VAR",
+        "kind": "variable",
+        "text": "list"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "variables_set__10": {
+    "type": "variables_set",
+    "file": "variables_set__10.svg",
+    "width": 548,
+    "height": 60,
+    "category": "Arrays",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "VAR",
+        "kind": "variable",
+        "text": "text list"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      }
+    ],
+    "inputs": [
+      ""
     ]
   }
 }

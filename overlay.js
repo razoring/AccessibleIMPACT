@@ -971,8 +971,23 @@
       if (cached && cached.svg) {
         applySvg(span, cached);
       } else {
-        // Live renderer first; NLP is only a fallback inside requestTokenRender
-        requestTokenRender(tokenText, tokenText, span);
+        const stepArea = span.closest('app-step-information, [data-instruction], article, .lesson-content') || document.body;
+        const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
+        const overallText = (document.body ? document.body.textContent : '').toLowerCase();
+        const resolution = (catalogMap && tokenRules.length > 0) ? resolveTokenWithNLP(tokenText, stepText, overallText) : null;
+        if (resolution && (resolution.template === 'isolated_pill' || (catalogMap[resolution.template] && catalogMap[resolution.template].file))) {
+          fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
+            if (data && data.svg) {
+              applyTokenToPage(tokenText, data);
+            } else {
+              requestTokenRender(tokenText, tokenText, span);
+            }
+          }).catch(() => {
+            requestTokenRender(tokenText, tokenText, span);
+          });
+        } else {
+          requestTokenRender(tokenText, tokenText, span);
+        }
       }
     }
   }
@@ -987,7 +1002,23 @@
       if (cached && cached.svg) {
         applySvg(span, cached);
       } else if (!cached || cached.svg !== null) {
-        requestTokenRender(lookupToken, tokenText, span);
+        const stepArea = span.closest('app-step-information, [data-instruction], article, .lesson-content') || document.body;
+        const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
+        const overallText = (document.body ? document.body.textContent : '').toLowerCase();
+        const resolution = (catalogMap && tokenRules.length > 0) ? resolveTokenWithNLP(tokenText, stepText, overallText) : null;
+        if (resolution && (resolution.template === 'isolated_pill' || (catalogMap[resolution.template] && catalogMap[resolution.template].file))) {
+          fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
+            if (data && data.svg) {
+              applyTokenToPage(tokenText, data);
+            } else {
+              requestTokenRender(lookupToken, tokenText, span);
+            }
+          }).catch(() => {
+            requestTokenRender(lookupToken, tokenText, span);
+          });
+        } else {
+          requestTokenRender(lookupToken, tokenText, span);
+        }
       }
     }
   }
@@ -1251,14 +1282,13 @@
       if (cached && cached.svg) {
         applySvg(span, cached);
       } else {
-        // Optimization: if token has no nested arguments/parameters (e.g. [animate frames], [game over], [on start]),
-        // and matches a catalog rule without custom parameter overrides, load the exact default catalog SVG immediately!
-        let fastApplied = false;
-        if (catalogMap && tokenRules.length > 0 && !tokenText.includes('(') && !tokenText.includes('<')) {
+        // Catalog-first resolution: lookup in catalogMap & tokenRules first!
+        // We only fall back to live in-page iframe rendering if catalog resolution fails.
+        let resolvedAndRendered = false;
+        if (catalogMap && tokenRules.length > 0) {
           const resolution = resolveTokenWithNLP(tokenText, stepText, overallText);
-          const hasCustomParams = resolution && resolution.params && Object.keys(resolution.params).some(k => resolution.params[k] !== undefined && resolution.params[k] !== '');
-          if (resolution && resolution.template && resolution.template !== 'isolated_pill' && !hasCustomParams) {
-            fastApplied = true;
+          if (resolution && (resolution.template === 'isolated_pill' || (catalogMap[resolution.template] && catalogMap[resolution.template].file))) {
+            resolvedAndRendered = true;
             fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
               if (data && data.svg) {
                 applyTokenToPage(tokenText, data);
@@ -1270,7 +1300,7 @@
             });
           }
         }
-        if (!fastApplied) {
+        if (!resolvedAndRendered) {
           requestTokenRender(tokenText, tokenText, span);
         }
       }
