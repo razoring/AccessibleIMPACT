@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 353 56" width="353" height="56">
+<defs>
+  <pattern id="aifx-tilemap-dots" width="8" height="8" patternUnits="userSpaceOnUse">
+    <rect width="8" height="8" fill="#4d3b66" stroke="#3d2d54" stroke-width="0.5"/>
+  </pattern>
+</defs>
+<style>
+.blocklyText { font-family: Consolas, Monaco, Menlo, "Ubuntu Mono", monospace; font-size: 16px; font-weight: 600; fill: #fff; }
+</style>
+<g class="variables_set blocklyBlock variable_blocks blocklyDraggable" data-aifx-type="variables_set" transform="translate(0,0)">
+  <path class="blocklyPath" stroke="#b12c43" fill="#ec3b59" d=" m 0,0  m 0,4 a 4 4 0 0,1 4,-4  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 309 a 4 4 0 0,1 4,4  v 8  V 44  V 48 a 4 4 0 0,1 -4,4  h -309  c -2,0  -3,1  -4,2  l -4,4  c -1,1  -2,2  -4,2  h -12  c -2,0  -3,-1  -4,-2  l -4,-4  c -1,-1  -2,-2  -4,-2  h -8 a 4 4 0 0,1 -4,-4 z"/>
+  <g class="blocklyLabelField" transform="translate(12,20)" data-aifx-field="" data-aifx-opaque="1"><text class="blocklyText" dominant-baseline="central">set</text></g>
+  <g class="blocklyField blocklyDropdownField blocklyVariableField blocklyEditableField" transform="translate(48,8)" data-aifx-field="VAR" data-aifx-kind="variable" data-aifx-charw="9.5" data-aifx-value="tilemap1">
+    <rect rx="4" ry="4" x="0" y="0" height="32" width="108" fill="transparent" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+    <text class="blocklyText blocklyDropdownText" x="8" y="16" dominant-baseline="central">tilemap1</text>
+    <image height="12px" width="12px" xlink:href="data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaGVpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLWFycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuNDEsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTDAuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNzFDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMCwxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNzlhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYzAuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMzdBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=" transform="translate(90,10)"/>
+  </g>
+  <g class="blocklyLabelField" transform="translate(164,20)" data-aifx-field="" data-aifx-opaque="1"><text class="blocklyText" dominant-baseline="central">to</text></g>
+  <g class="tiles_tilemap_editor blocklyBlock blocklyDraggable" transform="translate(192,6)" data-aifx-opaque="1">
+    <path class="blocklyPath" stroke="#384c63" fill="#4b6584" d=" m 20,0  h 109 a 20 20 0 0,1 20,20  v 0 a 20 20 0 0,1 -20,20  V 40  h -109 a 20 20 0 0,1 -20,-20  v 0 a 20 20 0 0,1 20,-20 z"/>
+    <g class="blocklyLabelField" transform="translate(14,20)"><text class="blocklyText" dominant-baseline="central">tilemap</text></g>
+    <g class="blocklyField blocklyEditableField" transform="translate(90,4)">
+      <rect rx="4" ry="4" x="0" y="0" height="32" width="30" fill="#dcdcdc" stroke="#cccccc" stroke-width="1.5"/>
+      <rect rx="3" ry="3" x="2" y="2" height="28" width="26" fill="url(#aifx-tilemap-dots)"/>
+      <rect x="5" y="6" width="4" height="4" fill="#f39c12"/>
+      <rect x="17" y="11" width="4" height="4" fill="#e67e22"/>
+      <rect x="11" y="19" width="4" height="4" fill="#f1c40f"/>
+    </g>
+  </g>
+</g>
+</svg>

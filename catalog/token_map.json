@@ -84,7 +84,7 @@
       "template": "function_definition",
       "blockType": "function_definition",
       "params": {
-        "NAME": "$1"
+        "NAME": 1
       }
     },
     {
@@ -217,7 +217,7 @@
     {
       "id": "sprites_prop_set",
       "category": "sprites",
-      "pattern": "^set\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s*[\\[\\(]?(velocity\\s*[xy]|vx|vy|ax|ay|x|y|scale|lifespan)[\\]\\)]?\\s+to(?:\\s+[\\[\\(]?([\\d-]+)[\\]\\)]?)?",
+      "pattern": "^set\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s*[\\[\\(]?(velocity\\s*[xy]|vx|vy|ax|ay|fx|fy|sx|sy|rotation|degrees|radians|z|scale|lifespan|x|y)[\\]\\)]?(?:\\s+to)?(?:\\s+[\\[\\(]?([\\d-]+)[\\]\\)]?)?",
       "template": "Sprite_blockCombine_set",
       "blockType": "Sprite_blockCombine_set",
       "params": {
@@ -229,7 +229,7 @@
     {
       "id": "sprites_prop_change",
       "category": "sprites",
-      "pattern": "^change\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s*[\\[\\(]?(velocity\\s*[xy]|vx|vy|ax|ay|x|y|scale|lifespan)[\\]\\)]?(?:\\s+by(?:\\s+[\\[\\(]?([\\d-]+)[\\]\\)]?)?)?",
+      "pattern": "^change\\s+(?:sprite|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s*[\\[\\(]?(velocity\\s*[xy]|vx|vy|ax|ay|fx|fy|sx|sy|rotation|degrees|radians|z|scale|lifespan|x|y)[\\]\\)]?(?:\\s+by)?(?:\\s+[\\[\\(]?([\\d-]+)[\\]\\)]?)?",
       "template": "Sprite_blockCombine_change",
       "blockType": "Sprite_blockCombine_change",
       "params": {
@@ -644,9 +644,7 @@
       "pattern": "^set\\s+(?:\\(statusbar\\)|statusbar)\\s+fill\\s+background",
       "template": "statusbars_setColor",
       "blockType": "statusbars_setColor",
-      "params": {
-        "varName": "statusbar"
-      }
+      "params": {}
     },
     {
       "id": "statusbars_kind_attached",
@@ -1054,7 +1052,7 @@
     {
       "id": "scene_set_bg_color",
       "category": "scene",
-      "pattern": "^set\\s+background\\s+color\\s+to",
+      "pattern": "^set\\s+background\\s+color(?:\\s+to)?",
       "template": "gamesetbackgroundcolor",
       "blockType": "gamesetbackgroundcolor"
     },
@@ -1251,6 +1249,16 @@
       "blockType": "variables_set",
       "params": {
         "varName": "list"
+      }
+    },
+    {
+      "id": "variables_set_tilemap",
+      "category": "variables",
+      "pattern": "^set\\s+(?:variable|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)\\s+to\\s*[\\[\\(]?tilemap(?:\\s*\\d+)?[\\]\\)]?$",
+      "template": "variables_set_tilemap",
+      "blockType": "variables_set",
+      "params": {
+        "varName": 1
       }
     },
     {

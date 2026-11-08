@@ -10660,5 +10660,38 @@
       }
     ],
     "inputs": []
+  },
+  "variables_set_tilemap": {
+    "type": "variables_set",
+    "file": "variables_set_tilemap.svg",
+    "width": 353,
+    "height": 56,
+    "category": "Variables",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "set"
+      },
+      {
+        "name": "VAR",
+        "kind": "variable",
+        "text": "tilemap1"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "to"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "tilemap"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
   }
 }

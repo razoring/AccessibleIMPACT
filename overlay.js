@@ -220,6 +220,9 @@
     const varVal = want('varName');
     if (varVal) pushEdit(fields.find(f => f.kind === 'variable'), varVal);
 
+    const nameVal = want('NAME') || want('function_name');
+    if (nameVal) pushEdit(fields.find(f => f.name === 'function_name' || f.name === 'NAME'), nameVal);
+
     const btnVal = want('button');
     if (btnVal) pushEdit(fields.find(f => f.kind === 'dropdown' && f.name === 'button'), btnVal);
 
@@ -237,8 +240,8 @@
     if (opVal) pushEdit(fields.find(f => f.kind === 'dropdown' && ['=', '+', '!=', '%', '\u2264', '\u2265'].includes(f.value)), opVal);
 
     // prop targets property dropdowns whose default is "x" / "value"
-    const propVal = want('prop');
-    if (propVal) pushEdit(fields.find(f => f.kind === 'dropdown' && ['x', 'value', 'column'].includes(f.value)), propVal);
+    const propVal = want('prop') || want('property');
+    if (propVal) pushEdit(fields.find(f => (f.name === 'property' || (f.kind === 'dropdown' && ['x', 'value', 'column'].includes(f.value)))), propVal);
 
     // numeric params land on number-kind fields, in legacy param order
     const numFields = fields.filter(f => f.kind === 'number');
@@ -310,7 +313,8 @@
         const rightEdge = fx + origW - 1; // ORIGINAL extent: everything right of it shifts
         root.querySelectorAll('[transform]').forEach(el => {
           // skip the field group itself and everything inside it
-          if (el === g || (g.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_CONTAINED_BY)) return;
+          const containedMask = (typeof Node !== 'undefined' && Node.DOCUMENT_POSITION_CONTAINED_BY) ? Node.DOCUMENT_POSITION_CONTAINED_BY : 16;
+          if (el === g || (g.compareDocumentPosition && (g.compareDocumentPosition(el) & containedMask))) return;
           const m = el.getAttribute('transform').match(/translate\((-?[\d.]+),\s*(-?[\d.]+)\)/);
           if (!m) return;
           const ex = parseFloat(m[1]);
@@ -368,7 +372,7 @@
     // 1. Variable name replacement & dynamic pill stretch for variables_get
     if (params.varName) {
       const v = escapeXml(params.varName);
-      if (s.includes('class="variables_get ') && !s.includes('variables_set')) {
+      if (s.includes('data-aifx-type="variables_get"') && !s.includes('variables_set')) {
         const charWidth = 9.5;
         const textWidth = Math.max(30, v.length * charWidth);
         const hStretch = Math.round(textWidth + 16);
@@ -388,6 +392,12 @@
         s = s.replace(/>statusbar</g, `>${v}<`);
         s = s.replace(/>item</g, `>${v}<`);
       }
+    }
+
+    if (params.NAME || params.function_name) {
+      const fnName = escapeXml(params.NAME || params.function_name);
+      s = s.replace(/(>function\s+)[a-zA-Z0-9_]+(<\/text>)/, '$1' + fnName + '$2');
+      s = s.replace(/>doSomething<\/text>/, `>${fnName}<\/text>`);
     }
 
     // 2. Kind replacement
@@ -487,7 +497,7 @@
         const group = fm[3];
         const rectM = group.match(/<rect[^>]*width="([\d.]+)"/);
         const textM = group.match(/<text[^>]*>([^<]*)<\/text>/);
-        if (rectM && textM) {
+        if (rectM && textM && textM[1] !== escapeXml(params.varName)) {
           const textW = textM[1].length * charW;
           // original proportions: 8 left pad + text + 5 gap + 12 arrow + 8 right pad
           const needed = Math.ceil((8 + textW + 5 + 12 + 8) * 2) / 2;
@@ -538,6 +548,7 @@
             regex: new RegExp(r.pattern, 'i')
           }));
         }
+        applyCacheToPage();
         scan();
       }
     } catch (e) {
@@ -596,7 +607,7 @@
 
   function getActiveCategories(stepText, overallText) {
     const combined = ((stepText || '') + ' ' + (overallText || '')).toLowerCase();
-    const active = new Set(['variables', 'common', 'logic', 'loops', 'math']);
+    const active = new Set(['variables', 'common', 'logic', 'loops', 'math', 'functions']);
 
     if (/status\s*bars?|statusbar/i.test(combined)) active.add('statusbars');
     if (/scene|tilemap|camera|background/i.test(combined)) active.add('scene');
@@ -652,6 +663,25 @@
         rule: { id: 'variables_get', category: 'variables' },
         template: 'variables_get',
         params: { varName: cleanFlat }
+      };
+    }
+
+    // Hardcode [set list to] to the arrays version
+    if (/^set\s+(?:\(list\)|list)\s+to$/i.test(cleanFlat)) {
+      return {
+        rule: { id: 'arrays_set_list_to', category: 'arrays' },
+        template: 'variables_set__9',
+        params: { varName: 'list' }
+      };
+    }
+
+    // Contextual handler for set <var> to tilemap
+    const mSetTilemap = cleanFlat.match(/^set\s+[\(\[]?([a-zA-Z0-9_]+)[\)\]]?\s+to\s+[\(\[]?tilemap(?:\s*\d+)?[\)\]]?$/i);
+    if (mSetTilemap) {
+      return {
+        rule: { id: 'variables_set_tilemap', category: 'variables' },
+        template: 'variables_set_tilemap',
+        params: { varName: mSetTilemap[1] === 'variable' ? 'variable' : mSetTilemap[1] }
       };
     }
 
@@ -731,6 +761,26 @@
           }
         }
 
+        if (params.prop) {
+          const pLower = String(params.prop).toLowerCase().trim();
+          const spritePropMap = {
+            'vx': 'vx (velocity x)',
+            'vy': 'vy (velocity y)',
+            'fx': 'fx (friction x)',
+            'fy': 'fy (friction y)',
+            'sx': 'sx (scale x)',
+            'sy': 'sy (scale y)',
+            'rotation': 'rotation (degrees)',
+            'degrees': 'rotation (degrees)',
+            'radians': 'rotation (radians)',
+            'z': 'z (depth)'
+          };
+          if (spritePropMap[pLower]) params.prop = spritePropMap[pLower];
+        }
+        if (params.varName && params.varName.toLowerCase() === 'sprite') {
+          delete params.varName;
+        }
+
         return {
           rule,
           template: rule.template,
@@ -788,7 +838,8 @@
         svg: mutatedSvg,
         width: w,
         height: entry.height,
-        category: entry.type
+        category: entry.type,
+        isMultiLine: entry.isMultiLine
       };
     } catch (e) {
       return null;
@@ -872,6 +923,16 @@
         stroke-opacity: 1 !important;
       }
 
+      /* Hide Blockly connection path highlights and indicators so puzzle piece notches/tabs and sockets never render black */
+      .aifx-rendered .blocklyHighlightedConnectionPath,
+      .aifx-rendered .blocklyConnectionIndicatorParent,
+      .aifx-rendered .blocklyConnectionIndicator {
+        display: none !important;
+        fill: none !important;
+        stroke: none !important;
+        opacity: 0 !important;
+      }
+
       .aifx-rendered.aifx-inline {
         display: inline-block !important;
         vertical-align: middle !important;
@@ -951,6 +1012,15 @@
       .aifx-disabled p:has(> .aifx-rendered.aifx-multiline) {
         display: inline !important;
         max-width: none !important;
+      }
+      .aifx-rendered:not([data-rendered="true"]) {
+        display: none !important;
+      }
+      .aifx-rendered:not([data-rendered="true"]) + .aifx-raw-fallback {
+        display: inline !important;
+      }
+      .aifx-rendered[data-rendered="true"] + .aifx-raw-fallback {
+        display: none !important;
       }
       .aifx-raw-fallback {
         display: none !important;
@@ -1034,10 +1104,7 @@
         svgEl.style.setProperty('height', '1.25em', 'important');
       } else if (isMultiLine) {
         svgEl.style.display = 'block';
-        let emScale = 2.2 / 44;
-        if ((data.height || 0) <= 60 && (data.width || 0) > 300) {
-          emScale = 2.2 / data.height;
-        }
+        const emScale = 1 / 16;
         const naturalEmWidth = ((data.width || 100) * emScale).toFixed(3);
         svgEl.style.setProperty('width', `${naturalEmWidth}em`, 'important');
         svgEl.style.setProperty('max-width', '100%', 'important');
@@ -1046,7 +1113,7 @@
         svgEl.style.display = 'inline-block';
         svgEl.style.verticalAlign = 'middle';
         const h = data.height || 44;
-        const emHeight = ((h / 44) * 2.2).toFixed(3);
+        const emHeight = (h / 16).toFixed(3);
         svgEl.style.setProperty('height', `${emHeight}em`, 'important');
         svgEl.style.setProperty('width', 'auto', 'important');
       }
@@ -1402,6 +1469,7 @@
             resolvedAndRendered = true;
             fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
               if (data && data.svg) {
+                applySvg(span, data);
                 applyTokenToPage(tokenText, data);
               } else {
                 requestTokenRender(tokenText, tokenText, span);
@@ -1411,7 +1479,7 @@
             });
           }
         }
-        if (!resolvedAndRendered && catalogMap !== null) {
+        if (!resolvedAndRendered) {
           requestTokenRender(tokenText, tokenText, span);
         }
       }

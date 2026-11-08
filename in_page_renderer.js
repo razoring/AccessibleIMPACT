@@ -455,7 +455,7 @@
     // 9b. Tilemap placeholder: (tilemap), (tilemap1), [tilemap 2] — render the real
     // tilemap picker block so it matches the standalone placeholder visual, instead
     // of falling through to a red variables_get.
-    if (/^[\[\(]\s*tilemap(?:\s*\d+)?\s*[\]\)]$/i.test(raw)) {
+    if (/^[\[\(]?\s*tilemap(?:\s*\d+)?\s*[\]\)]?$/i.test(raw)) {
       try {
         const tb = ws.newBlock('tiles_tilemap_editor');
         tb.initSvg();
@@ -1460,17 +1460,25 @@
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+position\s+to\s*(?:x\s*y)?\s*[\]\}]?$/i, type: 'spritesetpos', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+velocity\s+to\s*(?:vx\s*vy)?\s*\]?$/i, type: 'spritesetvel', conf: 1.0 },
     {
-      match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+[\[\(]?(velocity\s*[xy]|vx|vy|ax|ay|x|y|scale)[\]\)]?\s+to(?:\s+[\(\[]?(-?\d+)[\)\]]?)?\s*\]?$/i,
+      match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+[\[\(]?(velocity\s*[xy]|vx|vy|ax|ay|fx|fy|sx|sy|rotation|degrees|radians|z|scale|lifespan|x|y)[\]\)]?(?:\s+to)?(?:\s+[\(\[]?(-?\d+)[\)\]]?)?\s*\]?$/i,
       type: 'Sprite_blockCombine_set',
       mutator: (b, ws, raw) => {
-        const m = (raw || '').match(/set\s+(?:sprite|\(?([a-zA-Z0-9_]+)\)?)\s+[\[\(]?(velocity\s*[xy]|vx|vy|ax|ay|x|y|scale)[\]\)]?\s+to(?:\s+[\(\[]?(-?\d+)[\)\]]?)?/i);
-        const sName = m && m[1] ? m[1] : 'sprite';
-        const propRaw = (m && m[2] ? m[2] : 'velocity y').toLowerCase().replace(/\s+/g, '');
+        const m = (raw || '').match(/set\s+(?:sprite|\(?([a-zA-Z0-9_]+)\)?)\s+[\[\(]?(velocity\s*[xy]|vx|vy|ax|ay|fx|fy|sx|sy|rotation|degrees|radians|z|scale|lifespan|x|y)[\]\)]?(?:\s+to)?(?:\s+[\(\[]?(-?\d+)[\)\]]?)?/i);
+        const sName = (m && m[1] && m[1].toLowerCase() !== 'sprite') ? m[1] : 'mySprite';
+        const propRaw = (m && m[2] ? m[2] : 'x').toLowerCase().replace(/\s+/g, '');
         const valNum = m && m[3] ? m[3] : '0';
 
-        let propVal = 'Sprite.vy@set';
+        let propVal = 'Sprite.x@set';
         if (propRaw === 'velocityx' || propRaw === 'vx') propVal = 'Sprite.vx@set';
         else if (propRaw === 'velocityy' || propRaw === 'vy') propVal = 'Sprite.vy@set';
+        else if (propRaw === 'frictionx' || propRaw === 'fx') propVal = 'Sprite.fx@set';
+        else if (propRaw === 'frictiony' || propRaw === 'fy') propVal = 'Sprite.fy@set';
+        else if (propRaw === 'scalex' || propRaw === 'sx') propVal = 'Sprite.sx@set';
+        else if (propRaw === 'scaley' || propRaw === 'sy') propVal = 'Sprite.sy@set';
+        else if (propRaw === 'rotation' || propRaw === 'degrees') propVal = 'Sprite.rotation@set';
+        else if (propRaw === 'radians') propVal = 'Sprite.rotation_radians@set';
+        else if (propRaw === 'z') propVal = 'Sprite.z@set';
+        else if (propRaw === 'lifespan') propVal = 'Sprite.lifespan';
         else if (propRaw === 'x') propVal = 'Sprite.x@set';
         else if (propRaw === 'y') propVal = 'Sprite.y@set';
         else if (propRaw === 'ax') propVal = 'Sprite.ax@set';
@@ -2736,13 +2744,15 @@
 
     // Strip Blockly selection/outline path layers and any stale filter references —
     // they render as ghost outlines around text in the serialized SVG.
+    // Strip Blockly connection path highlights and connection indicator parents —
+    // they have no fill and would otherwise render as solid black puzzle piece notches/tabs/sockets.
     // NOTE: NEVER remove .blocklyBlockShadow — in Blockly, that class belongs to
     // placeholder/shadow blocks, not drop shadow effects!
     try {
       clone.classList.remove('blocklyDisabled');
-      clone.querySelectorAll('.blocklyPathLight, .blocklyPathDark, [filter]').forEach(el => {
+      clone.querySelectorAll('.blocklyPathLight, .blocklyPathDark, .blocklyHighlightedConnectionPath, .blocklyConnectionIndicatorParent, .blocklyConnectionIndicator, [filter]').forEach(el => {
         if (el.hasAttribute('filter')) el.removeAttribute('filter');
-        if (el.classList.contains('blocklyPathLight') || el.classList.contains('blocklyPathDark')) el.remove();
+        el.remove();
       });
       clone.querySelectorAll('.sr-only, span').forEach(el => el.remove());
       clone.querySelectorAll('.blocklyDisabled').forEach(el => el.classList.remove('blocklyDisabled'));
@@ -2763,10 +2773,14 @@
         const cs = getComputedStyle(el);
         let s = '';
 
-        if (tag === 'g') {
+        const display = cs.getPropertyValue('display');
+        const visibility = cs.getPropertyValue('visibility');
+        const isHidden = display === 'none' || visibility === 'hidden' || el.classList.contains('blocklyHighlightedConnectionPath') || el.classList.contains('blocklyConnectionIndicatorParent');
+
+        if (isHidden) {
+          s += 'display:none !important;';
+        } else if (tag === 'g') {
           // Never inline fill/stroke on group containers, let them cascade to children
-          const display = cs.getPropertyValue('display');
-          if (display && display === 'none') s += 'display:none;';
         } else if (tag === 'path') {
           // Force full opacity so scratch-workspace orphaned blocks are never serialized faded
           s += 'opacity:1 !important;fill-opacity:1 !important;stroke-opacity:1 !important;';
@@ -3916,20 +3930,48 @@
       }
     }
 
-    // 2. Sprite Property: [set sprite x to], [change sprite y by], [set sprite [x], [set sprite lifespan]
-    const spritePropMatch = raw.match(/(?:set|change)\s+sprite\s+\[?([xy]|vx|vy|ax|ay|lifespan)\]?(?:\s+(?:to|by))?/i);
+    // 2. Sprite Property: [set sprite x to], [change sprite y by], [set sprite [x]], [set sprite lifespan]
+    const spritePropMatch = raw.match(/(?:set|change)\s+(?:sprite|\[?([a-zA-Z0-9_]+)\]?)\s+\[?([xy]|vx|vy|ax|ay|fx|fy|sx|sy|rotation|degrees|radians|z|scale|lifespan)\]?(?:\s+(?:to|by))?(?:\s+[\(\[]?(-?\d+)[\)\]]?)?/i);
     if (spritePropMatch) {
-      const prop = spritePropMatch[1].toLowerCase();
+      const sName = spritePropMatch[1] && spritePropMatch[1].toLowerCase() !== 'sprite' ? spritePropMatch[1] : 'mySprite';
+      const prop = spritePropMatch[2].toLowerCase();
+      const valNum = spritePropMatch[3] || '0';
       const isChange = /change/i.test(raw);
       const type = isChange ? 'Sprite_blockCombine_change' : 'Sprite_blockCombine_set';
       return {
         confidence: 1.0,
         type,
-        mutator: (b) => {
+        mutator: (b, ws) => {
           const f = b.getField('property');
           if (f) {
             if (prop === 'lifespan') f.setValue('Sprite.lifespan');
+            else if (prop === 'rotation' || prop === 'degrees') f.setValue(`Sprite.rotation@${isChange ? 'change' : 'set'}`);
+            else if (prop === 'radians') f.setValue(`Sprite.rotation_radians@${isChange ? 'change' : 'set'}`);
             else f.setValue(`Sprite.${prop}@${isChange ? 'change' : 'set'}`);
+          }
+          if (ws) {
+            const inSprite = b.getInput('mySprite');
+            if (inSprite && inSprite.connection && !inSprite.connection.targetConnection) {
+              try {
+                const vb = ws.newBlock('variables_get');
+                const v = ensureVariable(ws, sName);
+                if (v && vb.getField('VAR')) vb.getField('VAR').setValue(v.getId());
+                vb.initSvg();
+                vb.render();
+                inSprite.connection.connect(vb.outputConnection);
+              } catch (e) {}
+            }
+            const inVal = b.getInput('value');
+            if (inVal && inVal.connection && !inVal.connection.targetConnection) {
+              try {
+                const nb = ws.newBlock('math_number');
+                const fn = nb.getField('NUM');
+                if (fn) fn.setValue(valNum);
+                nb.initSvg();
+                nb.render();
+                inVal.connection.connect(nb.outputConnection);
+              } catch (e) {}
+            }
           }
         },
         name: raw
