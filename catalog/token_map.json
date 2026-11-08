@@ -3,6 +3,20 @@
   "description": "Dynamic pattern regex lookup table for AccessibleIMPACT NLP engine",
   "rules": [
     {
+      "id": "music_play_sound_effect",
+      "category": "music",
+      "pattern": "^play\\s+sound\\s+effect(?:\\s+.*)?",
+      "template": "music_playable_play__4",
+      "blockType": "music_playable_play__4"
+    },
+    {
+      "id": "music_play_song",
+      "category": "music",
+      "pattern": "^play\\s+song(?:\\s+.*)?",
+      "template": "music_playable_play__2",
+      "blockType": "music_playable_play__2"
+    },
+    {
       "id": "tileUtil_connect_map_by_id",
       "category": "tileUtil",
       "pattern": "^connect(?:\\s+.*)?\\s+and(?:\\s+.*)?\\s+by",
@@ -50,11 +64,11 @@
     {
       "id": "function_call",
       "category": "functions",
-      "pattern": "^call\\s+([a-zA-Z0-9_]+)",
-      "template": "procedures_callnoreturn",
-      "blockType": "procedures_callnoreturn",
+      "pattern": "^call(?:\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "template": "function_call",
+      "blockType": "function_call",
       "params": {
-        "NAME": "$1"
+        "NAME": 1
       }
     },
     {
@@ -321,7 +335,7 @@
     {
       "id": "sprites_overlap_event",
       "category": "sprites",
-      "pattern": "^(?:run\\s+code\\s+on\\s+)?on\\s+(?:sprite\\s+)?(?:of\\s+kind\\s+)?[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+overlaps\\s+(?:otherSprite\\s+)?(?:of\\s+kind\\s+)?[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?",
+      "pattern": "^(?:run\\s+code\\s+on\\s+)?on\\s+(?:sprite\\s+)?(?:of\\s+kind\\s+)?[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?\\s+overlaps\\s+(?!tile\\b)(?:otherSprite\\s+)?(?:of\\s+kind\\s+)?[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?",
       "template": "spritesoverlap",
       "blockType": "spritesoverlap",
       "params": {
@@ -768,6 +782,27 @@
       "pattern": "^if(?:\\s+true)?(?:\\s+then)?$",
       "template": "controls_if",
       "blockType": "controls_if"
+    },
+    {
+      "id": "logic_else_if_true",
+      "category": "logic",
+      "pattern": "^else\\s+if\\s+true(?:\\s+then)?$",
+      "template": "controls_else_if_true",
+      "blockType": "controls_else_if_true"
+    },
+    {
+      "id": "logic_else_if",
+      "category": "logic",
+      "pattern": "^else\\s+if(?:\\s+false)?(?:\\s+then)?$",
+      "template": "controls_else_if",
+      "blockType": "controls_else_if"
+    },
+    {
+      "id": "logic_else",
+      "category": "logic",
+      "pattern": "^else$",
+      "template": "controls_else",
+      "blockType": "controls_else"
     },
     {
       "id": "logic_compare",
@@ -1261,7 +1296,7 @@
     {
       "id": "derived_spriteshittile",
       "category": "scene",
-      "pattern": "^on(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?\\s+|\\s+)of\\s+kind(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?\\s+|\\s+)overlaps(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?\\s+|\\s+)at(?:\\s+.*)?$",
+      "pattern": "^(?:on\\s+sprite(?:\\s+.*)?\\s+overlaps\\s+tile|on(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?\\s+|\\s+)of\\s+kind(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?\\s+|\\s+)overlaps(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?\\s+|\\s+)at(?:\\s+.*)?)",
       "template": "spriteshittile",
       "blockType": "spriteshittile",
       "params": {},
@@ -1563,15 +1598,6 @@
       "pattern": "^color\\s+at\\s+x(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?\\s+|\\s+)y(?:\\s+.*)?$",
       "template": "Image_getPixel",
       "blockType": "Image_getPixel",
-      "params": {},
-      "source": "console-extract"
-    },
-    {
-      "id": "derived_function_return",
-      "category": "functions",
-      "pattern": "^return(?:\\s+(?:\\(\\s*)?[a-zA-Z0-9_]+(?:\\s*\\))?\\s+|\\s+)Remove\\s+return\\s+value(?:\\s+.*)?$",
-      "template": "function_return",
-      "blockType": "function_return",
       "params": {},
       "source": "console-extract"
     },
@@ -2051,6 +2077,23 @@
       "blockType": "console_log",
       "params": {},
       "source": "console-extract"
+    },
+    {
+      "id": "function_return",
+      "category": "functions",
+      "pattern": "^return(?:\\s+(?:[\\[\\(]?([a-zA-Z0-9_.-]+)[\\]\\)]?|.*))?",
+      "template": "function_return",
+      "blockType": "function_return",
+      "params": {
+        "val": 1
+      }
     }
-  ]
+  ],
+  "else": "controls_else",
+  "else if": "controls_else_if",
+  "else if false": "controls_else_if",
+  "else if true": "controls_else_if_true",
+  "else if true then": "controls_else_if_true",
+  "else if false then": "controls_else_if",
+  "else if then": "controls_else_if"
 }

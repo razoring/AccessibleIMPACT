@@ -30,6 +30,10 @@ const testCases = [
   { token: '[use effect confetti for WIN]', expectedTemplate: 'game_setgameovereffect', isBoolLogic: false },
   { token: '[on start]', expectedTemplate: 'pxt-on-start', isBoolLogic: false },
   { token: '[if true then]', expectedTemplate: 'controls_if', isBoolLogic: false },
+  { token: '[else]', expectedTemplate: 'controls_else', isBoolLogic: false },
+  { token: '[else if]', expectedTemplate: 'controls_else_if', isBoolLogic: false },
+  { token: '[else if false then]', expectedTemplate: 'controls_else_if', isBoolLogic: false },
+  { token: '[else if true then]', expectedTemplate: 'controls_else_if_true', isBoolLogic: false },
   { token: '[place on top of random]', expectedTemplate: 'mapplaceonrandomtile', isBoolLogic: false },
   { token: '[splash]', expectedTemplate: 'gameSplash', isBoolLogic: false },
   { token: '[splash (title)]', expectedTemplate: 'gameSplash', isBoolLogic: false },
@@ -59,6 +63,12 @@ const testCases = [
   { token: '[change color in (picture) from () to ()]', expectedTemplate: 'Image_replace', isBoolLogic: false },
   { token: '[set (score) to (0)]', expectedTemplate: 'hudsetScore', isBoolLogic: false },
   { token: '[change (life) by (1)]', expectedTemplate: 'hudChangeLifeBy', isBoolLogic: false },
+  { token: '[return 0]', expectedTemplate: 'function_return', isBoolLogic: false },
+  { token: '[call doSomething]', expectedTemplate: 'function_call', isBoolLogic: false },
+  { token: '[play song]', expectedTemplate: 'music_playable_play__2', isBoolLogic: false },
+  { token: '[play melody]', expectedTemplate: 'music_playable_play', isBoolLogic: false },
+  { token: '[play sound effect]', expectedTemplate: 'music_playable_play__4', isBoolLogic: false },
+  { token: '[on sprite of kind Player overlaps tile at location]', expectedTemplate: 'spriteshittile', isBoolLogic: false },
 
   // 3. Boolean logic blocks (EXCEPTION: must have open hexagonal sockets without default booleans)
   { token: '<(a) and (b)>', expectedTemplate: 'logic_operation_and', isBoolLogic: true },

@@ -1197,6 +1197,21 @@
         }
       };
     }
+
+    if (B && B.Block && B.Block.prototype && !B.Block.prototype.__aifxShapeHooked) {
+      B.Block.prototype.__aifxShapeHooked = true;
+      const origInitSvg = B.Block.prototype.initSvg;
+      B.Block.prototype.initSvg = function () {
+        if (typeof this.setOutputShape === 'function') {
+          if (this.type === 'logic_boolean' || this.type === 'toggleWinLose' || this.type === 'toggleOnOff') {
+            this.setOutputShape(1);
+          } else if (this.type === 'math_number' || this.type === 'variables_get' || this.type === 'variables_get_reporter' || this.type === 'text') {
+            this.setOutputShape(2);
+          }
+        }
+        return origInitSvg.apply(this, arguments);
+      };
+    }
   }
 
   function normalize(s) {
@@ -2730,6 +2745,8 @@
             s += `fill:#a31515 !important;stroke:none !important;stroke-width:0 !important;font-size:16px !important;opacity:1 !important;`;
           } else if (el.classList.contains('blocklyToggleText')) {
             s += `fill:#ffffff !important;stroke:none !important;stroke-width:0 !important;font-family:Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace !important;font-size:16px !important;font-weight:600 !important;text-anchor:middle !important;dominant-baseline:central !important;paint-order:fill !important;`;
+          } else if (el.classList.contains('melody-editor-field-icon') || el.closest('.melody_editor')) {
+            s += `fill:#575e75 !important;stroke:none !important;stroke-width:0 !important;font-family:Icons, sans-serif !important;font-size:16px !important;text-anchor:middle !important;dominant-baseline:central !important;paint-order:fill !important;`;
           } else {
             // MakeCode block text is crisp white, editable inputs are dark slate
             const isWhite = !el.closest('.blocklyTextInputField, .blocklyNumberField');
@@ -2755,7 +2772,13 @@
           } else if (isAnimation) {
             s += 'fill:url(#aifx-checkered-tile) !important;stroke:#ffffff !important;stroke-width:2px !important;rx:4px !important;ry:4px !important;opacity:1 !important;';
           } else if (isSpriteOrImage) {
-            s += 'fill:url(#aifx-checkered-tile) !important;stroke:#000000 !important;stroke-width:2px !important;rx:4px !important;ry:4px !important;opacity:1 !important;';
+            if (el.closest('.tileset_tile_picker')) {
+              s += 'fill:transparent !important;stroke:none !important;';
+            } else if (el.closest('.music_song_field_editor') || el.getAttribute('width') === '72') {
+              s += 'fill:#dcdcdc !important;stroke:none !important;rx:4px !important;ry:4px !important;';
+            } else {
+              s += 'fill:url(#aifx-checkered-tile) !important;stroke:#7c8592 !important;stroke-width:1.5px !important;rx:4px !important;ry:4px !important;opacity:1 !important;';
+            }
           } else {
             for (const p of INPROPS) {
               const v = cs.getPropertyValue(p);
@@ -2782,19 +2805,20 @@
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
     const width = Math.ceil(bbox.width + 4);
     const height = Math.ceil(bbox.height + 4);
     svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
     svg.setAttribute('width', width);
     svg.setAttribute('height', height);
 
-    // Defs: embed checkered pattern with pixel-accurate 8x8 checkerboard (16x16 repeat)
+    // Defs: embed checkered pattern with pixel-accurate 8x8 checkerboard (16x16 repeat) using authentic MakeCode gray palette
     const defsEl = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
     defsEl.innerHTML =
       '<pattern id="aifx-checkered-tile" width="16" height="16" patternUnits="userSpaceOnUse">' +
       '<rect width="16" height="16" fill="#dedede"/>' +
-      '<rect x="0" y="0" width="8" height="8" fill="#ffffff"/>' +
-      '<rect x="8" y="8" width="8" height="8" fill="#ffffff"/>' +
+      '<rect x="0" y="0" width="8" height="8" fill="#aeaeae"/>' +
+      '<rect x="8" y="8" width="8" height="8" fill="#aeaeae"/>' +
       '</pattern>';
     svg.appendChild(defsEl);
 
@@ -2861,6 +2885,13 @@
     const imageAndTileFields = clone.querySelectorAll('.blocklySpriteField, g.blocklyEditableField rect[width="40"], g.blocklyEditableField rect[width="40px"], g.screen_image_picker rect, g.tileset_tile_picker rect');
     for (const rect of imageAndTileFields) {
       if (rect.classList.contains('blocklyAnimationField')) continue;
+      if (rect.closest('.tileset_tile_picker')) continue;
+      if (rect.closest('.music_song_field_editor') || rect.getAttribute('width') === '72' || rect.getAttribute('width') === '72px' || rect.getAttribute('width') === '160' || rect.getAttribute('width') === '160px' || rect.closest('.sound_editor, [data-aifx-type="music_playable_play__4"], [data-aifx-type="soundExpression_generateSimilarSound"]')) {
+        rect.setAttribute('fill', '#dcdcdc');
+        rect.setAttribute('stroke', 'none');
+        rect.setAttribute('style', 'fill:#dcdcdc !important;stroke:none !important;rx:4px !important;ry:4px !important;');
+        continue;
+      }
       const parentG = rect.parentNode;
       if (parentG) {
         parentG.querySelectorAll('image').forEach(img => {
@@ -2871,11 +2902,11 @@
         });
       }
       rect.setAttribute('fill', 'url(#aifx-checkered-tile)');
-      rect.setAttribute('stroke', '#000000');
-      rect.setAttribute('stroke-width', '2');
+      rect.setAttribute('stroke', '#7c8592');
+      rect.setAttribute('stroke-width', '1.5');
       rect.setAttribute('rx', '4');
       rect.setAttribute('ry', '4');
-      rect.setAttribute('style', 'fill:url(#aifx-checkered-tile) !important;stroke:#000000 !important;stroke-width:2px !important;rx:4px !important;ry:4px !important;opacity:1 !important;');
+      rect.setAttribute('style', 'fill:url(#aifx-checkered-tile) !important;stroke:#7c8592 !important;stroke-width:1.5px !important;rx:4px !important;ry:4px !important;opacity:1 !important;');
     }
 
     // Ensure filmstrip reel icon and white bordered square on animation fields (.blocklyAnimationField)
@@ -2979,7 +3010,7 @@
     const isMultiLine = hasStatement || height > 70;
 
     return {
-      svg: new XMLSerializer().serializeToString(svg),
+      svg: new XMLSerializer().serializeToString(svg).replace(/&nbsp;/g, '&#160;'),
       width: width,
       height: height,
       isMultiLine: isMultiLine
@@ -3225,6 +3256,13 @@
           try {
             const sb = ws.newBlock(shadowType);
             sb.setShadow(true);
+            if (typeof sb.setOutputShape === 'function') {
+              if (shadowType === 'logic_boolean' || shadowType === 'toggleWinLose' || shadowType === 'toggleOnOff') {
+                sb.setOutputShape(1);
+              } else {
+                sb.setOutputShape(2);
+              }
+            }
             if (shadowType === 'logic_boolean' || shadowType === 'toggleWinLose' || shadowType === 'toggleOnOff') {
               const f = sb.getField('BOOL');
               if (f) f.setValue(shadowValue);

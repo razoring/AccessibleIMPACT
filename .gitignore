@@ -27,3 +27,48 @@ tools/derive-token-rules.mjs
 tools/import-block-catalog.mjs
 scratch/hex2_3.txt
 scratch/chunk_8.txt
+scratch/check_artifacts.mjs
+scratch/check_colors.mjs
+scratch/check_cursor.mjs
+scratch/check_img2_line.mjs
+scratch/check_img3.mjs
+scratch/check_missing_tile_icon.mjs
+scratch/check_music_checkered.mjs
+scratch/check_music4.mjs
+scratch/check_picker_now.mjs
+scratch/check_pixel_line.mjs
+scratch/check_png.mjs
+scratch/check_spritescreate.mjs
+scratch/check_styles.mjs
+scratch/check_tile_files.mjs
+scratch/check_tile_icon_counts.mjs
+scratch/check_tile_picker.mjs
+scratch/check_tile_svg.mjs
+scratch/check_used_checkered.mjs
+scratch/check_xlink_all.mjs
+scratch/check_xlink_loc.mjs
+scratch/clean_music_defs.mjs
+scratch/cursor_card.png
+scratch/diag.mjs
+scratch/find_sound.mjs
+scratch/find_tile_blocks.mjs
+scratch/find_xml_errors.mjs
+scratch/fix_catalog_all.mjs
+scratch/fix_catalog_svgs.mjs
+scratch/fix_halo.mjs
+scratch/fix_tile_picker_solo.mjs
+scratch/sample_pngs.mjs
+scratch/scan_img3.mjs
+scratch/update_outline_color.mjs
+scratch/verify_all_svgs.mjs
+screenshots/Screenshot 2026-11-07 201959.png
+screenshots/Screenshot 2026-11-07 202023.png
+screenshots/Screenshot 2026-11-07 202027.png
+screenshots/Screenshot 2026-11-07 202035.png
+screenshots/Screenshot 2026-11-07 202041.png
+screenshots/Screenshot 2026-11-07 202110.png
+screenshots/Screenshot 2026-11-07 202244.png
+screenshots/Screenshot 2026-11-07 202315.png
+screenshots/Screenshot 2026-11-07 202331.png
+screenshots/Screenshot 2026-11-07 202400.png
+scratch_verify_block_rendering.js

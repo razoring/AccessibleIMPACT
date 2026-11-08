@@ -10521,5 +10521,112 @@
     "inputs": [
       ""
     ]
+  },
+  "function_definition": {
+    "type": "function_definition",
+    "file": "function_definition.svg",
+    "width": 220,
+    "height": 104,
+    "category": "Functions",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "function_title",
+        "kind": "dh",
+        "text": "function"
+      },
+      {
+        "name": "function_name",
+        "kind": "dh",
+        "text": "doSomething"
+      }
+    ],
+    "inputs": [
+      ""
+    ]
+  },
+  "controls_else": {
+    "type": "controls_else",
+    "file": "controls_else.svg",
+    "width": 199,
+    "height": 116,
+    "category": "Logic",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "else"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "remove else branch"
+      }
+    ],
+    "inputs": [
+      "",
+      ""
+    ]
+  },
+  "controls_else_if": {
+    "type": "controls_else_if",
+    "file": "controls_else_if.svg",
+    "width": 277,
+    "height": 116,
+    "category": "Logic",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "else if"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "then"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "remove else if branch"
+      }
+    ],
+    "inputs": [
+      "logic_boolean",
+      "",
+      ""
+    ]
+  },
+  "controls_else_if_true": {
+    "type": "controls_else_if_true",
+    "file": "controls_else_if_true.svg",
+    "width": 267,
+    "height": 116,
+    "category": "Logic",
+    "isMultiLine": true,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "else if"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "then"
+      },
+      {
+        "name": "",
+        "kind": "r",
+        "text": "remove else if branch"
+      }
+    ],
+    "inputs": [
+      "logic_boolean",
+      "",
+      ""
+    ]
   }
 }
