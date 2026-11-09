@@ -15,11 +15,11 @@
           <path d="M111.172 12 L155.172 12 C157.381 12 159.172 13.791 159.172 16 L159.172 50 C159.172 52.209 157.381 54 155.172 54 L111.172 54 C108.963 54 107.172 52.209 107.172 50 L107.172 16 C107.172 13.791 108.963 12 111.172 12 Z" fill="#000000" fill-opacity="0" stroke="#000000" stroke-opacity="0"/>
         </g>
       </g>
-      <g data-aifx-field="" data-aifx-opaque="1">
-        <text transform="matrix(1 0 0 1 8 37)" x="0" y="0" xml:space="preserve" font-family="Consolas, monospace" font-size="16" font-weight="600" fill="#ffffff"><tspan x="0" y="0">cover all</tspan></text>
+      <g class="blocklyLabelField" transform="translate(12, 33)" data-aifx-field="" data-aifx-opaque="1">
+        <text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="0" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-size="16" font-weight="600" fill="#ffffff">cover all</text>
       </g>
-      <g data-aifx-field="" data-aifx-opaque="1">
-        <text transform="matrix(1 0 0 1 179.172 37)" x="0" y="0" xml:space="preserve" font-family="Consolas, monospace" font-size="16" font-weight="600" fill="#ffffff"><tspan x="0" y="0">tiles with</tspan></text>
+      <g class="blocklyLabelField" transform="translate(180, 33)" data-aifx-field="" data-aifx-opaque="1">
+        <text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="0" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-size="16" font-weight="600" fill="#ffffff">tiles with</text>
       </g>
       <g>
         <path d="M300.141 8 L326.141 8 C339.948 8 351.141 19.193 351.141 33 L351.141 33 C351.141 46.807 339.948 58 326.141 58 L326.141 58 L300.141 58 C286.334 58 275.141 46.807 275.141 33 L275.141 33 C275.141 19.193 286.334 8 300.141 8 Z" fill="#405670" stroke="#384c63"/>

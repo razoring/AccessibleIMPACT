@@ -413,7 +413,7 @@
     {
       "id": "sprites_on_created",
       "category": "sprites",
-      "pattern": "^on\\s+created(?:\\s+(?:sprite\\s+)?(?:of\\s+kind\\s+)?[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "pattern": "^on\\s+created(?:\\s+sprite)?(?:\\s+(?:of\\s+kind\\s+of|of\\s+kind|kind\\s+of|of|kind)(?:\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?)?$",
       "template": "spritesoncreated",
       "blockType": "spritesoncreated",
       "params": {
@@ -463,7 +463,7 @@
     {
       "id": "tileUtil_create_sprites_on_tiles",
       "category": "tileUtil",
-      "pattern": "^on\\s+each(?:\\s+.*)?\\s+tile\\s+create\\s+sprite(?:\\s+with\\s+image)?(?:\\s+and\\s+kind)?(?:\\s*[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?",
+      "pattern": "^on\\s+each(?:\\s+.*)?\\s+tile\\s+create\\s+sprite(?:\\s+with\\s+image)?(?:\\s+(?:and\\s+kind\\s+of|and\\s+kind|of\\s+kind|kind\\s+of|and|kind|of)(?:\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?)?$",
       "template": "tileUtil_createSpritesOnTiles",
       "blockType": "tileUtil_createSpritesOnTiles",
       "params": {

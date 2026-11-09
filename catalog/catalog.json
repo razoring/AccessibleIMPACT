@@ -10664,8 +10664,8 @@
   "variables_set_tilemap": {
     "type": "variables_set",
     "file": "variables_set_tilemap.svg",
-    "width": 353,
-    "height": 56,
+    "width": 360,
+    "height": 78,
     "category": "Variables",
     "isMultiLine": false,
     "fields": [

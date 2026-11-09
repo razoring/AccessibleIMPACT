@@ -292,7 +292,7 @@
         delta = newW - curW;
         if (Math.abs(delta) > 0.01) rect.setAttribute('width', String(newW));
       } else {
-        delta = (newLen - oldLen) * f.charw;
+        delta = Math.ceil((newLen - oldLen) * f.charw + (newLen > oldLen ? 12 : 0));
       }
       if (Math.abs(delta) < 0.01) continue; // text-only change
 
@@ -397,7 +397,18 @@
     if (params.NAME || params.function_name) {
       const fnName = escapeXml(params.NAME || params.function_name);
       s = s.replace(/(>function\s+)[a-zA-Z0-9_]+(<\/text>)/, '$1' + fnName + '$2');
-      s = s.replace(/>doSomething<\/text>/, `>${fnName}<\/text>`);
+      if (s.includes('>doSomething</text>')) {
+        const oldLen = 11;
+        const newLen = fnName.length;
+        const delta = Math.max(0, Math.ceil((newLen - oldLen) * 10.5 + 14));
+        s = s.replace('>doSomething</text>', `>${fnName}</text>`);
+        if (delta > 0) {
+          s = s.replace(/h\s+(\d+(?:\.\d+)?)\s+a\s+4\s+4/, (m0, w) => 'h ' + (parseFloat(w) + delta) + ' a 4 4');
+          s = s.replace(/h\s+-(\d+(?:\.\d+)?)/, (m0, w) => 'h -' + (parseFloat(w) + delta));
+          s = s.replace(/viewBox="0 0 (\d+) (\d+)"/, (m0, w, h) => `viewBox="0 0 ${parseInt(w, 10) + delta} ${h}"`);
+          s = s.replace(/width="(\d+)"/, (m0, w) => `width="${parseInt(w, 10) + delta}"`);
+        }
+      }
     }
 
     // 2. Kind replacement
@@ -777,7 +788,17 @@
           };
           if (spritePropMap[pLower]) params.prop = spritePropMap[pLower];
         }
-        if (params.varName && params.varName.toLowerCase() === 'sprite') {
+        const syntaxStopwords = new Set(['of', 'kind', 'sprite', 'and', 'image', 'tile', 'variable', 'to', 'with', 'for']);
+        if (params.kind && syntaxStopwords.has(String(params.kind).toLowerCase().trim())) {
+          delete params.kind;
+        }
+        if (params.kind1 && syntaxStopwords.has(String(params.kind1).toLowerCase().trim())) {
+          delete params.kind1;
+        }
+        if (params.kind2 && syntaxStopwords.has(String(params.kind2).toLowerCase().trim())) {
+          delete params.kind2;
+        }
+        if (params.varName && (params.varName.toLowerCase() === 'sprite' || syntaxStopwords.has(String(params.varName).toLowerCase().trim()))) {
           delete params.varName;
         }
 
@@ -1000,33 +1021,34 @@
         overflow-y: auto !important;
         max-height: none !important;
       }
+      /* When extension is enabled */
+      html:not(.aifx-disabled) .aifx-rendered:not([data-rendered="true"]) {
+        display: none !important;
+      }
+      html:not(.aifx-disabled) .aifx-rendered:not([data-rendered="true"]) + .aifx-raw-fallback {
+        display: inline !important;
+      }
+      html:not(.aifx-disabled) .aifx-rendered[data-rendered="true"] + .aifx-raw-fallback {
+        display: none !important;
+      }
+      html:not(.aifx-disabled) .aifx-raw-fallback {
+        display: none !important;
+      }
+
+      /* When extension is DISABLED: completely hide all rendered SVGs and show all original raw tokens */
       .aifx-disabled .aifx-rendered,
       .aifx-disabled .aifx-rendered.aifx-multiline,
       .aifx-disabled .aifx-rendered.aifx-inline,
       .aifx-disabled .aifx-rendered.aifx-play-icon {
         display: none !important;
       }
-      .aifx-disabled strong:has(> .aifx-rendered.aifx-multiline),
-      .aifx-disabled em:has(> .aifx-rendered.aifx-multiline),
-      .aifx-disabled p:has(> strong > .aifx-rendered.aifx-multiline),
-      .aifx-disabled p:has(> .aifx-rendered.aifx-multiline) {
-        display: inline !important;
-        max-width: none !important;
-      }
-      .aifx-rendered:not([data-rendered="true"]) {
-        display: none !important;
-      }
-      .aifx-rendered:not([data-rendered="true"]) + .aifx-raw-fallback {
-        display: inline !important;
-      }
-      .aifx-rendered[data-rendered="true"] + .aifx-raw-fallback {
-        display: none !important;
-      }
-      .aifx-raw-fallback {
-        display: none !important;
-      }
       .aifx-disabled .aifx-raw-fallback {
         display: inline !important;
+      }
+      .aifx-disabled strong:has(> .aifx-rendered.aifx-multiline),
+      .aifx-disabled em:has(> .aifx-rendered.aifx-multiline) {
+        display: inline !important;
+        max-width: none !important;
       }
       .aifx-rendered.aifx-multiline svg {
         display: block !important;
