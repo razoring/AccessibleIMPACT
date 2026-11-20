@@ -129,7 +129,7 @@
 
       if (bDepth === 0 && pDepth === 0) {
         const rest = inner.slice(i);
-        const m2 = rest.match(/^(<=|>=|==|!=|=<|=>)/);
+        const m2 = rest.match(/^(<=|>=|==|!=|=<|=>|\u2264|\u2265|\u2260)/);
         if (m2 && aDepth === 0) {
           opIdx = i;
           opLen = m2[1].length;
@@ -177,11 +177,11 @@
     if (!left || !right) return null;
 
     let opVal = 'EQ';
-    if (opStr === '<=' || opStr === '=<') opVal = 'LTE';
+    if (opStr === '<=' || opStr === '=<' || opStr === '\u2264') opVal = 'LTE';
     else if (opStr === '<') opVal = 'LT';
-    else if (opStr === '>=' || opStr === '=>') opVal = 'GTE';
+    else if (opStr === '>=' || opStr === '=>' || opStr === '\u2265') opVal = 'GTE';
     else if (opStr === '>') opVal = 'GT';
-    else if (opStr === '!=') opVal = 'NEQ';
+    else if (opStr === '!=' || opStr === '\u2260') opVal = 'NEQ';
     else opVal = 'EQ';
 
     return { left, op: opStr, opVal, right };
@@ -193,9 +193,12 @@
     if (!((str.startsWith('(') && str.endsWith(')')) || (str.startsWith('[') && str.endsWith(']')))) {
       return null;
     }
+    // Reject unspaced numeric ranges such as (0-3) or (1-4)
+    if (/^\(\s*\d+-\d+\s*\)$/.test(str)) return null;
+
     const inner = str.slice(1, -1).trim();
 
-    // Find operator + or - or * or / or ** outside inner brackets
+    // Find operator +, -, *, ×, spaced x, /, or ** outside inner brackets
     let bDepth = 0;
     let pDepth = 0;
     let aDepth = 0;
@@ -212,12 +215,15 @@
       else if (c === '<') aDepth++;
       else if (c === '>') aDepth = Math.max(0, aDepth - 1);
       else if (bDepth === 0 && pDepth === 0 && aDepth === 0) {
-        if (c === '-' && (i === 0 || /[\+\-\*\/]\s*$/.test(inner.slice(0, i)))) continue; // negative number
+        if (c === '-' && (i === 0 || /[\+\-\*\/\u00d7]\s*$/.test(inner.slice(0, i)))) continue; // negative number
         const rest = inner.slice(i);
         const mPow = rest.match(/^\*\*/);
         if (mPow) { opIdx = i; opLen = 2; opStr = '**'; break; }
-        if (c === '+' || c === '-' || c === '*' || c === '/') {
+        if (c === '+' || c === '-' || c === '*' || c === '/' || c === '\u00d7') {
           opIdx = i; opLen = 1; opStr = c; break;
+        }
+        if ((c === 'x' || c === 'X') && i > 0 && /\s$/.test(inner.slice(0, i)) && /^\s/.test(inner.slice(i + 1))) {
+          opIdx = i; opLen = 1; opStr = '\u00d7'; break;
         }
       }
     }
@@ -229,7 +235,7 @@
 
     let opVal = 'ADD';
     if (opStr === '-') opVal = 'MINUS';
-    else if (opStr === '*') opVal = 'MULTIPLY';
+    else if (opStr === '*' || opStr === '\u00d7') opVal = 'MULTIPLY';
     else if (opStr === '/') opVal = 'DIVIDE';
     else if (opStr === '**') opVal = 'POWER';
 
@@ -452,10 +458,8 @@
       } catch (e) {}
     }
 
-    // 9b. Tilemap placeholder: (tilemap), (tilemap1), [tilemap 2] — render the real
-    // tilemap picker block so it matches the standalone placeholder visual, instead
-    // of falling through to a red variables_get.
-    if (/^[\[\(]?\s*tilemap(?:\s*\d+)?\s*[\]\)]?$/i.test(raw)) {
+    // 9b. Bare tilemap placeholder: (tilemap), [tilemap] ONLY (never tilemap1/tilemap2 variables)
+    if (/^[\[\(]?\s*tilemap\s*[\]\)]?$/i.test(raw)) {
       try {
         const tb = ws.newBlock('tiles_tilemap_editor');
         tb.initSvg();
@@ -470,7 +474,89 @@
       } catch (e) {}
     }
 
-    // 9c. Array pick random: (get random value from (list)), get random value from list
+    // 9c. Composite array length + array of sprites of kind: (length of array (array of sprites of kind ...))
+    const lenSpritesM = raw.match(/^[\[\(]?\s*length\s+of\s+array\s+[\[\(]?\s*(?:array\s+of\s+sprites|all\s+sprites|sprites)\s+of\s+kind(?:\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?)?\s*[\]\)]?\s*[\]\)]?$/i);
+    if (lenSpritesM) {
+      try {
+        const lb = ws.newBlock('lists_length');
+        const kindName = lenSpritesM[1] || 'Player';
+        const ab = ws.newBlock('allOfKind');
+        const kb = ab.getChildren(false).find(c => c.type === 'spritekind');
+        if (kb && kb.getField('MEMBER')) kb.getField('MEMBER').setValue(kindName);
+        ab.initSvg();
+        ab.render();
+        const inp = lb.inputList && lb.inputList.find(i => i.connection && i.type === 1);
+        if (inp && inp.connection) inp.connection.connect(ab.outputConnection);
+        lb.initSvg();
+        lb.render();
+        return lb;
+      } catch (e) {}
+    }
+
+    // 9d. Composite tilemap location of sprite: (tilemap location of (sprite))
+    const locSpriteM = raw.match(/^[\[\(]?\s*tilemap\s+location\s+of\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?\s*[\]\)]?$/i);
+    if (locSpriteM) {
+      try {
+        const locB = ws.newBlock('tiles_location_of_sprite');
+        const sName = locSpriteM[1] || 'sprite';
+        const inp = locB.inputList && locB.inputList.find(i => i.connection && i.type === 1);
+        if (inp && inp.connection) {
+          const vb = ws.newBlock('variables_get');
+          const v = ensureVariable(ws, sName);
+          if (v && vb.getField('VAR')) vb.getField('VAR').setValue(v.getId());
+          vb.initSvg();
+          vb.render();
+          inp.connection.connect(vb.outputConnection);
+        }
+        locB.initSvg();
+        locB.render();
+        return locB;
+      } catch (e) {}
+    }
+
+    // 9e. Composite location row/column: ((tilemap location of (sprite)) row|column)
+    const locPropM = raw.match(/^[\[\(]?\s*\(?\s*tilemap\s+location\s+of\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?\s*\)?\s+(row|column|col)\s*[\]\)]?$/i);
+    if (locPropM) {
+      try {
+        const pb = ws.newBlock('tiles.Location_blockCombine_get');
+        const propWord = locPropM[2].toLowerCase() === 'col' ? 'column' : locPropM[2].toLowerCase();
+        const fp = pb.getField('property');
+        if (fp) {
+          const opts = fp.getOptions ? fp.getOptions() : [];
+          const hit = opts.find(o => String(o[0]).toLowerCase().includes(propWord) || String(o[1]).toLowerCase().includes(propWord));
+          fp.setValue(hit ? hit[1] : propWord);
+        }
+        const childLoc = createSubBlock(`(tilemap location of (${locPropM[1]}))`, ws, tc);
+        const inp = pb.inputList && pb.inputList.find(i => i.connection && i.type === 1);
+        if (childLoc && inp && inp.connection) inp.connection.connect(childLoc.outputConnection);
+        pb.initSvg();
+        pb.render();
+        return pb;
+      } catch (e) {}
+    }
+
+    // 9f. Composite neighboring location: (tilemap location [left|right|top|bottom] of (tilemap location of (sprite)))
+    const neighLocM = raw.match(/^[\[\(]?\s*tilemap\s+location\s+[\[\(]?(left|right|top|bottom|up|down)[\]\)]?\s+of\s+(.+?)[\]\)]?$/i);
+    if (neighLocM) {
+      try {
+        const nb = ws.newBlock('tiles_location_get_neighboring_location');
+        const dirWord = neighLocM[1].toLowerCase();
+        const fd = nb.getField('direction');
+        if (fd) {
+          const opts = fd.getOptions ? fd.getOptions() : [];
+          const hit = opts.find(o => String(o[0]).toLowerCase().includes(dirWord) || String(o[1]).toLowerCase().includes(dirWord));
+          fd.setValue(hit ? hit[1] : dirWord);
+        }
+        const childB = createSubBlock(neighLocM[2].trim(), ws, tc);
+        const inp = nb.inputList && nb.inputList.find(i => i.connection && i.type === 1);
+        if (childB && inp && inp.connection) inp.connection.connect(childB.outputConnection);
+        nb.initSvg();
+        nb.render();
+        return nb;
+      } catch (e) {}
+    }
+
+    // 9g. Array pick random: (get random value from (list)), get random value from list
     if (/get\s+random\s+value\s+from/i.test(raw)) {
       try {
         const m = raw.match(/get\s+random\s+value\s+from\s*\(?([a-zA-Z0-9_ ]+)\)?/i);
@@ -2503,6 +2589,66 @@
       conf: 1.0
     },
     {
+      match: /^[\[\(]\s*length\s+of\s+array\s+[\[\(]\s*(?:array\s+of\s+sprites|all\s+sprites|sprites)\s+of\s+kind(?:\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?)?\s*[\]\)]\s*[\]\)]$/i,
+      type: 'lists_length',
+      mutator: (b, ws, raw) => {
+        if (!ws) return;
+        const m = (raw || '').match(/kind(?:\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?)?/i);
+        const kindName = (m && m[1]) ? m[1] : 'Player';
+        try {
+          const ab = ws.newBlock('allOfKind');
+          const kb = ab.getChildren(false).find(c => c.type === 'spritekind');
+          if (kb && kb.getField('MEMBER')) kb.getField('MEMBER').setValue(kindName);
+          ab.initSvg();
+          ab.render();
+          const inp = b.inputList && b.inputList.find(i => i.connection && i.type === 1);
+          if (inp && inp.connection) inp.connection.connect(ab.outputConnection);
+        } catch (e) {}
+      },
+      conf: 1.0
+    },
+    {
+      match: /^[\[\(]\s*\(?\s*tilemap\s+location\s+of\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?\s*\)?\s+(row|column|col)\s*[\]\)]$/i,
+      type: 'tiles.Location_blockCombine_get',
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/tilemap\s+location\s+of\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?\s*\)?\s+(row|column|col)/i);
+        const sName = m && m[1] ? m[1] : 'sprite';
+        const propWord = m && m[2] && m[2].toLowerCase() === 'row' ? 'row' : 'column';
+        const fp = b.getField('property');
+        if (fp) {
+          const opts = fp.getOptions ? fp.getOptions() : [];
+          const hit = opts.find(o => String(o[0]).toLowerCase().includes(propWord) || String(o[1]).toLowerCase().includes(propWord));
+          fp.setValue(hit ? hit[1] : propWord);
+        }
+        if (ws) {
+          const childLoc = createSubBlock(`(tilemap location of (${sName}))`, ws);
+          const inp = b.inputList && b.inputList.find(i => i.connection && i.type === 1);
+          if (childLoc && inp && inp.connection) inp.connection.connect(childLoc.outputConnection);
+        }
+      },
+      conf: 1.0
+    },
+    {
+      match: /^[\[\(]\s*tilemap\s+location\s+[\[\(]?(left|right|top|bottom|up|down)[\]\)]?\s+of\s+[\[\(]\s*tilemap\s+location\s+of(?:\s+[\[\(]?([a-zA-Z0-9_]+)[\]\)]?)?\s*[\]\)]\s*[\]\)]$/i,
+      type: 'tiles_location_get_neighboring_location',
+      mutator: (b, ws, raw) => {
+        const m = (raw || '').match(/tilemap\s+location\s+[\[\(]?(left|right|top|bottom|up|down)[\]\)]?\s+of\s+(.+?)[\]\)]?$/i);
+        const dirWord = m && m[1] ? m[1].toLowerCase() : 'left';
+        const fd = b.getField('direction');
+        if (fd) {
+          const opts = fd.getOptions ? fd.getOptions() : [];
+          const hit = opts.find(o => String(o[0]).toLowerCase().includes(dirWord) || String(o[1]).toLowerCase().includes(dirWord));
+          fd.setValue(hit ? hit[1] : dirWord);
+        }
+        if (ws && m && m[2]) {
+          const childB = createSubBlock(m[2].trim(), ws);
+          const inp = b.inputList && b.inputList.find(i => i.connection && i.type === 1);
+          if (childB && inp && inp.connection) inp.connection.connect(childB.outputConnection);
+        }
+      },
+      conf: 1.0
+    },
+    {
       match: /^[\[\(]\s*tilemap\s+location\s+of(?:\s+\(?[a-zA-Z0-9_]+\)?)?\s*[\]\)]$/i,
       type: 'tiles_location_of_sprite',
       mutator: (b, ws, raw) => {
@@ -3479,12 +3625,14 @@
 
   const KNOWN_VARS = [
     'question', 'speed', 'columnnumber', 'startingcolumn', 'bridgelength',
-    'snakesstomped', 'invincible', 'foundfossils', 'userresponselist',
-    'text list', 'powerup', 'column', 'row', 'levelnum', 'backgroundindex',
+    'snakesstomped', 'invincible', 'foundfossils', 'hiddenfossils', 'userresponselist',
+    'text list', 'powerup', 'column', 'row', 'levelnum', 'level', 'backgroundindex',
     'scenenum', 'userindex', 'currentindex', 'count', 'i', 'arraynum',
     'newindex', 'currentarray', 'age', 'place', 'name', 'time', 'score',
     'life', 'choice', 'statusbarsprite', 'statusbar', 'item', 'index',
-    'mysprite', 'othersprite', 'sprite', 'playersprite', 'fishsprite', 'projectile',
+    'mysprite', 'othersprite', 'sprite', 'playersprite', 'fishsprite', 'seaweedsprite',
+    'seaweedlist', 'projectile', 'tilemap1', 'tilemap2', 'magiclevel',
+    'archaeologist', 'snack', 'color', 'picture', 'location', 'myenemy',
     'x', 'y', 'vx', 'vy', 'ax', 'ay', 'dx', 'dy', 'value', 'list', 'text',
     'variable', 'answer', 'input', 'response', 'velocity', 'volume'
   ];
@@ -3499,7 +3647,11 @@
     'controls_if':      { cond: 'IF0' }
   };
 
-  const SLOT_OPS = { '=': 'EQ', '==': 'EQ', '!=': 'NEQ', '<': 'LT', '<=': 'LTE', '=<': 'LTE', '>': 'GT', '>=': 'GTE', '=>': 'GTE' };
+  const SLOT_OPS = {
+    '=': 'EQ', '==': 'EQ', '!=': 'NEQ', '\u2260': 'NEQ',
+    '<': 'LT', '<=': 'LTE', '=<': 'LTE', '\u2264': 'LTE',
+    '>': 'GT', '>=': 'GTE', '=>': 'GTE', '\u2265': 'GTE'
+  };
 
   // Prose stop-words that must never appear inside a variable/slot identifier.
   const SLOT_PROSE_RE = /\b(using|such as|for example|or|and|with|from|in|by|not|to|how|whatever|of|that|the|a|an|both|when|before|after|if|where|due|such|except|keeping|navigating|moving|including|instead|out|all|apply|vice versa)\b/i;
@@ -3609,7 +3761,7 @@
     {
       id: 'logic_compare',
       when: (outer) => outer === '<' || outer === null,
-      re: new RegExp('^' + R_OPER + '\\s*(<=|>=|==|!=|=<|=>|<|>|=)\\s*' + R_OPER + '$', 'i'),
+      re: new RegExp('^' + R_OPER + '\\s*(<=|>=|==|!=|=<|=>|\\u2264|\\u2265|\\u2260|<|>|=)\\s*' + R_OPER + '$', 'i'),
       build(m, children, ctx) {
         if (SLOT_OPS[m[2]] == null) return null;
         const left = valOperand(m[1], children);
@@ -3821,8 +3973,8 @@
       }
     }
 
-    // 0b. Tilemap placeholder socket bubbles: (tilemap), (tilemap1), (tilemap2), (tilemap 1), etc.
-    if (/^[\[\(]\s*tilemap(?:\s*\d+)?\s*[\]\)]$/i.test(raw)) {
+    // 0b. Bare tilemap placeholder socket bubbles: (tilemap), [tilemap] ONLY (so (tilemap1)/(tilemap2) become variable reporters)
+    if (/^[\[\(]\s*tilemap\s*[\]\)]$/i.test(raw)) {
       return {
         confidence: 1.0,
         custom: () => renderTilemapPlaceholder(raw),
@@ -4136,12 +4288,15 @@
       const isParen = raw.startsWith('(');
       if (isParen) {
         // If it contains English stop words, conjunctions, prepositions, or articles, it's a prose side comment
-        const proseRegex = /\b(using|such as|for example|or|and|with|from|in|by|not|to|how|whatever|of|that|the|a|an|both|when|before|after|if|where|due|such|except|keeping|navigating|moving|including|instead|out|all|apply|vice versa)\b/i;
+        const proseRegex = /\b(using|such as|for example|or|and|with|from|in|by|not|to|how|whatever|of|that|the|a|an|both|when|before|after|if|where|due|such|except|keeping|navigating|moving|including|instead|out|all|apply|vice versa|optional|again|default|seconds?|ms|hint|note|example)\b/i;
         if (proseRegex.test(name)) {
           return { confidence: 0.0, err: `(${name}) is an instruction side comment, not a block (confidence < 80%)` };
         }
-        // If it contains spaces and is not an explicitly known variable (like 'text list'), do not assume variable
-        if (name.includes(' ') && !knownVars.includes(name.toLowerCase())) {
+        // Only treat (name) as a variable if it is in KNOWN_VARS, camelCase/snake_case, variable-suffixed, or a 1-letter math var
+        const isCamelOrSnake = /[a-z][A-Z]/.test(name) || name.includes('_');
+        const isVarSuffix = /^[a-zA-Z0-9]+(?:Sprite|List|Location|Tile|Number|Count|Speed|Level|Index|Array|Item|Score)$/.test(name);
+        const isMathVar = /^[xyijn]$/i.test(name);
+        if (!knownVars.includes(name.toLowerCase()) && !isCamelOrSnake && !isVarSuffix && !isMathVar) {
           return { confidence: 0.0, err: `(${name}) is not a recognized variable name (confidence < 80%)` };
         }
       }
