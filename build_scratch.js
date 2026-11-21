@@ -48,6 +48,8 @@ const startFnIdx = overlay.indexOf("function escapeXml");
 const endFnIdx = overlay.indexOf("function requestTokenRender");
 const overlayLogic = overlay.slice(startFnIdx, endFnIdx);
 
+const harnessBody = fs.readFileSync("C:/Users/conta/OneDrive/Documents/Personal/Projects/Coding/AccessibleIMPACT/scratch_harness.js", "utf8");
+
 const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -248,133 +250,7 @@ const testSuites = [
   }
 ];
 
-function buildHarness() {
-  const container = document.getElementById("suites-container");
-  container.innerHTML = "";
-  
-  testSuites.forEach((suite) => {
-    const sEl = document.createElement("div");
-    sEl.innerHTML = "<h2>" + suite.title + "</h2>";
-    const grid = document.createElement("div");
-    grid.className = "test-grid";
-    
-    suite.cases.forEach((tc) => {
-      const card = document.createElement("div");
-      card.className = "test-card";
-      card.id = "card_" + tc.id;
-      
-      const header = document.createElement("div");
-      header.className = "test-header";
-      header.innerHTML = "<span class='test-title'>" + tc.label + "</span>" +
-                         "<span class='status-badge status-pass' id='badge_" + tc.id + "'>RENDERED</span>";
-      card.appendChild(header);
-      
-      const tokenSpan = document.createElement("div");
-      tokenSpan.className = "test-token";
-      tokenSpan.textContent = tc.token || tc.rawHtml;
-      card.appendChild(tokenSpan);
-      
-      const vp = document.createElement("div");
-      vp.className = "test-viewport";
-      vp.id = "vp_" + tc.id;
-      vp.style.width = "233px";
-      
-      if (tc.rawHtml) {
-        vp.innerHTML = tc.rawHtml;
-      } else {
-        const span = document.createElement("span");
-        span.className = "aifx-rendered";
-        span.setAttribute("data-token", tc.token);
-        span.textContent = tc.token;
-        vp.appendChild(span);
-      }
-      
-      card.appendChild(vp);
-      
-      const info = document.createElement("div");
-      info.className = "status-info";
-      info.id = "info_" + tc.id;
-      info.textContent = "Metrics: initializing...";
-      card.appendChild(info);
-      
-      grid.appendChild(card);
-    });
-    
-    sEl.appendChild(grid);
-    container.appendChild(sEl);
-  });
-
-  // Render tokens
-  document.querySelectorAll("span.aifx-rendered").forEach(span => {
-    const raw = span.getAttribute("data-token") || span.textContent.trim();
-    const cleanTok = raw.replace(/^\[|\]$/g, "");
-    resolveAndRenderSpan(span, cleanTok);
-  });
-  
-  setTimeout(rerunAudit, 300);
-}
-
-function setWidth(w) {
-  const label = typeof w === "number" ? (w + "px") : w;
-  document.getElementById("currentWidthLabel").textContent = label;
-  document.querySelectorAll(".controls .btn").forEach(b => {
-    if (b.textContent.includes(String(w))) b.classList.add("active");
-    else b.classList.remove("active");
-  });
-  document.querySelectorAll(".test-viewport").forEach(vp => {
-    vp.style.width = typeof w === "number" ? (w + "px") : w;
-  });
-  setTimeout(rerunAudit, 100);
-}
-
-function rerunAudit() {
-  testSuites.forEach(suite => {
-    suite.cases.forEach(tc => {
-      const card = document.getElementById("card_" + tc.id);
-      const vp = document.getElementById("vp_" + tc.id);
-      const badge = document.getElementById("badge_" + tc.id);
-      const info = document.getElementById("info_" + tc.id);
-      if (!vp || !badge || !info) return;
-      
-      const svgs = Array.from(vp.querySelectorAll("svg"));
-      if (!svgs.length) {
-        badge.className = "status-badge status-fail";
-        badge.textContent = "NO SVG";
-        info.textContent = "Failed to render SVG";
-        return;
-      }
-      
-      let allPass = true;
-      let details = [];
-      
-      svgs.forEach((svg) => {
-        const svgRect = svg.getBoundingClientRect();
-        const vpRect = vp.getBoundingClientRect();
-        const vb = (svg.getAttribute("viewBox") || "").split(/\s+/).map(parseFloat);
-        
-        // Check if SVG overflows container horizontally beyond permissible shadow blur (8px)
-        const overflowRight = svgRect.right - (vpRect.right + 2);
-        const isClippedByParent = (overflowRight > 6);
-        
-        details.push("SVG: " + Math.round(svgRect.width) + "x" + Math.round(svgRect.height) + "px, VB: " + (vb[2] || 0) + "x" + (vb[3] || 0));
-        
-        if (isClippedByParent) {
-          allPass = false;
-          details.push("OVERFLOW: " + Math.round(overflowRight) + "px");
-        }
-      });
-      
-      if (allPass) {
-        badge.className = "status-badge status-pass";
-        badge.textContent = "PASS (FIT & SHADOW OK)";
-      } else {
-        badge.className = "status-badge status-fail";
-        badge.textContent = "CLIPPED / OVERFLOW";
-      }
-      info.textContent = details.join(" | ");
-    });
-  });
-}
+${harnessBody}
 
 window.addEventListener("DOMContentLoaded", buildHarness);
 </script>

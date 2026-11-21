@@ -176,6 +176,130 @@
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  // ---------------------------------------------------------------------------
+  // Text measurement + shared dropdown arrow icon
+  // ---------------------------------------------------------------------------
+  let _measureCtx = null;
+  function measureTextWidth(text, px, weight) {
+    const str = String(text === undefined || text === null ? '' : text);
+    try {
+      if (typeof document !== 'undefined') {
+        if (!_measureCtx) {
+          const c = document.createElement('canvas');
+          _measureCtx = c.getContext('2d');
+        }
+        if (_measureCtx) {
+          _measureCtx.font = (weight || 600) + ' ' + (px || 16) + 'px Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace';
+          const w = _measureCtx.measureText(str).width;
+          // glyph advances are hinted at the displayed (scaled) size and render differently than canvas when scaled; leave a little headroom
+          if (w > 0) return w * 1.005;
+        }
+      }
+    } catch (e) { /* fall through */ }
+    return str.length * (px || 16) * 0.6;
+  }
+  // Per-character advance of the font the SVGs actually render with on this machine (16px / 600)
+  const CHAR_W = (() => {
+    const w = measureTextWidth('0000000000', 16, 600) / 10;
+    return (w > 6 && w < 14) ? w : 9.6;
+  })();
+
+  // The same dropdown-arrow image MakeCode uses inside every field (so pills match real blocks)
+  const DROPDOWN_ARROW_URI = 'data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaGVpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLWFycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuNDEsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTDAuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNzFDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMCwxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNzlhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYzAuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMzdBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
+  function dropdownArrowImage(x, y) {
+    return '<image width="12" height="12" x="' + x + '" y="' + y + '" xlink:href="' + DROPDOWN_ARROW_URI + '" href="' + DROPDOWN_ARROW_URI + '"/>';
+  }
+
+  // ---------------------------------------------------------------------------
+  // Absolute-coordinate path utilities (used to offset block outlines, never scale them)
+  // ---------------------------------------------------------------------------
+  function parsePathAbs(d) {
+    const toks = String(d || '').match(/[MmLlHhVvCcAaZz]|-?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?|[SsQqTt]/g) || [];
+    const segs = [];
+    let i = 0, cx = 0, cy = 0, sx = 0, sy = 0, cmd = null;
+    const isCmd = (t) => /^[A-Za-z]$/.test(t);
+    const num = () => parseFloat(toks[i++]);
+    let guard = 0;
+    while (i < toks.length) {
+      if (++guard > 20000) return null;
+      if (isCmd(toks[i])) { cmd = toks[i++]; }
+      else if (cmd === 'M') cmd = 'L';
+      else if (cmd === 'm') cmd = 'l';
+      else if (cmd === null || cmd === 'Z' || cmd === 'z') return null;
+      const rel = cmd === cmd.toLowerCase();
+      switch (cmd.toUpperCase()) {
+        case 'M': { let x = num(), y = num(); if (rel) { x += cx; y += cy; } cx = sx = x; cy = sy = y; segs.push({ c: 'M', a: [x, y] }); break; }
+        case 'L': { let x = num(), y = num(); if (rel) { x += cx; y += cy; } cx = x; cy = y; segs.push({ c: 'L', a: [x, y] }); break; }
+        case 'H': { let x = num(); if (rel) x += cx; cx = x; segs.push({ c: 'H', a: [x] }); break; }
+        case 'V': { let y = num(); if (rel) y += cy; cy = y; segs.push({ c: 'V', a: [y] }); break; }
+        case 'C': {
+          const a = [num(), num(), num(), num(), num(), num()];
+          if (rel) { for (let k = 0; k < 6; k += 2) { a[k] += cx; a[k + 1] += cy; } }
+          cx = a[4]; cy = a[5]; segs.push({ c: 'C', a }); break;
+        }
+        case 'A': {
+          const rx = num(), ry = num(), rot = num(), large = num(), sweep = num();
+          let x = num(), y = num(); if (rel) { x += cx; y += cy; }
+          cx = x; cy = y; segs.push({ c: 'A', a: [rx, ry, rot, large, sweep, x, y] }); break;
+        }
+        case 'Z': { cx = sx; cy = sy; segs.push({ c: 'Z', a: [] }); cmd = null; break; }
+        default: return null;
+      }
+      for (const s of segs) for (const v of s.a) if (!isFinite(v)) return null;
+    }
+    return segs;
+  }
+
+  function pathXs(segs) {
+    const xs = [];
+    segs.forEach(s => {
+      if (s.c === 'M' || s.c === 'L') xs.push(s.a[0]);
+      else if (s.c === 'H') xs.push(s.a[0]);
+      else if (s.c === 'C') xs.push(s.a[0], s.a[2], s.a[4]);
+      else if (s.c === 'A') xs.push(s.a[5]);
+    });
+    return xs;
+  }
+  function pathMaxX(d) {
+    const segs = parsePathAbs(d);
+    if (!segs) return null;
+    const xs = pathXs(segs);
+    return xs.length ? Math.max.apply(null, xs) : null;
+  }
+  function pathMinX(d) {
+    const segs = parsePathAbs(d);
+    if (!segs) return null;
+    const xs = pathXs(segs);
+    return xs.length ? Math.min.apply(null, xs) : null;
+  }
+
+  // Moves the outline's right-hand edge (corner radius + everything right of it) by `delta`.
+  // Notches, mouths and left corners stay put. Returns the new absolute path, or null if unparseable.
+  function shiftPathRight(d, delta) {
+    const segs = parsePathAbs(d);
+    if (!segs) return null;
+    const xs = pathXs(segs);
+    if (!xs.length) return null;
+    const xmax = Math.max.apply(null, xs);
+    const firstArc = segs.find(s => s.c === 'A');
+    const firstM = segs.find(s => s.c === 'M');
+    const R = firstArc ? Math.abs(firstArc.a[0]) : (firstM ? Math.abs(firstM.a[0]) : 0);
+    const T = xmax - R - 0.5;
+    const sh = (x) => (x >= T ? x + delta : x);
+    const f = (n) => String(Math.round(n * 1000) / 1000);
+    return segs.map(s => {
+      switch (s.c) {
+        case 'M': return 'M ' + f(sh(s.a[0])) + ',' + f(s.a[1]);
+        case 'L': return 'L ' + f(sh(s.a[0])) + ',' + f(s.a[1]);
+        case 'H': return 'H ' + f(sh(s.a[0]));
+        case 'V': return 'V ' + f(s.a[0]);
+        case 'C': return 'C ' + f(sh(s.a[0])) + ',' + f(s.a[1]) + ' ' + f(sh(s.a[2])) + ',' + f(s.a[3]) + ' ' + f(sh(s.a[4])) + ',' + f(s.a[5]);
+        case 'A': return 'A ' + f(s.a[0]) + ' ' + f(s.a[1]) + ' ' + f(s.a[2]) + ' ' + f(s.a[3]) + ' ' + f(s.a[4]) + ' ' + f(sh(s.a[5])) + ',' + f(s.a[6]);
+        default: return 'Z';
+      }
+    }).join(' ');
+  }
+
   function renderToggleToken(rawText) {
     const isWin = /win/i.test(rawText);
     const isLose = /lose/i.test(rawText);
@@ -219,7 +343,7 @@
 
   function generateVariableReporterBubble(varName, bg = '#ec3b59', stroke = '#b12c43') {
     const label = (varName || '').replace(/[\[\]\(\)]/g, '').trim();
-    const textWidth = Math.ceil(label.length * 9.6);
+    const textWidth = Math.ceil(measureTextWidth(label, 16, 600));
     const totalWidth = Math.max(48, textWidth + 24);
     const height = 32;
     const r = (height - 1) / 2;
@@ -230,7 +354,7 @@
   // Hexagonal Boolean reporter, e.g. <isBeeDizzy>
   function generateBooleanReporterBubble(varName) {
     const label = (varName || '').replace(/[<>\[\]\(\)]/g, '').trim();
-    const textWidth = Math.ceil(label.length * 9.6);
+    const textWidth = Math.ceil(measureTextWidth(label, 16, 600));
     const height = 32;
     const half = height / 2;
     const totalWidth = Math.max(60, textWidth + 24 + height);
@@ -254,14 +378,14 @@
   }
 
   function generateSectionLabelPill(label) {
-    const w = Math.max(54, Math.ceil(label.length * 9.6 + 22));
+    const w = Math.max(54, Math.ceil(measureTextWidth(label, 15, 700) + 22));
     const h = 30;
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><rect x="1" y="1" width="${w - 2}" height="${h - 2}" rx="6" ry="6" fill="#45aaf2" stroke="#3480b6" stroke-width="1.5"/><text x="${w / 2}" y="${h / 2}" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:15px !important;font-weight:700 !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">${escapeXml(label)}</text></svg>`;
     return { svg, width: w, height: h, category: 'logic', isMultiLine: false };
   }
 
   function generateUiButtonSvg(label, bg = '#2c5aa0', stroke = '#1c3b6e') {
-    const w = Math.max(120, Math.ceil(label.length * 9.6 + 32));
+    const w = Math.max(120, Math.ceil(measureTextWidth(label, 15, 700) + 32));
     const h = 34;
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><rect x="1" y="1" width="${w - 2}" height="${h - 2}" rx="6" ry="6" fill="${bg}" stroke="${stroke}" stroke-width="1.5"/><text x="${w / 2}" y="${h / 2}" style="font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif !important;font-size:15px !important;font-weight:700 !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">${escapeXml(label)}</text></svg>`;
     return { svg, width: w, height: h, category: 'ui', isMultiLine: false };
@@ -276,20 +400,21 @@
     ) {
       text = text.slice(1, -1).trim();
     }
+
     // Variable dropdown pills mirror the catalog `variables_get` capsule (40px pill in a 44px viewBox)
-    // so [mySprite], [text list] and [userResponseList] share one height, radius and arrow style.
+    // so [mySprite], [text list] and [userResponseList] share one height, radius and arrow icon.
+    // Layout (offsets only): 12 pad | text | 8 gap | 12 arrow | 12 pad
     if (category === 'variables') {
-      const tW = Math.ceil(text.length * 9.6);
-      const pw = tW + 46;
+      const tW = Math.ceil(measureTextWidth(text, 16, 600));
+      const pw = tW + 44;
       const vw = pw + 4;
-      const arrowX = 2 + pw - 24;
-      const vsvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${vw} 44" width="${vw}" height="44"><rect x="2" y="2" width="${pw}" height="40" rx="20" ry="20" fill="#ec3b59" stroke="#b12c43" stroke-width="1"/><text class="blocklyText" x="14" y="22" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:16px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:start !important;dominant-baseline:central !important;">${escapeXml(text)}</text><polygon points="${arrowX},19 ${arrowX + 12},19 ${arrowX + 6},26" fill="#ffffff"/></svg>`;
+      const vsvg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${vw} 44" width="${vw}" height="44"><rect x="2" y="2" width="${pw}" height="40" rx="20" ry="20" fill="#ec3b59" stroke="#b12c43" stroke-width="1"/><text class="blocklyText" x="14" y="22" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:16px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:start !important;dominant-baseline:central !important;">${escapeXml(text)}</text>${dropdownArrowImage(14 + tW + 8, 16)}</svg>`;
       return { svg: vsvg, width: vw, height: 44, category: 'variables', isMultiLine: false };
     }
 
-    const charWidth = 9.6;
-    const textWidth = Math.max(24, text.length * charWidth);
-    const totalWidth = Math.ceil(textWidth + 34); // text + arrow + padding
+    // Layout (offsets only): 10 pad | text | 8 gap | 12 arrow | 8 pad
+    const textWidth = Math.ceil(measureTextWidth(text, 15, 600));
+    const totalWidth = 10 + textWidth + 8 + 12 + 8;
     const height = 30;
 
     let bg = '#4b7bec'; // default sprites/scene blue
@@ -307,48 +432,31 @@
       stroke = '#52447c';
       rx = 15;
       ry = 15;
-    } else if (category === 'variables') {
-      bg = '#ec3b59';
-      stroke = '#b12c43';
-      rx = 6;
-      ry = 6;
     } else if (category === 'logic') {
       bg = '#45aaf2';
       stroke = '#3480b6';
-      rx = 6;
-      ry = 6;
     } else if (category === 'scene') {
       bg = '#4b6584';
       stroke = '#384c63';
-      rx = 6;
-      ry = 6;
     } else if (category === 'game') {
       bg = '#8b449b';
       stroke = '#6c3483';
-      rx = 6;
-      ry = 6;
     } else if (category === 'controller') {
       bg = '#d63031';
       stroke = '#c0392b';
-      rx = 6;
-      ry = 6;
     } else if (category === 'music') {
       bg = '#e30fc0';
       stroke = '#aa0b90';
-      rx = 6;
-      ry = 6;
     } else if (category === 'scroller') {
       bg = '#ff85a7';
       stroke = '#bf647d';
-      rx = 6;
-      ry = 6;
     }
 
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${height}" width="${totalWidth}" height="${height}">
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${totalWidth} ${height}" width="${totalWidth}" height="${height}">
 <g>
   <rect x="1" y="1" width="${totalWidth - 2}" height="${height - 2}" rx="${rx}" ry="${ry}" fill="${bg}" stroke="${stroke}" stroke-width="1.5" />
   <text class="blocklyText" x="10" y="${height / 2}" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:15px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:start !important;dominant-baseline:central !important;">${escapeXml(text)}</text>
-  <text class="blocklyText" x="${totalWidth - 14}" y="${height / 2}" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:12px !important;font-weight:700 !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">▾</text>
+  ${dropdownArrowImage(10 + textWidth + 8, height / 2 - 6)}
 </g>
 </svg>`;
 
@@ -450,14 +558,6 @@
       return t ? (t.textContent || '').replace(/\u00a0/g, ' ').trim() : '';
     };
 
-    const measureBlockWidth = (blockEl) => {
-      if (!blockEl) return 40;
-      const p = Array.from(blockEl.children || []).find(c => c.tagName === 'path' && c.classList.contains('blocklyPath'));
-      const d = p ? (p.getAttribute('d') || '') : '';
-      const pm = d.match(/m\s*(-?[\d.]+)\s*,\s*0\s+h\s*(-?[\d.]+)/i);
-      if (pm) return Math.abs(parseFloat(pm[1])) * 2 + Math.abs(parseFloat(pm[2]));
-      return 40;
-    };
 
     // ---- collect editable field groups (annotated + unannotated shadows) ---
     const fields = [];
@@ -474,7 +574,7 @@
         containerBlock,
         name: g.getAttribute('data-aifx-field') || '',
         kind,
-        charw: Math.max(parseFloat(g.getAttribute('data-aifx-charw') || '8.8') || 8.8, 9.2),
+        charw: CHAR_W,
         value: (g.getAttribute('data-aifx-value') || readTextVal(g)).replace(/\u00a0/g, ' ').trim(),
         visualX: getVisualX(g)
       });
@@ -488,7 +588,7 @@
         containerBlock: findEnclosingBlock(g),
         name: 'VAR',
         kind: 'variable',
-        charw: 9.4,
+        charw: CHAR_W,
         value: readTextVal(g),
         visualX: getVisualX(g)
       });
@@ -504,7 +604,7 @@
         containerBlock: findEnclosingBlock(g),
         name: g.closest && g.closest('g.spritekind') ? 'kind' : 'dropdown',
         kind: 'dropdown',
-        charw: 9.2,
+        charw: CHAR_W,
         value: val,
         visualX: getVisualX(g)
       });
@@ -521,7 +621,7 @@
         containerBlock: blockEl,
         name: blockEl.classList.contains('text') ? 'TEXT' : 'NUM',
         kind: blockEl.classList.contains('text') ? 'text' : 'number',
-        charw: 9.4,
+        charw: CHAR_W,
         value: readTextVal(g),
         visualX: getVisualX(g)
       });
@@ -537,7 +637,7 @@
           containerBlock: null,
           name: 'function_name',
           kind: 'function_name',
-          charw: 9.6,
+          charw: CHAR_W,
           value: val.replace(/^function\s+/i, '').trim(),
           visualX: getVisualX(g)
         });
@@ -549,7 +649,7 @@
           containerBlock: null,
           name: 'from_label',
           kind: 'from_label',
-          charw: 9.4,
+          charw: CHAR_W,
           value: m ? m[1] : '0',
           visualX: getVisualX(g)
         });
@@ -561,7 +661,6 @@
       if (!isHiddenElement(blockEl)) toggles.push(blockEl);
     });
 
-    if (!fields.length && !toggles.length) return null;
 
     // Sort by visual left-to-right position so left/right and var1/var2 always match visual layout
     fields.sort((a, b) => a.visualX - b.visualX);
@@ -675,87 +774,110 @@
       });
     }
 
-    if (!edits.length && !toggleChanged) return null;
-
-    // ---- apply edits with hierarchical reflow -------------------------------
+    // ---- geometry-driven reflow ---------------------------------------------
+    // Everything below OFFSETS geometry by (measuredTextWidth - currentWidth); nothing is scaled or multiplied.
+    //  * growBlock(): shifts the block's right-hand children by delta, moves the block outline's right edge by delta
+    //    (absolute-coordinate path rewrite), then bubbles up through value-block ancestors to the root viewBox.
+    //  * Fields are re-measured with the real rendered font, so unedited fields that were laid out for a narrower
+    //    font are also corrected (arrow/text overlap).  Labels are pushed off their right-hand neighbours.
     const svgEl = doc.documentElement;
+    let changed = toggleChanged;
 
-    const widenBlockPath = (blockEl, delta, allowAllH) => {
-      if (!blockEl || Math.abs(delta) < 0.01) return;
-      Array.from(blockEl.children || []).forEach(p => {
-        if (p.tagName !== 'path' || !p.classList.contains('blocklyPath')) return;
-        const d = p.getAttribute('d') || '';
-        const hasNotch = d.includes('c 2,0') || d.includes('c -2,0');
-        let nd = d.replace(/h\s*(-?[\d.]+)/g, (m0, num) => {
-          const v = parseFloat(num);
-          if (!allowAllH || hasNotch) {
-            if (Math.abs(v) < 19.5) return m0;
-          }
-          return 'h ' + (v + (v >= 0 ? delta : -delta));
-        });
-        // Also extend uppercase H runs on the outer right edge of C-blocks (leave inner left mouth H untouched)
-        const hMatches = [...nd.matchAll(/\bH\s*([\d.]+)/g)].map(m => parseFloat(m[1]));
-        if (hMatches.length) {
-          const maxH = Math.max(...hMatches);
-          if (maxH > 80) {
-            nd = nd.replace(/\bH\s*([\d.]+)/g, (m0, num) => {
-              const v = parseFloat(num);
-              if (v >= maxH - 5) return 'H ' + (v + delta);
-              return m0;
-            });
-          }
-        }
-        if (nd !== d) p.setAttribute('d', nd);
-      });
+    const setTx = (el, x, y) => el.setAttribute('transform', 'translate(' + x + ',' + y + ')');
+    const directPath = (blockEl) => Array.from(blockEl.children || []).find(c => c.tagName === 'path' && c.classList.contains('blocklyPath'));
+    const blockWidth = (blockEl) => {
+      const p = directPath(blockEl);
+      const m = p ? pathMaxX(p.getAttribute('d') || '') : null;
+      return m === null ? 0 : m;
+    };
+    const isValueBlock = (blockEl) => {
+      const p = directPath(blockEl);
+      const d = p ? (p.getAttribute('d') || '') : '';
+      return !!d && !/c\s*-?2,0\s+-?3,-?1/.test(d);
     };
 
-    const propagateReflowUp = (startChild, origWidthInParent, delta) => {
-      let curChild = startChild;
-      let curOrigW = origWidthInParent;
-      let parent = curChild ? curChild.parentNode : null;
-      while (parent && parent.nodeType === 1 && parent.tagName === 'g') {
-        const tr = parseTranslate(curChild);
-        if (tr) {
-          const rightEdge = tr.x + curOrigW - 2;
-          Array.from(parent.children || []).forEach(sib => {
-            if (sib === curChild) return;
-            const st = parseTranslate(sib);
-            if (!st) return;
-            if (st.x >= rightEdge && Math.abs(st.y - tr.y) < 28) {
-              sib.setAttribute('transform', 'translate(' + (st.x + delta) + ',' + st.y + ')');
-            }
-          });
+    const growBlock = (blockEl, atX, delta) => {
+      if (!blockEl || Math.abs(delta) < 0.01) return;
+      const oldW = blockWidth(blockEl);
+      Array.from(blockEl.children || []).forEach(ch => {
+        if (ch.tagName === 'g') {
+          if (ch.classList.contains('blocklyConnectionIndicatorParent')) return;
+          // statement children live in the C-block mouth (left-anchored): never shift them
+          if (ch.classList.contains('blocklyBlock') && !isValueBlock(ch)) return;
+          const t = parseTranslate(ch);
+          if (t && t.x >= atX - 0.5) setTx(ch, t.x + delta, t.y);
+        } else if (ch.tagName === 'path' && ch.classList.contains('blocklyOutlinePath')) {
+          // absolute-coordinate outline (e.g. empty shadow slot): offset as a whole
+          const minX = pathMinX(ch.getAttribute('d') || '');
+          if (minX !== null && minX >= atX - 0.5) {
+            const t = parseTranslate(ch) || { x: 0, y: 0 };
+            setTx(ch, t.x + delta, t.y);
+          }
         }
-        const isRoot = parent === root;
-        const parentOrigW = !isRoot ? measureBlockWidth(parent) : 0;
-        widenBlockPath(parent, delta, !isRoot);
-        if (isRoot) break;
-        curChild = parent;
-        curOrigW = parentOrigW;
-        parent = curChild.parentNode;
+      });
+      const p = directPath(blockEl);
+      if (p) {
+        const nd = shiftPathRight(p.getAttribute('d') || '', delta);
+        if (nd) p.setAttribute('d', nd);
+      }
+      changed = true;
+      if (blockEl === root) {
+        const vb = (svgEl.getAttribute('viewBox') || '').match(/^([\d.-]+)\s+([\d.-]+)\s+([\d.]+)\s+([\d.]+)$/);
+        if (vb) {
+          const nextW = Math.ceil((parseFloat(vb[3]) + delta) * 2) / 2;
+          svgEl.setAttribute('viewBox', vb[1] + ' ' + vb[2] + ' ' + nextW + ' ' + vb[4]);
+          if (svgEl.hasAttribute('width')) svgEl.setAttribute('width', String(Math.ceil(parseFloat(svgEl.getAttribute('width')) + delta)));
+        }
+        return;
+      }
+      // value blocks (reporters / shadows) sit inline in their parent row: the parent grows with them
+      const parent = blockEl.parentNode;
+      const bt = parseTranslate(blockEl);
+      if (parent && parent.nodeType === 1 && parent.tagName === 'g' && bt && isValueBlock(blockEl)) {
+        growBlock(parent, bt.x + oldW - 2, delta);
       }
     };
 
-    for (const edit of edits) {
-      const f = edit.field;
-      if (f.value === edit.text) continue;
+    const arrowOf = (g) => Array.from(g.children || []).find(c => c.tagName === 'image');
+    const rectOf = (g) => Array.from(g.children || []).find(c => c.tagName === 'rect');
+
+    const requiredFieldWidth = (g, len) => {
+      const textEl = getMainTextEl(g);
+      const textX = parseFloat((textEl && textEl.getAttribute('x')) || '0') || 0;
+      const hasArrow = !!arrowOf(g);
+      // text + gap(8) + arrow(12) + right pad(8 when the text is inset, 0 otherwise)
+      const hasQuotes = !!g.querySelector('text.field-text-quote');
+      const tail = hasArrow ? (textX > 0 ? 28 : 20) : (hasQuotes ? 12 : (textX > 0 ? 12 : 0));
+      return Math.ceil((textX + len * CHAR_W + tail) * 2) / 2;
+    };
+
+    const applyFieldEdit = (f, newText, force) => {
       const g = f.g;
       const textEl = getMainTextEl(g);
-      if (!textEl) continue;
+      if (!textEl) return;
+      const cBlock = f.containerBlock || root;
+      const currentText = (textEl.textContent || '').replace(/\u00a0/g, ' ').trim();
+      if (!force && currentText === newText) return;
 
       if (f.kind === 'function_name') {
-        textEl.textContent = 'function ' + edit.text;
-      } else if (f.kind === 'from_label') {
-        textEl.textContent = 'from ' + edit.text + ' to';
-      } else {
-        textEl.textContent = edit.text;
+        textEl.textContent = 'function ' + newText;
+        changed = true;
+        return; // label pass below pushes right-hand siblings / block edge
+      }
+      if (f.kind === 'from_label') {
+        textEl.textContent = 'from ' + newText + ' to';
+        changed = true;
+        return;
       }
 
+      const oldLen = currentText.length;
+      if (!force) textEl.textContent = newText;
+      const newLen = newText.length;
+
       // Convert white math_number shadow into red/magenta variable reporter when fed an identifier
-      const cBlock = f.containerBlock;
       const isNumShadow = cBlock && (cBlock.classList.contains('math_number') || cBlock.classList.contains('math_whole_number'));
-      const trimmedEdit = edit.text.trim();
-      const isIdent = isNumShadow && /^[a-zA-Z_][a-zA-Z0-9_\s]*$/.test(trimmedEdit) && !/^(true|false)$/i.test(trimmedEdit);
+      const trimmedEdit = newText.trim();
+      const isIdent = !force && isNumShadow && /^[a-zA-Z_][a-zA-Z0-9_\s]*$/.test(trimmedEdit) && !/^(true|false)$/i.test(trimmedEdit);
       if (isIdent) {
         const isInfoHud = /^(score|life)$/i.test(trimmedEdit);
         const fillCol = isInfoHud ? '#cf6a87' : '#ec3b59';
@@ -763,7 +885,7 @@
         cBlock.classList.remove('math_number', 'math_whole_number', 'blocklyShadow');
         cBlock.classList.add('variables_get');
         g.classList.remove('blocklyNumberField');
-        const sp = Array.from(cBlock.children || []).find(c => c.tagName === 'path' && c.classList.contains('blocklyPath'));
+        const sp = directPath(cBlock);
         if (sp) {
           sp.setAttribute('fill', fillCol);
           sp.setAttribute('stroke', strokeCol);
@@ -774,94 +896,101 @@
         textEl.setAttribute('style', tst.replace(/fill\s*:[^;]+;?/gi, '') + 'fill:#ffffff !important;');
       }
 
-      // Compute width delta and resize rect/quotes/arrow/capsule
-      const rect = Array.from(g.children || []).find(c => c.tagName === 'rect');
-      const arrow = Array.from(g.children || []).find(c => c.tagName === 'image');
-      const oldLen = f.value.length;
-      const newLen = edit.text.length;
+      const rect = rectOf(g);
+      const arrow = arrowOf(g);
+      const gtr = parseTranslate(g) || { x: 0, y: 0 };
       let delta = 0;
-      let origWForParent = 0;
+      let oldRight = gtr.x;
 
       if (rect) {
         const curW = parseFloat(rect.getAttribute('width') || '0');
-        origWForParent = cBlock ? measureBlockWidth(cBlock) : curW;
-        const textX = parseFloat(textEl.getAttribute('x') || '0');
-        const rightPad = arrow ? (textX > 0 ? 28 : 20) : (textX > 0 ? 12 : 8);
-        const minWidth = Math.ceil((textX + newLen * f.charw + rightPad) * 2) / 2;
-        let newW = Math.max(minWidth, curW + (newLen - oldLen) * f.charw);
-        if (newLen < oldLen) newW = Math.max(arrow ? 40 : 32, minWidth);
-        newW = Math.ceil(newW * 2) / 2;
+        let newW = requiredFieldWidth(g, newLen);
+        if (force) { if (newW <= curW + 0.5) return; }
+        else if (newLen < oldLen) newW = Math.max(newW, arrow ? 40 : 17);
         delta = newW - curW;
+        oldRight = gtr.x + curW;
         if (Math.abs(delta) > 0.01) rect.setAttribute('width', String(newW));
-      } else if (f.kind === 'function_name') {
-        const oldFullLen = ('function ' + f.value).length;
-        const newFullLen = ('function ' + edit.text).length;
-        delta = Math.ceil((newFullLen - oldFullLen) * f.charw);
-        origWForParent = oldFullLen * f.charw;
-      } else if (f.kind === 'from_label') {
-        const oldFullLen = ('from ' + f.value + ' to').length;
-        const newFullLen = ('from ' + edit.text + ' to').length;
-        delta = Math.ceil((newFullLen - oldFullLen) * f.charw);
-        origWForParent = oldFullLen * f.charw;
-      } else if (cBlock && cBlock !== root) {
-        const curCapW = measureBlockWidth(cBlock);
-        origWForParent = curCapW;
-        const isQuoteText = cBlock.classList.contains('text');
-        delta = Math.ceil((newLen - oldLen) * Math.max(f.charw, 9.4));
-        if (isNumShadow && f.value.length <= 1 && newLen > 1) {
-          textEl.setAttribute('x', '0');
-          const gtr = parseTranslate(g);
-          if (gtr) g.setAttribute('transform', 'translate(12,' + gtr.y + ')');
-        }
-        if (isQuoteText && Math.abs(delta) > 0.01) {
-          const quotes = Array.from(g.querySelectorAll('text.field-text-quote'));
-          const closeQ = quotes[1];
-          if (closeQ) {
-            const qt = parseTranslate(closeQ);
-            if (qt) closeQ.setAttribute('transform', 'translate(' + (qt.x + delta) + ',' + qt.y + ')');
-          }
+        const rq = Array.from(g.querySelectorAll('text.field-text-quote'))[1];
+        if (rq) {
+          const rqt = parseTranslate(rq) || { x: 0, y: 10 };
+          setTx(rq, (parseFloat(textEl.getAttribute('x') || '0') || 0) + newLen * CHAR_W + 4, rqt.y);
         }
       } else {
-        delta = Math.ceil((newLen - oldLen) * f.charw + (newLen > oldLen ? 12 : 0));
-        origWForParent = oldLen * f.charw;
+        const textX = parseFloat(textEl.getAttribute('x') || '0') || 0;
+        const closeQ = Array.from(g.querySelectorAll('text.field-text-quote'))[1];
+        if (closeQ) {
+          // quoted text: the closing quote sits right after the text; offset it, never scale
+          const qt = parseTranslate(closeQ) || { x: 0, y: 10 };
+          const wantX = textX + newLen * CHAR_W + 4;
+          delta = wantX - qt.x;
+          if (force && delta <= 0.5) return;
+          setTx(closeQ, wantX, qt.y);
+          oldRight = gtr.x + qt.x + 8;
+        } else {
+          if (force) return;
+          if (isNumShadow && oldLen <= 1 && newLen > 1) {
+            textEl.setAttribute('x', '0');
+            setTx(g, 12, gtr.y);
+          }
+          const am = arrow ? parseTranslate(arrow) : null;
+          oldRight = gtr.x + (am ? am.x + 12 : textX + oldLen * CHAR_W + 4);
+          delta = (newLen - oldLen) * CHAR_W;
+        }
       }
 
-      if (Math.abs(delta) < 0.01) continue;
-
+      if (Math.abs(delta) < 0.01) return;
+      changed = true;
       if (arrow) {
         if (arrow.hasAttribute('x')) arrow.setAttribute('x', String(parseFloat(arrow.getAttribute('x')) + delta));
         const am = parseTranslate(arrow);
-        if (am) arrow.setAttribute('transform', 'translate(' + (am.x + delta) + ',' + am.y + ')');
+        if (am) setTx(arrow, am.x + delta, am.y);
       }
+      growBlock(cBlock, oldRight - 2, delta);
+    };
 
-      if (cBlock) {
-        // Shift anything right of g inside cBlock, widen cBlock, then propagate up through ancestors to root
-        const gtr = parseTranslate(g);
-        const fOrigW = rect ? parseFloat(rect.getAttribute('width') || '0') - delta : origWForParent - 24;
-        if (gtr) {
-          Array.from(cBlock.children || []).forEach(sib => {
-            if (sib === g) return;
-            const st = parseTranslate(sib);
-            if (st && st.x >= gtr.x + fOrigW - 2 && Math.abs(st.y - gtr.y) < 25) {
-              sib.setAttribute('transform', 'translate(' + (st.x + delta) + ',' + st.y + ')');
-            }
-          });
-        }
-        widenBlockPath(cBlock, delta, true);
-        propagateReflowUp(cBlock, origWForParent, delta);
-      } else {
-        propagateReflowUp(g, origWForParent, delta);
-      }
+    // 1. requested edits
+    for (const edit of edits) applyFieldEdit(edit.field, edit.text, false);
 
-      const vb = (svgEl.getAttribute('viewBox') || '').match(/^([\d.-]+)\s+([\d.-]+)\s+([\d.]+)\s+([\d.]+)$/);
-      if (vb) {
-        const nextW = Math.ceil(parseFloat(vb[3]) + delta);
-        svgEl.setAttribute('viewBox', vb[1] + ' ' + vb[2] + ' ' + nextW + ' ' + vb[4]);
-        if (svgEl.hasAttribute('width')) {
-          svgEl.setAttribute('width', String(Math.ceil(parseFloat(svgEl.getAttribute('width')) + delta)));
+    // 2. re-measure every other editable field against the real rendered font
+    for (const f of fields) {
+      if (edits.some(e => e.field === f)) continue;
+      if (f.kind === 'function_name' || f.kind === 'from_label') continue;
+      const tEl = getMainTextEl(f.g);
+      if (!tEl) continue;
+      applyFieldEdit(f, (tEl.textContent || '').replace(/\u00a0/g, ' ').trim(), true);
+    }
+
+    // 3. labels: keep a gap to the next element in their row, and keep the block's right edge past the last one
+    const allBlocks = [root].concat(Array.from(root.querySelectorAll('g.blocklyBlock'))).filter(b => !isHiddenElement(b));
+    for (const blk of allBlocks.slice().reverse()) {
+      for (let guard = 0; guard < 24; guard++) {
+        let pushed = false;
+        const kids = Array.from(blk.children || []).filter(c => c.tagName === 'g' && !c.classList.contains('blocklyConnectionIndicatorParent') && parseTranslate(c));
+        const labels = kids.filter(c => c.classList.contains('blocklyLabelField')).sort((a, b) => parseTranslate(a).x - parseTranslate(b).x);
+        for (const L of labels) {
+          const txt = L.querySelector('text');
+          const str = txt ? (txt.textContent || '') : '';
+          if (!str.trim()) continue;
+          const lt = parseTranslate(L);
+          const right = lt.x + (parseFloat(txt.getAttribute('x') || '0') || 0) + str.length * CHAR_W;
+          const next = kids
+            .filter(s => s !== L && !isHiddenElement(s) && !(s.classList.contains('blocklyBlock') && !isValueBlock(s)))
+            .map(s => ({ s, t: parseTranslate(s) }))
+            .filter(o => o.t.x > lt.x + 0.5 && Math.abs(o.t.y - lt.y) < 30)
+            .sort((a, b) => a.t.x - b.t.x)[0];
+          if (next) {
+            const gap = next.t.x - right;
+            if (gap < 5) { growBlock(blk, next.t.x, right + 8 - next.t.x); pushed = true; break; }
+          } else {
+            const W = blockWidth(blk);
+            if (W > 0 && right + 8 > W) { growBlock(blk, 1e9, right + 8 - W); pushed = true; break; }
+          }
         }
+        if (!pushed) break;
       }
     }
+
+    if (!changed) return null;
 
     try {
       return new XMLSerializer().serializeToString(doc.documentElement);
@@ -905,7 +1034,8 @@
       }
     }
 
-    if (params.NAME || params.function_name) {
+    // Only blocks that actually contain a unction <name> label take a NAME (never reshape unrelated blocks)
+    if ((params.NAME || params.function_name) && /(?:>function\s+[a-zA-Z0-9_]+<\/text>)/.test(s)) {
       const fnName = escapeXml(params.NAME || params.function_name);
       const m = s.match(/>function\s+([a-zA-Z0-9_]+)<\/text>/);
       const oldFn = m ? m[1] : 'loadTilemap';
@@ -1387,10 +1517,13 @@
       const pathOf = (g) => Array.from(g.children).find(c => c.tagName === 'path' && c.classList.contains('blocklyPath'));
       const pill = (g) => {
         const p = pathOf(g);
-        const m = p && (p.getAttribute('d') || '').match(/m\s*(-?[\d.]+)\s*,\s*0\s+h\s*(-?[\d.]+)/i);
-        if (!m) return null;
-        const R = Math.abs(parseFloat(m[1]));
-        return { R, w: 2 * R + Math.abs(parseFloat(m[2])), h: 2 * R };
+        const segs = p && parsePathAbs(p.getAttribute('d') || '');
+        if (!segs) return null;
+        const arc = segs.find(s => s.c === 'A');
+        const mx = pathMaxX(p.getAttribute('d') || '');
+        if (!arc || mx === null) return null;
+        const R = Math.abs(arc.a[0]);
+        return { R, w: mx, h: 2 * R };
       };
 
       const slot = Array.from(oRoot.children).find(c => c.tagName === 'g' && c.classList.contains('variables_get'));
@@ -1689,6 +1822,11 @@
         padding: 6px 14px 14px 6px !important;
         scrollbar-width: thin !important;
       }
+      /* Linear (unhinted) glyph advances: text width scales exactly with the SVG so measured layouts never drift */
+      .aifx-rendered svg text,
+      .aifx-rendered svg .blocklyText {
+        text-rendering: geometricPrecision !important;
+      }
       .aifx-rendered svg,
       .aifx-rendered.aifx-multiline svg,
       .aifx-rendered.aifx-inline svg {
@@ -1803,10 +1941,10 @@
     const isInsideSentence = proseLen > 2;
     const h = data.height || 44;
     const isInlineTokenOverride = (tokenText === '[then]' || tokenText === '[else]' || tokenText === 'then' || tokenText === 'else');
-    // Ultra-wide blocks (>520 units) must never shrink into micro-ribbons: keep a legible floor scale and scroll horizontally.
+    // Wide blocks (>440 units) must never shrink into micro-ribbons: keep a legible floor scale and scroll horizontally.
     const vbEarly = String(data.svg).match(/viewBox="\s*[-\d.]+\s+[-\d.]+\s+([\d.]+)\s+[\d.]+/);
     const svgWNat = vbEarly ? parseFloat(vbEarly[1]) : (data.width || 0);
-    const isWide = !isPlayIcon && !isInlineTokenOverride && svgWNat > 520;
+    const isWide = !isPlayIcon && !isInlineTokenOverride && svgWNat > 440;
     const isMultiLine = !isPlayIcon && !isInlineTokenOverride && (isWide || data.isMultiLine || h > 72 || !isInsideSentence);
 
     // Scope SVG pattern IDs per instance and strip redundant 315KB @font-face declarations
