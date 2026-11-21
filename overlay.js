@@ -502,6 +502,35 @@
       });
     });
 
+    root.querySelectorAll('g.blocklyLabelField').forEach(g => {
+      if (seenGroups.has(g) || isHiddenElement(g)) return;
+      const val = readTextVal(g);
+      if (/^function\s+[a-zA-Z0-9_]+/i.test(val)) {
+        seenGroups.add(g);
+        fields.push({
+          g,
+          containerBlock: null,
+          name: 'function_name',
+          kind: 'function_name',
+          charw: 9.6,
+          value: val.replace(/^function\s+/i, '').trim(),
+          visualX: getVisualX(g)
+        });
+      } else if (/^from\s+\d+\s+to$/i.test(val)) {
+        seenGroups.add(g);
+        const m = val.match(/^from\s+(\d+)\s+to$/i);
+        fields.push({
+          g,
+          containerBlock: null,
+          name: 'from_label',
+          kind: 'from_label',
+          charw: 9.4,
+          value: m ? m[1] : '0',
+          visualX: getVisualX(g)
+        });
+      }
+    });
+
     const toggles = [];
     root.querySelectorAll('g.toggleOnOff, g.toggleWinLose').forEach(blockEl => {
       if (!isHiddenElement(blockEl)) toggles.push(blockEl);
@@ -530,7 +559,10 @@
     if (v2 && varFields[1]) pushEdit(varFields[1], v2);
 
     const nameVal = want('NAME') || want('function_name');
-    if (nameVal) pushEdit(fields.find(f => f.name === 'function_name' || f.name === 'NAME'), nameVal);
+    if (nameVal) pushEdit(fields.find(f => f.kind === 'function_name' || f.name === 'function_name' || f.name === 'NAME'), nameVal);
+
+    const fromVal = want('from');
+    if (fromVal) pushEdit(fields.find(f => f.kind === 'from_label'), fromVal);
 
     const btnVal = want('button');
     if (btnVal) pushEdit(fields.find(f => f.kind === 'dropdown' && (f.name === 'button' || f.value === 'A')), btnVal);
@@ -639,7 +671,7 @@
         const hMatches = [...nd.matchAll(/\bH\s*([\d.]+)/g)].map(m => parseFloat(m[1]));
         if (hMatches.length) {
           const maxH = Math.max(...hMatches);
-          if (maxH > 100) {
+          if (maxH > 80) {
             nd = nd.replace(/\bH\s*([\d.]+)/g, (m0, num) => {
               const v = parseFloat(num);
               if (v >= maxH - 5) return 'H ' + (v + delta);
@@ -685,7 +717,13 @@
       const textEl = getMainTextEl(g);
       if (!textEl) continue;
 
-      textEl.textContent = edit.text;
+      if (f.kind === 'function_name') {
+        textEl.textContent = 'function ' + edit.text;
+      } else if (f.kind === 'from_label') {
+        textEl.textContent = 'from ' + edit.text + ' to';
+      } else {
+        textEl.textContent = edit.text;
+      }
 
       // Convert white math_number shadow into red/magenta variable reporter when fed an identifier
       const cBlock = f.containerBlock;
@@ -729,22 +767,25 @@
         newW = Math.ceil(newW * 2) / 2;
         delta = newW - curW;
         if (Math.abs(delta) > 0.01) rect.setAttribute('width', String(newW));
-      } else if (cBlock) {
+      } else if (f.kind === 'function_name') {
+        const oldFullLen = ('function ' + f.value).length;
+        const newFullLen = ('function ' + edit.text).length;
+        delta = Math.ceil((newFullLen - oldFullLen) * f.charw);
+        origWForParent = oldFullLen * f.charw;
+      } else if (f.kind === 'from_label') {
+        const oldFullLen = ('from ' + f.value + ' to').length;
+        const newFullLen = ('from ' + edit.text + ' to').length;
+        delta = Math.ceil((newFullLen - oldFullLen) * f.charw);
+        origWForParent = oldFullLen * f.charw;
+      } else if (cBlock && cBlock !== root) {
         const curCapW = measureBlockWidth(cBlock);
         origWForParent = curCapW;
         const isQuoteText = cBlock.classList.contains('text');
-        const pad = isQuoteText ? 38 : (arrow ? 42 : 24);
-        const minCapW = isQuoteText ? 50 : (isNumShadow ? 40 : 48);
-        const neededW = Math.max(minCapW, Math.ceil(newLen * Math.max(f.charw, 9.4) + pad));
-        if (newLen === oldLen && !isIdent && neededW <= curCapW) {
-          delta = 0;
-        } else {
-          delta = neededW - curCapW;
-          if (!isQuoteText && f.value.length <= 1 && newLen > 1) {
-            textEl.setAttribute('x', '0');
-            const gtr = parseTranslate(g);
-            if (gtr) g.setAttribute('transform', 'translate(12,' + gtr.y + ')');
-          }
+        delta = Math.ceil((newLen - oldLen) * Math.max(f.charw, 9.4));
+        if (isNumShadow && f.value.length <= 1 && newLen > 1) {
+          textEl.setAttribute('x', '0');
+          const gtr = parseTranslate(g);
+          if (gtr) g.setAttribute('transform', 'translate(12,' + gtr.y + ')');
         }
         if (isQuoteText && Math.abs(delta) > 0.01) {
           const quotes = Array.from(g.querySelectorAll('text.field-text-quote'));
@@ -756,7 +797,7 @@
         }
       } else {
         delta = Math.ceil((newLen - oldLen) * f.charw + (newLen > oldLen ? 12 : 0));
-        origWForParent = oldLen * f.charw + 16;
+        origWForParent = oldLen * f.charw;
       }
 
       if (Math.abs(delta) < 0.01) continue;
@@ -840,18 +881,18 @@
 
     if (params.NAME || params.function_name) {
       const fnName = escapeXml(params.NAME || params.function_name);
-      s = s.replace(/(>function\s+)[a-zA-Z0-9_]+(<\/text>)/, '$1' + fnName + '$2');
-      if (s.includes('>doSomething</text>')) {
-        const oldLen = 11;
-        const newLen = fnName.length;
-        const delta = Math.max(0, Math.ceil((newLen - oldLen) * 10.5 + 14));
-        s = s.replace('>doSomething</text>', `>${fnName}</text>`);
-        if (delta > 0) {
-          s = s.replace(/h\s+(\d+(?:\.\d+)?)\s+a\s+4\s+4/, (m0, w) => 'h ' + (parseFloat(w) + delta) + ' a 4 4');
-          s = s.replace(/h\s+-(\d+(?:\.\d+)?)/, (m0, w) => 'h -' + (parseFloat(w) + delta));
-          s = s.replace(/viewBox="0 0 (\d+(?:\.\d+)?) (\d+(?:\.\d+)?)"/, (m0, w, h) => `viewBox="0 0 ${Math.ceil(parseFloat(w) + delta)} ${h}"`);
-          s = s.replace(/width="(\d+(?:\.\d+)?)"/, (m0, w) => `width="${Math.ceil(parseFloat(w) + delta)}"`);
-        }
+      const m = s.match(/>function\s+([a-zA-Z0-9_]+)<\/text>/);
+      const oldFn = m ? m[1] : 'loadTilemap';
+      const oldLen = oldFn.length;
+      const newLen = fnName.length;
+      const delta = Math.max(0, Math.ceil((newLen - oldLen) * 9.6));
+      s = s.replace(/>function\s+[a-zA-Z0-9_]+<\/text>/, `>function ${fnName}</text>`);
+      if (delta > 0) {
+        s = s.replace(/h\s+(\d+(?:\.\d+)?)\s+a\s+4\s+4/, (m0, w) => 'h ' + (parseFloat(w) + delta) + ' a 4 4');
+        s = s.replace(/\bH\s+(\d+(?:\.\d+)?)\s+a\s+4\s+4/, (m0, w) => 'H ' + (parseFloat(w) + delta) + ' a 4 4');
+        s = s.replace(/h\s+-(\d+(?:\.\d+)?)/, (m0, w) => 'h -' + (parseFloat(w) + delta));
+        s = s.replace(/viewBox="0 0 (\d+(?:\.\d+)?) (\d+(?:\.\d+)?)"/, (m0, w, h) => `viewBox="0 0 ${Math.ceil(parseFloat(w) + delta)} ${h}"`);
+        s = s.replace(/width="(\d+(?:\.\d+)?)"/, (m0, w) => `width="${Math.ceil(parseFloat(w) + delta)}"`);
       }
     }
 
@@ -1026,8 +1067,15 @@
     if (/^Make a Variable$/i.test(cleanFlat)) {
       return { rule: { id: 'ui_make_variable', category: 'variables' }, template: 'direct_svg', svgData: generateUiButtonSvg('Make a Variable', '#ec3b59', '#b12c43') };
     }
-    if (/^(?:then|else|else\s+if)$/i.test(cleanFlat)) {
-      return { rule: { id: 'section_label_' + cleanFlat.toLowerCase(), category: 'logic' }, template: 'direct_svg', svgData: generateSectionLabelPill(cleanFlat.toLowerCase()) };
+    if (/^else$/i.test(cleanFlat)) {
+      return { template: 'controls_else', rule: { id: 'controls_else', category: 'logic', template: 'controls_else', blockType: 'controls_else' } };
+    }
+    if (/^then$/i.test(cleanFlat)) {
+      return { template: 'controls_then', rule: { id: 'controls_then', category: 'logic', template: 'controls_then', blockType: 'controls_then' } };
+    }
+    if (/^else\s+if(?:\s+true)?$/i.test(cleanFlat)) {
+      const tmpl = /true/i.test(cleanFlat) ? 'controls_else_if_true' : 'controls_else_if';
+      return { template: tmpl, rule: { id: tmpl, category: 'logic', template: tmpl, blockType: tmpl } };
     }
     if (/^game\s+over$/i.test(cleanFlat) && (afterText ? /^\s*toggle\b/i.test(afterText) : /\[game\s+over\]\s+toggle|replace\s+the\s+\[game\s+over\]\s+toggle/i.test(stepText || ''))) {
       return { rule: { id: 'toggle_win', category: 'game' }, template: 'direct_svg', svgData: renderToggleToken('WIN') };
@@ -1375,7 +1423,7 @@
         display: inline-block !important;
         vertical-align: middle !important;
         max-width: 100% !important;
-        margin: 2px 3px !important;
+        margin: 1px 2px !important;
         line-height: 1 !important;
       }
       .aifx-rendered.aifx-inline svg {
@@ -1440,14 +1488,19 @@
       .aifx-rendered.aifx-multiline {
         display: block !important;
         max-width: 100% !important;
-        overflow-x: hidden !important;
-        overflow-y: hidden !important;
+        width: fit-content !important;
+        overflow: visible !important;
         margin: 6px 0 !important;
-        padding-bottom: 2px !important;
+        padding: 2px 8px 6px 2px !important;
         clear: both !important;
         text-align: left !important;
         line-height: normal !important;
         box-sizing: border-box !important;
+      }
+      .aifx-rendered svg,
+      .aifx-rendered.aifx-multiline svg,
+      .aifx-rendered.aifx-inline svg {
+        overflow: visible !important;
       }
       .lesson-content,
       [data-instruction] {
@@ -1557,7 +1610,8 @@
     }
     const isInsideSentence = proseLen > 2;
     const h = data.height || 44;
-    const isMultiLine = !isPlayIcon && (data.isMultiLine || h > 72 || !isInsideSentence);
+    const isInlineTokenOverride = (tokenText === '[then]' || tokenText === '[else]' || tokenText === 'then' || tokenText === 'else');
+    const isMultiLine = !isPlayIcon && !isInlineTokenOverride && (data.isMultiLine || h > 72 || !isInsideSentence);
 
     // Scope SVG pattern IDs per instance and strip redundant 315KB @font-face declarations
     const uid = ++svgInstanceCounter;
@@ -1578,25 +1632,31 @@
         svgEl.style.verticalAlign = 'middle';
         svgEl.style.setProperty('width', '1.25em', 'important');
         svgEl.style.setProperty('height', '1.25em', 'important');
-      } else if (isMultiLine) {
-        svgEl.style.display = 'block';
-        const emScale = 1 / 22;
-        const naturalEmWidth = ((data.width || 100) * emScale).toFixed(2);
-        svgEl.style.setProperty('width', `min(${naturalEmWidth}em, 100%)`, 'important');
-        svgEl.style.setProperty('max-width', '100%', 'important');
-        svgEl.style.setProperty('height', 'auto', 'important');
       } else {
-        svgEl.style.display = 'inline-block';
-        svgEl.style.verticalAlign = 'middle';
-        let emH;
-        if (h <= 36) emH = 1.45;
-        else if (h <= 52) emH = 1.85;
-        else if (h <= 72) emH = 2.35;
-        else emH = h / 24;
-        const emWidth = (((data.width || 100) / h) * emH).toFixed(2);
-        svgEl.style.setProperty('width', `min(${emWidth}em, 100%)`, 'important');
-        svgEl.style.setProperty('max-width', '100%', 'important');
-        svgEl.style.setProperty('height', 'auto', 'important');
+        const vbMatch = (svgEl.getAttribute('viewBox') || '').trim().split(/\s+/);
+        const actualSvgW = (vbMatch.length >= 3 ? parseFloat(vbMatch[2]) : null) || parseFloat(svgEl.getAttribute('width')) || data.width || 100;
+        const actualSvgH = (vbMatch.length >= 4 ? parseFloat(vbMatch[3]) : null) || parseFloat(svgEl.getAttribute('height')) || data.height || 100;
+
+        if (isMultiLine) {
+          svgEl.style.display = 'block';
+          const emScale = 1 / 22;
+          const naturalEmWidth = (actualSvgW * emScale).toFixed(2);
+          svgEl.style.setProperty('width', `${naturalEmWidth}em`, 'important');
+          svgEl.style.setProperty('max-width', '100%', 'important');
+          svgEl.style.setProperty('height', 'auto', 'important');
+        } else {
+          svgEl.style.display = 'inline-block';
+          svgEl.style.verticalAlign = 'middle';
+          let emH;
+          if (actualSvgH <= 36) emH = 1.45;
+          else if (actualSvgH <= 52) emH = 1.85;
+          else if (actualSvgH <= 72) emH = 2.35;
+          else emH = actualSvgH / 24;
+          const emWidth = ((actualSvgW / actualSvgH) * emH).toFixed(2);
+          svgEl.style.setProperty('width', `${emWidth}em`, 'important');
+          svgEl.style.setProperty('max-width', '100%', 'important');
+          svgEl.style.setProperty('height', 'auto', 'important');
+        }
       }
     }
   }
@@ -1669,6 +1729,7 @@
 
   // Scans all unrendered spans and applies cached SVGs immediately
   function applyCacheToPage() {
+    if (!isTargetBelt()) return;
     const spans = document.querySelectorAll('span.aifx-rendered:not([data-rendered="true"])');
     for (const span of spans) {
       const tokenText = span.getAttribute('data-token') || span.textContent || '';
@@ -1916,6 +1977,7 @@
   }
 
   function replaceInNode(node) {
+    if (!isTargetBelt()) return;
     if (!node || node.nodeType !== 3) return;
     if (node.parentElement && (
       node.parentElement.closest('.aifx-rendered') ||
@@ -2026,7 +2088,25 @@
     cta.insertBefore(btn, cta.firstChild);
   }
 
+  function isTargetBelt() {
+    // Strictly optimize for White Belt through Green Belt; exclude Blue Belt and beyond
+    const headingEl = document.querySelector('app-activity-title h3, .title-container h3, app-activity-title, app-activity-bar, app-makecode-top-bar, .heading-container');
+    const heading = headingEl ? headingEl.textContent.trim().toLowerCase() : '';
+    if (heading) {
+      if (heading.includes('blue belt')) return false;
+      if (/purple\s+belt|brown\s+belt|red\s+belt|black\s+belt/.test(heading)) return false;
+      if (/white\s+belt|yellow\s+belt|orange\s+belt|green\s+belt/.test(heading)) return true;
+    }
+
+    const bodyText = document.body ? document.body.innerText.slice(0, 1500).toLowerCase() : '';
+    if (bodyText.includes('blue belt')) return false;
+    if (/purple\s+belt|brown\s+belt|red\s+belt|black\s+belt/.test(bodyText)) return false;
+
+    return true;
+  }
+
   function scan() {
+    if (!isTargetBelt()) return;
     // Disconnect observer temporarily to avoid self-triggering during DOM mutations
     observer.disconnect();
     try {

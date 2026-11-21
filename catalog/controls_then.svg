@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="199" height="72" viewBox="0 0 199 72">
+  <title>controls_then.svg</title>
+  <g id="Layer_1" data-name="Layer 1">
+    <g data-aifx-type="controls_then">
+      <path d="M0 48 L0 4 C0 1.791 1.791 0 4 0 L12 0 C14 0 15 1 16 2 L20 6 C21 7 22 8 24 8 L36 8 C38 8 39 7 40 6 L44 2 C45 1 46 0 48 0 L190.375 0 C192.584 0 194.375 1.791 194.375 4 L194.375 12 L194.375 40 L194.375 44 C194.375 46.209 192.584 48 190.375 48 L64 48 C62 48 61 49 60 50 L56 54 C55 55 54 56 52 56 L40 56 C38 56 37 55 36 54 L32 50 C31 49 30 48 28 48 L20 48 Z" fill="#45aaf2" stroke="#3480b6"/>
+      <g>
+        <path d="M64 8 L127.188 8 L143.188 24 L127.188 40 L127.188 40 L64 40 L48 24 Z" fill="#3b91ce" stroke="#3480b6"/>
+        <g>
+          <text transform="matrix(1 0 0 1 68 29)" x="0" y="0" xml:space="preserve" font-family="Consolas, monospace" font-size="16" font-weight="600" fill="#ffffff"><tspan x="0" y="0">true</tspan></text>
+          <g>
+            <path d="M123.187 22.154 C123.19 22.763 122.949 23.348 122.517 23.778 L118.816 27.479 C117.914 28.373 116.461 28.373 115.559 27.479 L111.867 23.778 C111.433 23.349 111.188 22.765 111.188 22.154 C111.189 21.543 111.43 20.957 111.858 20.521 C112.132 20.294 112.538 19.851 117.192 19.851 C121.847 19.851 122.281 20.285 122.517 20.521 C122.949 20.955 123.19 21.542 123.187 22.154 Z" fill="#231f20" opacity="0.1"/>
+            <path d="M117.192 27.205 C116.838 27.202 116.499 27.06 116.248 26.809 L112.528 23.108 C112.02 22.581 112.02 21.746 112.528 21.22 C113.057 20.691 121.318 20.691 121.847 21.22 C122.355 21.746 122.355 22.581 121.847 23.108 L118.146 26.809 C117.893 27.062 117.55 27.205 117.192 27.205 Z" fill="#ffffff"/>
+          </g>
+        </g>
+      </g>
+      <g data-aifx-field="" data-aifx-opaque="1">
+        <text transform="matrix(1 0 0 1 8 29)" x="0" y="0" xml:space="preserve" font-family="Consolas, monospace" font-size="16" font-weight="600" fill="#ffffff"><tspan x="0" y="0">if</tspan></text>
+      </g>
+      <g data-aifx-field="" data-aifx-opaque="1">
+        <text transform="matrix(1 0 0 1 151.188 29)" x="0" y="0" xml:space="preserve" font-family="Consolas, monospace" font-size="16" font-weight="600" fill="#ffffff"><tspan x="0" y="0">then</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>

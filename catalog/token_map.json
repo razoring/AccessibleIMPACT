@@ -939,7 +939,7 @@
     {
       "id": "logic_if",
       "category": "logic",
-      "pattern": "^if(?:\\s+true)?(?:\\s+then)?$",
+      "pattern": "^if(?:\\s+(?!else\\b)(.+?))?(?:\\s+then)?$",
       "template": "controls_if",
       "blockType": "controls_if"
     },
@@ -956,6 +956,13 @@
       "pattern": "^else\\s+if(?:\\s+false)?(?:\\s+then)?$",
       "template": "controls_else_if",
       "blockType": "controls_else_if"
+    },
+    {
+      "id": "logic_then",
+      "category": "logic",
+      "pattern": "^then$",
+      "template": "controls_then",
+      "blockType": "controls_then"
     },
     {
       "id": "logic_else",
@@ -1083,13 +1090,23 @@
     {
       "id": "loops_for_index",
       "category": "loops",
-      "pattern": "^for\\s+(?!element\\b|each\\b)(?:index|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)(?:\\s+(?:from\\s+([\\d]+)\\s+)?to(?:\\s+([\\d]+))?)?$",
+      "pattern": "^for\\s+(?!element\\b|each\\b)(?:index|[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)(?:\\s+(?:from\\s+([\\d]+)\\s+)?to(?:\\s+([\\d]+))?)?(?:\\s+do)?$",
       "template": "pxt_controls_for",
       "blockType": "pxt_controls_for",
       "params": {
         "varName": 1,
         "from": 2,
         "to": 3
+      }
+    },
+    {
+      "id": "text_literal",
+      "category": "text",
+      "pattern": "^\"([^\"]+)\"$",
+      "template": "text",
+      "blockType": "text",
+      "params": {
+        "text": 1
       }
     },
     {
@@ -2289,6 +2306,7 @@
       "params": {}
     }
   ],
+  "then": "controls_then",
   "else": "controls_else",
   "else if": "controls_else_if",
   "else if false": "controls_else_if",

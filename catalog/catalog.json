@@ -10545,6 +10545,34 @@
       ""
     ]
   },
+  "controls_then": {
+    "type": "controls_then",
+    "file": "controls_then.svg",
+    "width": 199,
+    "height": 72,
+    "category": "Logic",
+    "isMultiLine": false,
+    "fields": [
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "if"
+      },
+      {
+        "name": "BOOL",
+        "kind": "val",
+        "text": "true"
+      },
+      {
+        "name": "",
+        "kind": "dh",
+        "text": "then"
+      }
+    ],
+    "inputs": [
+      "DO0"
+    ]
+  },
   "controls_else": {
     "type": "controls_else",
     "file": "controls_else.svg",
