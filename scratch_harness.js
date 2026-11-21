@@ -51,7 +51,7 @@ function buildGeneratedCases() {
   add('gen_var_long', 'variable reporter (long name)', g(() => generateVariableReporterBubble(LONG)), true);
   add('gen_bool_short', 'boolean reporter <isDizzy>', g(() => generateBooleanReporterBubble('isDizzy')), true);
   add('gen_bool_long', 'boolean reporter <long name>', g(() => generateBooleanReporterBubble(LONG)), true);
-  ['variables', 'logic', 'scene', 'game', 'controller', 'music', 'scroller', 'sprites', 'statusbars_property', 'statusbars_kind'].forEach((cat) => {
+  ['variables', 'logic', 'scene', 'game', 'controller', 'music', 'scroller', 'sprites', 'tileScanner', 'statusbars_property', 'statusbars_kind'].forEach((cat) => {
     add('gen_pill_' + cat, 'isolated pill [' + cat + '] short', g(() => generateIsolatedPropertyPill('value', cat)), true);
     add('gen_pill_long_' + cat, 'isolated pill [' + cat + '] long', g(() => generateIsolatedPropertyPill(LONG, cat)), true);
   });
@@ -59,8 +59,51 @@ function buildGeneratedCases() {
   add('gen_mut_plus', 'mutator (+)', g(() => generateMutatorButtonSvg('+')), true);
   add('gen_mut_minus', 'mutator (-)', g(() => generateMutatorButtonSvg('-')), true);
   add('gen_empty_bool', 'empty boolean slot', g(() => generateEmptyBooleanSlotSvg()), true);
-  add('gen_ui_btn', 'UI button Make a Function...', g(() => generateUiButtonSvg('Make a Function...')), true);
+  add('gen_ui_btn', 'UI button [Make a Function...]', () => fetchAndRenderResolvedToken(resolveTokenWithNLP('[Make a Function...]', '', ''), '[Make a Function...]'), true);
   add('gen_section', 'section label pill', g(() => generateSectionLabelPill('Variables')), true);
+
+  // Contextual color & nearby-token disambiguation cases
+  const ctxCase = (tok, ctx) => () => fetchAndRenderResolvedToken(resolveTokenWithNLP(tok, ctx), tok);
+  add('ctx_bottom_wall', 'context: [bottom] after <is sprite hitting wall> (Scene #4b6584)', ctxCase('[bottom]', {
+    sentenceText: "select the marble sprite's name and [bottom] as the direction",
+    localText: "select the marble sprite's name and [bottom] as the direction",
+    stepText: "replace <true> with an <is sprite hitting wall> block. select the marble sprite's name and [bottom] as the direction.",
+    overallText: '',
+    prevTokens: ['<is sprite hitting wall>', '<true>'],
+    nextTokens: []
+  }), true);
+  add('ctx_bottom_dialog', 'context: [bottom] near [show long text] (Game #8854d0)', ctxCase('[bottom]', {
+    sentenceText: 'click the on the [bottom] value to select a position for the dialog text box',
+    localText: 'open game and drag a [show long text] block. click the [bottom] value for the dialog text box',
+    stepText: 'drag a [show long text] block. select [bottom] for dialog.',
+    overallText: '',
+    prevTokens: ['[on start]', '[show long text]'],
+    nextTokens: []
+  }), true);
+  add('ctx_bottom_sprite_prop', 'context: [bottom] near (mySprite x) (Sprites #4b7bec)', ctxCase('[bottom]', {
+    sentenceText: 'replace (mysprite) with the (sprite) bubble, then select [bottom] from the drop down',
+    localText: 'from sprites, drag a (mysprite x) block. replace (mysprite) with (sprite), then select [bottom] from the drop down.',
+    stepText: 'from sprites, drag a (mysprite x) block. select [bottom].',
+    overallText: '',
+    prevTokens: ['(sprite)', '(mySprite)', '< 0<0 >', '(mySprite x)'],
+    nextTokens: []
+  }), true);
+  add('ctx_left_controller', 'context: [left] after <is button pressed> despite "direction" (Controller #d54322)', ctxCase('[left]', {
+    sentenceText: 'click the drop down and select [left] or [right] to match the direction the [set sprite image to] block shows',
+    localText: 'drag two <is button pressed> value blocks. click the drop down and select [left] or [right] to match the direction.',
+    stepText: 'from controller, drag <is button pressed>. select [left] or [right] depending on which way the sprite is facing.',
+    overallText: '',
+    prevTokens: ['[forever]', '[if then]', '<true>', '<is button pressed>'],
+    nextTokens: ['[right]']
+  }), true);
+  add('ctx_left_wall', 'context: [left] after <is sprite hitting wall> (Scene #4b6584)', ctxCase('[left]', {
+    sentenceText: 'select [left] for the first block and [right] for the other block',
+    localText: 'from scene, drag <is sprite hitting wall> blocks. select [left] for the first block.',
+    stepText: 'from scene, drag <is sprite hitting wall>. select [left].',
+    overallText: '',
+    prevTokens: ['(value)', '<is sprite hitting wall>'],
+    nextTokens: ['[right]']
+  }), true);
 
   const nest = (outerKey, outerParams, innerKey, innerParams) => async () => {
     const o = await fetchAndRenderResolvedToken(mkResolution(outerKey, outerParams), '');

@@ -180,7 +180,7 @@
   // Text measurement + shared dropdown arrow icon
   // ---------------------------------------------------------------------------
   let _measureCtx = null;
-  function measureTextWidth(text, px, weight) {
+  function measureTextWidth(text, px, weight, fontFamily) {
     const str = String(text === undefined || text === null ? '' : text);
     try {
       if (typeof document !== 'undefined') {
@@ -189,7 +189,7 @@
           _measureCtx = c.getContext('2d');
         }
         if (_measureCtx) {
-          _measureCtx.font = (weight || 600) + ' ' + (px || 16) + 'px Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace';
+          _measureCtx.font = (weight || 600) + ' ' + (px || 16) + 'px ' + (fontFamily || 'Consolas, Monaco, Menlo, "Ubuntu Mono", source-code-pro, monospace');
           const w = _measureCtx.measureText(str).width;
           // glyph advances are hinted at the displayed (scaled) size and render differently than canvas when scaled; leave a little headroom
           if (w > 0) return w * 1.005;
@@ -384,10 +384,12 @@
     return { svg, width: w, height: h, category: 'logic', isMultiLine: false };
   }
 
-  function generateUiButtonSvg(label, bg = '#2c5aa0', stroke = '#1c3b6e') {
-    const w = Math.max(120, Math.ceil(measureTextWidth(label, 15, 700) + 32));
-    const h = 34;
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><rect x="1" y="1" width="${w - 2}" height="${h - 2}" rx="6" ry="6" fill="${bg}" stroke="${stroke}" stroke-width="1.5"/><text x="${w / 2}" y="${h / 2}" style="font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif !important;font-size:15px !important;font-weight:700 !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">${escapeXml(label)}</text></svg>`;
+  function generateUiButtonSvg(label, bg = '#2c5aa0', stroke = '#1c3b6e', strokeWidth = 1.5, fontWeight = 700, height = 34) {
+    const fontFamily = "'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+    const w = Math.max(120, Math.ceil(measureTextWidth(label, 15, fontWeight, fontFamily) + 40));
+    const h = height;
+    const sw = strokeWidth;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><rect x="${sw / 2}" y="${sw / 2}" width="${w - sw}" height="${h - sw}" rx="6" ry="6" fill="${bg}" stroke="${stroke}" stroke-width="${sw}"/><text x="${w / 2}" y="${h / 2}" style="font-family:${fontFamily} !important;font-size:15px !important;font-weight:${fontWeight} !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">${escapeXml(label)}</text></svg>`;
     return { svg, width: w, height: h, category: 'ui', isMultiLine: false };
   }
 
@@ -417,40 +419,34 @@
     const totalWidth = 10 + textWidth + 8 + 12 + 8;
     const height = 30;
 
-    let bg = '#4b7bec'; // default sprites/scene blue
-    let stroke = '#385cb1';
-    let rx = 6;
-    let ry = 6;
-
-    if (category === 'statusbars_property' || category === 'statusbars') {
-      bg = '#312f43';
-      stroke = '#1f1e2b';
-      rx = 4;
-      ry = 4;
-    } else if (category === 'statusbars_kind') {
-      bg = '#5d4d8c';
-      stroke = '#52447c';
-      rx = 15;
-      ry = 15;
-    } else if (category === 'logic') {
-      bg = '#45aaf2';
-      stroke = '#3480b6';
-    } else if (category === 'scene') {
-      bg = '#4b6584';
-      stroke = '#384c63';
-    } else if (category === 'game') {
-      bg = '#8b449b';
-      stroke = '#6c3483';
-    } else if (category === 'controller') {
-      bg = '#d63031';
-      stroke = '#c0392b';
-    } else if (category === 'music') {
-      bg = '#e30fc0';
-      stroke = '#aa0b90';
-    } else if (category === 'scroller') {
-      bg = '#ff85a7';
-      stroke = '#bf647d';
-    }
+    // Exact category fills/strokes matching MakeCode catalog SVGs
+    const PILL_THEME = {
+      statusbars_property: ['#38364d', '#2a293a', 4],
+      statusbars: ['#38364d', '#2a293a', 4],
+      statusbars_kind: ['#5d4d8c', '#52447c', 15],
+      logic: ['#45aaf2', '#3480b6', 6],
+      scene: ['#4b6584', '#384c63', 6],
+      game: ['#8854d0', '#663f9c', 6],
+      controller: ['#d54322', '#a0321a', 6],
+      music: ['#e30fc0', '#aa0b90', 6],
+      scroller: ['#ff85a7', '#bf647d', 6],
+      tileScanner: ['#4963ab', '#374a80', 6],
+      mp: ['#207a77', '#185c59', 6],
+      multiplayer: ['#207a77', '#185c59', 6],
+      math: ['#a55eea', '#7c47b0', 6],
+      loops: ['#20bf6b', '#188f50', 6],
+      info: ['#cf6a87', '#9b5065', 6],
+      images: ['#a5b1c2', '#7c8592', 6],
+      animation: ['#03aa74', '#028057', 6],
+      browserEvents: ['#9c1355', '#750e40', 6],
+      story: ['#b36634', '#864d27', 6],
+      miniMenu: ['#36b58b', '#298868', 6],
+      functions: ['#1446a0', '#0f3578', 6],
+      console: ['#002050', '#00183c', 6],
+      sprites: ['#4b7bec', '#385cb1', 6]
+    };
+    const [bg, stroke, rx] = PILL_THEME[category] || PILL_THEME.sprites;
+    const ry = rx;
 
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${totalWidth} ${height}" width="${totalWidth}" height="${height}">
 <g>
@@ -1101,14 +1097,140 @@
   }
   loadCatalog();
 
-  function getContextCategory(cleanFlat, stepText, overallText) {
-    const step = (stepText || '').toLowerCase();
-    const overall = (overallText || '').toLowerCase();
+  function getCleanNodeText(el) {
+    if (!el) return '';
+    let out = '';
+    const walk = (n) => {
+      if (!n) return;
+      if (n.nodeType === 3) {
+        out += n.nodeValue || '';
+      } else if (n.nodeType === 1) {
+        if (n.matches && n.matches('svg, style, .aifx-raw-fallback')) return;
+        if (n.classList && n.classList.contains('aifx-rendered')) {
+          out += ' ' + (n.getAttribute('data-token') || '') + ' ';
+          return;
+        }
+        for (let c = n.firstChild; c; c = c.nextSibling) walk(c);
+      }
+    };
+    walk(el);
+    return out.replace(/\s+/g, ' ').trim();
+  }
 
-    // 1. Status Bar properties: value, max, zero
+  function extractSpanContext(span) {
+    const stepArea = (span && span.closest('app-step-information, [data-instruction], article, .lesson-content, .token-target-area')) || document.body;
+    const stepText = getCleanNodeText(stepArea).toLowerCase();
+    const overallText = (document.body ? document.body.textContent : '').toLowerCase();
+
+    const localEl = (span && span.closest('p, li')) || stepArea;
+    let beforeLocal = '';
+    let afterLocal = '';
+    let seenSpan = false;
+    const walkSplit = (n) => {
+      if (!n) return;
+      if (n === span) { seenSpan = true; return; }
+      if (n.nodeType === 3) {
+        if (seenSpan) afterLocal += n.nodeValue || '';
+        else beforeLocal += n.nodeValue || '';
+      } else if (n.nodeType === 1) {
+        if (n.matches && n.matches('svg, style, .aifx-raw-fallback')) return;
+        if (n.classList && n.classList.contains('aifx-rendered')) {
+          const tok = ' ' + (n.getAttribute('data-token') || '') + ' ';
+          if (seenSpan) afterLocal += tok;
+          else beforeLocal += tok;
+          return;
+        }
+        for (let c = n.firstChild; c; c = c.nextSibling) walkSplit(c);
+      }
+    };
+    if (localEl) walkSplit(localEl);
+
+    const beforeNorm = beforeLocal.replace(/\s+/g, ' ').trim().toLowerCase();
+    const afterNorm = afterLocal.replace(/\s+/g, ' ').trim().toLowerCase();
+    const localText = (beforeNorm + ' ' + afterNorm).trim();
+
+    const sentBefore = beforeNorm.split(/[.!?](?:\s+|$)/).pop() || '';
+    const sentAfter = afterNorm.split(/[.!?](?:\s+|$)/)[0] || '';
+    const sentenceText = (sentBefore + ' ' + sentAfter).trim();
+
+    const rawNext = (span && span.nextElementSibling && span.nextElementSibling.classList.contains('aifx-raw-fallback'))
+      ? span.nextElementSibling.nextSibling
+      : (span ? span.nextSibling : null);
+    const wrapEl = (span && !rawNext) ? span.closest('strong, em') : null;
+    const nextNode = rawNext || (wrapEl ? wrapEl.nextSibling : null);
+    const afterText = (nextNode && (nextNode.nodeValue || nextNode.textContent)) ? (nextNode.nodeValue || nextNode.textContent) : afterLocal;
+
+    const allSpans = stepArea ? Array.from(stepArea.querySelectorAll('span.aifx-rendered')) : [];
+    const idx = span ? allSpans.indexOf(span) : -1;
+    const prevTokens = idx > 0
+      ? allSpans.slice(Math.max(0, idx - 6), idx).map(s => (s.getAttribute('data-token') || '').toLowerCase().trim()).reverse()
+      : [];
+    const nextTokens = idx >= 0
+      ? allSpans.slice(idx + 1, idx + 4).map(s => (s.getAttribute('data-token') || '').toLowerCase().trim())
+      : [];
+
+    return { stepText, overallText, localText, sentenceText, beforeLocal: beforeNorm, afterLocal: afterNorm, afterText, prevTokens, nextTokens };
+  }
+
+  function normalizeCtx(stepOrCtx, overallText, afterText) {
+    if (stepOrCtx && typeof stepOrCtx === 'object') return stepOrCtx;
+    const step = (stepOrCtx || '').toLowerCase();
+    return {
+      stepText: step,
+      overallText: (overallText || '').toLowerCase(),
+      localText: step,
+      sentenceText: step,
+      afterText: afterText || '',
+      prevTokens: [],
+      nextTokens: []
+    };
+  }
+
+  // Evaluates category hint matchers in strict proximity order:
+  //   1. current sentence  2. closest neighboring tokens (nearest wins)
+  //   3. current paragraph 4. whole step  5. overall page
+  // Strong block/explicit rules run across layers 1-3 before weak fallbacks.
+  function pickCategoryFromHints(ctx, matchers, weakMatchers) {
+    const testLayer = (list, text, useTokenRe) => {
+      if (!text || !list) return null;
+      for (const m of list) {
+        const re = (useTokenRe && m.tokenRe) ? m.tokenRe : m.re;
+        if (re && re.test(text)) return m.cat;
+      }
+      return null;
+    };
+    const scanProximity = (list) => {
+      let hit = testLayer(list, ctx.sentenceText, false);
+      if (hit) return hit;
+      for (let i = 0; i < (ctx.prevTokens || []).length; i++) {
+        hit = testLayer(list, ctx.prevTokens[i], true);
+        if (hit) return hit;
+      }
+      for (let i = 0; i < (ctx.nextTokens || []).length; i++) {
+        hit = testLayer(list, ctx.nextTokens[i], true);
+        if (hit) return hit;
+      }
+      hit = testLayer(list, ctx.localText, false);
+      if (hit) return hit;
+      hit = testLayer(list, ctx.stepText, false);
+      if (hit) return hit;
+      return testLayer(list, ctx.overallText, false);
+    };
+    return scanProximity(matchers) || (weakMatchers ? scanProximity(weakMatchers) : null);
+  }
+
+  function getContextCategory(cleanFlat, stepOrCtx, overallText, trimmedOrig) {
+    const ctx = normalizeCtx(stepOrCtx, overallText, '');
+    const step = ctx.stepText;
+    const overall = ctx.overallText;
+    const isBracketed = !trimmedOrig || trimmedOrig.startsWith('[');
+
+    // 1. Status Bar properties: value, max, zero (keep parenthesized `(value)` free for loop variables unless explicitly statusbar)
     if (/^(?:value|max|zero)$/i.test(cleanFlat)) {
-      if (/status\s*bar|statusbar/i.test(step) || /status\s*bar|statusbar/i.test(overall)) return 'statusbars_property';
-      return 'statusbars_property';
+      if (isBracketed || /status\s*bar|statusbar/i.test((ctx.sentenceText || '') + ' ' + (ctx.prevTokens || []).join(' '))) {
+        return 'statusbars_property';
+      }
+      return null;
     }
 
     // 2. Status Bar kinds: Health, Hunger, Energy, Magic, Life, Heat, Cold (keep Info lowercase (life) as hudLife)
@@ -1116,21 +1238,77 @@
       return 'statusbars_kind';
     }
 
-    // 3. Dialog layouts: bottom, top, center, full screen
+    // 3. Top / bottom / center / full screen: check nearby wall/direction/sprite/scanner/dialog hints
     if (/^(?:bottom|top|center|full\s*screen)$/i.test(cleanFlat)) {
-      return 'game';
+      const isEdge = /^(?:bottom|top)$/i.test(cleanFlat);
+      const strong = [
+        { cat: 'tileScanner', re: /tile\s*scanner|scanner|\bscan\s+(?:from|in)\b/i },
+        { cat: 'statusbars', re: /position\s+.*next\s+to|status\s*bar|statusbar/i }
+      ];
+      if (isEdge) {
+        strong.push(
+          { cat: 'scene', re: /hitting\s+wall|tile\s+to|neighboring|tilemap\s+location|\bwall\b/i },
+          {
+            cat: 'sprites',
+            re: /\bmySprite\s+(?:x|y|vx|vy|top|bottom|left|right)\b|select\s+\[?(?:bottom|top|left|right)\]?\s+and\s+\[?(?:x|y)\]?/i,
+            tokenRe: /\(\s*[a-zA-Z0-9_]+\s+(?:x|y|vx|vy|ax|ay|top|bottom|left|right|width|height)\s*\)|\[\s*(?:set|change)\s+(?:sprite|[a-zA-Z0-9_]+)\s+\[?(?:x|y|vx|vy|ax|ay|top|bottom|left|right)\]?\s*\]/i
+          }
+        );
+      }
+      strong.push({ cat: 'game', re: /show\s+long\s+text|long\s+text|dialog|splash|layout|text\s+box/i });
+      const weak = isEdge ? [{ cat: 'scene', re: /\bdirection\b/i }] : null;
+      return pickCategoryFromHints(ctx, strong, weak) || 'game';
     }
 
-    // 4. Direction properties: left, right, up, down
+    // 4. Direction / button properties: left, right, up, down
     if (/^(?:left|right|up|down)$/i.test(cleanFlat)) {
-      if (/tile\s*scanner|scanner|scan/i.test(step)) return 'tileScanner';
-      if (/controller|button|press/i.test(step)) return 'controller';
-      if (/tile\s*scanner|scanner|scan/i.test(overall)) return 'tileScanner';
-      return 'scene';
+      const isLR = /^(?:left|right)$/i.test(cleanFlat);
+      const strong = [
+        { cat: 'tileScanner', re: /tile\s*scanner|scanner|\bscan\s+(?:from|in)\b/i },
+        { cat: 'mp', re: /(?:multiplayer|mp\.|player\s*[1234]).*(?:button|press)|(?:button|press).*(?:multiplayer|mp\.|player\s*[1234])/i },
+        { cat: 'controller', re: /controller|button\s+pressed|\bon\s+(?:\[?[a-z]+\]?\s+)?button\b|\bis\s+(?:\[?[a-z]+\]?\s+)?button\b|\bbutton\b|press(?:ed)?/i },
+        { cat: 'statusbars', re: /position\s+.*next\s+to|status\s*bar.*next\s+to/i },
+        { cat: 'browserEvents', re: /mouse\s+button/i },
+        { cat: 'scene', re: /hitting\s+wall|tile\s+to|neighboring|tilemap\s+location|\bwall\b/i }
+      ];
+      if (isLR) {
+        strong.push({
+          cat: 'sprites',
+          re: /\bmySprite\s+(?:x|y|vx|vy|top|bottom|left|right)\b|select\s+\[?(?:bottom|top|left|right)\]?\s+and\s+\[?(?:x|y)\]?/i,
+          tokenRe: /\(\s*[a-zA-Z0-9_]+\s+(?:x|y|vx|vy|ax|ay|top|bottom|left|right|width|height)\s*\)|\[\s*(?:set|change)\s+(?:sprite|[a-zA-Z0-9_]+)\s+\[?(?:x|y|vx|vy|ax|ay|top|bottom|left|right)\]?\s*\]/i
+        });
+      }
+      const weak = [{ cat: 'scene', re: /\bdirection\b/i }];
+      return pickCategoryFromHints(ctx, strong, weak) || 'scene';
     }
 
-    // 5. Sprite properties (short and long dropdown names, with or without parens)
-    if (/^(?:x|y|vx|vy|ax|ay|lifespan|z|scale|sx|sy|fx|fy|rotation|vx\s*\(?velocity\s*x\)?|vy\s*\(?velocity\s*y\)?|ax\s*\(?acceleration\s*x\)?|ay\s*\(?acceleration\s*y\)?|fx\s*\(?friction\s*x\)?|fy\s*\(?friction\s*y\)?|sx\s*\(?scale\s*x\)?|sy\s*\(?scale\s*y\)?|z\s*\(?depth\)?)$/i.test(cleanFlat)) {
+    // 4b. Standalone controller / multiplayer button pills: [A], [B], [menu]
+    if (isBracketed && /^(?:A|B|menu)$/i.test(cleanFlat)) {
+      const hit = pickCategoryFromHints(ctx, [
+        { cat: 'mp', re: /(?:multiplayer|mp\.|player\s*[1234]).*(?:button|press)|(?:button|press).*(?:multiplayer|mp\.|player\s*[1234])/i },
+        { cat: 'controller', re: /controller|button|press(?:ed)?/i }
+      ]);
+      if (hit) return hit;
+    }
+
+    // 4c. Bracketed [column] / [row] dropdowns (keep `(column)` / `(row)` free for loop variables)
+    if (isBracketed && /^(?:column|row)$/i.test(cleanFlat)) {
+      const hit = pickCategoryFromHints(ctx, [
+        { cat: 'tileScanner', re: /tile\s*scanner|scanner|\bscan\b/i },
+        { cat: 'scene', re: /tilemap\s+location/i }
+      ]);
+      if (hit) return hit;
+    }
+
+    // 5. Sprite / camera properties (x, y, vx, vy, etc.)
+    if (/^(?:x|y)$/i.test(cleanFlat)) {
+      const hit = pickCategoryFromHints(ctx, [
+        { cat: 'scene', re: /\bcamera\b|cameraproperty/i },
+        { cat: 'sprites', re: /sprite|mySprite|otherSprite|projectile|vx|vy/i }
+      ]);
+      return hit || 'sprites';
+    }
+    if (/^(?:vx|vy|ax|ay|lifespan|z|scale|sx|sy|fx|fy|rotation|vx\s*\(?velocity\s*x\)?|vy\s*\(?velocity\s*y\)?|ax\s*\(?acceleration\s*x\)?|ay\s*\(?acceleration\s*y\)?|fx\s*\(?friction\s*x\)?|fy\s*\(?friction\s*y\)?|sx\s*\(?scale\s*x\)?|sy\s*\(?scale\s*y\)?|z\s*\(?depth\)?)$/i.test(cleanFlat)) {
       return 'sprites';
     }
 
@@ -1144,9 +1322,13 @@
       return 'music';
     }
 
-    // 8. Standalone visual effects (confetti, spray, trail, etc.)
+    // 8. Standalone visual effects (game over vs screen vs sprite effects)
     if (/^(?:confetti|spray|trail|fountain|hearts|smiles|rings|fire|warm\s*radial|cool\s*radial|halo|ashes|disintegrate|blizzard|bubbles|star\s*field|clouds|dust)$/i.test(cleanFlat)) {
-      return /game\s*over|use\s*effect/i.test(step) ? 'game' : 'scene';
+      return pickCategoryFromHints(ctx, [
+        { cat: 'game', re: /game\s*over|use\s*effect|\bwin\b|\blose\b/i },
+        { cat: 'scene', re: /start\s+screen|end\s+screen|screen\s+.*\beffect\b/i },
+        { cat: 'sprites', re: /\bdestroy\b.*\beffect|\bstart\s+(?:[a-z\s]+\s+)?effect\b|sprite\s+effect|\b(?:mySprite|otherSprite|projectile)\b.*\beffect/i }
+      ]) || 'scene';
     }
 
     // 9. Scroller modes
@@ -1194,8 +1376,12 @@
     return true;
   }
 
-  function resolveTokenWithNLP(tokenText, stepText, overallText, afterText) {
+  function resolveTokenWithNLP(tokenText, stepOrCtx, overallText, afterText) {
     if (!tokenText) return null;
+    const ctx = normalizeCtx(stepOrCtx, overallText, afterText);
+    const stepText = ctx.stepText;
+    const overall = ctx.overallText;
+    const localAfterText = ctx.afterText || afterText || '';
     const trimmedOrig = tokenText.trim();
     let clean = trimmedOrig;
     if ((clean.startsWith('[') && clean.endsWith(']')) ||
@@ -1218,7 +1404,7 @@
       return { rule: { id: 'mutator_button', category: 'common' }, template: 'direct_svg', svgData: generateMutatorButtonSvg(mutMatch[1]) };
     }
     if (/^Make a Function(?:\.\.\.)?$/i.test(cleanFlat)) {
-      return { rule: { id: 'ui_make_function', category: 'functions' }, template: 'direct_svg', svgData: generateUiButtonSvg('Make a Function...', '#1e88e5', '#1565c0') };
+      return { rule: { id: 'ui_make_function', category: 'functions' }, template: 'direct_svg', svgData: generateUiButtonSvg('Make a Function...', '#5f6665', '#f76820', 3, 500, 44) };
     }
     if (/^Make a Variable$/i.test(cleanFlat)) {
       return { rule: { id: 'ui_make_variable', category: 'variables' }, template: 'direct_svg', svgData: generateUiButtonSvg('Make a Variable', '#ec3b59', '#b12c43') };
@@ -1267,14 +1453,14 @@
       };
     }
     // [value] / [max] / [zero] inside a Status Bar step are Status Bar property dropdowns, not variables.
-    if (trimmedOrig.startsWith('[') && /^(?:value|max|zero)$/i.test(cleanFlat) && /status\s*bar|statusbar/i.test((stepText || '') + ' ' + (overallText || ''))) {
+    if (trimmedOrig.startsWith('[') && /^(?:value|max|zero)$/i.test(cleanFlat) && /status\s*bar|statusbar/i.test((stepText || '') + ' ' + overall)) {
       return { rule: { id: 'property_statusbars_property', category: 'statusbars_property' }, template: 'isolated_pill', params: { prop: cleanFlat, pillCategory: 'statusbars_property' } };
     }
     // Overlap-event parameter bubbles are plain reporter ovals (no dropdown arrow), same as (otherSprite).
     if (trimmedOrig.startsWith('[') && /^(?:sprite|otherSprite)$/.test(cleanFlat) && /overlap/i.test(stepText || '')) {
       return { rule: { id: 'variables_get', category: 'variables' }, template: 'direct_svg', svgData: generateVariableReporterBubble(cleanFlat) };
     }
-    if (/^game\s+over$/i.test(cleanFlat) && (afterText ? /^\s*toggle\b/i.test(afterText) : /\[game\s+over\]\s+toggle|replace\s+the\s+\[game\s+over\]\s+toggle/i.test(stepText || ''))) {
+    if (/^game\s+over$/i.test(cleanFlat) && (localAfterText ? /^\s*toggle\b/i.test(localAfterText) : /\[game\s+over\]\s+toggle|replace\s+the\s+\[game\s+over\]\s+toggle/i.test(stepText || ''))) {
       return { rule: { id: 'toggle_win', category: 'game' }, template: 'direct_svg', svgData: renderToggleToken('WIN') };
     }
 
@@ -1292,13 +1478,14 @@
     // Function identifiers in instructions (e.g. [makeEnemy], [makeCoin], [createBubbles])
     const RESERVED_NON_FUNC = /^(?:true|false|yes|no|win|lose|on|off|not|and|or|null|undefined|return|break|continue|then|else|forever|repeat|pause|splash|score|life|sprite|list|item|value|index)$/i;
     // "[makeBee] function is called" -> the prose itself says it is a function
-    const funcNamedAfter = trimmedOrig.startsWith('[') && /^[a-z][a-zA-Z0-9_]+$/.test(cleanFlat) && !RESERVED_NON_FUNC.test(cleanFlat) && /^\s*function\b/i.test(afterText || '');
+    const funcNamedAfter = trimmedOrig.startsWith('[') && /^[a-z][a-zA-Z0-9_]+$/.test(cleanFlat) && !RESERVED_NON_FUNC.test(cleanFlat) && /^\s*function\b/i.test(localAfterText || '');
     // Known sprite properties ([lifespan], [x], [vx]...) are never function names even when the step mentions functions.
-    const isSpritePropName = getContextCategory(cleanFlat, stepText, overallText) === 'sprites';
+    const ctxCatPre = getContextCategory(cleanFlat, ctx, overall, trimmedOrig);
+    const isSpritePropName = ctxCatPre === 'sprites';
     if (/^(?:makeEnemy|makeCoin|createBubbles)$/i.test(cleanFlat)
       || funcNamedAfter
-      || (!isSpritePropName && trimmedOrig.startsWith('[') && !RESERVED_NON_FUNC.test(cleanFlat) && /function\s+(?:named|called)\s+/i.test(stepText || '') && /^[a-z][a-zA-Z0-9_]+$/.test(cleanFlat))) {
-      const isCall = /\bcall\b/i.test(stepText || '') || /^\s*function\s+(?:is\s+|gets\s+|will\s+be\s+)?(?:called|run|runs|executed)/i.test(afterText || '');
+      || (!isSpritePropName && trimmedOrig.startsWith('[') && !RESERVED_NON_FUNC.test(cleanFlat) && /function\s+(?:named|called)\s+/i.test(ctx.localText || stepText || '') && /^[a-z][a-zA-Z0-9_]+$/.test(cleanFlat))) {
+      const isCall = /\bcall\b/i.test(ctx.sentenceText || '') || /^\s*function\s+(?:is\s+|gets\s+|will\s+be\s+)?(?:called|run|runs|executed)/i.test(localAfterText || '');
       return {
         rule: { id: isCall ? 'function_call' : 'function_definition', category: 'functions' },
         template: isCall ? 'function_call' : 'function_definition',
@@ -1310,7 +1497,7 @@
     // Known property/direction/effect words are left to the dropdown logic below.
     if (trimmedOrig.startsWith('(') && /^[a-z][a-zA-Z0-9_]*$/.test(cleanFlat)
       && !/^(?:true|false|yes|no|win|lose|on|off|not|and|or|null|undefined|score|life|countdown|random|then|else|bpm|px|pixels|degrees|radians|seconds|secs|sec|ms|hz|optional|default)$/i.test(cleanFlat)
-      && !getContextCategory(cleanFlat, stepText, overallText)) {
+      && !ctxCatPre) {
       return {
         rule: { id: 'variables_get', category: 'variables' },
         template: 'direct_svg',
@@ -1373,18 +1560,17 @@
       return { rule: { id: 'toggle_on_off', category: 'game' }, template: 'toggleOnOff', params: {} };
     }
 
-    const ctxCategory = getContextCategory(cleanFlat, stepText, overallText);
-    if (ctxCategory) {
+    if (ctxCatPre) {
       return {
-        rule: { id: 'property_' + ctxCategory, category: ctxCategory },
+        rule: { id: 'property_' + ctxCatPre, category: ctxCatPre },
         template: 'isolated_pill',
-        params: { prop: ctxCategory === 'sprites' ? clean : cleanFlat, pillCategory: ctxCategory }
+        params: { prop: ctxCatPre === 'sprites' ? clean : cleanFlat, pillCategory: ctxCatPre }
       };
     }
 
     // Category whitelist: If the instructions do not include a category, the NLP will not choose it!
     const isTestBed = (typeof window !== 'undefined' && (window.ALL_TOKENS || document.querySelector('[data-instruction], .token-target-area')));
-    const activeCategories = isTestBed ? null : getActiveCategories(stepText, overallText);
+    const activeCategories = isTestBed ? null : getActiveCategories(stepText, overall);
 
     for (const rule of tokenRules) {
       if (activeCategories && rule.category && !activeCategories.has(rule.category)) continue;
@@ -1807,20 +1993,14 @@
       .aifx-rendered.aifx-multiline {
         display: block !important;
         max-width: 100% !important;
-        width: fit-content !important;
+        width: 100% !important;
         overflow: visible !important;
         margin: 6px 0 !important;
-        padding: 2px 8px 6px 2px !important;
+        padding: 2px 4px 6px 2px !important;
         clear: both !important;
         text-align: left !important;
         line-height: normal !important;
         box-sizing: border-box !important;
-      }
-      .aifx-rendered.aifx-multiline.aifx-wide {
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        padding: 6px 14px 14px 6px !important;
-        scrollbar-width: thin !important;
       }
       /* Linear (unhinted) glyph advances: text width scales exactly with the SVG so measured layouts never drift */
       .aifx-rendered svg text,
@@ -1919,6 +2099,24 @@
     return !!el.closest('app-step-information content, [data-instruction], article, .lesson-content, .token-target-area');
   }
 
+  function isTargetBelt() {
+    // Strictly optimize for White Belt through Green Belt; exclude Blue Belt and beyond
+    const headingEl = document.querySelector('app-activity-title h3, .title-container h3, app-activity-title, app-activity-bar, app-makecode-top-bar, .heading-container');
+    const heading = headingEl ? headingEl.textContent.trim().toLowerCase() : '';
+    if (heading) {
+      if (heading.includes('blue belt')) return false;
+      if (/purple\s+belt|brown\s+belt|red\s+belt|black\s+belt/.test(heading)) return false;
+      if (/white\s+belt|yellow\s+belt|orange\s+belt|green\s+belt/.test(heading)) return true;
+    }
+
+    const bodyText = document.body ? document.body.innerText.slice(0, 1500).toLowerCase() : '';
+    if (bodyText.includes('blue belt')) return false;
+    if (/purple\s+belt|brown\s+belt|red\s+belt|black\s+belt/.test(bodyText)) return false;
+
+    return true;
+  }
+
+
   let svgInstanceCounter = 0;
 
   function applySvg(span, data) {
@@ -1941,11 +2139,7 @@
     const isInsideSentence = proseLen > 2;
     const h = data.height || 44;
     const isInlineTokenOverride = (tokenText === '[then]' || tokenText === '[else]' || tokenText === 'then' || tokenText === 'else');
-    // Wide blocks (>440 units) must never shrink into micro-ribbons: keep a legible floor scale and scroll horizontally.
-    const vbEarly = String(data.svg).match(/viewBox="\s*[-\d.]+\s+[-\d.]+\s+([\d.]+)\s+[\d.]+/);
-    const svgWNat = vbEarly ? parseFloat(vbEarly[1]) : (data.width || 0);
-    const isWide = !isPlayIcon && !isInlineTokenOverride && svgWNat > 440;
-    const isMultiLine = !isPlayIcon && !isInlineTokenOverride && (isWide || data.isMultiLine || h > 72 || !isInsideSentence);
+    const isMultiLine = !isPlayIcon && !isInlineTokenOverride && (data.isMultiLine || h > 72 || !isInsideSentence);
 
     // Scope SVG pattern IDs per instance and strip redundant 315KB @font-face declarations
     const uid = ++svgInstanceCounter;
@@ -1955,7 +2149,7 @@
       .replace(/aifx-checkered-tile/g, `aifx-checkered-tile-${uid}`)
       .replace(/aifx-checker/g, `aifx-checker-${uid}`);
 
-    span.className = 'aifx-rendered ' + (isPlayIcon ? 'aifx-play-icon' : (isMultiLine ? 'aifx-multiline' : 'aifx-inline')) + (isWide ? ' aifx-wide' : '');
+    span.className = 'aifx-rendered ' + (isPlayIcon ? 'aifx-play-icon' : (isMultiLine ? 'aifx-multiline' : 'aifx-inline'));
     span.innerHTML = safeSvg;
     span.setAttribute('data-rendered', 'true');
 
@@ -1978,11 +2172,6 @@
           svgEl.style.setProperty('width', `${naturalEmWidth}em`, 'important');
           svgEl.style.setProperty('max-width', '100%', 'important');
           svgEl.style.setProperty('height', 'auto', 'important');
-          if (isWide) {
-            // min-width overrides max-width: block may shrink to 65% of natural size, then the wrapper scrolls.
-            svgEl.style.setProperty('min-width', `${(actualSvgW * emScale * 0.65).toFixed(2)}em`, 'important');
-            svgEl.style.setProperty('flex-shrink', '0', 'important');
-          }
         } else {
           svgEl.style.display = 'inline-block';
           svgEl.style.verticalAlign = 'middle';
@@ -2033,16 +2222,8 @@
 
   function resolveAndRenderSpan(span, tokenText) {
     if (!span || !tokenText) return;
-    const stepArea = span.closest('app-step-information, [data-instruction], article, .lesson-content') || document.body;
-    const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
-    const overallText = (document.body ? document.body.textContent : '').toLowerCase();
-    const rawNext = (span.nextElementSibling && span.nextElementSibling.classList.contains('aifx-raw-fallback'))
-      ? span.nextElementSibling.nextSibling
-      : span.nextSibling;
-    const wrapEl = !rawNext ? span.closest('strong, em') : null;
-    const nextNode = rawNext || (wrapEl ? wrapEl.nextSibling : null);
-    const afterText = (nextNode && (nextNode.nodeValue || nextNode.textContent)) ? (nextNode.nodeValue || nextNode.textContent) : '';
-    const resolution = (catalogMap && tokenRules.length > 0) ? resolveTokenWithNLP(tokenText, stepText, overallText, afterText) : null;
+    const ctx = extractSpanContext(span);
+    const resolution = (catalogMap && tokenRules.length > 0) ? resolveTokenWithNLP(tokenText, ctx) : null;
     const cacheKey = getResolutionCacheKey(tokenText, resolution);
     span.setAttribute('data-lookup-token', cacheKey);
 
@@ -2133,10 +2314,7 @@
             const liveWaiters = waiters.filter(s => s && s.isConnected && s.getAttribute('data-rendered') !== 'true');
             if (liveWaiters.length && catalogMap && tokenRules.length > 0) {
               const first = liveWaiters[0];
-              const stepArea = first.closest('app-step-information, [data-instruction], article, .lesson-content') || document.body;
-              const stepText = (stepArea ? stepArea.textContent : '').toLowerCase();
-              const overallText = (document.body ? document.body.textContent : '').toLowerCase();
-              const resolution = resolveTokenWithNLP(tokenText, stepText, overallText);
+              const resolution = resolveTokenWithNLP(tokenText, extractSpanContext(first));
               if (resolution) {
                 nlpStarted = true;
                 fetchAndRenderResolvedToken(resolution, tokenText).then(data => {
@@ -2428,22 +2606,6 @@
     cta.insertBefore(btn, cta.firstChild);
   }
 
-  function isTargetBelt() {
-    // Strictly optimize for White Belt through Green Belt; exclude Blue Belt and beyond
-    const headingEl = document.querySelector('app-activity-title h3, .title-container h3, app-activity-title, app-activity-bar, app-makecode-top-bar, .heading-container');
-    const heading = headingEl ? headingEl.textContent.trim().toLowerCase() : '';
-    if (heading) {
-      if (heading.includes('blue belt')) return false;
-      if (/purple\s+belt|brown\s+belt|red\s+belt|black\s+belt/.test(heading)) return false;
-      if (/white\s+belt|yellow\s+belt|orange\s+belt|green\s+belt/.test(heading)) return true;
-    }
-
-    const bodyText = document.body ? document.body.innerText.slice(0, 1500).toLowerCase() : '';
-    if (bodyText.includes('blue belt')) return false;
-    if (/purple\s+belt|brown\s+belt|red\s+belt|black\s+belt/.test(bodyText)) return false;
-
-    return true;
-  }
 
   function scan() {
     if (!isTargetBelt()) return;
