@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "IMPACT Block Visualizer",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Replaces verbose [block] instruction tokens with inline SVG clones of the actual MakeCode blocks.",
   "host_permissions": [
     "https://impact.codeninjas.com/*",
