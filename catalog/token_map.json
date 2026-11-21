@@ -818,7 +818,7 @@
     {
       "id": "arrays_length",
       "category": "arrays",
-      "pattern": "^length\\s+of\\s+array(?:\\s+[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?$",
+      "pattern": "^length\\s+of\\s+array(?:\\s+(?!of\\s+sprites)[\\[\\(]?([a-zA-Z0-9_]+)[\\]\\)]?)?(?:\\s+.*)?$",
       "template": "lists_length",
       "blockType": "lists_length",
       "params": {
@@ -1311,6 +1311,14 @@
       "template": "gamelifeevent",
       "blockType": "gamelifeevent"
     },
+    {
+      "id": "music_play_melody",
+      "category": "music",
+      "pattern": "^play\\s+melody(?:\\s+.*)?$",
+      "template": "music_playable_play",
+      "blockType": "music_playable_play"
+    },
+
     {
       "id": "music_play",
       "category": "music",

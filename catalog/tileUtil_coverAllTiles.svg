@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="364" height="78" viewBox="0 0 364 78">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="385" height="78" viewBox="0 0 385 78">
   <title>tileUtil_coverAllTiles.svg</title>
   <g id="Layer_1" data-name="Layer 1">
     <g data-aifx-type="tileUtil_coverAllTiles">
-      <path d="M0 4 C0 1.791 1.791 0 4 0 L12 0 C14 0 15 1 16 2 L20 6 C21 7 22 8 24 8 L36 8 C38 8 39 7 40 6 L44 2 C45 1 46 0 48 0 L355.141 0 C357.35 0 359.141 1.791 359.141 4 L359.141 12 L359.141 58 L359.141 62 L359.141 62 C359.141 64.209 357.35 66 355.141 66 L48 66 C46 66 45 67 44 68 L40 72 C39 73 38 74 36 74 L24 74 C22 74 21 73 20 72 L16 68 C15 67 14 66 12 66 L4 66 C1.791 66 0 64.209 0 62 Z" fill="#879bff" stroke="#6574bf"/>
-      <g>
+      <path d="M0 4 C0 1.791 1.791 0 4 0 L12 0 C14 0 15 1 16 2 L20 6 C21 7 22 8 24 8 L36 8 C38 8 39 7 40 6 L44 2 C45 1 46 0 48 0 L376.141 0 C378.35 0 380.141 1.791 380.141 4 L380.141 12 L380.141 58 L380.141 62 L380.141 62 C380.141 64.209 378.35 66 376.141 66 L48 66 C46 66 45 67 44 68 L40 72 C39 73 38 74 36 74 L24 74 C22 74 21 73 20 72 L16 68 C15 67 14 66 12 66 L4 66 C1.791 66 0 64.209 0 62 Z" fill="#879bff" stroke="#6574bf"/>
+      <g transform="translate(12,0)">
         <path d="M120.172 8 L146.172 8 C159.979 8 171.172 19.193 171.172 33 L171.172 33 C171.172 46.807 159.979 58 146.172 58 L146.172 58 L120.172 58 C106.365 58 95.172 46.807 95.172 33 L95.172 33 C95.172 19.193 106.365 8 120.172 8 Z" fill="#405670" stroke="#384c63"/>
         <g>
           <image width="16" height="16" transform="matrix(2 0 0 2 107.172 17)" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAVklEQVR4AdyRwQkAIAzEihN18s7SCbqKkl/+fkQhEAgIp6uqtpmZbdxwN3zF5XnggsyMFN0dLdxwN/yBCZefEIsdhp3GDXfDf3gDdhh2GjfcDf/gDQ4AAAD//xRE6jsAAAAGSURBVAMA0Hd9MQrHq6MAAAAASUVORK5CYII="/>
@@ -15,13 +15,13 @@
           <path d="M111.172 12 L155.172 12 C157.381 12 159.172 13.791 159.172 16 L159.172 50 C159.172 52.209 157.381 54 155.172 54 L111.172 54 C108.963 54 107.172 52.209 107.172 50 L107.172 16 C107.172 13.791 108.963 12 111.172 12 Z" fill="#000000" fill-opacity="0" stroke="#000000" stroke-opacity="0"/>
         </g>
       </g>
-      <g class="blocklyLabelField" transform="translate(12, 33)" data-aifx-field="" data-aifx-opaque="1">
+      </g><g class="blocklyLabelField" transform="translate(12, 33)" data-aifx-field="" data-aifx-opaque="1">
         <text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="0" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-size="16" font-weight="600" fill="#ffffff">cover all</text>
       </g>
-      <g class="blocklyLabelField" transform="translate(180, 33)" data-aifx-field="" data-aifx-opaque="1">
+      <g class="blocklyLabelField" transform="translate(192, 33)" data-aifx-field="" data-aifx-opaque="1">
         <text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="0" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-size="16" font-weight="600" fill="#ffffff">tiles with</text>
       </g>
-      <g>
+      <g transform="translate(21,0)">
         <path d="M300.141 8 L326.141 8 C339.948 8 351.141 19.193 351.141 33 L351.141 33 C351.141 46.807 339.948 58 326.141 58 L326.141 58 L300.141 58 C286.334 58 275.141 46.807 275.141 33 L275.141 33 C275.141 19.193 286.334 8 300.141 8 Z" fill="#405670" stroke="#384c63"/>
         <g>
           <image width="16" height="16" transform="matrix(2 0 0 2 287.141 17)" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAVklEQVR4AdyRwQkAIAzEihN18s7SCbqKkl/+fkQhEAgIp6uqtpmZbdxwN3zF5XnggsyMFN0dLdxwN/yBCZefEIsdhp3GDXfDf3gDdhh2GjfcDf/gDQ4AAAD//xRE6jsAAAAGSURBVAMA0Hd9MQrHq6MAAAAASUVORK5CYII="/>
@@ -32,6 +32,6 @@
           <path d="M291.141 12 L335.141 12 C337.35 12 339.141 13.791 339.141 16 L339.141 50 C339.141 52.209 337.35 54 335.141 54 L291.141 54 C288.931 54 287.141 52.209 287.141 50 L287.141 16 C287.141 13.791 288.931 12 291.141 12 Z" fill="#000000" fill-opacity="0" stroke="#000000" stroke-opacity="0"/>
         </g>
       </g>
-    </g>
+    </g></g>
   </g>
 </svg>

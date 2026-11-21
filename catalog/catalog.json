@@ -358,7 +358,7 @@
   "tileUtil_coverAllTiles": {
     "type": "tileUtil_coverAllTiles",
     "file": "tileUtil_coverAllTiles.svg",
-    "width": 364,
+    "width": 385,
     "height": 78,
     "category": "Sprites",
     "isMultiLine": true,
@@ -661,7 +661,7 @@
   "tileUtil_onMapLoaded": {
     "type": "tileUtil_onMapLoaded",
     "file": "tileUtil_onMapLoaded.svg",
-    "width": 264,
+    "width": 278,
     "height": 116,
     "category": "Sprites",
     "isMultiLine": true,
@@ -3450,7 +3450,7 @@
   "gamecountdownevent": {
     "type": "gamecountdownevent",
     "file": "gamecountdownevent.svg",
-    "width": 164,
+    "width": 180,
     "height": 108,
     "category": "Info",
     "isMultiLine": true,
@@ -4061,7 +4061,7 @@
   "pxt_controls_for_of": {
     "type": "pxt_controls_for_of",
     "file": "pxt_controls_for_of.svg",
-    "width": 342,
+    "width": 351,
     "height": 116,
     "category": "Loops",
     "isMultiLine": true,
@@ -5351,7 +5351,7 @@
   "run_image_animation": {
     "type": "run_image_animation",
     "file": "run_image_animation.svg",
-    "width": 211,
+    "width": 227,
     "height": 206,
     "category": "Animation",
     "isMultiLine": true,
@@ -5387,7 +5387,7 @@
   "run_movement_animation": {
     "type": "run_movement_animation",
     "file": "run_movement_animation.svg",
-    "width": 222,
+    "width": 231,
     "height": 188,
     "category": "Animation",
     "isMultiLine": true,

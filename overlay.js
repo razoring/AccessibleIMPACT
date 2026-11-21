@@ -45,8 +45,8 @@
     // 5. Keyboard shortcuts: (Ctrl + C), (Ctrl + V), (Ctrl + X)
     if (/^Ctrl\s*\+\s*[A-Za-z]$/i.test(inner)) return true;
 
-    // 6. Numeric coordinate ranges: (0-160), (0-120)
-    if (ch === '(' && /^\d+-\d+$/.test(inner)) return true;
+    // 6. Numeric coordinate ranges: (0-160), (0-120). `(0-0)` is the math subtraction placeholder, not a range.
+    if (ch === '(' && /^\d+-\d+$/.test(inner) && !/^0-0$/.test(inner)) return true;
 
     // 7. Prose operator explanations: "greater than (>)", "less than (<)", "equal to (=)"
     if (ch === '(' && /^(?:>|<|=|>=|<=|≥|≤|\+|-|\*)$/.test(inner)) {
@@ -71,6 +71,8 @@
       const old = el.innerHTML;
       if (!old || (!old.includes('<strong') && !old.includes('&lt;') && !old.includes('<span') && !old.includes('<'))) continue;
       const fixed = old
+        // Author typo: unclosed outer bracket before a nested pill, e.g. "[set sprite [ay (acceleration y)] block" -> close it.
+        .replace(/\[(set\s+sprite\s+)(\[[^\[\]]+\])(?![^\[\]]*\])/gi, '[$1$2]')
         .replace(/<strong[^>]*>(?:&lt;|<)<\/strong>([a-zA-Z0-9_\s%<>=≤≥]+)<strong[^>]*>(?:&gt;|>)<\/strong>/gi, (m, g1) => '&lt;' + g1.trim() + '&gt;')
         .replace(/<strong[^>]*>\(<\/strong>([a-zA-Z0-9_\s%]+)<strong[^>]*>\)<\/strong>/gi, (m, g1) => '(' + g1.trim() + ')')
         .replace(/<strong[^>]*>\[<\/strong>([a-zA-Z0-9_\s%]+)<strong[^>]*>\]<\/strong>/gi, (m, g1) => '[' + g1.trim() + ']')
@@ -225,6 +227,18 @@
     return { svg, width: totalWidth, height, category: 'variables', isMultiLine: false };
   }
 
+  // Hexagonal Boolean reporter, e.g. <isBeeDizzy>
+  function generateBooleanReporterBubble(varName) {
+    const label = (varName || '').replace(/[<>\[\]\(\)]/g, '').trim();
+    const textWidth = Math.ceil(label.length * 9.6);
+    const height = 32;
+    const half = height / 2;
+    const totalWidth = Math.max(60, textWidth + 24 + height);
+    const pts = `${half},1 ${totalWidth - half},1 ${totalWidth - 1},${half} ${totalWidth - half},${height - 1} ${half},${height - 1} 1,${half}`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${height}" width="${totalWidth}" height="${height}"><polygon points="${pts}" fill="#ec3b59" stroke="#b12c43" stroke-width="1.5"/><text x="${totalWidth / 2}" y="${height / 2}" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:16px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">${escapeXml(label)}</text></svg>`;
+    return { svg, width: totalWidth, height, category: 'variables', isMultiLine: false };
+  }
+
   function generateMutatorButtonSvg(sign) {
     const isPlus = sign === '+';
     const d = isPlus
@@ -262,7 +276,18 @@
     ) {
       text = text.slice(1, -1).trim();
     }
-    const charWidth = 9.5;
+    // Variable dropdown pills mirror the catalog `variables_get` capsule (40px pill in a 44px viewBox)
+    // so [mySprite], [text list] and [userResponseList] share one height, radius and arrow style.
+    if (category === 'variables') {
+      const tW = Math.ceil(text.length * 9.6);
+      const pw = tW + 46;
+      const vw = pw + 4;
+      const arrowX = 2 + pw - 24;
+      const vsvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${vw} 44" width="${vw}" height="44"><rect x="2" y="2" width="${pw}" height="40" rx="20" ry="20" fill="#ec3b59" stroke="#b12c43" stroke-width="1"/><text class="blocklyText" x="14" y="22" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:16px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:start !important;dominant-baseline:central !important;">${escapeXml(text)}</text><polygon points="${arrowX},19 ${arrowX + 12},19 ${arrowX + 6},26" fill="#ffffff"/></svg>`;
+      return { svg: vsvg, width: vw, height: 44, category: 'variables', isMultiLine: false };
+    }
+
+    const charWidth = 9.6;
     const textWidth = Math.max(24, text.length * charWidth);
     const totalWidth = Math.ceil(textWidth + 34); // text + arrow + padding
     const height = 30;
@@ -553,8 +578,9 @@
     };
 
     const varFields = fields.filter(f => f.kind === 'variable');
-    const v1 = want('varName') || want('var1') || want('sprite') || want('list') || want('statusbar') || want('follower');
-    const v2 = want('var2') || want('target') || want('parentSprite');
+    const bothSbSprite = !!(want('statusbar') && want('sprite'));
+    const v1 = bothSbSprite ? want('statusbar') : (want('varName') || want('var1') || want('sprite') || want('list') || want('statusbar') || want('follower'));
+    const v2 = bothSbSprite ? want('sprite') : (want('var2') || want('target') || want('parentSprite'));
     if (v1 && varFields[0]) pushEdit(varFields[0], v1);
     if (v2 && varFields[1]) pushEdit(varFields[1], v2);
 
@@ -1007,7 +1033,7 @@
 
     if (/status\s*bars?|statusbar/i.test(combined)) active.add('statusbars');
     if (/scene|tilemap|camera|background|wall|tile|location|neighboring|place|start\s+screen|screen\s+.*effect|effects?/i.test(combined)) active.add('scene');
-    if (/sprites?|projectile|overlap|destroy|velocity|position|kind|follow/i.test(combined)) active.add('sprites');
+    if (/sprites?|projectile|overlap|destroy|velocity|position|kind|follow|\bsay\b|speech/i.test(combined)) active.add('sprites');
     if (/controller|button|press|dx|dy/i.test(combined)) active.add('controller');
     if (/music|sound|melody|tune|tempo|ba\s+ding/i.test(combined)) active.add('music');
     if (/tilemap|\btile\b|\btiles\b|tile\s*util|wall/i.test(combined)) active.add('tileUtil');
@@ -1019,7 +1045,7 @@
     if (/info|score|life|countdown/i.test(combined)) active.add('info');
     if (/functions?|procedure|call\b|return\b/i.test(combined)) active.add('functions');
     if (/image|pixel|draw|flip|picture/i.test(combined)) active.add('images');
-    if (/array|list\b|element\s+of/i.test(combined)) active.add('arrays');
+    if (/array|list\b|element\s+of|\bindex\b|get\s+value\s+at/i.test(combined)) active.add('arrays');
     if (/text|string|char|join|split|length\s+of/i.test(combined)) active.add('text');
     if (/console|\blog\b/i.test(combined)) active.add('console');
 
@@ -1077,6 +1103,47 @@
       const tmpl = /true/i.test(cleanFlat) ? 'controls_else_if_true' : 'controls_else_if';
       return { template: tmpl, rule: { id: tmpl, category: 'logic', template: tmpl, blockType: tmpl } };
     }
+
+    // Exact block names must never be hijacked by nearby "Variables"/category prose.
+    if (/^on\s+countdown\s+end$/i.test(cleanFlat) && catalogMap && catalogMap.gamecountdownevent) {
+      return { rule: { id: 'gamecountdownevent', category: 'info' }, template: 'gamecountdownevent', params: {} };
+    }
+    const mLogicAngle = trimmedOrig.match(/^<\s*(and|or)\s*>$/i);
+    if (mLogicAngle) {
+      return { rule: { id: 'logic_operation', category: 'logic' }, template: 'logic_operation_' + mLogicAngle[1].toLowerCase(), params: {} };
+    }
+    // <isBeeDizzy>: custom Boolean variable/parameter reporter -> hexagonal pill
+    const mAngleId = trimmedOrig.match(/^<\s*([a-z][a-z0-9]*[A-Z][a-zA-Z0-9_]*)\s*>$/);
+    if (mAngleId) {
+      return { rule: { id: 'boolean_reporter', category: 'variables' }, template: 'direct_svg', svgData: generateBooleanReporterBubble(mAngleId[1]) };
+    }
+    // Nested reporters: ((tilemap location of (sprite)) row) and (length of array (array of sprites of kind))
+    const mNestLen = trimmedOrig.match(/^\(\s*length\s+of\s+array\s*\(\s*array\s+of\s+sprites\s+of\s+kind(?:\s+\(?\s*([A-Za-z0-9_]+)\s*\)?)?\s*\)\s*\)$/i);
+    if (mNestLen) {
+      const innerParams = (mNestLen[1] && !/^kind$/i.test(mNestLen[1])) ? { kind: mNestLen[1] } : {};
+      return {
+        rule: { id: 'nested_lists_length', category: 'arrays' },
+        template: 'nested_compose',
+        params: { outer: { template: 'lists_length', params: {} }, inner: { template: 'allOfKind', params: innerParams } }
+      };
+    }
+    const mNestLoc = trimmedOrig.match(/^\(\s*\(\s*tilemap\s+location\s+of(?:\s+\(?\s*([A-Za-z0-9_]+)\s*\)?)?\s*\)\s*(row|column)\s*\)$/i);
+    if (mNestLoc) {
+      const innerParams = (mNestLoc[1] && !/^sprite$/i.test(mNestLoc[1])) ? { varName: mNestLoc[1] } : {};
+      return {
+        rule: { id: 'nested_location_prop', category: 'scene' },
+        template: 'nested_compose',
+        params: { outer: { template: 'tiles.Location_blockCombine_get', params: { prop: mNestLoc[2].toLowerCase() } }, inner: { template: 'tiles_location_of_sprite', params: innerParams } }
+      };
+    }
+    // [value] / [max] / [zero] inside a Status Bar step are Status Bar property dropdowns, not variables.
+    if (trimmedOrig.startsWith('[') && /^(?:value|max|zero)$/i.test(cleanFlat) && /status\s*bar|statusbar/i.test((stepText || '') + ' ' + (overallText || ''))) {
+      return { rule: { id: 'property_statusbars_property', category: 'statusbars_property' }, template: 'isolated_pill', params: { prop: cleanFlat, pillCategory: 'statusbars_property' } };
+    }
+    // Overlap-event parameter bubbles are plain reporter ovals (no dropdown arrow), same as (otherSprite).
+    if (trimmedOrig.startsWith('[') && /^(?:sprite|otherSprite)$/.test(cleanFlat) && /overlap/i.test(stepText || '')) {
+      return { rule: { id: 'variables_get', category: 'variables' }, template: 'direct_svg', svgData: generateVariableReporterBubble(cleanFlat) };
+    }
     if (/^game\s+over$/i.test(cleanFlat) && (afterText ? /^\s*toggle\b/i.test(afterText) : /\[game\s+over\]\s+toggle|replace\s+the\s+\[game\s+over\]\s+toggle/i.test(stepText || ''))) {
       return { rule: { id: 'toggle_win', category: 'game' }, template: 'direct_svg', svgData: renderToggleToken('WIN') };
     }
@@ -1094,13 +1161,30 @@
 
     // Function identifiers in instructions (e.g. [makeEnemy], [makeCoin], [createBubbles])
     const RESERVED_NON_FUNC = /^(?:true|false|yes|no|win|lose|on|off|not|and|or|null|undefined|return|break|continue|then|else|forever|repeat|pause|splash|score|life|sprite|list|item|value|index)$/i;
+    // "[makeBee] function is called" -> the prose itself says it is a function
+    const funcNamedAfter = trimmedOrig.startsWith('[') && /^[a-z][a-zA-Z0-9_]+$/.test(cleanFlat) && !RESERVED_NON_FUNC.test(cleanFlat) && /^\s*function\b/i.test(afterText || '');
+    // Known sprite properties ([lifespan], [x], [vx]...) are never function names even when the step mentions functions.
+    const isSpritePropName = getContextCategory(cleanFlat, stepText, overallText) === 'sprites';
     if (/^(?:makeEnemy|makeCoin|createBubbles)$/i.test(cleanFlat)
-      || (trimmedOrig.startsWith('[') && !RESERVED_NON_FUNC.test(cleanFlat) && /function\s+(?:named|called)\s+/i.test(stepText || '') && /^[a-z][a-zA-Z0-9_]+$/.test(cleanFlat))) {
-      const isCall = /\bcall\b/i.test(stepText || '');
+      || funcNamedAfter
+      || (!isSpritePropName && trimmedOrig.startsWith('[') && !RESERVED_NON_FUNC.test(cleanFlat) && /function\s+(?:named|called)\s+/i.test(stepText || '') && /^[a-z][a-zA-Z0-9_]+$/.test(cleanFlat))) {
+      const isCall = /\bcall\b/i.test(stepText || '') || /^\s*function\s+(?:is\s+|gets\s+|will\s+be\s+)?(?:called|run|runs|executed)/i.test(afterText || '');
       return {
         rule: { id: isCall ? 'function_call' : 'function_definition', category: 'functions' },
         template: isCall ? 'function_call' : 'function_definition',
         params: { NAME: cleanFlat }
+      };
+    }
+
+    // Parenthesized lowercase identifier -> plain variable / parameter reporter oval, e.g. (name), (speed), (column), (coin).
+    // Known property/direction/effect words are left to the dropdown logic below.
+    if (trimmedOrig.startsWith('(') && /^[a-z][a-zA-Z0-9_]*$/.test(cleanFlat)
+      && !/^(?:true|false|yes|no|win|lose|on|off|not|and|or|null|undefined|score|life|countdown|random|then|else|bpm|px|pixels|degrees|radians|seconds|secs|sec|ms|hz|optional|default)$/i.test(cleanFlat)
+      && !getContextCategory(cleanFlat, stepText, overallText)) {
+      return {
+        rule: { id: 'variables_get', category: 'variables' },
+        template: 'direct_svg',
+        svgData: generateVariableReporterBubble(cleanFlat)
       };
     }
 
@@ -1236,6 +1320,10 @@
         if (params.varName && (params.varName.toLowerCase() === 'sprite' || syntaxStopwords.has(String(params.varName).toLowerCase().trim()))) {
           delete params.varName;
         }
+        // "set projectile to projectile from ..." — the word `projectile` is the literal label, not a sprite variable to inject into `from`.
+        if (params.varName && /^variables_set_projectile_/.test(String(rule.template || '')) && /^projectile$/i.test(String(params.varName).trim())) {
+          delete params.varName;
+        }
         if (params.button && /^button$/i.test(String(params.button).trim())) {
           delete params.button;
         }
@@ -1277,6 +1365,99 @@
 
   const rawSvgFileCache = new Map();
 
+  // Embeds `innerData` (a reporter SVG) into the first `variables_get` slot of `outerData` (a pill-shaped reporter).
+  // Offsets (never scales): the outer pill grows by (innerWidth - slotWidth) horizontally and, when the inner
+  // reporter is taller than the slot, vertically (outer radius follows height/2); siblings right of the slot shift by dx.
+  function composeNestedReporter(outerData, innerData) {
+    if (!outerData || !outerData.svg || !innerData || !innerData.svg || typeof DOMParser === 'undefined') return null;
+    try {
+      const parse = (s) => new DOMParser().parseFromString(s, 'image/svg+xml');
+      const od = parse(outerData.svg);
+      const idoc = parse(innerData.svg);
+      if (od.querySelector('parsererror') || idoc.querySelector('parsererror')) return null;
+      const oSvg = od.documentElement;
+      const oRoot = od.querySelector('g[data-aifx-type]') || od.querySelector('svg > g.blocklyBlock');
+      const iRoot = idoc.querySelector('g[data-aifx-type]') || idoc.querySelector('svg > g.blocklyBlock');
+      if (!oRoot || !iRoot) return null;
+
+      const tr = (el) => {
+        const m = (el.getAttribute('transform') || '').match(/translate\(\s*(-?[\d.]+)[\s,]+(-?[\d.]+)\s*\)/);
+        return m ? { x: parseFloat(m[1]), y: parseFloat(m[2]) } : null;
+      };
+      const pathOf = (g) => Array.from(g.children).find(c => c.tagName === 'path' && c.classList.contains('blocklyPath'));
+      const pill = (g) => {
+        const p = pathOf(g);
+        const m = p && (p.getAttribute('d') || '').match(/m\s*(-?[\d.]+)\s*,\s*0\s+h\s*(-?[\d.]+)/i);
+        if (!m) return null;
+        const R = Math.abs(parseFloat(m[1]));
+        return { R, w: 2 * R + Math.abs(parseFloat(m[2])), h: 2 * R };
+      };
+
+      const slot = Array.from(oRoot.children).find(c => c.tagName === 'g' && c.classList.contains('variables_get'));
+      const oPill = pill(oRoot), sPill = slot && pill(slot), iPill = pill(iRoot);
+      const slotTr = slot && tr(slot);
+      if (!slot || !oPill || !sPill || !iPill || !slotTr) return null;
+
+      const dx = iPill.w - sPill.w;
+      const pad = Math.max(0, (oPill.h - sPill.h) / 2);
+      const newH = Math.max(oPill.h, iPill.h + pad * 2);
+      const dy = (newH - oPill.h) / 2;
+      const newR = newH / 2;
+      const newW = oPill.w + dx;
+      const W = Math.max(0, newW - 2 * newR);
+
+      // Rebuild the outer pill outline at its new size
+      const oPath = pathOf(oRoot);
+      oPath.setAttribute('d', ` m ${newR},0  h ${W} a ${newR} ${newR} 0 0,1 ${newR},${newR}  v 0 a ${newR} ${newR} 0 0,1 -${newR},${newR}  V ${newH}  h -${W} a ${newR} ${newR} 0 0,1 -${newR},-${newR}  v 0 a ${newR} ${newR} 0 0,1 ${newR},-${newR} z`);
+
+      // Reflow siblings: shift right of the slot by dx, recentre vertically by dy
+      Array.from(oRoot.children).forEach(c => {
+        if (c === slot || c === oPath || c.tagName !== 'g') return;
+        if (c.classList.contains('blocklyConnectionIndicatorParent')) return;
+        const t = tr(c);
+        if (!t) return;
+        const nx = t.x >= slotTr.x + sPill.w - 1 ? t.x + dx : t.x;
+        c.setAttribute('transform', `translate(${nx},${t.y + dy})`);
+      });
+      Array.from(oRoot.querySelectorAll(':scope > path.blocklyHighlightedConnectionPath')).forEach(p => p.remove());
+
+      // Swap the slot for the inner reporter (inner block origin = pill top-left)
+      const innerClone = od.importNode(iRoot, true);
+      innerClone.querySelectorAll('path.blocklyHighlightedConnectionPath').forEach(p => p.remove());
+      innerClone.removeAttribute('data-aifx-type');
+      innerClone.setAttribute('transform', `translate(${slotTr.x},${(newH - iPill.h) / 2})`);
+      oRoot.replaceChild(innerClone, slot);
+
+      // Carry over pattern defs the inner SVG may reference
+      const iDefs = idoc.querySelector('defs');
+      if (iDefs) {
+        let oDefs = od.querySelector('defs');
+        if (!oDefs) { oDefs = od.createElementNS('http://www.w3.org/2000/svg', 'defs'); oSvg.insertBefore(oDefs, oSvg.firstChild); }
+        Array.from(iDefs.children).forEach(ch => {
+          const id = ch.getAttribute('id');
+          if (!id || !oDefs.querySelector('[id="' + id + '"]')) oDefs.appendChild(od.importNode(ch, true));
+        });
+      }
+
+      const vb = (oSvg.getAttribute('viewBox') || '').trim().split(/\s+/).map(parseFloat);
+      const vbW = (vb.length === 4 ? vb[2] : oPill.w + 4) + dx;
+      const vbH = (vb.length === 4 ? vb[3] : oPill.h + 4) + (newH - oPill.h);
+      oSvg.setAttribute('viewBox', `0 0 ${Math.ceil(vbW)} ${Math.ceil(vbH)}`);
+      oSvg.setAttribute('width', String(Math.ceil(vbW)));
+      oSvg.setAttribute('height', String(Math.ceil(vbH)));
+
+      return {
+        svg: new XMLSerializer().serializeToString(oSvg),
+        width: Math.ceil(vbW),
+        height: Math.ceil(vbH),
+        category: outerData.category,
+        isMultiLine: false
+      };
+    } catch (e) {
+      return null;
+    }
+  }
+
   function getResolutionCacheKey(tokenText, resolution) {
     if (isNlpRenderable(resolution)) {
       return `${tokenText}::${resolution.template}::${JSON.stringify(resolution.params || {})}`;
@@ -1286,6 +1467,11 @@
 
   async function fetchAndRenderResolvedToken(resolution, tokenText) {
     if (!resolution) return null;
+    if (resolution.template === 'nested_compose' && resolution.params && resolution.params.outer && resolution.params.inner) {
+      const sub = (s) => fetchAndRenderResolvedToken({ template: s.template, params: s.params || {}, rule: { category: 'common' } }, '');
+      const [outerData, innerData] = await Promise.all([sub(resolution.params.outer), sub(resolution.params.inner)]);
+      return composeNestedReporter(outerData, innerData) || outerData;
+    }
     if (resolution.template === 'direct_svg' && resolution.svgData) {
       return resolution.svgData;
     }
@@ -1497,6 +1683,12 @@
         line-height: normal !important;
         box-sizing: border-box !important;
       }
+      .aifx-rendered.aifx-multiline.aifx-wide {
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        padding: 6px 14px 14px 6px !important;
+        scrollbar-width: thin !important;
+      }
       .aifx-rendered svg,
       .aifx-rendered.aifx-multiline svg,
       .aifx-rendered.aifx-inline svg {
@@ -1611,7 +1803,11 @@
     const isInsideSentence = proseLen > 2;
     const h = data.height || 44;
     const isInlineTokenOverride = (tokenText === '[then]' || tokenText === '[else]' || tokenText === 'then' || tokenText === 'else');
-    const isMultiLine = !isPlayIcon && !isInlineTokenOverride && (data.isMultiLine || h > 72 || !isInsideSentence);
+    // Ultra-wide blocks (>520 units) must never shrink into micro-ribbons: keep a legible floor scale and scroll horizontally.
+    const vbEarly = String(data.svg).match(/viewBox="\s*[-\d.]+\s+[-\d.]+\s+([\d.]+)\s+[\d.]+/);
+    const svgWNat = vbEarly ? parseFloat(vbEarly[1]) : (data.width || 0);
+    const isWide = !isPlayIcon && !isInlineTokenOverride && svgWNat > 520;
+    const isMultiLine = !isPlayIcon && !isInlineTokenOverride && (isWide || data.isMultiLine || h > 72 || !isInsideSentence);
 
     // Scope SVG pattern IDs per instance and strip redundant 315KB @font-face declarations
     const uid = ++svgInstanceCounter;
@@ -1621,7 +1817,7 @@
       .replace(/aifx-checkered-tile/g, `aifx-checkered-tile-${uid}`)
       .replace(/aifx-checker/g, `aifx-checker-${uid}`);
 
-    span.className = 'aifx-rendered ' + (isPlayIcon ? 'aifx-play-icon' : (isMultiLine ? 'aifx-multiline' : 'aifx-inline'));
+    span.className = 'aifx-rendered ' + (isPlayIcon ? 'aifx-play-icon' : (isMultiLine ? 'aifx-multiline' : 'aifx-inline')) + (isWide ? ' aifx-wide' : '');
     span.innerHTML = safeSvg;
     span.setAttribute('data-rendered', 'true');
 
@@ -1644,6 +1840,11 @@
           svgEl.style.setProperty('width', `${naturalEmWidth}em`, 'important');
           svgEl.style.setProperty('max-width', '100%', 'important');
           svgEl.style.setProperty('height', 'auto', 'important');
+          if (isWide) {
+            // min-width overrides max-width: block may shrink to 65% of natural size, then the wrapper scrolls.
+            svgEl.style.setProperty('min-width', `${(actualSvgW * emScale * 0.65).toFixed(2)}em`, 'important');
+            svgEl.style.setProperty('flex-shrink', '0', 'important');
+          }
         } else {
           svgEl.style.display = 'inline-block';
           svgEl.style.verticalAlign = 'middle';
@@ -1684,6 +1885,7 @@
   function isNlpRenderable(resolution) {
     return !!(resolution && (
       resolution.template === 'direct_svg' ||
+      resolution.template === 'nested_compose' ||
       resolution.template === 'isolated_pill' ||
       resolution.template === 'toggleWinLose' ||
       resolution.template === 'toggleOnOff' ||
