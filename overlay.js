@@ -6,7 +6,7 @@
   'use strict';
 
   // Matches [nested [bracket]] blocks, parenthesized (nested (bubbles)), <angled> blocks (including >= and > comparisons), and ▶ play icon
-  const TOKEN_REGEX = /\[set\s+sprite\s+position\s+to\}|\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\((?:[^\(\)\r\n]|\([^\)\r\n]*\))+\)|<(?:[^<>\r\n]+?\s*(?:<=|>=|=>|=<|<|>|=|==)\s*[^<>\r\n]+?)>|<[^<>\r\n]+>|▶/g;
+  const TOKEN_REGEX = /\[set\s+sprite\s+position\s+to\}|\[(?:[^\[\]\r\n]|\[[^\]\r\n]*\])+\]|\((?:[^\(\)\r\n]|\([^\)\r\n]*\))+\)|<(?:[^<>\r\n]+?\s*(?:<=|>=|=>|=<|<|>|=|==|≤|≥|\u2264|\u2265|\([≤≥<=><=!=]==?\))\s*[^<>\r\n]+?)>|<[^<>\r\n]+>|▶/g;
   const svgCache = new Map();
   const pendingRequests = new Map(); // lookupToken -> Array<span elements>
   let scanTimer = null;
@@ -73,7 +73,7 @@
       const fixed = old
         // Author typo: unclosed outer bracket before a nested pill, e.g. "[set sprite [ay (acceleration y)] block" -> close it.
         .replace(/\[(set\s+sprite\s+)(\[[^\[\]]+\])(?![^\[\]]*\])/gi, '[$1$2]')
-        .replace(/<strong[^>]*>(?:&lt;|<)<\/strong>([a-zA-Z0-9_\s%<>=≤≥]+)<strong[^>]*>(?:&gt;|>)<\/strong>/gi, (m, g1) => '&lt;' + g1.trim() + '&gt;')
+        .replace(/<strong[^>]*>(?:&lt;|<)<\/strong>([a-zA-Z0-9_\s%<>=≤≥≠()[\].+\-/*]+)<strong[^>]*>(?:&gt;|>)<\/strong>/gi, (m, g1) => '&lt;' + g1.trim() + '&gt;')
         .replace(/<strong[^>]*>\(<\/strong>([a-zA-Z0-9_\s%]+)<strong[^>]*>\)<\/strong>/gi, (m, g1) => '(' + g1.trim() + ')')
         .replace(/<strong[^>]*>\[<\/strong>([a-zA-Z0-9_\s%]+)<strong[^>]*>\]<\/strong>/gi, (m, g1) => '[' + g1.trim() + ']')
         .replace(/\(([ \t\r\n]*<strong[^>]*>)([^<]+)\)([ \t\r\n]*<\/strong>)/gi, (m, g1, g2, g3) => g1 + '(' + g2 + ')' + g3)
@@ -576,6 +576,7 @@
 
     let opVal = want('op');
     if (opVal) {
+      opVal = String(opVal).replace(/[()]/g, '').trim();
       const opNorm = { '>=': '\u2265', '=>': '\u2265', '<=': '\u2264', '=<': '\u2264', '!=': '\u2260', '==': '=', '*': '\u00d7', 'x': '\u00d7' };
       opVal = opNorm[opVal] || opVal;
       pushEdit(fields.find(f => f.name === 'OP' || (f.kind === 'dropdown' && ['=', '+', '-', '/', '\u00d7', '*', '<', '>', '!=', '\u2260', '%', '\u2264', '\u2265'].includes(f.value))), opVal);
@@ -999,8 +1000,8 @@
       s = s.replace(/>x</g, `>${p}<`).replace(/>value</g, `>${p}<`);
     }
     if (params.op) {
-      const safeOp = escapeXml(params.op);
-      s = s.replace(/>=<\/text>/g, `>${safeOp}</text>`).replace(/>&lt;<\/text>/g, `>${safeOp}</text>`).replace(/>&gt;<\/text>/g, `>${safeOp}</text>`).replace(/>\+<\/text>/g, `>${safeOp}</text>`);
+      const safeOp = escapeXml(String(params.op).replace(/[()]/g, '').trim());
+      s = s.replace(/>=<\/text>/g, `>${safeOp}</text>`).replace(/>&lt;<\/text>/g, `>${safeOp}</text>`).replace(/>&gt;<\/text>/g, `>${safeOp}</text>`).replace(/>\+<\/text>/g, `>${safeOp}</text>`).replace(/>[≤≥]<\/text>/g, `>${safeOp}</text>`);
     }
 
     return s;
@@ -1301,13 +1302,14 @@
 
   // Boolean bubbles (<a and b>, <x = y>, <not z>) are SHORT and verb-free.
   // Instruction statements containing and/or/not must never resolve to logic blocks.
-  const LOGIC_VERB_BLACKLIST = /\b(connect|create|destroy|remove|clear|draw|drap|splash|show|play|press|move|place|follow|overlap|on\s+each|on\s+game|on\s+life|on\s+countdown|stay\s+in\s+screen|bounce|of\s+kind|tile|tilemap|camera|screen|volume|sound|melody|effect|image|animat|set\b|change\b|game\s+over|score\b|life\b|countdown)\b/i;
+  const LOGIC_VERB_BLACKLIST = /\b(connect|create|destroy|remove|clear|draw|drap|splash|show|play|press|move|place|follow|overlap|on\s+each|on\s+game|on\s+life|on\s+countdown|stay\s+in\s+screen|bounce|of\s+kind|tile|tilemap|camera|screen|volume|sound|melody|effect|image|animat|set\b|change\b|game\s+over)\b/i;
 
   function isBooleanBubble(cleanFlat) {
+    if (cleanFlat.length > 60) return false;
+    if (LOGIC_VERB_BLACKLIST.test(cleanFlat)) return false;
+    if (/(?:==|!=|<=|>=|=<|=>|≤|≥|≠|<|>|=)/.test(cleanFlat)) return true;
     const words = cleanFlat.split(/\s+/).filter(Boolean);
     if (words.length > 3) return false;                 // "a and b" = 3 words max
-    if (cleanFlat.length > 45) return false;            // statements are longer
-    if (LOGIC_VERB_BLACKLIST.test(cleanFlat)) return false;
     return true;
   }
 

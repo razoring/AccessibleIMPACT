@@ -119,6 +119,15 @@
         continue;
       }
       if (c === '(') {
+        if (bDepth === 0 && pDepth === 0) {
+          const mParenOp = inner.slice(i).match(/^\(\s*(<=|>=|==|!=|=<|=>|\u2264|\u2265|\u2260|<|>|=)\s*\)/);
+          if (mParenOp && aDepth === 0) {
+            opIdx = i;
+            opLen = mParenOp[0].length;
+            opStr = mParenOp[1];
+            break;
+          }
+        }
         pDepth++;
         continue;
       }
@@ -3666,7 +3675,7 @@
     {
       id: 'logic_compare',
       when: (outer) => outer === '<' || outer === null,
-      re: new RegExp('^' + R_OPER + '\\s*(<=|>=|==|!=|=<|=>|\\u2264|\\u2265|\\u2260|<|>|=)\\s*' + R_OPER + '$', 'i'),
+      re: new RegExp('^' + R_OPER + '\\s*(?:\\(?\\s*(<=|>=|==|!=|=<|=>|\\u2264|\\u2265|\\u2260|<|>|=)\\s*\\)?)\\s*' + R_OPER + '$', 'i'),
       build(m, children, ctx) {
         if (SLOT_OPS[m[2]] == null) return null;
         const left = valOperand(m[1], children);

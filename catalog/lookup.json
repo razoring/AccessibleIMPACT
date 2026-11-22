@@ -1030,7 +1030,7 @@
     {
       "id": "logic_compare",
       "category": "logic",
-      "pattern": "^([a-zA-Z0-9_ %.\\-]{1,20}?)\\s*(==|!=|<=|>=|=<|=>|≤|≥|≠|<|>|=)\\s*([a-zA-Z0-9_ %.\\-]{1,20}?)$",
+      "pattern": "^([a-zA-Z0-9_ %.()\\-]{1,30}?)\\s*(?:\\(?\\s*(==|!=|<=|>=|=<|=>|≤|≥|≠|<|>|=)\\s*\\)?)\\s*([a-zA-Z0-9_ %.()\\-]{1,30}?)$",
       "template": "logic_compare_lt",
       "blockType": "logic_compare",
       "params": {
