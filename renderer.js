@@ -1,5 +1,5 @@
 // renderer.js — runs in isolated world of arcade.makecode.com iframe
-// Relays render requests from background.js to in_page_renderer.js (MAIN world).
+// Relays render requests from background.js to embedder.js (MAIN world).
 
 (function () {
   'use strict';
@@ -11,7 +11,7 @@
     if (event.data.action === 'AIFX_RENDERER_READY') {
       try {
         chrome.runtime.sendMessage({ action: 'rendererReady' });
-      } catch (e) {}
+      } catch (e) { }
       return;
     }
     if (event.data.action !== 'AIFX_BLOCK_RENDERED') return;

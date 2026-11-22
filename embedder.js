@@ -1,4 +1,4 @@
-// in_page_renderer.js — runs in MAIN world of arcade.makecode.com iframe
+// embedder.js — runs in MAIN world of arcade.makecode.com iframe
 // Has direct access to window.pxt, window.pxt.blocks, window.Blockly, and Blockly workspaces.
 // Extracts and renders REAL MakeCode Blockly SVGs. No heuristic or fake fallbacks.
 
@@ -58,7 +58,7 @@
       return scratchWs;
     } catch (e) {
       console.warn('[AIFX in-page] scratch workspace injection failed; falling back to main workspace:', e);
-      try { if (scratchContainer) scratchContainer.remove(); } catch (e2) {}
+      try { if (scratchContainer) scratchContainer.remove(); } catch (e2) { }
       scratchContainer = null;
       scratchWs = null;
       scratchFailed = true;
@@ -323,7 +323,7 @@
         nb.initSvg();
         nb.render();
         return nb;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 2. Boolean literal (e.g. <true>, <false>, true, false)
@@ -336,7 +336,7 @@
         tb.initSvg();
         tb.render();
         return tb;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 3. Logic Negate: <not ...>
@@ -351,7 +351,7 @@
         nb.initSvg();
         nb.render();
         return nb;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 4. Logic Operation: <left and right> or <left or right>
@@ -372,7 +372,7 @@
         lb.initSvg();
         lb.render();
         return lb;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 5. Logic Compare: <left OP right> (e.g. <0=0>, <0>0>, <1<0>, <magicLevel >= 1>)
@@ -389,7 +389,7 @@
         cb.initSvg();
         cb.render();
         return cb;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 6. Math Arithmetic: (left OP right) (e.g. (1+1), (2-0), (1/1), (x + 10))
@@ -406,7 +406,7 @@
         mb.initSvg();
         mb.render();
         return mb;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 7. Controller: is button pressed: [is (A) button pressed], [is [B] button pressed]
@@ -429,7 +429,7 @@
         kb.initSvg();
         kb.render();
         return kb;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 8. Sprite property getter: (sprite x), (mySprite y), (sprite vx)
@@ -443,7 +443,7 @@
         gb.initSvg();
         gb.render();
         return gb;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 9. Argument reporter: (sprite), (otherSprite), (location)
@@ -455,7 +455,7 @@
         rb.initSvg();
         rb.render();
         return rb;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 9b. Bare tilemap placeholder: (tilemap), [tilemap] ONLY (never tilemap1/tilemap2 variables)
@@ -465,13 +465,13 @@
         tb.initSvg();
         tb.render();
         return tb;
-      } catch (e) {}
+      } catch (e) { }
       try {
         const tp = ws.newBlock('tileset_tile_picker');
         tp.initSvg();
         tp.render();
         return tp;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 9c. Composite array length + array of sprites of kind: (length of array (array of sprites of kind ...))
@@ -490,7 +490,7 @@
         lb.initSvg();
         lb.render();
         return lb;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 9d. Composite tilemap location of sprite: (tilemap location of (sprite))
@@ -511,7 +511,7 @@
         locB.initSvg();
         locB.render();
         return locB;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 9e. Composite location row/column: ((tilemap location of (sprite)) row|column)
@@ -532,7 +532,7 @@
         pb.initSvg();
         pb.render();
         return pb;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 9f. Composite neighboring location: (tilemap location [left|right|top|bottom] of (tilemap location of (sprite)))
@@ -553,7 +553,7 @@
         nb.initSvg();
         nb.render();
         return nb;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 9g. Array pick random: (get random value from (list)), get random value from list
@@ -575,7 +575,7 @@
         ab.initSvg();
         ab.render();
         return ab;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 10. Default: Variable getter — never create a variable with an empty name
@@ -590,7 +590,7 @@
       vb.initSvg();
       vb.render();
       return vb;
-    } catch (e) {}
+    } catch (e) { }
 
     return null;
   }
@@ -712,48 +712,8 @@
 
   // Ensure built-in extension blocks (e.g. Scroller) are defined in Blockly.Blocks
   function renderToggleToken(rawText) {
-    const isWin = /win/i.test(rawText);
-    const isLose = /lose/i.test(rawText);
-    const isOn = /on/i.test(rawText);
-    const isOff = /off/i.test(rawText);
-
-    let label = 'OFF';
-    let isRight = false;
-    let thumbFill = '#879599';
-    let thumbStroke = '#636e72';
-
-    if (isOn) {
-      label = 'ON';
-      isRight = true;
-      thumbFill = '#2ecc71';
-      thumbStroke = '#27ae60';
-    } else if (isWin) {
-      label = 'WIN';
-      isRight = true;
-      thumbFill = '#2ecc71';
-      thumbStroke = '#27ae60';
-    } else if (isLose) {
-      label = 'LOSE';
-      isRight = false;
-      thumbFill = '#e74c3c';
-      thumbStroke = '#c0392b';
-    } else {
-      label = 'OFF';
-      isRight = false;
-      thumbFill = '#879599';
-      thumbStroke = '#636e72';
-    }
-
-    const tx = isRight ? 34 : 0;
-    const textX = isRight ? 51 : 17;
-
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 32" width="108" height="32" style="display: inline-block; vertical-align: middle; width: auto !important; margin: 0 3px !important;"><path class="blocklyPath" stroke="#413663" fill="#52447c" stroke-width="1" d="m 16,0 h 76 l 16,16 l -16,16 V 32 h -76 l -16,-16 l 16,-16 z" /><g transform="translate(20, 16)"><g class="blocklyToggle ${isRight ? 'blocklyToggleOn' : 'blocklyToggleOff'}" transform="translate(${tx}, 0)"><polygon class="blocklyToggleRect" points="0,-14 -14,0 0,14 34,14 48,0 34,-14" fill="${thumbFill}" stroke="${thumbStroke}" stroke-width="1.5" /></g><text class="blocklyText blocklyToggleText" x="${textX}" y="0" fill="#ffffff" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-size="16px" font-weight="700" text-anchor="middle" dominant-baseline="central">${label}</text></g></svg>`;
-
     return {
-      svg: svg,
-      width: 108,
-      height: 32,
-      isMultiLine: false
+      svg: null
     };
   }
 
@@ -835,21 +795,8 @@
   }
 
   function renderDropdownBadge(label, color) {
-    const cleanLabel = (label || '').replace(/[\[\]\(\)]/g, '').trim();
-    const displayLabel = cleanLabel === '<' ? '&lt;' : (cleanLabel === '>' ? '&gt;' : (cleanLabel === '<=' ? '&lt;=' : (cleanLabel === '>=' ? '&gt;=' : cleanLabel)));
-    const charWidth = 9.6;
-    const textW = Math.max(cleanLabel.length * charWidth, 16);
-    const width = Math.ceil(textW + 36);
-    const height = 44;
-    const arrowX = width - 18;
-
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="display:inline-block;vertical-align:middle;width:auto !important;margin:0 3px !important;"><rect x="1" y="2" width="${width - 2}" height="${height - 4}" rx="8" ry="8" fill="${color}" stroke="rgba(0,0,0,0.2)" stroke-width="1.5"/><text x="10" y="23" fill="#ffffff" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-size="16px" font-weight="600" dominant-baseline="central">${displayLabel}</text><polygon points="${arrowX},19 ${arrowX + 8},19 ${arrowX + 4},25" fill="#ffffff"/></svg>`;
-
     return {
-      svg: svg,
-      width: width,
-      height: height,
-      isMultiLine: false
+      svg: null
     };
   }
 
@@ -933,21 +880,8 @@
   const CHECKERED_TILE_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAVklEQVR4AdyRwQkAIAzEihN18s7SCbqKkl/+fkQhEAgIp6uqtpmZbdxwN3zF5XnggsyMFN0dLdxwN/yBCZefEIsdhp3GDXfDf3gDdhh2GjfcDf/gDQ4AAAD//xRE6jsAAAAGSURBVAMA0Hd9MQrHq6MAAAAASUVORK5CYII=';
 
   function renderTilemapPlaceholder(text) {
-    const label = (text || 'tilemap').replace(/[\[\]\(\)]/g, '').trim();
-    const charWidth = 9.5;
-    const textWidth = label.length * charWidth;
-    const innerWidth = Math.ceil(textWidth + 48);
-    const totalWidth = innerWidth + 48;
-    const height = 48;
-    const imgX = Math.round(textWidth + 24);
-
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${height}" width="${totalWidth}" height="${height}"><g class="tiles_tilemap_editor blocklyBlock blocklyDraggable" data-id="tilemap_bubble"><path class="blocklyPath" stroke="#384c63" fill="#4b6584" d=" m 24,0  h ${innerWidth} a 24 24 0 0,1 24,24  v 0 a 24 24 0 0,1 -24,24  V 48  h -${innerWidth} a 24 24 0 0,1 -24,-24  v 0 a 24 24 0 0,1 24,-24 z&#10;"/><g class="blocklyLabelField" transform="translate(14,14.5)"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="fill:#ffffff !important;font-family:Consolas, Monaco, Menlo, &quot;Ubuntu Mono&quot;, source-code-pro, monospace !important;font-size:16px !important;font-weight:600 !important;text-anchor:start;dominant-baseline:central;">${label}</text></g><g class="blocklyField blocklyDropdownField pxtFieldDropdown blocklyEditableField" transform="translate(${imgX},4)"><rect rx="4" ry="4" x="0" y="0" height="40" width="36" class="blocklyFieldRect" stroke="#384c63" fill="#202b38"/><image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${CHECKERED_TILE_PNG}" height="32" width="32" x="2" y="4"/></g></g></svg>`;
-
     return {
-      svg: svg,
-      width: totalWidth,
-      height: height,
-      isMultiLine: false
+      svg: null
     };
   }
 
@@ -1029,37 +963,8 @@
   }
 
   function renderCreateSpritesOnTiles(rawText) {
-    const mKind = (rawText || '').match(/(?:kind|\()\s*([a-zA-Z0-9_]+)\)?\s*\]?$/i);
-    let kindLabel = mKind && mKind[1] && mKind[1].toLowerCase() !== 'kind' ? mKind[1].trim() : 'Player';
-    // Capitalize first letter (e.g. item -> Item)
-    kindLabel = kindLabel.charAt(0).toUpperCase() + kindLabel.slice(1);
-
-    const kindCharWidth = 9.6;
-    const kindTextW = Math.max(kindLabel.length * kindCharWidth, 24);
-    const kindPillW = Math.round(kindTextW + 46);
-
-    const xOnEach = 12;
-    const onEachW = 70;
-    const xTile = xOnEach + onEachW + 8;
-    const tileFieldW = 68;
-    const xTileCreate = xTile + tileFieldW + 10;
-    const tileCreateW = 280;
-    const xImg = xTileCreate + tileCreateW + 10;
-    const imgFieldW = 48;
-    const xAndKind = xImg + imgFieldW + 10;
-    const andKindW = 80;
-    const xKind = xAndKind + andKindW + 8;
-    const totalW = xKind + kindPillW + 14;
-    const h = 66;
-    const hStretch = totalW - 52.25;
-
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalW} ${h}" width="${totalW}" height="${h}"><g class="tileUtil_createSpritesOnTiles blocklyBlock blocklyDraggable"><path class="blocklyPath" stroke="#6574bf" fill="#879bff" d=" m 0,0  m 0,4 a 4 4 0 0,1 4,-4  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h ${hStretch} a 4 4 0 0,1 4,4  v 8  V 54  V 54 a 4 4 0 0,1 -4,4  h -${hStretch}  c -2,0  -3,1  -4,2  l -4,4  c -1,1  -2,2  -4,2  h -12  c -2,0  -3,-1  -4,-2  l -4,-4  c -1,-1  -2,-2  -4,-2  h -8 a 4 4 0 0,1 -4,-4 z"/><g class="blocklyLabelField" transform="translate(${xOnEach},19.5)"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="fill:#ffffff !important;font-family:Consolas, Monaco, Menlo, monospace !important;font-size:16px !important;font-weight:600 !important;">on each</text></g><g class="tileset_tile_picker" transform="translate(${xTile}, 5)"><path stroke="#5867af" fill="#4d5c9e" d=" m 24,0  h 20 a 24 24 0 0,1 24,24  v 0 a 24 24 0 0,1 -24,24  V 48  h -20 a 24 24 0 0,1 -24,-24  v 0 a 24 24 0 0,1 24,-24 z"/><rect rx="4" ry="4" x="12" y="4" height="40" width="44" stroke="transparent" fill="transparent"/><image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${CHECKERED_TILE_PNG}" height="32" width="32" x="14" y="8"/><image height="12px" width="12px" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaGVpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLWFycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuNDEsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTDAuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNzFDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMCwxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNzlhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYzAuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMzdBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=" transform="translate(48,18)"/></g><g class="blocklyLabelField" transform="translate(${xTileCreate},19.5)"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="fill:#ffffff !important;font-family:Consolas, Monaco, Menlo, monospace !important;font-size:16px !important;font-weight:600 !important;">tile create sprite with image</text></g><g class="screen_image_picker" transform="translate(${xImg}, 5)"><path stroke="#5867af" fill="#6c7dc9" d=" m 24,0  h 0 a 24 24 0 0,1 24,24  v 0 a 24 24 0 0,1 -24,24  V 48  h 0 a 24 24 0 0,1 -24,-24  v 0 a 24 24 0 0,1 24,-24 z"/><rect rx="4" ry="4" x="8" y="8" height="32" width="32" stroke="#999999" stroke-width="1.5" fill="#dedede"/></g><g class="blocklyLabelField" transform="translate(${xAndKind},19.5)"><text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="9.5" style="fill:#ffffff !important;font-family:Consolas, Monaco, Menlo, monospace !important;font-size:16px !important;font-weight:600 !important;">and kind</text></g><g class="spritekind" transform="translate(${xKind}, 7)"><path stroke="#2451b2" fill="#2e64d8" d=" m 22,0  h ${kindPillW - 44} a 22 22 0 0,1 22,22  v 0 a 22 22 0 0,1 -22,22  V 44  h -${kindPillW - 44} a 22 22 0 0,1 -22,-22  v 0 a 22 22 0 0,1 22,-22 z"/><text x="14" y="22" fill="#ffffff" font-family="Consolas, Monaco, Menlo, monospace" font-size="16px" font-weight="600" dominant-baseline="central">${kindLabel}</text><image height="12px" width="12px" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaGVpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLWFycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuNDEsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTDAuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNzFDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMCwxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNzlhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYzAuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMzdBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=" transform="translate(${kindPillW - 20},16)"/></g></g></svg>`;
-
     return {
-      svg: svg,
-      width: totalW,
-      height: h,
-      isMultiLine: false
+      svg: null
     };
   }
 
@@ -1410,7 +1315,7 @@
             if (f0) f0.setValue('');
             s0.initSvg();
             s0.render();
-            try { in0.connection.connect(s0.outputConnection); } catch (e) {}
+            try { in0.connection.connect(s0.outputConnection); } catch (e) { }
           }
           const in1 = b.getInput('ADD1');
           if (in1 && in1.connection && !in1.connection.targetConnection) {
@@ -1420,7 +1325,7 @@
             if (f1) f1.setValue('');
             s1.initSvg();
             s1.render();
-            try { in1.connection.connect(s1.outputConnection); } catch (e) {}
+            try { in1.connection.connect(s1.outputConnection); } catch (e) { }
           }
         }
       },
@@ -1441,7 +1346,7 @@
             if (f) f.setValue('');
             s.initSvg();
             s.render();
-            try { inMsg.connection.connect(s.outputConnection); } catch (e) {}
+            try { inMsg.connection.connect(s.outputConnection); } catch (e) { }
           }
         }
       },
@@ -1460,7 +1365,7 @@
             if (f) f.setValue('');
             s.initSvg();
             s.render();
-            try { inMsg.connection.connect(s.outputConnection); } catch (e) {}
+            try { inMsg.connection.connect(s.outputConnection); } catch (e) { }
           }
         }
       },
@@ -1584,7 +1489,7 @@
               vb.initSvg();
               vb.render();
               inSprite.connection.connect(vb.outputConnection);
-            } catch (e) {}
+            } catch (e) { }
           }
           const inVal = b.getInput('value');
           if (inVal && inVal.connection && !inVal.connection.targetConnection) {
@@ -1595,7 +1500,7 @@
               nb.initSvg();
               nb.render();
               inVal.connection.connect(nb.outputConnection);
-            } catch (e) {}
+            } catch (e) { }
           }
         }
       },
@@ -1605,7 +1510,8 @@
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+kind\s+to\s*\]?$/i, type: 'spritesetkind', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+stay\s+in\s+screen\s*\]?$/i, type: 'spritesetsetstayinscreen', conf: 1.0 },
     { match: /^\[?\s*set\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+bounce\s+on\s+wall\s*\]?$/i, type: 'spritesetsetbounceonwall', conf: 1.0 },
-    { match: /^\[?\s*set\s+(?:sprite|[\(\[]?([a-zA-Z0-9_]+)[\]\)]?\s+)?(auto\s+destroy|invisible|ghost)(?:\s+[\(\[]?(ON|OFF)[\)\]]?)?\s*\]?$/i, type: 'spritesetsetflag', mutator: (b, ws, raw) => {
+    {
+      match: /^\[?\s*set\s+(?:sprite|[\(\[]?([a-zA-Z0-9_]+)[\]\)]?\s+)?(auto\s+destroy|invisible|ghost)(?:\s+[\(\[]?(ON|OFF)[\)\]]?)?\s*\]?$/i, type: 'spritesetsetflag', mutator: (b, ws, raw) => {
         const f = b.getField('flag');
         if (f) {
           if (/invisible/i.test(raw)) f.setValue('SpriteFlag.Invisible');
@@ -1624,7 +1530,7 @@
               vb.initSvg();
               vb.render();
               inSprite.connection.connect(vb.outputConnection);
-            } catch (e) {}
+            } catch (e) { }
           }
           const inVal = b.getInput('on') || b.getInput('BOOL') || b.getInput('val');
           if (inVal && inVal.connection && !inVal.connection.targetConnection) {
@@ -1637,10 +1543,11 @@
               tb.initSvg();
               tb.render();
               inVal.connection.connect(tb.outputConnection);
-            } catch (e) {}
+            } catch (e) { }
           }
         }
-      }, conf: 1.0 },
+      }, conf: 1.0
+    },
     { match: /^\[?\s*move\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s+with\s+buttons\s*\]?$/i, type: 'game_control_sprite', conf: 1.0 },
     { match: /^\[?\s*destroy\s+(?:sprite|\(?[a-zA-Z0-9_]+\)?)\s*\]?$/i, type: 'spritedestroy2', conf: 1.0 },
     {
@@ -1658,7 +1565,7 @@
             kb.initSvg();
             kb.render();
             inKind.connection.connect(kb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -1678,7 +1585,7 @@
             vb.initSvg();
             vb.render();
             inSprite.connection.connect(vb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -1705,7 +1612,7 @@
           v1.getField('VAR').setValue(ensureVar(s1));
           v1.initSvg();
           v1.render();
-          try { inSprite.connection.connect(v1.outputConnection); } catch (e) {}
+          try { inSprite.connection.connect(v1.outputConnection); } catch (e) { }
         }
 
         const inTarget = b.getInput('target');
@@ -1714,7 +1621,7 @@
           v2.getField('VAR').setValue(ensureVar(s2));
           v2.initSvg();
           v2.render();
-          try { inTarget.connection.connect(v2.outputConnection); } catch (e) {}
+          try { inTarget.connection.connect(v2.outputConnection); } catch (e) { }
         }
       },
       conf: 1.0
@@ -1742,7 +1649,7 @@
           if (f) f.setValue('sprite');
           rep.initSvg();
           rep.render();
-          try { inSprite.connection.connect(rep.outputConnection); } catch (e) {}
+          try { inSprite.connection.connect(rep.outputConnection); } catch (e) { }
         }
 
         const inKind = b.getInput('kind');
@@ -1752,7 +1659,7 @@
           if (f) f.setValue(k1);
           kb.initSvg();
           kb.render();
-          try { inKind.connection.connect(kb.outputConnection); } catch (e) {}
+          try { inKind.connection.connect(kb.outputConnection); } catch (e) { }
         }
 
         const inOther = b.getInput('HANDLER_DRAG_PARAM_otherSprite');
@@ -1762,7 +1669,7 @@
           if (f) f.setValue('otherSprite');
           rep.initSvg();
           rep.render();
-          try { inOther.connection.connect(rep.outputConnection); } catch (e) {}
+          try { inOther.connection.connect(rep.outputConnection); } catch (e) { }
         }
 
         const inOtherKind = b.getInput('otherKind');
@@ -1772,7 +1679,7 @@
           if (f) f.setValue(k2);
           kb.initSvg();
           kb.render();
-          try { inOtherKind.connection.connect(kb.outputConnection); } catch (e) {}
+          try { inOtherKind.connection.connect(kb.outputConnection); } catch (e) { }
         }
       },
       conf: 1.0
@@ -1794,7 +1701,7 @@
           if (f) f.setValue('sprite');
           rep.initSvg();
           rep.render();
-          try { spriteParamInput.connection.connect(rep.outputConnection); } catch (e) {}
+          try { spriteParamInput.connection.connect(rep.outputConnection); } catch (e) { }
         }
         const kindInput = b.getInput('kind');
         if (kindInput && ws) {
@@ -1803,7 +1710,7 @@
           if (kf) kf.setValue(kind);
           kindBlock.initSvg();
           kindBlock.render();
-          try { kindInput.connection.connect(kindBlock.outputConnection); } catch (e) {}
+          try { kindInput.connection.connect(kindBlock.outputConnection); } catch (e) { }
         }
       },
       conf: 1.0
@@ -1819,7 +1726,7 @@
           if (f) f.setValue('sprite');
           rep.initSvg();
           rep.render();
-          try { spriteParamInput.connection.connect(rep.outputConnection); } catch (e) {}
+          try { spriteParamInput.connection.connect(rep.outputConnection); } catch (e) { }
         }
         const kindInput = b.getInput('kind');
         if (kindInput && ws) {
@@ -1828,7 +1735,7 @@
           if (kf) kf.setValue('Player');
           kindBlock.initSvg();
           kindBlock.render();
-          try { kindInput.connection.connect(kindBlock.outputConnection); } catch (e) {}
+          try { kindInput.connection.connect(kindBlock.outputConnection); } catch (e) { }
         }
       },
       conf: 1.0
@@ -1888,11 +1795,12 @@
             tb.render();
             inp.connection.connect(tb.outputConnection);
           }
-        } catch (e) {}
+        } catch (e) { }
       },
       conf: 1.0
     },
-    { match: /^\[?\s*else\s*if\s*\]?$/i,
+    {
+      match: /^\[?\s*else\s*if\s*\]?$/i,
       type: 'controls_if',
       mutator: (b, ws) => {
         b.elseifCount_ = 1;
@@ -1908,11 +1816,13 @@
             tb.render();
             const inp = b.getInput(inputName);
             if (inp && inp.connection && tb.outputConnection) inp.connection.connect(tb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
-      conf: 1.0 },
-    { match: /^\[?\s*else\s*\]?$/i,
+      conf: 1.0
+    },
+    {
+      match: /^\[?\s*else\s*\]?$/i,
       type: 'controls_if',
       mutator: (b, ws) => {
         b.elseCount_ = 1;
@@ -1925,9 +1835,10 @@
           tb.render();
           const inp = b.getInput('IF0');
           if (inp && inp.connection && tb.outputConnection) inp.connection.connect(tb.outputConnection);
-        } catch (e) {}
+        } catch (e) { }
       },
-      conf: 1.0 },
+      conf: 1.0
+    },
     { match: /^\[?\s*(?:repeat\s+)?while(?:\s+loop)?\s*\]?$/i, type: 'device_while', conf: 1.0 },
     { match: /^\[?\s*repeat(?:\s+times|\s+loop)?\s*\]?$/i, type: 'controls_repeat_ext', conf: 1.0 },
     {
@@ -1949,7 +1860,7 @@
             reporter.initSvg();
             reporter.render();
             inVar.connection.connect(reporter.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
 
         const inTo = b.getInput('TO') || (b.inputList && b.inputList.find(i => (i.name || '').toLowerCase() === 'to'));
@@ -1962,7 +1873,7 @@
             nb.initSvg();
             nb.render();
             inTo.connection.connect(nb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -1986,7 +1897,7 @@
             reporter.initSvg();
             reporter.render();
             inVar.connection.connect(reporter.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
 
         const inList = b.getInput('LIST') || (b.inputList && b.inputList.find(i => (i.name || '').toLowerCase().includes('list')));
@@ -1999,7 +1910,7 @@
             vb.initSvg();
             vb.render();
             inList.connection.connect(vb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2024,7 +1935,7 @@
             nb0.initSvg();
             nb0.render();
             inMin.connection.connect(nb0.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
 
         const inMax = b.getInput('max') || (b.inputList && b.inputList[1]);
@@ -2037,7 +1948,7 @@
             nb1.initSvg();
             nb1.render();
             inMax.connection.connect(nb1.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2065,7 +1976,7 @@
             vb.render();
             inp.connection.connect(vb.outputConnection);
           }
-        } catch (e) {}
+        } catch (e) { }
       },
       conf: 1.0
     },
@@ -2158,10 +2069,7 @@
     {
       match: /^\[?\s*\(?\s*Make\s+a\s+Function(?:\.{2,3})?\s*\)?\s*\]?$/i,
       custom: () => ({
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 44" width="156" height="44"><style>.fn-btn-bg { fill: #5f6665; stroke: #f76820; stroke-width: 2.5; rx: 4px; ry: 4px; } .fn-btn-txt { fill: #ffffff !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important; font-size: 14px !important; font-weight: 700 !important; letter-spacing: 0.2px; }</style><rect x="2" y="2" width="152" height="40" class="fn-btn-bg"/><text x="78" y="22" class="fn-btn-txt" text-anchor="middle" dominant-baseline="central">Make a Function...</text></svg>`,
-        width: 156,
-        height: 44,
-        isMultiLine: false
+        svg: null
       }),
       conf: 1.0
     },
@@ -2170,10 +2078,7 @@
     {
       match: /^\[?\s*▶\s*\]?$/i,
       custom: () => ({
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 96" width="100" height="96"><rect x="3" y="1" width="96" height="94" rx="10" fill="#077b8a"/><path d="M 13 95 L 89 95 A 10 10 0 0 0 99 85 L 99 90 A 6 6 0 0 1 93 95 L 13 95 Z" fill="#0b6e7b"/><path d="M 3 85 A 10 10 0 0 0 13 95 L 9 95 A 6 6 0 0 1 3 89 Z" fill="#0b6e7b"/><rect x="3" y="1" width="92" height="84" rx="9" fill="#028b9b" stroke="#077b8a" stroke-width="1"/><line x1="12" y1="2" x2="84" y2="2" stroke="#048392" stroke-width="1"/><line x1="4" y1="12" x2="4" y2="76" stroke="#048392" stroke-width="1"/><path d="M 37 30 C 35.5 29 33.5 30 33.5 32 L 33.5 60 C 33.5 62 35.5 63 37 62 L 63 47.5 C 64.5 46.5 64.5 44.5 63 43.5 Z" fill="#e6f4f5"/></svg>`,
-        width: 100,
-        height: 96,
-        isMultiLine: false
+        svg: null
       }),
       conf: 1.0
     },
@@ -2283,7 +2188,7 @@
             nb.initSvg();
             nb.render();
             inVal.connection.connect(nb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2305,7 +2210,7 @@
             nb.initSvg();
             nb.render();
             inVal.connection.connect(nb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2329,7 +2234,7 @@
             nb.initSvg();
             nb.render();
             inDuration.connection.connect(nb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2356,7 +2261,7 @@
             tb.initSvg();
             tb.render();
             inWin.connection.connect(tb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2376,7 +2281,7 @@
             tb.initSvg();
             tb.render();
             inTitle.connection.connect(tb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2406,7 +2311,7 @@
             vb.initSvg();
             vb.render();
             inThis.connection.connect(vb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
 
         // Only wire 'from' and 'to' if explicitly provided with non-empty values
@@ -2416,7 +2321,7 @@
             try {
               const sub = createSubBlock(fromVal, ws, { B: blockly(), ws });
               if (sub && sub.outputConnection) inFrom.connection.connect(sub.outputConnection);
-            } catch (e) {}
+            } catch (e) { }
           }
         } else {
           const inFrom = b.getInput('from');
@@ -2429,7 +2334,7 @@
                 cb.render();
                 inFrom.connection.connect(cb.outputConnection);
               }
-            } catch (e) {}
+            } catch (e) { }
           }
         }
         if (toVal) {
@@ -2438,7 +2343,7 @@
             try {
               const sub = createSubBlock(toVal, ws, { B: blockly(), ws });
               if (sub && sub.outputConnection) inTo.connection.connect(sub.outputConnection);
-            } catch (e) {}
+            } catch (e) { }
           }
         } else {
           const inTo = b.getInput('to');
@@ -2451,7 +2356,7 @@
                 cb.render();
                 inTo.connection.connect(cb.outputConnection);
               }
-            } catch (e) {}
+            } catch (e) { }
           }
         }
       },
@@ -2473,7 +2378,7 @@
           if (f) f.setValue('ba ding');
           soundBlock.initSvg();
           soundBlock.render();
-          try { toPlay.connection.connect(soundBlock.outputConnection); } catch (e) {}
+          try { toPlay.connection.connect(soundBlock.outputConnection); } catch (e) { }
         }
       },
       conf: 1.0
@@ -2503,7 +2408,7 @@
             vb.initSvg();
             vb.render();
             inSprite.connection.connect(vb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2525,7 +2430,7 @@
             vb.initSvg();
             vb.render();
             inSprite.connection.connect(vb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
         const inLoc = b.getInput('loc');
         if (inLoc && inLoc.connection && !inLoc.connection.targetConnection) {
@@ -2536,7 +2441,7 @@
             locB.initSvg();
             locB.render();
             inLoc.connection.connect(locB.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2556,7 +2461,7 @@
             bTile.initSvg();
             bTile.render();
             inTile.connection.connect(bTile.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
         const inLoc = b.getInput('loc');
         if (inLoc && inLoc.connection && !inLoc.connection.targetConnection) {
@@ -2583,7 +2488,7 @@
             bGet.initSvg();
             bGet.render();
             inLoc.connection.connect(bGet.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2603,7 +2508,7 @@
           ab.render();
           const inp = b.inputList && b.inputList.find(i => i.connection && i.type === 1);
           if (inp && inp.connection) inp.connection.connect(ab.outputConnection);
-        } catch (e) {}
+        } catch (e) { }
       },
       conf: 1.0
     },
@@ -2664,7 +2569,7 @@
             vb.initSvg();
             vb.render();
             inThis.connection.connect(vb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2705,7 +2610,7 @@
                 inp.connection.connect(sub.outputConnection);
               }
             }
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2748,7 +2653,7 @@
               tb.initSvg();
               tb.render();
               inWin.connection.connect(tb.outputConnection);
-            } catch (e) {}
+            } catch (e) { }
           }
         }
       },
@@ -2773,7 +2678,7 @@
             tb.initSvg();
             tb.render();
             inWin.connection.connect(tb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2797,7 +2702,7 @@
             tb.initSvg();
             tb.render();
             inWin.connection.connect(tb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2820,7 +2725,7 @@
             vb.initSvg();
             vb.render();
             inSprite.connection.connect(vb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2841,7 +2746,7 @@
             vb.initSvg();
             vb.render();
             inSprite.connection.connect(vb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2868,7 +2773,7 @@
             listBlock.initSvg();
             listBlock.render();
             listInput.connection.connect(listBlock.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       },
       conf: 1.0
@@ -2902,7 +2807,7 @@
       });
       clone.querySelectorAll('.sr-only, span').forEach(el => el.remove());
       clone.querySelectorAll('.blocklyDisabled').forEach(el => el.classList.remove('blocklyDisabled'));
-    } catch (e) {}
+    } catch (e) { }
 
     const INPROPS = [
       'fill', 'fill-opacity', 'opacity', 'stroke', 'stroke-width',
@@ -3337,7 +3242,7 @@
 
     // Exception for boolean logic blocks: keep open hexagonal sockets
     if (b.type === 'logic_operation' || b.type === 'logic_compare' || b.type === 'logic_negate' ||
-        b.type === 'tileScanner_and' || b.type === 'tileScanner_or' || b.type === 'tileScanner_not') {
+      b.type === 'tileScanner_and' || b.type === 'tileScanner_or' || b.type === 'tileScanner_not') {
       return;
     }
 
@@ -3485,7 +3390,7 @@
             sb.initSvg();
             sb.render();
             input.connection.connect(sb.outputConnection);
-          } catch (e) {}
+          } catch (e) { }
         }
       }
     }
@@ -3639,12 +3544,12 @@
 
   // Socket names used to connect resolved slot values into their parent block.
   const SLOT_SPEC = {
-    'variables_set':    { varField: 'VAR',   value: 'VALUE' },
-    'variables_change': { varField: 'VAR',   value: 'VALUE' },
-    'logic_compare':    { opField: 'OP',     sides: ['A', 'B'] },
-    'logic_operation':  { opField: 'OP',     sides: ['A', 'B'] },
-    'logic_negate':     { value: 'BOOL' },
-    'controls_if':      { cond: 'IF0' }
+    'variables_set': { varField: 'VAR', value: 'VALUE' },
+    'variables_change': { varField: 'VAR', value: 'VALUE' },
+    'logic_compare': { opField: 'OP', sides: ['A', 'B'] },
+    'logic_operation': { opField: 'OP', sides: ['A', 'B'] },
+    'logic_negate': { value: 'BOOL' },
+    'controls_if': { cond: 'IF0' }
   };
 
   const SLOT_OPS = {
@@ -3659,11 +3564,11 @@
   // Frozen-placeholder / operand / value regex fragments.
   // PH_RE never captures (avoids group-number shifting when composed);
   // R_PH_CAP captures the placeholder index when matched standalone.
-  const PH_RE    = '\\u0001\\d+\\u0001';
+  const PH_RE = '\\u0001\\d+\\u0001';
   const R_PH_CAP = '^\\u0001(\\d+)\\u0001$';
   const LIT_OPER = 'true|false|[-+]?\\d+(?:\\.\\d+)?|[A-Za-z_]\\w{0,18}';
-  const R_OPER      = '(' + PH_RE + '|' + LIT_OPER + ')';                 // operand side  (1 capture)
-  const R_PH_GROUP  = '(' + PH_RE + ')';                                  // frozen child  (1 capture)
+  const R_OPER = '(' + PH_RE + '|' + LIT_OPER + ')';                 // operand side  (1 capture)
+  const R_PH_GROUP = '(' + PH_RE + ')';                                  // frozen child  (1 capture)
   const R_VAL_GROUP = '(' + PH_RE + '|' + LIT_OPER + ')';                 // value side    (1 capture)
 
   // Mirror of the bubble-path prose/identifier gate.
@@ -4111,7 +4016,7 @@
                 vb.initSvg();
                 vb.render();
                 inSprite.connection.connect(vb.outputConnection);
-              } catch (e) {}
+              } catch (e) { }
             }
             const inVal = b.getInput('value');
             if (inVal && inVal.connection && !inVal.connection.targetConnection) {
@@ -4122,7 +4027,7 @@
                 nb.initSvg();
                 nb.render();
                 inVal.connection.connect(nb.outputConnection);
-              } catch (e) {}
+              } catch (e) { }
             }
           }
         },

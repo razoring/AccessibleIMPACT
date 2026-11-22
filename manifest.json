@@ -36,7 +36,7 @@
       ],
       "all_frames": true,
       "js": [
-        "in_page_renderer.js"
+        "embedder.js"
       ],
       "run_at": "document_idle",
       "world": "MAIN"
@@ -57,7 +57,7 @@
       "resources": [
         "catalog/*",
         "catalog/catalog.json",
-        "catalog/token_map.json"
+        "catalog/lookup.json"
       ],
       "matches": [
         "https://impact.codeninjas.com/*",

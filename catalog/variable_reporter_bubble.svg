@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84 32" width="84" height="32">
+  <rect class="bubble-rect" x="0.5" y="0.5" width="83" height="31" rx="15.5" ry="15.5" fill="#ec3b59" stroke="#b12c43" stroke-width="1.5"/>
+  <text class="bubble-text" x="42" y="16" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:16px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">sprite</text>
+</svg>

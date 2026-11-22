@@ -10721,5 +10721,109 @@
     "inputs": [
       ""
     ]
+  },
+  "mutator_plus": {
+    "type": "mutator_plus",
+    "file": "mutator_plus.svg",
+    "width": 28,
+    "height": 28,
+    "category": "common",
+    "isMultiLine": false
+  },
+  "mutator_minus": {
+    "type": "mutator_minus",
+    "file": "mutator_minus.svg",
+    "width": 28,
+    "height": 28,
+    "category": "common",
+    "isMultiLine": false
+  },
+  "make_a_function": {
+    "type": "make_a_function",
+    "file": "make_a_function.svg",
+    "width": 156,
+    "height": 44,
+    "category": "functions",
+    "isMultiLine": false
+  },
+  "make_a_variable": {
+    "type": "make_a_variable",
+    "file": "make_a_variable.svg",
+    "width": 156,
+    "height": 34,
+    "category": "variables",
+    "isMultiLine": false
+  },
+  "empty_boolean_slot": {
+    "type": "empty_boolean_slot",
+    "file": "empty_boolean_slot.svg",
+    "width": 52,
+    "height": 30,
+    "category": "logic",
+    "isMultiLine": false
+  },
+  "toggle_on": {
+    "type": "toggle_on",
+    "file": "toggle_on.svg",
+    "width": 108,
+    "height": 32,
+    "category": "game",
+    "isMultiLine": false
+  },
+  "toggle_off": {
+    "type": "toggle_off",
+    "file": "toggle_off.svg",
+    "width": 108,
+    "height": 32,
+    "category": "game",
+    "isMultiLine": false
+  },
+  "dropdown_arrow": {
+    "type": "dropdown_arrow",
+    "file": "dropdown_arrow.svg",
+    "width": 13,
+    "height": 9,
+    "category": "common",
+    "isMultiLine": false
+  },
+  "code_icon": {
+    "type": "code_icon",
+    "file": "code_icon.svg",
+    "width": 24,
+    "height": 24,
+    "category": "ui",
+    "isMultiLine": false
+  },
+  "variable_reporter_bubble": {
+    "type": "variable_reporter_bubble",
+    "file": "variable_reporter_bubble.svg",
+    "width": 84,
+    "height": 32,
+    "category": "variables",
+    "isMultiLine": false
+  },
+  "boolean_reporter_bubble": {
+    "type": "boolean_reporter_bubble",
+    "file": "boolean_reporter_bubble.svg",
+    "width": 84,
+    "height": 32,
+    "category": "variables",
+    "isMultiLine": false
+  },
+  "property_pill": {
+    "type": "property_pill",
+    "file": "property_pill.svg",
+    "width": 84,
+    "height": 30,
+    "category": "common",
+    "isMultiLine": false
+  },
+  "section_label_pill": {
+    "type": "section_label_pill",
+    "file": "section_label_pill.svg",
+    "width": 64,
+    "height": 30,
+    "category": "logic",
+    "isMultiLine": false
   }
 }

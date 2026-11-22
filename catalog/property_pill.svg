@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 84 30" width="84" height="30">
+  <rect class="pill-rect" x="1" y="1" width="82" height="28" rx="6" ry="6" fill="#4b7bec" stroke="#385cb1" stroke-width="1.5"/>
+  <text class="pill-text" x="10" y="15" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:15px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:start !important;dominant-baseline:central !important;">prop</text>
+  <image class="pill-arrow" width="12" height="12" x="62" y="9" xlink:href="dropdown_arrow.svg" href="dropdown_arrow.svg"/>
+</svg>

@@ -17,7 +17,7 @@
     if (saved !== null) {
       isAifxEnabled = (saved === 'true');
     }
-  } catch (e) {}
+  } catch (e) { }
 
   function shouldSkipToken(fullText, start, end) {
     const raw = fullText.slice(start, end);
@@ -205,9 +205,11 @@
   })();
 
   // The same dropdown-arrow image MakeCode uses inside every field (so pills match real blocks)
-  const DROPDOWN_ARROW_URI = 'data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaGVpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLWFycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuNDEsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTDAuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNzFDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMCwxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNzlhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYzAuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMzdBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
+  const DROPDOWN_ARROW_URL = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL)
+    ? chrome.runtime.getURL('catalog/dropdown_arrow.svg')
+    : './catalog/dropdown_arrow.svg';
   function dropdownArrowImage(x, y) {
-    return '<image width="12" height="12" x="' + x + '" y="' + y + '" xlink:href="' + DROPDOWN_ARROW_URI + '" href="' + DROPDOWN_ARROW_URI + '"/>';
+    return '<image width="12" height="12" x="' + x + '" y="' + y + '" xlink:href="' + DROPDOWN_ARROW_URL + '" href="' + DROPDOWN_ARROW_URL + '"/>';
   }
 
   // ---------------------------------------------------------------------------
@@ -300,170 +302,32 @@
     }).join(' ');
   }
 
-  function renderToggleToken(rawText) {
-    const isWin = /win/i.test(rawText);
-    const isLose = /lose/i.test(rawText);
-    const isOn = /on/i.test(rawText);
-
-    let label = 'OFF';
-    let isRight = false;
-    let thumbFill = '#879599';
-    let thumbStroke = '#636e72';
-
-    if (isOn) {
-      label = 'ON';
-      isRight = true;
-      thumbFill = '#2ecc71';
-      thumbStroke = '#27ae60';
-    } else if (isWin) {
-      label = 'WIN';
-      isRight = true;
-      thumbFill = '#2ecc71';
-      thumbStroke = '#27ae60';
-    } else if (isLose) {
-      label = 'LOSE';
-      isRight = false;
-      thumbFill = '#e74c3c';
-      thumbStroke = '#c0392b';
-    }
-
-    const tx = isRight ? 34 : 0;
-    const textX = isRight ? 51 : 17;
-
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 32" width="108" height="32"><path class="blocklyPath" stroke="#413663" fill="#52447c" stroke-width="1" d="m 16,0 h 76 l 16,16 l -16,16 V 32 h -76 l -16,-16 l 16,-16 z" /><g transform="translate(20, 16)"><g class="blocklyToggle ${isRight ? 'blocklyToggleOn' : 'blocklyToggleOff'}" transform="translate(${tx}, 0)"><polygon class="blocklyToggleRect" points="0,-14 -14,0 0,14 34,14 48,0 34,-14" fill="${thumbFill}" stroke="${thumbStroke}" stroke-width="1.5" /></g><text class="blocklyText blocklyToggleText" x="${textX}" y="0" fill="#ffffff" font-family="Consolas, Monaco, Menlo, 'Ubuntu Mono', monospace" font-size="16px" font-weight="700" text-anchor="middle" dominant-baseline="central">${label}</text></g></svg>`;
-
-    return {
-      svg: svg,
-      width: 108,
-      height: 32,
-      category: 'game',
-      isMultiLine: false
-    };
-  }
-
-  function generateVariableReporterBubble(varName, bg = '#ec3b59', stroke = '#b12c43') {
-    const label = (varName || '').replace(/[\[\]\(\)]/g, '').trim();
-    const textWidth = Math.ceil(measureTextWidth(label, 16, 600));
-    const totalWidth = Math.max(48, textWidth + 24);
-    const height = 32;
-    const r = (height - 1) / 2;
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${height}" width="${totalWidth}" height="${height}"><rect x="0.5" y="0.5" width="${totalWidth - 1}" height="${height - 1}" rx="${r}" ry="${r}" fill="${bg}" stroke="${stroke}" stroke-width="1.5"/><text x="${totalWidth / 2}" y="${height / 2}" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:16px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">${escapeXml(label)}</text></svg>`;
-    return { svg, width: totalWidth, height, category: 'variables', isMultiLine: false };
-  }
-
-  // Hexagonal Boolean reporter, e.g. <isBeeDizzy>
-  function generateBooleanReporterBubble(varName) {
-    const label = (varName || '').replace(/[<>\[\]\(\)]/g, '').trim();
-    const textWidth = Math.ceil(measureTextWidth(label, 16, 600));
-    const height = 32;
-    const half = height / 2;
-    const totalWidth = Math.max(60, textWidth + 24 + height);
-    const pts = `${half},1 ${totalWidth - half},1 ${totalWidth - 1},${half} ${totalWidth - half},${height - 1} ${half},${height - 1} 1,${half}`;
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${height}" width="${totalWidth}" height="${height}"><polygon points="${pts}" fill="#ec3b59" stroke="#b12c43" stroke-width="1.5"/><text x="${totalWidth / 2}" y="${height / 2}" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:16px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">${escapeXml(label)}</text></svg>`;
-    return { svg, width: totalWidth, height, category: 'variables', isMultiLine: false };
-  }
-
-  function generateMutatorButtonSvg(sign) {
-    const isPlus = sign === '+';
-    const d = isPlus
-      ? '<rect x="12" y="7" width="4" height="14" rx="1" fill="#ffffff"/><rect x="7" y="12" width="14" height="4" rx="1" fill="#ffffff"/>'
-      : '<rect x="7" y="12" width="14" height="4" rx="1" fill="#ffffff"/>';
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="28" height="28"><circle cx="14" cy="14" r="11" fill="#3455db" stroke="#ffffff" stroke-width="2"/>${d}</svg>`;
-    return { svg, width: 28, height: 28, category: 'common', isMultiLine: false };
-  }
-
-  function generateEmptyBooleanSlotSvg() {
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 30" width="52" height="30"><polygon points="2,15 15,2 37,2 50,15 37,28 15,28" fill="#3480b6" stroke="#296691" stroke-width="1.5"/></svg>`;
-    return { svg, width: 52, height: 30, category: 'logic', isMultiLine: false };
-  }
-
-  function generateSectionLabelPill(label) {
-    const w = Math.max(54, Math.ceil(measureTextWidth(label, 15, 700) + 22));
-    const h = 30;
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><rect x="1" y="1" width="${w - 2}" height="${h - 2}" rx="6" ry="6" fill="#45aaf2" stroke="#3480b6" stroke-width="1.5"/><text x="${w / 2}" y="${h / 2}" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:15px !important;font-weight:700 !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">${escapeXml(label)}</text></svg>`;
-    return { svg, width: w, height: h, category: 'logic', isMultiLine: false };
-  }
-
-  function generateUiButtonSvg(label, bg = '#2c5aa0', stroke = '#1c3b6e', strokeWidth = 1.5, fontWeight = 700, height = 34) {
-    const fontFamily = "'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
-    const w = Math.max(120, Math.ceil(measureTextWidth(label, 15, fontWeight, fontFamily) + 40));
-    const h = height;
-    const sw = strokeWidth;
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><rect x="${sw / 2}" y="${sw / 2}" width="${w - sw}" height="${h - sw}" rx="6" ry="6" fill="${bg}" stroke="${stroke}" stroke-width="${sw}"/><text x="${w / 2}" y="${h / 2}" style="font-family:${fontFamily} !important;font-size:15px !important;font-weight:${fontWeight} !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">${escapeXml(label)}</text></svg>`;
-    return { svg, width: w, height: h, category: 'ui', isMultiLine: false };
-  }
-
-  function generateIsolatedPropertyPill(propText, category) {
-    let text = (propText || '').trim();
-    while (
-      (text.startsWith('[') && text.endsWith(']')) ||
-      (text.startsWith('(') && text.endsWith(')')) ||
-      (text.startsWith('<') && text.endsWith('>'))
-    ) {
-      text = text.slice(1, -1).trim();
-    }
-
-    // Variable dropdown pills mirror the catalog `variables_get` capsule (40px pill in a 44px viewBox)
-    // so [mySprite], [text list] and [userResponseList] share one height, radius and arrow icon.
-    // Layout (offsets only): 12 pad | text | 8 gap | 12 arrow | 12 pad
-    if (category === 'variables') {
-      const tW = Math.ceil(measureTextWidth(text, 16, 600));
-      const pw = tW + 44;
-      const vw = pw + 4;
-      const vsvg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${vw} 44" width="${vw}" height="44"><rect x="2" y="2" width="${pw}" height="40" rx="20" ry="20" fill="#ec3b59" stroke="#b12c43" stroke-width="1"/><text class="blocklyText" x="14" y="22" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:16px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:start !important;dominant-baseline:central !important;">${escapeXml(text)}</text>${dropdownArrowImage(14 + tW + 8, 16)}</svg>`;
-      return { svg: vsvg, width: vw, height: 44, category: 'variables', isMultiLine: false };
-    }
-
-    // Layout (offsets only): 10 pad | text | 8 gap | 12 arrow | 8 pad
-    const textWidth = Math.ceil(measureTextWidth(text, 15, 600));
-    const totalWidth = 10 + textWidth + 8 + 12 + 8;
-    const height = 30;
-
-    // Exact category fills/strokes matching MakeCode catalog SVGs
-    const PILL_THEME = {
-      statusbars_property: ['#38364d', '#2a293a', 4],
-      statusbars: ['#38364d', '#2a293a', 4],
-      statusbars_kind: ['#5d4d8c', '#52447c', 15],
-      logic: ['#45aaf2', '#3480b6', 6],
-      scene: ['#4b6584', '#384c63', 6],
-      game: ['#8854d0', '#663f9c', 6],
-      controller: ['#d54322', '#a0321a', 6],
-      music: ['#e30fc0', '#aa0b90', 6],
-      scroller: ['#ff85a7', '#bf647d', 6],
-      tileScanner: ['#4963ab', '#374a80', 6],
-      mp: ['#207a77', '#185c59', 6],
-      multiplayer: ['#207a77', '#185c59', 6],
-      math: ['#a55eea', '#7c47b0', 6],
-      loops: ['#20bf6b', '#188f50', 6],
-      info: ['#cf6a87', '#9b5065', 6],
-      images: ['#a5b1c2', '#7c8592', 6],
-      animation: ['#03aa74', '#028057', 6],
-      browserEvents: ['#9c1355', '#750e40', 6],
-      story: ['#b36634', '#864d27', 6],
-      miniMenu: ['#36b58b', '#298868', 6],
-      functions: ['#1446a0', '#0f3578', 6],
-      console: ['#002050', '#00183c', 6],
-      sprites: ['#4b7bec', '#385cb1', 6]
-    };
-    const [bg, stroke, rx] = PILL_THEME[category] || PILL_THEME.sprites;
-    const ry = rx;
-
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${totalWidth} ${height}" width="${totalWidth}" height="${height}">
-<g>
-  <rect x="1" y="1" width="${totalWidth - 2}" height="${height - 2}" rx="${rx}" ry="${ry}" fill="${bg}" stroke="${stroke}" stroke-width="1.5" />
-  <text class="blocklyText" x="10" y="${height / 2}" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:15px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:start !important;dominant-baseline:central !important;">${escapeXml(text)}</text>
-  ${dropdownArrowImage(10 + textWidth + 8, height / 2 - 6)}
-</g>
-</svg>`;
-
-    return {
-      svg,
-      width: totalWidth,
-      height: height,
-      category: category || 'property',
-      isMultiLine: false
-    };
-  }
+  // Exact category fills/strokes matching MakeCode catalog SVGs
+  const PILL_THEME = {
+    statusbars_property: ['#38364d', '#2a293a', 4],
+    statusbars: ['#38364d', '#2a293a', 4],
+    statusbars_kind: ['#5d4d8c', '#52447c', 15],
+    logic: ['#45aaf2', '#3480b6', 6],
+    scene: ['#4b6584', '#384c63', 6],
+    game: ['#8854d0', '#663f9c', 6],
+    controller: ['#d54322', '#a0321a', 6],
+    music: ['#e30fc0', '#aa0b90', 6],
+    scroller: ['#ff85a7', '#bf647d', 6],
+    tileScanner: ['#4963ab', '#374a80', 6],
+    mp: ['#207a77', '#185c59', 6],
+    multiplayer: ['#207a77', '#185c59', 6],
+    math: ['#a55eea', '#7c47b0', 6],
+    loops: ['#20bf6b', '#188f50', 6],
+    info: ['#cf6a87', '#9b5065', 6],
+    images: ['#a5b1c2', '#7c8592', 6],
+    animation: ['#03aa74', '#028057', 6],
+    browserEvents: ['#9c1355', '#750e40', 6],
+    story: ['#b36634', '#864d27', 6],
+    miniMenu: ['#36b58b', '#298868', 6],
+    functions: ['#1446a0', '#0f3578', 6],
+    console: ['#002050', '#00183c', 6],
+    sprites: ['#4b7bec', '#385cb1', 6]
+  };
 
   // ---------------------------------------------------------------------------
   // Annotation-driven field mutation (WYSIWYG auto-resize).
@@ -1005,6 +869,77 @@
     }
     if (!params) return s;
 
+    // 0a. Property pill template mutation
+    if (s.includes('class="pill-rect"')) {
+      let text = (params.prop !== undefined ? params.prop : (params.varName || '')).trim();
+      while (
+        (text.startsWith('[') && text.endsWith(']')) ||
+        (text.startsWith('(') && text.endsWith(')')) ||
+        (text.startsWith('<') && text.endsWith('>'))
+      ) {
+        text = text.slice(1, -1).trim();
+      }
+      const cat = params.pillCategory || 'sprites';
+      const [bg, stroke, rx] = PILL_THEME[cat] || PILL_THEME.sprites;
+      const textWidth = Math.ceil(measureTextWidth(text, 15, 600));
+      const totalWidth = 10 + textWidth + 8 + 12 + 8;
+      const height = 30;
+      const arrowX = 10 + textWidth + 8;
+      s = s.replace(/viewBox="0 0 \d+(?:\.\d+)? \d+(?:\.\d+)?"/, `viewBox="0 0 ${totalWidth} ${height}"`);
+      s = s.replace(/width="\d+(?:\.\d+)?"/, `width="${totalWidth}"`);
+      s = s.replace(/height="\d+(?:\.\d+)?"/, `height="${height}"`);
+      s = s.replace(/class="pill-rect"[^>]*\/>/, `class="pill-rect" x="1" y="1" width="${totalWidth - 2}" height="${height - 2}" rx="${rx}" ry="${rx}" fill="${bg}" stroke="${stroke}" stroke-width="1.5"/>`);
+      s = s.replace(/<text class="pill-text"[^>]*>[^<]*<\/text>/, `<text class="pill-text" x="10" y="${height / 2}" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:15px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:start !important;dominant-baseline:central !important;">${escapeXml(text)}</text>`);
+      s = s.replace(/class="pill-arrow"[^>]*\/>/, `class="pill-arrow" width="12" height="12" x="${arrowX}" y="9" xlink:href="${DROPDOWN_ARROW_URL}" href="${DROPDOWN_ARROW_URL}"/>`);
+      return s;
+    }
+
+    // 0b. Variable reporter bubble template mutation
+    if (s.includes('class="bubble-rect"')) {
+      const label = (params.varName || '').replace(/[\[\]\(\)]/g, '').trim();
+      const textWidth = Math.ceil(measureTextWidth(label, 16, 600));
+      const totalWidth = Math.max(48, textWidth + 24);
+      const height = 32;
+      const r = (height - 1) / 2;
+      const bg = params.bg || '#ec3b59';
+      const stroke = params.stroke || '#b12c43';
+      s = s.replace(/viewBox="0 0 \d+(?:\.\d+)? \d+(?:\.\d+)?"/, `viewBox="0 0 ${totalWidth} ${height}"`);
+      s = s.replace(/width="\d+(?:\.\d+)?"/, `width="${totalWidth}"`);
+      s = s.replace(/height="\d+(?:\.\d+)?"/, `height="${height}"`);
+      s = s.replace(/class="bubble-rect"[^>]*\/>/, `class="bubble-rect" x="0.5" y="0.5" width="${totalWidth - 1}" height="${height - 1}" rx="${r}" ry="${r}" fill="${bg}" stroke="${stroke}" stroke-width="1.5"/>`);
+      s = s.replace(/<text class="bubble-text"[^>]*>[^<]*<\/text>/, `<text class="bubble-text" x="${totalWidth / 2}" y="${height / 2}" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:16px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">${escapeXml(label)}</text>`);
+      return s;
+    }
+
+    // 0c. Boolean reporter bubble template mutation
+    if (s.includes('class="bubble-poly"')) {
+      const label = (params.varName || '').replace(/[<>\[\]\(\)]/g, '').trim();
+      const textWidth = Math.ceil(measureTextWidth(label, 16, 600));
+      const height = 32;
+      const half = height / 2;
+      const totalWidth = Math.max(60, textWidth + 24 + height);
+      const pts = `${half},1 ${totalWidth - half},1 ${totalWidth - 1},${half} ${totalWidth - half},${height - 1} ${half},${height - 1} 1,${half}`;
+      s = s.replace(/viewBox="0 0 \d+(?:\.\d+)? \d+(?:\.\d+)?"/, `viewBox="0 0 ${totalWidth} ${height}"`);
+      s = s.replace(/width="\d+(?:\.\d+)?"/, `width="${totalWidth}"`);
+      s = s.replace(/height="\d+(?:\.\d+)?"/, `height="${height}"`);
+      s = s.replace(/class="bubble-poly"[^>]*\/>/, `class="bubble-poly" points="${pts}" fill="#ec3b59" stroke="#b12c43" stroke-width="1.5"/>`);
+      s = s.replace(/<text class="bubble-text"[^>]*>[^<]*<\/text>/, `<text class="bubble-text" x="${totalWidth / 2}" y="${height / 2}" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:16px !important;font-weight:600 !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">${escapeXml(label)}</text>`);
+      return s;
+    }
+
+    // 0d. Section label pill template mutation
+    if (s.includes('class="section-rect"')) {
+      const label = (params.label || params.prop || 'else').trim();
+      const w = Math.max(54, Math.ceil(measureTextWidth(label, 15, 700) + 22));
+      const h = 30;
+      s = s.replace(/viewBox="0 0 \d+(?:\.\d+)? \d+(?:\.\d+)?"/, `viewBox="0 0 ${w} ${h}"`);
+      s = s.replace(/width="\d+(?:\.\d+)?"/, `width="${w}"`);
+      s = s.replace(/height="\d+(?:\.\d+)?"/, `height="${h}"`);
+      s = s.replace(/class="section-rect"[^>]*\/>/, `class="section-rect" x="1" y="1" width="${w - 2}" height="${h - 2}" rx="6" ry="6" fill="#45aaf2" stroke="#3480b6" stroke-width="1.5"/>`);
+      s = s.replace(/<text class="section-text"[^>]*>[^<]*<\/text>/, `<text class="section-text" x="${w / 2}" y="${h / 2}" style="font-family:Consolas,Monaco,Menlo,monospace !important;font-size:15px !important;font-weight:700 !important;fill:#ffffff !important;stroke:none !important;text-anchor:middle !important;dominant-baseline:central !important;">${escapeXml(label)}</text>`);
+      return s;
+    }
+
     // 1. Variable name replacement & dynamic pill stretch for variables_get
     if (params.varName) {
       const v = escapeXml(params.varName);
@@ -1075,7 +1010,7 @@
     try {
       if (true) {
         const catUrl = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) ? chrome.runtime.getURL('catalog/catalog.json') : './catalog/catalog.json';
-        const mapUrl = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) ? chrome.runtime.getURL('catalog/token_map.json') : './catalog/token_map.json';
+        const mapUrl = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) ? chrome.runtime.getURL('catalog/lookup.json') : './catalog/lookup.json';
         const [catRes, mapRes] = await Promise.all([
           fetch(catUrl),
           fetch(mapUrl)
@@ -1385,8 +1320,8 @@
     const trimmedOrig = tokenText.trim();
     let clean = trimmedOrig;
     if ((clean.startsWith('[') && clean.endsWith(']')) ||
-        (clean.startsWith('(') && clean.endsWith(')')) ||
-        (clean.startsWith('<') && clean.endsWith('>'))) {
+      (clean.startsWith('(') && clean.endsWith(')')) ||
+      (clean.startsWith('<') && clean.endsWith('>'))) {
       clean = clean.slice(1, -1).trim();
     }
     const cleanFlat = clean
@@ -1395,19 +1330,20 @@
       .replace(/\s+/g, ' ')
       .trim();
 
-    // Direct SVG tokens: empty boolean diamond, mutator (+)/(-), UI buttons, section labels, game over toggle
+    // Direct catalog tokens: empty boolean diamond, mutator (+)/(-), UI buttons, section labels, game over toggle
     if (/^<\s*>$/.test(trimmedOrig) || /^\[\s*<\s*>\s*\]$/.test(trimmedOrig)) {
-      return { rule: { id: 'empty_boolean_slot', category: 'logic' }, template: 'direct_svg', svgData: generateEmptyBooleanSlotSvg() };
+      return { rule: { id: 'empty_boolean_slot', category: 'logic' }, template: 'empty_boolean_slot' };
     }
     const mutMatch = trimmedOrig.match(/^[\(\[]\s*([+-])\s*[\)\]]$/);
     if (mutMatch) {
-      return { rule: { id: 'mutator_button', category: 'common' }, template: 'direct_svg', svgData: generateMutatorButtonSvg(mutMatch[1]) };
+      const isPlus = mutMatch[1] === '+';
+      return { rule: { id: isPlus ? 'mutator_plus' : 'mutator_minus', category: 'common' }, template: isPlus ? 'mutator_plus' : 'mutator_minus' };
     }
     if (/^Make a Function(?:\.\.\.)?$/i.test(cleanFlat)) {
-      return { rule: { id: 'ui_make_function', category: 'functions' }, template: 'direct_svg', svgData: generateUiButtonSvg('Make a Function...', '#5f6665', '#f76820', 3, 500, 44) };
+      return { rule: { id: 'make_a_function', category: 'functions' }, template: 'make_a_function' };
     }
     if (/^Make a Variable$/i.test(cleanFlat)) {
-      return { rule: { id: 'ui_make_variable', category: 'variables' }, template: 'direct_svg', svgData: generateUiButtonSvg('Make a Variable', '#ec3b59', '#b12c43') };
+      return { rule: { id: 'make_a_variable', category: 'variables' }, template: 'make_a_variable' };
     }
     if (/^else$/i.test(cleanFlat)) {
       return { template: 'controls_else', rule: { id: 'controls_else', category: 'logic', template: 'controls_else', blockType: 'controls_else' } };
@@ -1431,7 +1367,7 @@
     // <isBeeDizzy>: custom Boolean variable/parameter reporter -> hexagonal pill
     const mAngleId = trimmedOrig.match(/^<\s*([a-z][a-z0-9]*[A-Z][a-zA-Z0-9_]*)\s*>$/);
     if (mAngleId) {
-      return { rule: { id: 'boolean_reporter', category: 'variables' }, template: 'direct_svg', svgData: generateBooleanReporterBubble(mAngleId[1]) };
+      return { rule: { id: 'boolean_reporter_bubble', category: 'variables' }, template: 'boolean_reporter_bubble', params: { varName: mAngleId[1] } };
     }
     // Nested reporters: ((tilemap location of (sprite)) row) and (length of array (array of sprites of kind))
     const mNestLen = trimmedOrig.match(/^\(\s*length\s+of\s+array\s*\(\s*array\s+of\s+sprites\s+of\s+kind(?:\s+\(?\s*([A-Za-z0-9_]+)\s*\)?)?\s*\)\s*\)$/i);
@@ -1458,10 +1394,10 @@
     }
     // Overlap-event parameter bubbles are plain reporter ovals (no dropdown arrow), same as (otherSprite).
     if (trimmedOrig.startsWith('[') && /^(?:sprite|otherSprite)$/.test(cleanFlat) && /overlap/i.test(stepText || '')) {
-      return { rule: { id: 'variables_get', category: 'variables' }, template: 'direct_svg', svgData: generateVariableReporterBubble(cleanFlat) };
+      return { rule: { id: 'variable_reporter_bubble', category: 'variables' }, template: 'variable_reporter_bubble', params: { varName: cleanFlat } };
     }
     if (/^game\s+over$/i.test(cleanFlat) && (localAfterText ? /^\s*toggle\b/i.test(localAfterText) : /\[game\s+over\]\s+toggle|replace\s+the\s+\[game\s+over\]\s+toggle/i.test(stepText || ''))) {
-      return { rule: { id: 'toggle_win', category: 'game' }, template: 'direct_svg', svgData: renderToggleToken('WIN') };
+      return { rule: { id: 'toggle_win', category: 'game' }, template: 'toggle_win' };
     }
 
     // Standalone comparison operators: (>), (<), (>=), (<=), (=), (==), (!=), (≥), (≤), (≠)
@@ -1499,9 +1435,9 @@
       && !/^(?:true|false|yes|no|win|lose|on|off|not|and|or|null|undefined|score|life|countdown|random|then|else|bpm|px|pixels|degrees|radians|seconds|secs|sec|ms|hz|optional|default)$/i.test(cleanFlat)
       && !ctxCatPre) {
       return {
-        rule: { id: 'variables_get', category: 'variables' },
-        template: 'direct_svg',
-        svgData: generateVariableReporterBubble(cleanFlat)
+        rule: { id: 'variable_reporter_bubble', category: 'variables' },
+        template: 'variable_reporter_bubble',
+        params: { varName: cleanFlat }
       };
     }
 
@@ -1517,9 +1453,9 @@
       if (isExplicitVariable || (isKnownVarPattern && !cleanFlat.includes(' '))) {
         if (trimmedOrig.startsWith('(')) {
           return {
-            rule: { id: 'variables_get', category: 'variables' },
-            template: 'direct_svg',
-            svgData: generateVariableReporterBubble(cleanFlat)
+            rule: { id: 'variable_reporter_bubble', category: 'variables' },
+            template: 'variable_reporter_bubble',
+            params: { varName: cleanFlat }
           };
         }
         return {
@@ -1791,16 +1727,17 @@
       const [outerData, innerData] = await Promise.all([sub(resolution.params.outer), sub(resolution.params.inner)]);
       return composeNestedReporter(outerData, innerData) || outerData;
     }
-    if (resolution.template === 'direct_svg' && resolution.svgData) {
-      return resolution.svgData;
-    }
     if (resolution.template === 'toggleWinLose' || resolution.template === 'toggleOnOff') {
-      return renderToggleToken(tokenText);
+      const isWin = /win/i.test(tokenText);
+      const isLose = /lose/i.test(tokenText);
+      const isOn = /on/i.test(tokenText);
+      const tName = isOn ? 'toggle_on' : (isWin ? 'toggle_win' : (isLose ? 'toggle_lose' : 'toggle_off'));
+      return fetchAndRenderResolvedToken({ template: tName, rule: { category: 'game' } }, tokenText);
     }
     if (resolution.template === 'isolated_pill') {
       const prop = (resolution.params && resolution.params.prop !== undefined) ? resolution.params.prop : tokenText;
       const cat = (resolution.params && resolution.params.pillCategory) || resolution.rule.category;
-      return generateIsolatedPropertyPill(prop, cat);
+      return fetchAndRenderResolvedToken({ template: 'property_pill', params: { prop, pillCategory: cat }, rule: { category: cat } }, tokenText);
     }
 
     if (!catalogMap || !resolution.template) return null;
@@ -1853,7 +1790,7 @@
       // Clear legacy storage cache so stale extractions never override dynamic NLP engine
       chrome.storage.local.clear();
     }
-  } catch (e) {}
+  } catch (e) { }
 
   // Listen for background announcement that renderer/iframe is ready
   try {
@@ -1866,7 +1803,7 @@
         }
       });
     }
-  } catch (e) {}
+  } catch (e) { }
 
   function injectStyles() {
     if (document.getElementById('aifx-styles')) return;
@@ -2197,7 +2134,7 @@
       if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
         chrome.storage.local.set({ [token]: data });
       }
-    } catch (e) {}
+    } catch (e) { }
 
     const spans = document.querySelectorAll('span.aifx-rendered');
     for (const span of spans) {
@@ -2308,7 +2245,7 @@
               svgCache.set(lookupToken, { svg: null });
               svgCache.set(tokenText, { svg: null });
             }
-            // Renderer definitively failed — try the NLP fallback (token_map rules
+            // Renderer definitively failed — try the NLP fallback (lookup rules
             // + static catalog templates) before leaving the token as plain text.
             let nlpStarted = false;
             const liveWaiters = waiters.filter(s => s && s.isConnected && s.getAttribute('data-rendered') !== 'true');
@@ -2575,12 +2512,12 @@
     btn.id = 'aifx-toggle-container';
     btn.className = 'mode-aifx-toggle' + (isAifxEnabled ? '' : ' aifx-off');
     btn.setAttribute('title', isAifxEnabled ? 'Disable block graphics' : 'Enable block graphics');
+    const codeIconUrl = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL)
+      ? chrome.runtime.getURL('catalog/code_icon.svg')
+      : './catalog/code_icon.svg';
     btn.innerHTML = `
       <span>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="16 18 22 12 16 6"></polyline>
-          <polyline points="8 6 2 12 8 18"></polyline>
-        </svg>
+        <img src="${codeIconUrl}" width="20" height="20" alt="Toggle blocks" style="display:block;" />
       </span>
     `;
 
@@ -2590,7 +2527,7 @@
       isAifxEnabled = !isAifxEnabled;
       try {
         localStorage.setItem('aifx_enabled', String(isAifxEnabled));
-      } catch (err) {}
+      } catch (err) { }
 
       updateAifxStateClass();
 
@@ -2612,34 +2549,34 @@
     // Disconnect observer temporarily to avoid self-triggering during DOM mutations
     observer.disconnect();
     try {
-    injectStyles();
-    ensureToggleButton();
-    // Strictly query content containers only
-    const areas = document.querySelectorAll('app-step-information content, [data-instruction], article, .lesson-content, .token-target-area');
-    for (const area of areas) {
-      healSplitTokens(area);
-      const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT, {
-        acceptNode(n) {
-          if (!n || !n.nodeValue) return NodeFilter.FILTER_REJECT;
-          if (n.parentElement && (n.parentElement.closest('.aifx-rendered') || n.parentElement.closest('.aifx-raw-fallback') || n.parentElement.closest('[data-token]'))) {
+      injectStyles();
+      ensureToggleButton();
+      // Strictly query content containers only
+      const areas = document.querySelectorAll('app-step-information content, [data-instruction], article, .lesson-content, .token-target-area');
+      for (const area of areas) {
+        healSplitTokens(area);
+        const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT, {
+          acceptNode(n) {
+            if (!n || !n.nodeValue) return NodeFilter.FILTER_REJECT;
+            if (n.parentElement && (n.parentElement.closest('.aifx-rendered') || n.parentElement.closest('.aifx-raw-fallback') || n.parentElement.closest('[data-token]'))) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            if (n.nodeValue.includes('[') || n.nodeValue.includes('(') || n.nodeValue.includes('<') || n.nodeValue.includes('▶')) {
+              return NodeFilter.FILTER_ACCEPT;
+            }
             return NodeFilter.FILTER_REJECT;
           }
-          if (n.nodeValue.includes('[') || n.nodeValue.includes('(') || n.nodeValue.includes('<') || n.nodeValue.includes('▶')) {
-            return NodeFilter.FILTER_ACCEPT;
-          }
-          return NodeFilter.FILTER_REJECT;
-        }
-      });
+        });
 
-      const textNodes = [];
-      while (walker.nextNode()) {
-        textNodes.push(walker.currentNode);
+        const textNodes = [];
+        while (walker.nextNode()) {
+          textNodes.push(walker.currentNode);
+        }
+        for (const node of textNodes) {
+          replaceInNode(node);
+        }
       }
-      for (const node of textNodes) {
-        replaceInNode(node);
-      }
-    }
-    applyCacheToPage();
+      applyCacheToPage();
     } finally {
       // Reconnect observer after scan completes
       observer.observe(document.body || document.documentElement, {

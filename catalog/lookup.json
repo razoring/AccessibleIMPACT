@@ -3,6 +3,62 @@
   "description": "Dynamic pattern regex lookup table for AccessibleIMPACT NLP engine",
   "rules": [
     {
+      "id": "toggle_on",
+      "category": "game",
+      "pattern": "^(?:ON|<\\s*on\\s*>|\\[\\s*on\\s*\\])$",
+      "template": "toggle_on",
+      "blockType": "toggle_on",
+      "params": {}
+    },
+    {
+      "id": "toggle_off",
+      "category": "game",
+      "pattern": "^(?:OFF|<\\s*off\\s*>|\\[\\s*off\\s*\\])$",
+      "template": "toggle_off",
+      "blockType": "toggle_off",
+      "params": {}
+    },
+    {
+      "id": "mutator_plus",
+      "category": "common",
+      "pattern": "^(?:\\+|\\(\\+\\)|\\[\\+\\])$",
+      "template": "mutator_plus",
+      "blockType": "mutator_plus",
+      "params": {}
+    },
+    {
+      "id": "mutator_minus",
+      "category": "common",
+      "pattern": "^(?:\\-|\\(\\-\\)|<\\->|\\[\\-\\])$",
+      "template": "mutator_minus",
+      "blockType": "mutator_minus",
+      "params": {}
+    },
+    {
+      "id": "make_a_function",
+      "category": "functions",
+      "pattern": "^(?:\\[?\\(?Make\\s+a\\s+Function(?:\\.{2,3})?\\)?\\]?)$",
+      "template": "make_a_function",
+      "blockType": "make_a_function",
+      "params": {}
+    },
+    {
+      "id": "make_a_variable",
+      "category": "variables",
+      "pattern": "^(?:\\[?\\(?Make\\s+a\\s+Variable\\)?\\]?)$",
+      "template": "make_a_variable",
+      "blockType": "make_a_variable",
+      "params": {}
+    },
+    {
+      "id": "empty_boolean_slot",
+      "category": "logic",
+      "pattern": "^(?:<\\s*>|\\[\\s*<\\s*>\\s*\\])$",
+      "template": "empty_boolean_slot",
+      "blockType": "empty_boolean_slot",
+      "params": {}
+    },
+    {
       "id": "toggle_lose",
       "category": "game",
       "pattern": "^LOSE$",
@@ -1318,7 +1374,6 @@
       "template": "music_playable_play",
       "blockType": "music_playable_play"
     },
-
     {
       "id": "music_play",
       "category": "music",
